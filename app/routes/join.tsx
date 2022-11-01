@@ -1,30 +1,30 @@
-import type {ActionArgs, LoaderArgs, MetaFunction} from "@remix-run/node";
-import {json, redirect} from "@remix-run/node";
-import {Form, Link, useActionData, useBeforeUnload, useSearchParams} from "@remix-run/react";
+import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import * as React from "react";
 
-import {createUserSession, getUserId} from "~/session.server";
-import {verifyLogin} from "~/models/user.server";
-import {safeRedirect, validateEmail} from "~/utils";
+import { getUserId, createUserSession } from "~/session.server";
+
+import { createUser, getUserByEmail } from "~/models/user.server";
+import { safeRedirect, validateEmail } from "~/utils";
 import messages from "~/components/i18n/messages";
 
-export async function loader({request}: LoaderArgs) {
+export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
   return json({});
 }
 
-export async function action({request}: ActionArgs) {
+export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const redirectTo = safeRedirect(formData.get("redirectTo"), "/dashboard");
-  const remember = formData.get("remember");
+  const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
   if (!validateEmail(email)) {
     return json(
-      {errors: {email: "Email is invalid", password: null}},
-      {status: 400}
+      { errors: { email: "Email is invalid", password: null } },
+      { status: 400 }
     );
   }
 
@@ -42,37 +42,41 @@ export async function action({request}: ActionArgs) {
     );
   }
 
-  const user = await verifyLogin(email, password);
-
-  if (!user) {
+  const existingUser = await getUserByEmail(email);
+  if (existingUser) {
     return json(
-      { errors: { email: "Invalid email or password", password: null } },
+      {
+        errors: {
+          email: "A user already exists with this email",
+          password: null,
+        },
+      },
       { status: 400 }
     );
   }
 
+  const user = await createUser(email, password);
+
   return createUserSession({
     request,
     userId: user.id,
-    remember: remember === "on",
+    remember: false,
     redirectTo,
   });
 }
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Login",
+    title: "Sign Up",
   };
 };
 
-export default function LoginPage() {
+export default function Join() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/application";
+  const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
-
-  const [state, setState] = React.useState<{ email: string | null }>({email: null});
 
   React.useEffect(() => {
     if (actionData?.errors?.email) {
@@ -81,19 +85,6 @@ export default function LoginPage() {
       passwordRef.current?.focus();
     }
   }, [actionData]);
-
-  useBeforeUnload(
-    React.useCallback(() => {
-      localStorage.loginStuff = state;
-    }, [state])
-  );
-
-  // read it in when they return
-  React.useEffect(() => {
-    if (state === null && localStorage.loginStuff != null) {
-      setState(localStorage.loginStuff);
-    }
-  }, [state]);
 
   return (
     <div className="flex min-h-full flex-col justify-center">
@@ -140,7 +131,7 @@ export default function LoginPage() {
                 ref={passwordRef}
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"
                 className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
@@ -158,32 +149,18 @@ export default function LoginPage() {
             type="submit"
             className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
           >
-            {messages.loginform.login}
+            {messages.joinForm.createAccount}
           </button>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember"
-                name="remember"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label
-                htmlFor="remember"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                {messages.loginform.rememberMe}
-              </label>
-            </div>
+          <div className="flex items-center justify-center">
             <div className="text-center text-sm text-gray-500">
               <Link
                 className="text-blue-500 underline"
                 to={{
-                  pathname: "/join",
+                  pathname: "/login",
                   search: searchParams.toString(),
                 }}
               >
-                {messages.loginform.createAccount}
+                {messages.joinForm.backToLogin}
               </Link>
             </div>
           </div>

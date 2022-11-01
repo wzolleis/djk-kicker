@@ -13,12 +13,14 @@ datasource db {
 model User {
   id    String @id @default(cuid())
   email String @unique
+  name String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   password Password?
   admin Boolean @default(false)
+  testUser Boolean @default(false)
 }
 
 model Password {
