@@ -22,7 +22,7 @@ export const meta: MetaFunction = () => ({
 
 export default function App() {
   return (
-    <html lang="en">
+    <html lang="de">
       <head>
         <title>Kick it like an Oldie</title>
         <Meta />
