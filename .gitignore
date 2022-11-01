@@ -5,3 +5,11 @@ node_modules
 /.netlify
 .env
 /app/styles/tailwind.css
+/build
+
+/cypress/screenshots
+/cypress/videos
+/prisma/data.db
+/prisma/data.db-journal
+
+/coverage
