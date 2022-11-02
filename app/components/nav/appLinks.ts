@@ -10,9 +10,9 @@ export const appLinks = {
         admin: {
             path: "admin",
             label: "Administration",
-            events: {
-                path: "admin/events",
-                label: "Termine"
+            games: {
+                path: "admin/games",
+                label: "Spiele"
             }
         }
     },
