@@ -7,13 +7,13 @@ export const appLinks = {
     application: {
         path: "/application",
         label: "Start",
-        equipment: {
-            path: "equipments",
-            label: "Geräte"
-        },
-        training: {
-            path: "trainings",
-            label: "Training"
+        admin: {
+            path: "admin",
+            label: "Administration",
+            events: {
+                path: "admin/events",
+                label: "Termine"
+            }
         }
     },
 }

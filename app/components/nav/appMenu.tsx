@@ -9,12 +9,12 @@ export type MenuEntry = {
 export const appMenu: { app: MenuEntry[] } = {
     app: [
         {
-            id: "49331f29-6465-4c01-975d-bef01371d3fb",
-            appLink: appLinks.application.equipment
+            id: "5fda6c32-e771-4598-b96b-d24d60209eef",
+            appLink: appLinks.application.admin
         },
         {
-            id: "52cd654e-9c65-4318-ac5c-4bf0b0d77038",
-            appLink: appLinks.application.training
+            id: "7182e423-f2e7-4aa0-9231-bd04cd8217a1",
+            appLink: appLinks.application.admin.events
         }
     ]
 }
