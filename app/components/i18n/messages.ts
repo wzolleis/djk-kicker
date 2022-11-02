@@ -15,6 +15,10 @@ const messages = {
   joinForm: {
     backToLogin: "Zur Anmeldung",
     createAccount: "Neuen Account anlegen"
+  },
+  gamesform: {
+    name: 'Name',
+    new: 'Neu'
   }
 
 }
