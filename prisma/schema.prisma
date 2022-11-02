@@ -28,7 +28,7 @@ model Event {
   id    String @id @default(cuid())
   eventTime DateTime?
   name String
-  link String @unique
+  link String
 }
 
 model Password {
