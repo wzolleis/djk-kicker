@@ -14,7 +14,7 @@ export const appMenu: { app: MenuEntry[] } = {
         },
         {
             id: "7182e423-f2e7-4aa0-9231-bd04cd8217a1",
-            appLink: appLinks.application.admin.events
+            appLink: appLinks.application.admin.games
         }
     ]
 }
