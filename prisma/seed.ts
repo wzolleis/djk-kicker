@@ -9,6 +9,8 @@ async function seed() {
   // cleanup the existing database
   await prisma.user.delete({ where: { email } }).catch(() => {
   });
+  //await prisma.event.delete({ where: { name: 'testevent' } }).catch(() => {
+  // });
 
   const hashedPassword = await bcrypt.hash("test@test.de", 10);
 
@@ -24,6 +26,13 @@ async function seed() {
       }
     }
   });
+
+  await prisma.event.create({
+    data: {
+      name: 'testevent',
+      link: 'testevent_link'
+    }
+  })
 
   console.log("created user with id: ", user.id);
 
