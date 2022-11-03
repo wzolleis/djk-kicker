@@ -9,7 +9,7 @@ export const appLinks = {
         label: "Start",
         admin: {
             path: "admin",
-            label: "Administration",
+            label: "Verwaltung",
             games: {
                 path: "admin/games",
                 label: "Spiele"
