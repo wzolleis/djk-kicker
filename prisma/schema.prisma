@@ -24,12 +24,27 @@ model User {
   testUser Boolean @default(false)
 }
 
-model Event {
+model Game {
   id    String @id @default(cuid())
-  eventTime DateTime?
+  eventTime DateTime? @default(now())
   name String
   link String
 }
+
+model Feedback {
+ id    String @id @default(cuid())
+ eventId String
+ playerId String
+ status Boolean
+ note String
+}
+
+model Player {
+id String @id @default(cuid())
+name String
+email String
+}
+
 
 model Password {
   hash String

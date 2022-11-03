@@ -16,14 +16,10 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
     const hamburgerOrCloseIcon = isOpen ? hamburgerIcon : closeIcon;
 
     return (
-      <header className="bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
+      <header className="bg-gray-100 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
           <div className="flex items-center justify-between px-4 py-3 sm:p-0">
               <div className="flex items-center justify-between">
-                  <a href="/">
-                      <img src="/img/logo.jpg" className="h-8" alt="Jackfit" />
-                  </a>
-                  <span className="text-white px-2 uppercase">{messages.app.title}</span>
-                  <span className="text-white px-2 uppercase">{user?.email || "Login"}</span>
+                  <span className="px-2 text-4xl font-poppins-semibold">{messages.app.title}</span>
               </div>
               <div className="sm:hidden">
                   <button type="button"
@@ -39,7 +35,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
             <nav className={`${menuItemClassName} px-2 pt-2 pb-4 sm:flex sm:p-0`}>
                 {appMenu.map((menu) =>
                     <Link key={menu.id}
-                          className="block px-2 py-1 text-gray-100 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
+                          className="block px-2 py-1 text-gray-800 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
                           to={menu.appLink.path}>
                         {menu.appLink.label}
                     </Link>

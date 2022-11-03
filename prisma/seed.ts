@@ -16,7 +16,7 @@ async function seed() {
     data: {
       email,
       testUser: true,
-      name: 'Jack TestUser',
+      name: "Jack TestUser",
       password: {
         create: {
           hash: hashedPassword
@@ -25,14 +25,17 @@ async function seed() {
     }
   });
 
-  await prisma.event.create({
+
+  const game = await prisma.game.create({
     data: {
-      name: 'testevent',
-      link: 'testevent_link'
+      name: "Fußball, 22.10.2022",
+      link: "abcdefg"
     }
-  })
+  });
+
 
   console.log("created user with id: ", user.id);
+  console.log("created game with id: ", game.id);
 
   console.log(`Database has been seeded. 🌱`);
 }
