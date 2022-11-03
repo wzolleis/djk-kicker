@@ -19,8 +19,14 @@ const messages = {
   gamesform: {
     name: 'Name',
     new: 'Neu'
+  },
+  admin: {
+    title: 'Verwaltung',
+    games: 'Spiele',
+    gamesDescription: 'Spiele anlegen, Spiele absagen, usw...',
+    users: 'Benutzerverwaltung',
+    usersDescription: 'Berechtigungen und so ein Quatsch'
   }
-
 }
 
 export default messages
