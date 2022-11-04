@@ -20,10 +20,10 @@ const GameView = ({ defaultValues }: GameViewProps) => {
                name="eventTime"
                required
                autoFocus
-               key={defaultValues?.eventTime}
+               key={defaultValues?.gameTime}
                placeholder={messages.gamesform.eventTime}
                className="border text-sm rounded-lg block w-full p-2.5 border-gray-600 placeholder-gray-400 focus:border-blue-500 border-2"
-               defaultValue={defaultValues?.eventTime ?? dateUtils.format(new Date(), { format: "dd.MM.yyyy" })}
+               defaultValue={defaultValues?.gameTime ?? dateUtils.format(new Date(), { format: "dd.MM.yyyy" })}
         />
       </div>
       <div>

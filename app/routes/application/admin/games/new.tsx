@@ -3,8 +3,8 @@ import GameView from "~/features/games/GameView";
 import type { GameActionData } from "~/models/games.server";
 import messages from "~/components/i18n/messages";
 import dateUtils from "~/dateUtils";
-import { redirect } from "@remix-run/node";
 import type { ActionFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { requireUserId } from "~/session.server";
 import invariant from "tiny-invariant";
 
@@ -26,9 +26,9 @@ const NewGame = () => {
   const errors = useActionData<GameActionData>();
   const transition = useTransition();
   const defaultValues: GameActionData = {
-    eventTime: dateUtils.format(new Date(), {format: "dd.MM.yyyy"}),
-    name: dateUtils.format(new Date(), {format: "dd.MM.yyyy"}),
-    link: 'new'
+    gameTime: dateUtils.format(new Date(), { format: "dd.MM.yyyy" }),
+    name: dateUtils.format(new Date(), { format: "dd.MM.yyyy" }),
+    link: "new"
   }
 
   return (
@@ -42,7 +42,7 @@ const NewGame = () => {
           <div className="text-right">
             <button
               type="submit"
-              className="rounded bg-blue-500 py-2 text-white hover:bg-blue-600 disabled:bg-blue-300 focus:border-2 my-2 px-2"
+              className="rounded bg-blue-500 py-2 text-white hover:bg-blue-600 disabled:bg-blue-300 focus:border-2 my-2 px-2 bg-y"
             >
               {transition.state === "submitting" ? messages.gamesform.create.submitting : messages.gamesform.create.submit}
             </button>

@@ -1,27 +1,25 @@
 import { prisma } from "~/db.server";
-import type { Event } from "@prisma/client";
 import { json } from "@remix-run/node";
-
-export type Game = Event
+import type { Game } from "@prisma/client";
 
 export type GameActionData = {
-  eventTime: string | null,
+  gameTime: string | null,
   name: string | null,
   link: string | null
 }
 
 
 export const getGames = async (): Promise<Game[]> => {
-  return await prisma.event.findMany({
+  return await prisma.game.findMany({
     orderBy: {
-      eventTime: "desc"
+      gameTime: "desc"
     }
   });
 };
 
-export const createGame = async (game: Pick<Game, "eventTime" | "name" | "link">) => {
+export const createGame = async (game: Pick<Game, "gameTime" | "name" | "link">) => {
   const errors: GameActionData = {
-    eventTime: !game.eventTime ? `Zeit muss gesetzt sein` : null,
+    gameTime: !game.gameTime ? `Zeit muss gesetzt sein` : null,
     name: null,
     link: null
   };
@@ -30,5 +28,5 @@ export const createGame = async (game: Pick<Game, "eventTime" | "name" | "link">
     return json<GameActionData>(errors);
   }
 
-  await prisma.event.create({ data: game });
+  await prisma.game.create({ data: game });
 };
