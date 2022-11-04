@@ -16,7 +16,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
     const hamburgerOrCloseIcon = isOpen ? hamburgerIcon : closeIcon;
 
     return (
-      <header className="bg-gray-100 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
+      <header className="bg-slate-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 text-white">
           <div className="flex items-center justify-between px-4 py-3 sm:p-0">
               <div className="flex items-center justify-between">
                   <img src="/img/logo.png" alt="" className={"h-10"}/>
@@ -24,7 +24,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
               </div>
               <div className="sm:hidden">
                   <button type="button"
-                          className="block text-gray-500 hover:text-white focus:text-white focus:outline-none"
+                          className="block hover:text-white focus:text-white focus:outline-none"
                           onClick={() => setIsOpen(!isOpen)}
                   >
                       <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
@@ -36,7 +36,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
             <nav className={`${menuItemClassName} px-2 pt-2 pb-4 sm:flex sm:p-0`}>
                 {appMenu.map((menu) =>
                     <Link key={menu.id}
-                          className="block px-2 py-1 text-gray-800 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
+                          className="block px-2 py-1  font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
                           to={menu.appLink.path}>
                         {menu.appLink.label}
                     </Link>
@@ -44,7 +44,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
                 <Form action="/logout" method="post">
                     <button
                         type="submit"
-                        className="block px-2 py-1 text-gray-100 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
+                        className="block px-2 py-1  font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
                     >
                         Logout
                     </button>

@@ -10,7 +10,7 @@ const Application = () => {
     <div className="flex h-full min-h-screen flex-col">
       <AppNavBar appMenu={appMenu.app} user={user} />
       <main className="flex h-full">
-        <div className="">
+        <div className="flex-1 p-6">
           <Outlet />
         </div>
       </main>
