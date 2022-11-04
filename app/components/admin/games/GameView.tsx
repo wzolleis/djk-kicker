@@ -13,15 +13,15 @@ const GameView = ({ defaultValues }: GameViewProps) => {
     <>
       <div>
         <label htmlFor="eventTime" className="block mb-2 text-sm font-medium text-gray-900">
-          {messages.gamesform.eventTime}
+          {messages.gamesform.gameTime}
         </label>
-        <input type="text"
-               id="eventTime"
-               name="eventTime"
+        <input type="datetime-local"
+               id="gameTime"
+               name="gameTime"
                required
                autoFocus
                key={defaultValues?.gameTime}
-               placeholder={messages.gamesform.eventTime}
+               placeholder={messages.gamesform.gameTime}
                className="border text-sm rounded-lg block w-full p-2.5 border-gray-600 placeholder-gray-400 focus:border-blue-500 border-2"
                defaultValue={defaultValues?.gameTime ?? dateUtils.format(new Date(), { format: "dd.MM.yyyy" })}
         />
