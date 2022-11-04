@@ -1,10 +1,10 @@
-import type { Game } from "~/models/games.server";
 import { getGames } from "~/models/games.server";
 import type { LoaderArgs } from "@remix-run/node";
-import { requireUserId } from "~/session.server";
 import { json } from "@remix-run/node";
+import { requireUserId } from "~/session.server";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import messages from "~/components/i18n/messages";
+import type { Game } from "@prisma/client";
 
 type LoaderData = {
   games: Awaited<ReturnType<typeof getGames>>
@@ -18,7 +18,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   });
 };
 
-const isOldGame = (game: Game): boolean => !!game.eventTime && (new Date() > new Date(game.eventTime))
+const isOldGame = (game: Game): boolean => !!game.gameTime && (new Date() > new Date(game.gameTime));
 
 const GameView = ({ game }: { game: Game }) => {
   const image = isOldGame(game) ? "/img/game_over_3.jpg" : "/img/ball.jpg";
