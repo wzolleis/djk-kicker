@@ -16,17 +16,6 @@ const messages = {
     backToLogin: "Zur Anmeldung",
     createAccount: "Neuen Account anlegen"
   },
-  game: {
-    players: {
-      title: "Spieler",
-      add: "+ Hinzufügen",
-      status: {
-        undefined: "Unbekannt",
-        confirmed: "Zugesagt",
-        declined: "Abgesagt"
-      }
-    }
-  },
   gamesform: {
     name: 'Name',
     new: 'Neu',
@@ -43,8 +32,18 @@ const messages = {
     gamesDescription: 'Spiele anlegen, Spiele absagen, usw...',
     users: 'Benutzerverwaltung',
     usersDescription: 'Berechtigungen und so ein Quatsch'
+  },
+  game: {
+    players: {
+      title: "Spieler",
+      add: "Hinzufügen",
+      status: {
+        undefined: "Unbekannt",
+        confirmed: "Zugesagt",
+        declined: "Abgesagt"
+      }
+    }
   }
-
 };
 
 export default messages;

@@ -7,7 +7,7 @@ const Games = () => {
   const user = useOptionalUser();
 
   return (
-    <div className="flex h-full min-h-screen flex-col bg-white">
+    <div className="h-full min-h-screen bg-neutral-200/50">
       <AppNavBar appMenu={appMenu.app} user={user} />
       <main className="flex w-full">
         <div className="flex-1 py-6">

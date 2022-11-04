@@ -36,13 +36,13 @@ model Feedback {
  id    String @id @default(cuid())
  game Game @relation(fields: [gameId], references: [id])
  gameId String
- player Index @relation (fields: [playerId], references: [id])
- playerId String
+ player Player @relation (fields: [playerId], references: [id])
+ playerId String @unique
  status Boolean?
  note String?
 }
 
-model Index {
+model Player {
 id String @id @default(cuid())
 name String
 email String

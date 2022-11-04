@@ -1,9 +1,10 @@
-import GameHeader from "~/components/game/gameHeader";
-import { Prisma } from "@prisma/client";
-import { json, LoaderFunction } from "@remix-run/node";
+import GameHeader from "~/components/game/GameHeader";
+import type { Prisma } from "@prisma/client";
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import { getGameById } from "~/models/game.server";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import Players from "~/components/game/Players";
 
 
@@ -34,7 +35,7 @@ const GameIndex = () => {
   const { game } = useLoaderData() as LoaderData;
 
   return (
-    <section>
+    <section className={"flex flex-col gap-3"}>
       <GameHeader game={game}></GameHeader>
       <Players game={game}></Players>
     </section>);
