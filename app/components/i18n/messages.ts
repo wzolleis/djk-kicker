@@ -18,7 +18,13 @@ const messages = {
   },
   gamesform: {
     name: 'Name',
-    new: 'Neu'
+    new: 'Neu',
+    eventTime: 'Datum',
+    create: {
+      submit: 'Speichern',
+      submitting: 'Speichere...'
+    }
+
   },
   admin: {
     title: 'Verwaltung',
