@@ -2,3 +2,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Poppins Bold';
+    font-style: normal;
+    src: url("/fonts/Poppins-Bold.ttf");
+}
+
+@font-face {
+    font-family: 'Poppins Light';
+    font-style: normal;
+    src: url("/fonts/Poppins-Light.ttf");
+}
+
+@font-face {
+    font-family: 'Poppins Medium';
+    font-style: normal;
+    src: url("/fonts/Poppins-Medium.ttf");
+}
+
+@font-face {
+    font-family: 'Poppins Regular';
+    font-style: normal;
+    src: url("/fonts/Poppins-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Poppins SemiBold';
+    font-style: normal;
+    src: url("/fonts/Poppins-SemiBold.ttf");
+}
+
+
+
+@font-face {
+    font-family: 'Inter Bold';
+    font-style: normal;
+    src: url("/fonts/Inter-Bold.woff2");
+}
+
+@font-face {
+    font-family: 'Inter Light';
+    font-style: normal;
+    src: url("/fonts/Inter-Light.woff2");
+}
+
+@font-face {
+    font-family: 'Inter Medium';
+    font-style: normal;
+    src: url("/fonts/Inter-Medium.woff2");
+}
+
+@font-face {
+    font-family: 'Inter Regular';
+    font-style: normal;
+    src: url("/fonts/Inter-Regular.woff2");
+}
+
+@font-face {
+    font-family: 'Inter SemiBold';
+    font-style: normal;
+    src: url("/fonts/Inter-SemiBold.woff2");
+}
+
+

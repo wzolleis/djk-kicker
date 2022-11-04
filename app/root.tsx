@@ -26,7 +26,7 @@ export async function loader({request}: LoaderArgs) {
 
 export default function App() {
   return (
-    <html lang="en" className="h-full bg-gray-200">
+    <html lang="en" className="h-full bg-neutral-100">
     <head>
       <title>DJK Kicker</title>
       <Meta />
