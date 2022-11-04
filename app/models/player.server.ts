@@ -20,3 +20,16 @@ export async function createPlayer(name: string, email: string) {
     }
   });
 }
+
+
+export async function updatePlayer(id: Player["id"], name: string, email: string) {
+  return await prisma.player.update({
+    where: {
+      id
+    },
+    data: {
+      name,
+      email
+    }
+  });
+}

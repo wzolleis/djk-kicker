@@ -8,8 +8,9 @@ interface gameHeaderProps {
 
 const gameHeader = ({ game }: gameHeaderProps) => {
   return (
-    <div className={"rounded-lg shadow shadow-xl shadow-gray-900/5 bg-white p-3 py-5"}>
-      <p className={"font-poppins-semibold text-darkblue text-3xl"}>{game.name}</p>
+    <div className={"flex px-2 flex-col w-full"}>
+      <p className={"font-inter-light text-gray-500 text-item-heading uppercase m-0"}>Neues Spiel</p>
+      <p className={"font-inter-semibold text-heading -mt-2"}>{game.name}</p>
     </div>
   );
 };

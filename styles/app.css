@@ -35,3 +35,36 @@
     src: url("/fonts/Poppins-SemiBold.ttf");
 }
 
+
+
+@font-face {
+    font-family: 'Inter Bold';
+    font-style: normal;
+    src: url("/fonts/Inter-Bold.woff2");
+}
+
+@font-face {
+    font-family: 'Inter Light';
+    font-style: normal;
+    src: url("/fonts/Inter-Light.woff2");
+}
+
+@font-face {
+    font-family: 'Inter Medium';
+    font-style: normal;
+    src: url("/fonts/Inter-Medium.woff2");
+}
+
+@font-face {
+    font-family: 'Inter Regular';
+    font-style: normal;
+    src: url("/fonts/Inter-Regular.woff2");
+}
+
+@font-face {
+    font-family: 'Inter SemiBold';
+    font-style: normal;
+    src: url("/fonts/Inter-SemiBold.woff2");
+}
+
+

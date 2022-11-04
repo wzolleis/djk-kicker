@@ -6,7 +6,7 @@
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
     "generate:css": "tailwindcss -w -i ./styles/app.css -o ./app/styles/tailwind.css",
-    "dev": "run-p dev:*",
+    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "cross-env NODE_ENV=development binode --require ./mocks -- @remix-run/dev:remix dev",
     "format": "prettier --write .",
@@ -19,23 +19,25 @@
     "validate": "run-p \"test -- --run\" lint typecheck"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.2.0",
     "@netlify/functions": "^1.0.0",
     "@prisma/client": "^4.5.0",
     "@remix-run/netlify": "^1.7.3",
     "@remix-run/node": "^1.7.3",
     "@remix-run/react": "^1.7.3",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^7.5.0",
     "cross-env": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tiny-invariant": "^1.2.0",
-    "bcryptjs": "^2.4.3",
-    "@fortawesome/fontawesome-free": "^6.2.0"
+    "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.4.0",
     "@remix-run/dev": "^1.7.3",
     "@remix-run/eslint-config": "^1.7.3",
     "@remix-run/serve": "^1.7.3",
+    "@tailwindcss/forms": "^0.5.3",
     "@testing-library/dom": "^8.17.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
@@ -58,12 +60,11 @@
     "postcss": "^8.4.18",
     "prisma": "^4.5.0",
     "tailwindcss": "^3.2.1",
-    "@tailwindcss/forms": "^0.5.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4",
     "vite": "^3.2.2",
     "vite-tsconfig-paths": "^3.5.2",
-    "vitest": "^0.24.4",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.8.4"
+    "vitest": "^0.24.4"
   },
   "prisma": {
     "seed": "ts-node --require tsconfig-paths/register prisma/seed.ts"

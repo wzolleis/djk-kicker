@@ -4,8 +4,8 @@ const messages = {
     title: "DJK Kicker"
   },
   loginform: {
-    welcome: 'DJK Kicker - Anmeldung',
-    description: 'Viel Spaß beim Bolzen',
+    welcome: "DJK Kicker - Anmeldung",
+    description: "Viel Spaß beim Bolzen",
     email: "Email",
     password: "Passwort",
     login: "Anmelden",
@@ -15,8 +15,20 @@ const messages = {
   joinForm: {
     backToLogin: "Zur Anmeldung",
     createAccount: "Neuen Account anlegen"
+  },
+  game: {
+    players: {
+      title: "Spieler",
+      add: "+ Hinzufügen",
+      status: {
+        undefined: "Unbekannt",
+        confirmed: "Zugesagt",
+        declined: "Abgesagt"
+      }
+    }
   }
 
-}
 
-export default messages
+};
+
+export default messages;

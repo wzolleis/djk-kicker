@@ -26,23 +26,27 @@ model User {
 
 model Game {
   id    String @id @default(cuid())
-  eventTime DateTime? @default(now())
+  gameTime DateTime? @default(now())
   name String
   link String
+  feedback Feedback[]
 }
 
 model Feedback {
  id    String @id @default(cuid())
- eventId String
+ game Game @relation(fields: [gameId], references: [id])
+ gameId String
+ player Player @relation (fields: [playerId], references: [id])
  playerId String
- status Boolean
- note String
+ status Boolean?
+ note String?
 }
 
 model Player {
 id String @id @default(cuid())
 name String
 email String
+feedback Feedback[]
 }
 
 

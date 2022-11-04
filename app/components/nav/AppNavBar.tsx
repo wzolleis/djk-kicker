@@ -19,6 +19,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
       <header className="bg-gray-100 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
           <div className="flex items-center justify-between px-4 py-3 sm:p-0">
               <div className="flex items-center justify-between">
+                  <img src="/img/logo.png" alt="" className={"h-10"}/>
                   <span className="px-2 text-4xl font-poppins-semibold">{messages.app.title}</span>
               </div>
               <div className="sm:hidden">
