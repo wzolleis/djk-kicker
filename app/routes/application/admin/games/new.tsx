@@ -1,9 +1,6 @@
-import { Form, useActionData, useTransition } from "@remix-run/react";
-import GameView from "~/components/admin/games/GameView";
-import type { GameActionData } from "~/models/games.server";
+import { Form, useTransition } from "@remix-run/react";
 import { createGame } from "~/models/games.server";
 import messages from "~/components/i18n/messages";
-import dateUtils from "~/dateUtils";
 import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { requireUserId } from "~/session.server";
@@ -26,21 +23,41 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const NewGame = () => {
-  const errors = useActionData<GameActionData>();
   const transition = useTransition();
-  const defaultValues: GameActionData = {
-    gameTime: dateUtils.format(new Date(), { format: "dd.MM.yyyy" }),
-    name: "Fussball"
-  };
 
   return (
     <div className="grid gap-6 mb-6 bg-gray-300 md:grid-cols-2 px-4">
+      <div className="text-4xl font-poppins-semibold md:col-span-2">Neues Spiel</div>
       <Form method="post" className="py-2">
         <fieldset
           disabled={transition.state === "submitting"}
         >
-          {/* @ts-ignore */}
-          <GameView errors={errors} defaultValues={defaultValues} />
+          <div>
+            <label htmlFor="eventTime" className="block mb-2 text-sm font-medium text-gray-900">
+              {messages.gamesform.gameTime}
+            </label>
+            <input type="datetime-local"
+                   id="gameTime"
+                   name="gameTime"
+                   required
+                   autoFocus
+                   placeholder={messages.gamesform.gameTime}
+                   className="border text-sm rounded-lg block w-full p-2.5 border-gray-600 placeholder-gray-400 focus:border-blue-500 border-2"
+            />
+          </div>
+          <div>
+            <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">
+              {messages.gamesform.name}
+            </label>
+            <input type="text"
+                   id="name"
+                   name="name"
+                   required
+                   placeholder={messages.gamesform.name}
+                   className="border text-sm rounded-lg block w-full p-2.5 border-gray-600 placeholder-gray-400 focus:border-blue-500 border-2"
+                   defaultValue={"Fussball"}
+            />
+          </div>
           <div className="text-right">
             <button
               type="submit"

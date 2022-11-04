@@ -3,6 +3,11 @@ const messages = {
     welcome: "Willkommen bei den DJK Kickern",
     title: "DJK Kicker"
   },
+  appmenu: {
+    administration: "Verwaltung",
+    gameadministration: "Spieleverwaltung",
+    games: "Alle Spiele"
+  },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",
     description: "Viel Spaß beim Bolzen",

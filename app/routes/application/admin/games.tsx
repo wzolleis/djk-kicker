@@ -1,4 +1,4 @@
-import { getGames } from "~/models/games.server";
+import { readGames } from "~/models/games.server";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { requireUserId } from "~/session.server";
@@ -8,14 +8,14 @@ import type { Game } from "@prisma/client";
 import dateUtils from "~/dateUtils";
 
 type LoaderData = {
-  games: Awaited<ReturnType<typeof getGames>>
+  games: Awaited<ReturnType<typeof readGames>>
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUserId(request);
 
   return json<LoaderData>({
-    games: await getGames()
+    games: await readGames()
   });
 };
 
