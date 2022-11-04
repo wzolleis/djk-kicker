@@ -15,11 +15,11 @@ const PlayerCard = ({ player, feedback }: PlayerCardProps) => {
   }
 
   return (
-    <section className={"rounded-xl bg-white shadow-lg shadow-slate-900/20"}>
-      <main className={"grid grid-cols-6 px-4 py-3 gap-3"}>
+    <section className={"rounded-xl bg-slate-100/50"}>
+      <main className={"grid grid-cols-6 p-5 gap-3"}>
         <div className={"col-span-5 flex flex-col gap-2"}>
           <div className={"flex gap-2 items-center"}>
-            <p className={"text-darkblue font-inter-medium text-item-heading"}>{player.name}</p>
+            <p className={"text-darkblue font-poppins-semibold text-item-heading"}>{player.name}</p>
             <div
               className={`font-inter-light text-tag rounded-full py-1 px-3 text-item-caption truncate ${feedback.status === null ? "bg-gray-200" : feedback.status ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>
               {feedback.status === null ? messages.game.players.status.undefined : feedback.status ? messages.game.players.status.confirmed : messages.game.players.status.declined}

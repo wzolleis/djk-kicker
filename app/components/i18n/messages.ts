@@ -19,7 +19,7 @@ const messages = {
   game: {
     players: {
       title: "Spieler",
-      add: "+ Hinzufügen",
+      add: "Hinzufügen",
       status: {
         undefined: "Unbekannt",
         confirmed: "Zugesagt",
