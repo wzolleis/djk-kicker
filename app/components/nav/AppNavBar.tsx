@@ -20,7 +20,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
           <div className="flex items-center justify-between px-4 py-3 sm:p-0">
               <div className="flex items-center justify-between">
                   <a href="/">
-                      <img src="/img/logo.jpg" className="h-8" alt="Jackfit" />
+                      <img src="/img/soccer_ball.jpg" className="h-12" alt="Jackfit" />
                   </a>
                   <span className="text-white px-2 uppercase">{messages.app.title}</span>
                   <span className="text-white px-2 uppercase">{user?.email || "Login"}</span>

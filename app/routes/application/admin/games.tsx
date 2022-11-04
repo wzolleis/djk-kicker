@@ -18,24 +18,29 @@ export const loader = async ({ request }: LoaderArgs) => {
   });
 };
 
+const isOldGame = (game: Game): boolean => !!game.eventTime && (new Date() > new Date(game.eventTime))
+
+const GameView = ({ game }: { game: Game }) => {
+  const image = isOldGame(game) ? "/img/game_over_3.jpg" : "/img/ball.jpg";
+  return (
+    <li>
+      <Link to={game.id}
+            className="font-medium block px-2 py-1 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300">
+        <div className="flex">
+          <img src={image} className="h-8 flex-none" alt="Spiel" />
+          <span className="flex-1 ml-2">{game.name}</span>
+        </div>
+      </Link>
+    </li>
+  );
+};
+
 type GameListProps = { games: Game[] }
 const GameList = ({ games }: GameListProps) => {
   return (
     <div className="mb-2 p-2 bg-gray-300 overflow-auto">
       <ul className="mb-2">
-        {games.map((game) => {
-            const isActive = true;
-            const bgStyle = isActive ? "bg-gray-400 text-white" : "";
-            return (
-              <li key={game.id} className={"hover:bg-gray-400 hover:text-white " + bgStyle}>
-                <Link to={game.id}
-                      className={isActive ? "font-bold" : "font-medium"}>
-                  <span>{`${messages.gamesform.name}: ${game.name}`}</span>
-                </Link>
-              </li>
-            );
-          }
-        )}
+        {games.map((game) => <GameView key={game.id} game={game} />)}
       </ul>
       <Link to="new"
             className="py-2 hover:bg-gray-100 rounded border-gray-300">
@@ -45,7 +50,6 @@ const GameList = ({ games }: GameListProps) => {
     </div>
   );
 };
-
 
 const Games = () => {
   const { games } = useLoaderData<LoaderData>();
