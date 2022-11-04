@@ -43,15 +43,7 @@ const messages = {
         declined: "Abgesagt"
       }
     }
-  },
-
-  tooltips: {
-    games: {
-      overview: "Du siehst dir gerade einer Übersicht aller Spiele an. Solltest du keinen gültigen Einladungslink haben, kannst du hier nach dem aktuellsten Spiel suchen."
-    }
   }
 };
-
-
 
 export default messages;

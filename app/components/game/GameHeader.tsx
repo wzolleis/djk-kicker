@@ -12,6 +12,7 @@ const GameHeader = ({game}: gameHeaderProps) => {
         <div className={"flex flex-col w-full items-start"}>
             <p className={"rounded px-2 py-1 bg-indigo-200 text-indigo-700 font-poppins-regular text-label-medium"}>{useDate(game.gameTime!)}</p>
             <p className={"font-poppins-semibold text-headline-medium text-slate-800"}>{game.name}</p>
+
         </div>
     );
 };
