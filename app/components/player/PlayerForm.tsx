@@ -12,8 +12,8 @@ const PlayerForm = ({gameId }: PlayerFormProps) => {
       <div className={"flex flex-col justify-center items-start"}>
         <div className={"flex font-inter-semibold text-gray-700 text-subheading gap-1"}>
           <Link to={`/games/${gameId}`} className={"text-indigo-700"}>Spiel</Link> /
-          <p className={""}>Status
-            bearbeiten</p>
+          <p className={""}>Spieler
+            Erstellen</p>
         </div>
       </div>
       <Form method={"post"}>
