@@ -24,12 +24,31 @@ model User {
   testUser Boolean @default(false)
 }
 
-model Event {
+model Game {
   id    String @id @default(cuid())
-  eventTime DateTime?
+  gameTime DateTime? @default(now())
   name String
   link String
+  feedback Feedback[]
 }
+
+model Feedback {
+ id    String @id @default(cuid())
+ game Game @relation(fields: [gameId], references: [id])
+ gameId String
+ player Index @relation (fields: [playerId], references: [id])
+ playerId String
+ status Boolean?
+ note String?
+}
+
+model Index {
+id String @id @default(cuid())
+name String
+email String
+feedback Feedback[]
+}
+
 
 model Password {
   hash String
