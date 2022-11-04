@@ -26,9 +26,10 @@ model User {
 
 model Game {
   id    String @id @default(cuid())
-  gameTime DateTime? @default(now())
+  gameTime DateTime @default(now())
   name String
-  link String
+  link String?
+  spielort String?
   feedback Feedback[]
 }
 

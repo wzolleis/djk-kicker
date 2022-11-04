@@ -5,6 +5,7 @@ import { requireUserId } from "~/session.server";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import type { Game } from "@prisma/client";
+import dateUtils from "~/dateUtils";
 
 type LoaderData = {
   games: Awaited<ReturnType<typeof getGames>>
@@ -21,17 +22,21 @@ export const loader = async ({ request }: LoaderArgs) => {
 const isOldGame = (game: Game): boolean => !!game.gameTime && (new Date() > new Date(game.gameTime));
 
 const GameView = ({ game }: { game: Game }) => {
-  const image = isOldGame(game) ? "/img/game_over_3.jpg" : "/img/ball.jpg";
+  let oldGame = isOldGame(game);
+  const image = oldGame ? "/img/game_over_3.jpg" : "/img/ball.jpg";
+  const gameTime = dateUtils.format(new Date(game.gameTime));
   return (
     <li>
       <Link to={game.id}
-            className="font-medium block px-2 py-1 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300">
+            className={`font-medium block px-2 py-1 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300 ${oldGame ? "text-gray-100" : ""}`}
+      >
         <div className="flex">
           <img src={image} className="h-8 flex-none" alt="Spiel" />
-          <span className="flex-1 ml-2">{game.name}</span>
+          <span className="flex-1 ml-2">{`${game.name} - ${gameTime}`}</span>
         </div>
       </Link>
     </li>
+
   );
 };
 

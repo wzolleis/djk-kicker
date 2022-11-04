@@ -1,7 +1,7 @@
-import {useMatches} from "@remix-run/react";
-import {useMemo} from "react";
+import { useMatches } from "@remix-run/react";
+import { useMemo } from "react";
 
-import type {User} from "~/models/user.server";
+import type { User } from "~/models/user.server";
 
 const DEFAULT_REDIRECT = "/";
 
@@ -72,12 +72,12 @@ export function validateEmail(email: unknown): email is string {
 }
 
 
-export function useDate(date: Date) {
+export function useDate(date: Date): string {
 
     if (date === null) {
-        return "Unbekannt"
+        return "Unbekannt";
     }
     const parsedDate = new Date(date);
-    return `${parsedDate.getDate()}.${parsedDate.getMonth() + 1}.${parsedDate.getFullYear()}`
+    return `${parsedDate.getDate()}.${parsedDate.getMonth() + 1}.${parsedDate.getFullYear()}`;
 
 }

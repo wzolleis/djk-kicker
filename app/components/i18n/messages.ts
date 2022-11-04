@@ -17,12 +17,12 @@ const messages = {
     createAccount: "Neuen Account anlegen"
   },
   gamesform: {
-    name: 'Name',
-    new: 'Neu',
-    eventTime: 'Datum',
+    name: "Name",
+    new: "Neu",
+    gameTime: "Datum",
     create: {
-      submit: 'Speichern',
-      submitting: 'Speichere...'
+      submit: "Speichern",
+      submitting: "Speichere..."
     }
 
   },
