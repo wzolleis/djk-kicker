@@ -1,4 +1,4 @@
-import { getGames } from "~/models/games.server";
+import { readGames } from "~/models/admin.games.server";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { requireUserId } from "~/session.server";
@@ -8,14 +8,14 @@ import type { Game } from "@prisma/client";
 import dateUtils from "~/dateUtils";
 
 type LoaderData = {
-  games: Awaited<ReturnType<typeof getGames>>
+  games: Awaited<ReturnType<typeof readGames>>
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUserId(request);
 
   return json<LoaderData>({
-    games: await getGames()
+    games: await readGames()
   });
 };
 
@@ -50,7 +50,7 @@ const GameList = ({ games }: GameListProps) => {
       <Link to="new"
             className="py-2 hover:bg-gray-100 rounded border-gray-300">
         <i className="fa-solid fa-square-plus" />
-        <span className="m-2">{messages.gamesform.new}</span>
+        <span className="m-2">{messages.adminGamesForm.new}</span>
       </Link>
     </div>
   );

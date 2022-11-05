@@ -32,10 +32,11 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 
 const GameIndex = () => {
-  const { game } = useLoaderData() as LoaderData;
+  const { game } = useLoaderData<LoaderData>();
 
   return (
     <section className={"flex flex-col gap-3"}>
+      {  /* @ts-ignore */}
       <GameHeader game={game}></GameHeader>
       <Players game={game}></Players>
     </section>);

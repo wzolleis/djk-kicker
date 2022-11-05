@@ -1,6 +1,5 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import messages from "~/components/i18n/messages";
-import { useNavigate } from "@remix-run/react";
 
 const GamesSvg = () => {
   return (
@@ -40,8 +39,8 @@ const AdminIndex = () => {
           <span className="p-5 rounded-full bg-orange-500 text-white shadow-lg shadow-orange-200">
             <GamesSvg />
           </span>
-          <Link className="text-xl font-medium text-slate-700 mt-3" to="games">{messages.admin.games}</Link>
-          <p className="mt-2 text-sm text-slate-500">{messages.admin.gamesDescription}</p>
+          <Link className="text-xl font-medium text-slate-700 mt-3" to="games">{messages.adminLandingPage.games}</Link>
+          <p className="mt-2 text-sm text-slate-500">{messages.adminLandingPage.gamesDescription}</p>
         </div>
         <div
           className="p-10 flex flex-col items-center text-center group md:lg:xl:border-r md:lg:xl:border-b hover:bg-slate-50 cursor-pointer"
@@ -51,9 +50,9 @@ const AdminIndex = () => {
             <UsersSvg />
           </span>
           <p className="text-xl font-medium text-slate-700 mt-3">
-            <Link to="users">{messages.admin.users}</Link>
+            <Link to="users">{messages.adminLandingPage.users}</Link>
           </p>
-          <p className="mt-2 text-sm text-slate-500">{messages.admin.usersDescription}</p>
+          <p className="mt-2 text-sm text-slate-500">{messages.adminLandingPage.usersDescription}</p>
         </div>
       </div>
     </div>
