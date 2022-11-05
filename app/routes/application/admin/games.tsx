@@ -1,4 +1,4 @@
-import { readGames } from "~/models/games.server";
+import { readGames } from "~/models/admin.games.server";
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { requireUserId } from "~/session.server";
@@ -50,7 +50,7 @@ const GameList = ({ games }: GameListProps) => {
       <Link to="new"
             className="py-2 hover:bg-gray-100 rounded border-gray-300">
         <i className="fa-solid fa-square-plus" />
-        <span className="m-2">{messages.gamesform.new}</span>
+        <span className="m-2">{messages.adminGamesForm.new}</span>
       </Link>
     </div>
   );

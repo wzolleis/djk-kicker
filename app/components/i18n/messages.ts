@@ -21,22 +21,29 @@ const messages = {
     backToLogin: "Zur Anmeldung",
     createAccount: "Neuen Account anlegen"
   },
-  gamesform: {
+  adminGamesForm: {
     name: "Name",
-    new: "Neu",
-    gameTime: "Datum",
-    create: {
-      submit: "Speichern",
-      submitting: "Speichere..."
-    }
-
+    new: "Neu"
   },
-  admin: {
-    title: 'Verwaltung',
-    games: 'Spiele',
-    gamesDescription: 'Spiele anlegen, Spiele absagen, usw...',
-    users: 'Benutzerverwaltung',
-    usersDescription: 'Berechtigungen und so ein Quatsch'
+  adminCreateGameForm: {
+    newGame: "Neues Spiel anlegen",
+    gameTime: "Datum",
+    name: "Name",
+    submit: "Speichern",
+    submitting: "Speichere..."
+  },
+  adminEditGameForm: {
+    gameTime: "Datum",
+    name: "Name",
+    submit: "Speichern",
+    submitting: "Speichere..."
+  },
+  adminLandingPage: {
+    title: "Verwaltung",
+    games: "Spiele",
+    gamesDescription: "Spiele anlegen, Spiele absagen, usw...",
+    users: "Benutzerverwaltung",
+    usersDescription: "Berechtigungen und so ein Quatsch"
   },
   game: {
     players: {

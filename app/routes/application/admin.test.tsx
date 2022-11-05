@@ -8,5 +8,5 @@ const setup = () => {
 
 it("should render without crash", () => {
   setup();
-  expect(screen.getByText(messages.admin.title)).toBeDefined();
+  expect(screen.getByText(messages.adminLandingPage.title)).toBeDefined();
 });
