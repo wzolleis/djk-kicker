@@ -33,12 +33,18 @@ const messages = {
     submitting: "Speichere..."
   },
   adminEditGameForm: {
+    title: "Spiel aktualisieren",
     gameTime: "Datum",
     name: "Name",
+    spielort: "Spielort",
+    optionHalle: "Halle",
+    optionDraussen: "Draussen",
     update: "Speichern",
     updating: "Speichere...",
     delete: "Löschen",
-    deleting: "Lösche..."
+    deleting: "Lösche...",
+    deleteConfirmation: "Das Spiel wirklich löschen ?",
+    gameDeleted: "Das Spiel wurde gelöscht"
   },
   adminLandingPage: {
     title: "Verwaltung",
