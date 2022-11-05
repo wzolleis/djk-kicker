@@ -35,7 +35,7 @@ model Game {
 
 model Feedback {
  id    String @id @default(cuid())
- game Game @relation(fields: [gameId], references: [id])
+ game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
  gameId String
  player Player @relation (fields: [playerId], references: [id])
  playerId String @unique
