@@ -29,7 +29,7 @@ model Game {
   gameTime DateTime @default(now())
   name String
   link String?
-  spielort String?
+  spielort String @default("0")
   feedback Feedback[]
 }
 

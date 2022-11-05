@@ -4,6 +4,7 @@ import type { Game } from "@prisma/client";
 export type GameActionData = {
   gameTime: string | null,
   name: string | null,
+  spielort: string | null
 }
 
 
@@ -15,7 +16,7 @@ export const readGames = async (): Promise<Game[]> => {
   });
 };
 
-export const createGame = async (game: Pick<Game, "gameTime" | "name">) => {
+export const createGame = async (game: Pick<Game, "gameTime" | "name" | "spielort">) => {
   await prisma.game.create({ data: game });
 };
 

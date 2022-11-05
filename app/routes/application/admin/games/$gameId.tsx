@@ -2,7 +2,7 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import ErrorView from "~/components/errorhandling/ErrorView";
-import { Form, useCatch, useLoaderData, useTransition } from "@remix-run/react";
+import { Form, useCatch, useLoaderData, useSubmit, useTransition } from "@remix-run/react";
 import CatchView from "~/components/errorhandling/CatchView";
 import messages from "~/components/i18n/messages";
 import { deleteGame, findGameById, updateGame } from "~/models/admin.games.server";
@@ -11,6 +11,7 @@ import type { Game } from "@prisma/client";
 import { dateTimeLocalInputValueToDateTime, dateTimeToDateTimeLocalInputFormValue } from "~/utils";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
+import { useEffect, useRef } from "react";
 
 type LoaderData = {
   game: Awaited<ReturnType<typeof findGameById>>;
@@ -29,19 +30,21 @@ export const action: ActionFunction = async ({
                                              }) => {
   const formData = await request.formData();
 
-
   const name = formData.get("name");
   const gameTime = formData.get("gameTime");
   const userId = await requireUserId(request);
   const intent = formData.get("intent");
+  const spielort = formData.get("spielort");
+  const validSpielort =
+    typeof spielort === "string" && !Number.isNaN(parseInt(spielort, 10));
 
+  invariant(typeof gameId === "string", "GameId must be a string");
   invariant(typeof userId === "string", "UserId must be a string");
   invariant(typeof name === "string", "name must be a string");
   invariant(typeof gameTime === "string", "gameTime must be a string");
   invariant(!!userId, "UserId muss gesetzt sein");
-  invariant(typeof gameId === "string", "GameId must be a string");
   invariant(!!gameId, "GameId muss gesetzt sein");
-
+  invariant(validSpielort, "Der Wert von Spielort muss eine Zahl sein");
   if (intent === "delete") {
     await deleteGame(gameId);
     return redirect("application/admin/games");
@@ -53,7 +56,7 @@ export const action: ActionFunction = async ({
     name,
     gameTime: dateTimeLocalInputValueToDateTime(gameTime).toJSDate(),
     link: null, // todo
-    spielort: null // todo
+    spielort
   };
 
   await updateGame(toUpdate);
@@ -67,18 +70,35 @@ const notify = (message: string) => {
 const EditGame = () => {
   const { game } = useLoaderData<LoaderData>();
   const transition = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
+  const submit = useSubmit();
+
+  useEffect(() => {
+    if (formRef.current) {
+      // initialisiere die Select-Box mit dem Wert des Spielorts wenn ein Game geladen wurde
+      // @ts-ignore
+      formRef.current.elements["spielort"].value = game.spielort;
+    }
+  }, [game]);
+
   const isUpdating = transition.submission?.formData.get("intent") === "update";
   const isDeleting = transition.submission?.formData.get("intent") === "delete";
+
+  const handleDelete = (event: any) => {
+    if (confirm(messages.adminEditGameForm.deleteConfirmation)) {
+      notify(messages.adminEditGameForm.gameDeleted);
+      submit(event.currentTarget);
+    }
+  };
 
   return (
     <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
       <div className="pt-2 font-poppins-semibold text-4xl md:col-span-2">{`Spiel ${game.name}`}</div>
-      <Form method="post" className="py-2">
+      <Form ref={formRef} method="post" className="py-2">
         <fieldset disabled={transition.state === "submitting"}>
           <div>
-            <label
-              htmlFor="name"
-              className="mb-2 block text-sm font-medium text-gray-900"
+            <label htmlFor="name"
+                   className="mb-2 block text-sm font-medium text-gray-900"
             >
               {messages.adminGamesForm.name}
             </label>
@@ -93,47 +113,55 @@ const EditGame = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="eventTime"
-              className="mb-2 block pt-2 text-sm font-medium text-gray-900"
+            <label htmlFor="eventTime"
+                   className="mb-2 block pt-2 text-sm font-medium text-gray-900"
             >
               {messages.adminEditGameForm.gameTime}
             </label>
-            <input
-              type="datetime-local"
-              id="gameTime"
-              name="gameTime"
-              required
-              autoFocus
-              placeholder={messages.adminEditGameForm.gameTime}
-              className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500"
-              defaultValue={dateTimeToDateTimeLocalInputFormValue(
-                DateTime.fromISO(game.gameTime)
-              )}
+            <input type="datetime-local"
+                   id="gameTime"
+                   name="gameTime"
+                   required
+                   autoFocus
+                   placeholder={messages.adminEditGameForm.gameTime}
+                   className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500"
+                   defaultValue={dateTimeToDateTimeLocalInputFormValue(
+                     DateTime.fromISO(game.gameTime)
+                   )}
             />
           </div>
-          <div className="flex justify-between">
-            <button
-              type="submit"
-              className="bg-y my-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
-              name="intent"
-              value="delete"
-              disabled={isDeleting}
-              onClick={() => {
-                notify("Das Spiel wurde gelöscht");
-              }}
+          <div className={"flex flex-col"}>
+            <label className="mb-2 block pt-2 text-sm font-medium text-gray-900"
+                   htmlFor="spielort"
             >
-              {transition.state === "submitting" ? messages.adminEditGameForm.deleting : messages.adminEditGameForm.delete}
+              {messages.adminEditGameForm.spielort}
+            </label>
+            <select name="spielort"
+                    id="spielort"
+                    className="rounded rounded border border-gray-300 outline-none"
+            >
+              <option value={"0"}>{messages.adminEditGameForm.optionHalle}</option>
+              <option value={"1"}>{messages.adminEditGameForm.optionDraussen}</option>
+            </select>
+          </div>
+
+          <div className="flex justify-between">
+            <button type="button"
+                    className="bg-y my-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
+                    name="intent"
+                    value="delete"
+                    disabled={isDeleting}
+                    onClick={handleDelete}
+            >
+              {transition.state === "submitting"
+                ? messages.adminEditGameForm.deleting
+                : messages.adminEditGameForm.delete}
             </button>
-            <button
-              type="submit"
-              className="bg-y my-2 rounded bg-blue-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-blue-300"
-              name="intent"
-              value="update"
-              disabled={isUpdating}
-              onClick={() => {
-                notify("Das Spiel wurde gespeichert");
-              }}
+            <button type="submit"
+                    className="bg-y my-2 rounded bg-blue-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-blue-300"
+                    name="intent"
+                    value="update"
+                    disabled={isUpdating}
             >
               {transition.state === "submitting"
                 ? messages.adminEditGameForm.updating
@@ -147,22 +175,20 @@ const EditGame = () => {
 };
 
 export const ErrorBoundary = ({ error }: { error: Error }) => {
-    return <ErrorView error={error} />;
-  }
-;
+  return <ErrorView error={error} />;
+};
 
 export const CatchBoundary = () => {
-    const caught = useCatch();
-    const { statusText, status } = caught;
-    return (
-      <CatchView
-        statusText={statusText}
-        status={status}
-        caught={caught}
-        description={"Fehler bei der Verwaltung des Spiels"}
-      />
-    );
-  }
-;
+  const caught = useCatch();
+  const { statusText, status } = caught;
+  return (
+    <CatchView
+      statusText={statusText}
+      status={status}
+      caught={caught}
+      description={"Fehler bei der Verwaltung des Spiels"}
+    />
+  );
+};
 
 export default EditGame;
