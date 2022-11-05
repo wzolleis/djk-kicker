@@ -46,7 +46,7 @@ const NewGame = () => {
 
   return (
     <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
-      <div className="pt-2 font-poppins-semibold text-4xl md:col-span-2">
+      <div className="pt-2 font-poppins-semibold text-xl md:text-4xl md:col-span-2">
         {messages.adminCreateGameForm.newGame}
       </div>
       <Form method="post" className="py-2">

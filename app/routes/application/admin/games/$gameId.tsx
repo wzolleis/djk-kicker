@@ -93,8 +93,8 @@ const EditGame = () => {
 
   return (
     <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
-      <div className="pt-2 font-poppins-semibold text-4xl md:col-span-2">{`Spiel ${game.name}`}</div>
-      <Form ref={formRef} method="post" className="py-2">
+      <div className="pt-2 font-poppins-semibold md:col-span-2">{messages.adminEditGameForm.title}</div>
+      <Form ref={formRef} method="post" className="pt-2">
         <fieldset disabled={transition.state === "submitting"}>
           <div>
             <label htmlFor="name"
@@ -145,9 +145,9 @@ const EditGame = () => {
             </select>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-end">
             <button type="button"
-                    className="bg-y my-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
+                    className="m-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
                     name="intent"
                     value="delete"
                     disabled={isDeleting}

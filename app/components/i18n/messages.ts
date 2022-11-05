@@ -33,6 +33,7 @@ const messages = {
     submitting: "Speichere..."
   },
   adminEditGameForm: {
+    title: "Spiel aktualisieren",
     gameTime: "Datum",
     name: "Name",
     spielort: "Spielort",
