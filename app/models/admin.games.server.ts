@@ -23,6 +23,11 @@ export const updateGame = async (game: Game) => {
   await prisma.game.update({ data: game, where: { id: game.id } });
 };
 
+export const deleteGame = async (gameId: string) => {
+  await prisma.game.delete({ where: { id: gameId } });
+};
+
+
 export const findGameById = async (gameId: string): Promise<Game> => {
   const game = await prisma.game.findUnique({ where: { id: gameId } });
   if (!game) {

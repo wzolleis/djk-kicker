@@ -35,8 +35,10 @@ const messages = {
   adminEditGameForm: {
     gameTime: "Datum",
     name: "Name",
-    submit: "Speichern",
-    submitting: "Speichere..."
+    update: "Speichern",
+    updating: "Speichere...",
+    delete: "Löschen",
+    deleting: "Lösche..."
   },
   adminLandingPage: {
     title: "Verwaltung",
