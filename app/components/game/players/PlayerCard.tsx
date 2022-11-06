@@ -1,14 +1,13 @@
 import type { Player, Feedback } from "@prisma/client";
 import messages from "~/components/i18n/messages";
 import { Link } from "@remix-run/react";
-import { useDate } from "~/utils";
+import {PlayerWithFeedback} from "~/models/player.server";
 
 interface PlayerCardProps {
-  player: Player;
-  feedback: Feedback;
+  player: PlayerWithFeedback;
 }
 
-const PlayerCard = ({ player, feedback }: PlayerCardProps) => {
+const PlayerCard = ({ player }: PlayerCardProps) => {
   return (
     <main
       className={
@@ -24,22 +23,22 @@ const PlayerCard = ({ player, feedback }: PlayerCardProps) => {
               {player.name}
             </p>
             <div
-              className={`rounded-lg py-1 px-3 font-poppins-medium text-label-medium ring ring-1 ${
-                feedback.status === null
-                  ? "bg-white text-slate-700 shadow-xl shadow-inner shadow-slate-500/20 ring-slate-200"
-                  : feedback.status
-                  ? "bg-white text-green-700 shadow-xl shadow-inner shadow-green-500/50 ring-green-200"
-                  : "bg-white text-red-700 shadow-xl shadow-inner shadow-red-500/50 ring-red-200"
+              className={`rounded-lg py-1 px-3 font-poppins-regular text-label-medium ${
+                player.feedback.status === null
+                  ? "bg-white text-slate-700 shadow-xl shadow-inner shadow-slate-500/40 ring-slate-200"
+                  : player.feedback.status
+                  ? "bg-green-500 text-white shadow-lg shadow-green-500/50"
+                  : "bg-red-500 text-white shadow-lg shadow-red-500/50"
               }`}
             >
-              {feedback.status === null
+              {player.feedback.status === null
                 ? messages.game.players.status.undefined
-                : feedback.status
+                : player.feedback.status
                 ? messages.game.players.status.confirmed
                 : messages.game.players.status.declined}
             </div>
           </div>
-          <p className={"text-label-medium text-gray-500"}>{feedback.note}</p>
+          <p className={"text-label-medium text-gray-500"}>{player.feedback.note}</p>
         </div>
       </div>
       <Link

@@ -31,6 +31,8 @@ model Game {
   link String?
   spielort String @default("0")
   feedback Feedback[]
+  token String @default(cuid()) @unique
+
 }
 
 model Feedback {
@@ -41,6 +43,9 @@ model Feedback {
  playerId String
  status Boolean?
  note String?
+ @@unique([playerId, gameId])
+
+
 }
 
 model Player {

@@ -2,26 +2,31 @@ import messages from "~/components/i18n/messages";
 import PlayerCard from "~/components/game/players/PlayerCard";
 import {Link} from "@remix-run/react";
 // @ts-ignore
-import type {GameWithFeedback} from "~/routes/games/$gameId";
 import MainPageContent from "~/components/common/MainPageContent";
+import SmallButton from "~/components/common/buttons/SmallButton";
+import type {FeedBackWithPlayer} from "~/routes/application/games/$gameId";
+import {PlayerWithFeedback} from "~/models/player.server";
 
 
 interface PlayerProps {
-    game: GameWithFeedback;
+    players: PlayerWithFeedback[];
+    gameId: string
 }
 
 
-const Players = ({game}: PlayerProps) => {
+const Players = ({players, gameId}: PlayerProps) => {
     return (
         <>
-            {/*<Link to={"player/create"}*/}
-            {/*      className={"font-poppins-regular text-label-medium text-white rounded-lg py-3 px-5 bg-indigo-500 "}>{messages.game.players.add}</Link>*/}
             <MainPageContent>
-                <p className={"font-poppins-medium text-headline-small text-darkblue"}>Spieler</p>
+                <header className={"flex justify-between items-center"}>
+                    <p className={"font-poppins-medium text-headline-small text-darkblue"}>Spieler</p>
+                    <SmallButton title={"Spieler hinzufügen"}
+                                 link={`/application/player/create?gameid=${gameId}`}></SmallButton>
+                </header>
                 <main className={"flex flex-col gap-3 mt-5"}>
                     {
-                        game.feedback.map((feedback: GameWithFeedback) => (
-                            <PlayerCard key={feedback.id} player={feedback.player} feedback={feedback}></PlayerCard>
+                        players.map((player: PlayerWithFeedback) => (
+                            <PlayerCard key={player.id} player={player}></PlayerCard>
                         ))
                     }
                 </main>
