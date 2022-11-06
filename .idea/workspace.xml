@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="16dd0235-7559-4cdb-afcd-ba948b864a67" name="Changes" comment="* Layout-Anpassungen + Styling">
+    <list default="true" id="16dd0235-7559-4cdb-afcd-ba948b864a67" name="Changes" comment="prisma mit binaryTargets">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -277,7 +279,21 @@
       <option name="project" value="LOCAL" />
       <updated>1667690020736</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="prisma mit binaryTargets">
+      <created>1667751105784</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1667751105784</updated>
+    </task>
+    <task id="LOCAL-00028" summary="prisma mit binaryTargets">
+      <created>1667751147705</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1667751147705</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -326,7 +342,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Konfiguration und Run-Scripts für tailwindcss hinzugefügt." />
     <MESSAGE value="Tailwind u. Prisma in package.json." />
     <MESSAGE value="Prisma Setup + Schema" />
     <MESSAGE value="Login Formular" />
@@ -351,7 +366,8 @@
     <MESSAGE value="* Loesche ein Spiels + Feedback&#10;* Es gibt einen Feedback über einen Toast.&#10;* Keine Rückfrage" />
     <MESSAGE value="* Spielort kann jetzt auch gespeichert werden. &#10;* useEffect um den Wert im Select zu setzen, form.reset und setzen des Default-Values funktioniert nicht." />
     <MESSAGE value="* Layout-Anpassungen + Styling" />
-    <option name="LAST_COMMIT_MESSAGE" value="* Layout-Anpassungen + Styling" />
+    <MESSAGE value="prisma mit binaryTargets" />
+    <option name="LAST_COMMIT_MESSAGE" value="prisma mit binaryTargets" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
