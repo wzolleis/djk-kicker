@@ -8,7 +8,7 @@ import {Form} from "@remix-run/react";
 import type {FeedbackForm} from "~/helpers/formdata/feedback.formdata.server";
 import {getFeedbackForm} from "~/helpers/formdata/feedback.formdata.server";
 import {updatePlayer} from "~/models/player.server";
-import PlayerForm from "~/components/player/PlayerForm";
+import EditPlayerStatusForm from "~/components/player/EditPlayerStatusForm";
 import PageHeader from "~/components/common/PageHeader";
 
 export type PlayerFeedbackForGame = Prisma.PlayerGetPayload<{
@@ -55,7 +55,7 @@ const EditPlayerFeedback = () => {
     return (
         <>
             <PageHeader title={"Status bearbeiten"}></PageHeader>
-            <PlayerForm player={player}></PlayerForm>
+            <EditPlayerStatusForm player={player}></EditPlayerStatusForm>
         </>
     );
 

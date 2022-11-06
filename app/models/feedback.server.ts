@@ -1,55 +1,76 @@
-import type { Feedback } from "@prisma/client";
-import type { Game, Player } from "@prisma/client";
-import { prisma } from "~/db.server";
-import { Nullable } from "vitest";
-
+import type {Feedback, Game, Player} from "@prisma/client";
+import {prisma} from "~/db.server";
+import {Nullable} from "vitest";
 
 
 export async function getFeedbackForGame(gameId: Feedback["gameId"]) {
-  return await prisma.feedback.findMany({ where: { gameId } });
+    return await prisma.feedback.findMany({where: {gameId}});
+}
+
+export async function getUniqueFeedbackForGameAndPlayer(gameId: Game["id"], playerId: Player["id"]): Promise<Feedback> {
+    let feedback = await prisma.feedback.findUnique({
+        where: {
+            playerId_gameId: {
+                playerId: playerId,
+                gameId: gameId
+            }
+        }
+    })
+    if (!feedback) {
+        feedback = await createDefaultFeedback(gameId, playerId)
+    }
+    return feedback
 }
 
 export async function getPlayerFeedbackForGame(id: Player["id"], gameId: Feedback["gameId"]) {
-  return await prisma.player.findUnique({
-    where: {
-      id
-    },
-    include: {
-      feedback: {
+    return await prisma.player.findUnique({
         where: {
-          gameId
+            id
+        },
+        include: {
+            feedback: {
+                where: {
+                    gameId
+                }
+            }
         }
-      }
-    }
-  });
+    });
 }
 
 export async function updateFeedback(playerId: Player["id"], gameId: Game["id"], status: Nullable<boolean>, note: Nullable<string>) {
-  return await prisma.feedback.updateMany({
-    where: {
-      AND: [{
-        gameId: gameId
-      },
-        { playerId: playerId }]
-    },
-    data: {
-      status: status,
-      note: note
-    }
-  });
+    return await prisma.feedback.updateMany({
+        where: {
+            AND: [{
+                gameId: gameId
+            },
+                {playerId: playerId}]
+        },
+        data: {
+            status: status,
+            note: note
+        }
+    });
 }
 
 
-export async function createDefaultFeedback(gameId: Game["id"]) {
-  const players = await prisma.player.findMany();
-  for (const player of players) {
-    const feedback = await prisma.feedback.create({
-      data: {
-        gameId: gameId,
-        playerId: player.id,
-        status: null
-      }
-    });
+export async function createFeedback(playerId: Player["id"], gameId: Game["id"], status: Nullable<boolean>, note: Nullable<string>) {
+    return await prisma.feedback.create({
+        data: {
+            playerId: playerId,
+            gameId: gameId,
+            status: status,
+            note: note
+        }
+    })
+}
 
-  }
+
+export async function createDefaultFeedback(gameId: Game["id"], playerId: Player["id"]) {
+    return await prisma.feedback.create({
+        data: {
+            gameId: gameId,
+            playerId: playerId,
+            status: null
+        }
+    })
 }
