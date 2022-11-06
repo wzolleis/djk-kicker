@@ -53,7 +53,13 @@ Note: When running the Netlify CLI, file changes will rebuild assets, but you wi
 
 ### Build
 
-* Prüfen, ob in schema.prisma als Provider mysql eingetragen ist
+* Prüfen, ob in schema.prisma als Provider *mysql* eingetragen ist
+```
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+```
 * Build starten (css, schema, remix...)
 ```sh
  npm run build
