@@ -29,7 +29,7 @@ model Game {
   gameTime DateTime @default(now())
   name String
   link String?
-  spielort String @default("0")
+  location String @default("0")
   feedback Feedback[]
 }
 
@@ -38,7 +38,7 @@ model Feedback {
  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
  gameId String
  player Player @relation (fields: [playerId], references: [id])
- playerId String @unique
+ playerId String
  status Boolean?
  note String?
 }

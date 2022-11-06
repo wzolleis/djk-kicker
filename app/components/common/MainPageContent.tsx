@@ -1,20 +1,20 @@
-import {ReactComponentElement} from "react";
+import type {ReactNode} from "react";
+
 
 type MainPageContentProps = {
-    title: string,
-    content: ReactComponentElement<any>
+    children: ReactNode | ReactNode[];
 }
 
 
-const MainPageContent = ({title, content}: MainPageContentProps) => {
-
+const MainPageContent = ({children}: MainPageContentProps) => {
     return (
-        <main>
-            <section className={""}></section>
-
-
+        <main className={"flex flex-col py-3"}>
+            {children}
         </main>
+
     )
 
 
 }
+
+export default MainPageContent

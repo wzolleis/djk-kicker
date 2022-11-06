@@ -2,13 +2,26 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import ErrorView from "~/components/errorhandling/ErrorView";
-import { Form, useCatch, useLoaderData, useSubmit, useTransition } from "@remix-run/react";
+import {
+  Form,
+  useCatch,
+  useLoaderData,
+  useSubmit,
+  useTransition,
+} from "@remix-run/react";
 import CatchView from "~/components/errorhandling/CatchView";
 import messages from "~/components/i18n/messages";
-import { deleteGame, findGameById, updateGame } from "~/models/admin.games.server";
+import {
+  deleteGame,
+  findGameById,
+  updateGame,
+} from "~/models/admin.games.server";
 import { requireUserId } from "~/session.server";
 import type { Game } from "@prisma/client";
-import { dateTimeLocalInputValueToDateTime, dateTimeToDateTimeLocalInputFormValue } from "~/utils";
+import {
+  dateTimeLocalInputValueToDateTime,
+  dateTimeToDateTimeLocalInputFormValue,
+} from "~/utils";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
 import { useEffect, useRef } from "react";
@@ -20,14 +33,14 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ params: { gameId } }) => {
   invariant(gameId, "Expected params.gameId");
   return json<LoaderData>({
-    game: await findGameById(gameId)
+    game: await findGameById(gameId),
   });
 };
 
 export const action: ActionFunction = async ({
-                                               params: { gameId },
-                                               request
-                                             }) => {
+  params: { gameId },
+  request,
+}) => {
   const formData = await request.formData();
 
   const name = formData.get("name");
@@ -56,7 +69,7 @@ export const action: ActionFunction = async ({
     name,
     gameTime: dateTimeLocalInputValueToDateTime(gameTime).toJSDate(),
     link: null, // todo
-    spielort
+    spielort,
   };
 
   await updateGame(toUpdate);
@@ -93,12 +106,15 @@ const EditGame = () => {
 
   return (
     <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
-      <div className="pt-2 font-poppins-semibold md:col-span-2">{messages.adminEditGameForm.title}</div>
+      <div className="pt-2 font-poppins-semibold md:col-span-2">
+        {messages.adminEditGameForm.title}
+      </div>
       <Form ref={formRef} method="post" className="pt-2">
         <fieldset disabled={transition.state === "submitting"}>
           <div>
-            <label htmlFor="name"
-                   className="mb-2 block text-sm font-medium text-gray-900"
+            <label
+              htmlFor="name"
+              className="mb-2 block text-sm font-medium text-gray-900"
             >
               {messages.adminGamesForm.name}
             </label>
@@ -113,55 +129,65 @@ const EditGame = () => {
             />
           </div>
           <div>
-            <label htmlFor="eventTime"
-                   className="mb-2 block pt-2 text-sm font-medium text-gray-900"
+            <label
+              htmlFor="eventTime"
+              className="mb-2 block pt-2 text-sm font-medium text-gray-900"
             >
               {messages.adminEditGameForm.gameTime}
             </label>
-            <input type="datetime-local"
-                   id="gameTime"
-                   name="gameTime"
-                   required
-                   autoFocus
-                   placeholder={messages.adminEditGameForm.gameTime}
-                   className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500"
-                   defaultValue={dateTimeToDateTimeLocalInputFormValue(
-                     DateTime.fromISO(game.gameTime)
-                   )}
+            <input
+              type="datetime-local"
+              id="gameTime"
+              name="gameTime"
+              required
+              autoFocus
+              placeholder={messages.adminEditGameForm.gameTime}
+              className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500"
+              defaultValue={dateTimeToDateTimeLocalInputFormValue(
+                DateTime.fromISO(game.gameTime)
+              )}
             />
           </div>
           <div className={"flex flex-col"}>
-            <label className="mb-2 block pt-2 text-sm font-medium text-gray-900"
-                   htmlFor="spielort"
+            <label
+              className="mb-2 block pt-2 text-sm font-medium text-gray-900"
+              htmlFor="spielort"
             >
               {messages.adminEditGameForm.spielort}
             </label>
-            <select name="spielort"
-                    id="spielort"
-                    className="rounded rounded border border-gray-300 outline-none"
+            <select
+              name="spielort"
+              id="spielort"
+              className="rounded rounded border border-gray-300 outline-none"
             >
-              <option value={"0"}>{messages.adminEditGameForm.optionHalle}</option>
-              <option value={"1"}>{messages.adminEditGameForm.optionDraussen}</option>
+              <option value={"0"}>
+                {messages.adminEditGameForm.optionHalle}
+              </option>
+              <option value={"1"}>
+                {messages.adminEditGameForm.optionDraussen}
+              </option>
             </select>
           </div>
 
           <div className="flex justify-end">
-            <button type="button"
-                    className="m-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
-                    name="intent"
-                    value="delete"
-                    disabled={isDeleting}
-                    onClick={handleDelete}
+            <button
+              type="button"
+              className="m-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
+              name="intent"
+              value="delete"
+              disabled={isDeleting}
+              onClick={handleDelete}
             >
               {transition.state === "submitting"
                 ? messages.adminEditGameForm.deleting
                 : messages.adminEditGameForm.delete}
             </button>
-            <button type="submit"
-                    className="bg-y my-2 rounded bg-blue-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-blue-300"
-                    name="intent"
-                    value="update"
-                    disabled={isUpdating}
+            <button
+              type="submit"
+              className="bg-y my-2 rounded bg-blue-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-blue-300"
+              name="intent"
+              value="update"
+              disabled={isUpdating}
             >
               {transition.state === "submitting"
                 ? messages.adminEditGameForm.updating

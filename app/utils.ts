@@ -72,7 +72,7 @@ export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }
 
-export function useDate(date: Date): string {
+export function useDate(date: string): string {
   if (date === null) {
     return "Unbekannt";
   }
