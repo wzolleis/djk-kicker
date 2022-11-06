@@ -1,6 +1,7 @@
 node_modules
 
-.idea
+.idea/shelf
+.idea/dataSources
 /.cache
 /public/build
 /.netlify
@@ -8,8 +9,7 @@ node_modules
 /app/styles/tailwind.css
 /build
 
-/cypress/screenshots
-/cypress/videos
 /prisma/data.db
 /prisma/data.db-journal
 
+/coverage

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="16dd0235-7559-4cdb-afcd-ba948b864a67" name="Changes" comment="* Layout-Anpassungen + Styling">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2GSNKQ7Fzn4czJEMJxMpKKYKhUt" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/wolfgang/development/checkout/djk-kicker/.idea",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "D:\\wolfgang\\development\\checkout\\djk-kicker\\node_modules\\prettier",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
+    "ts.external.directory.path": "D:\\wolfgang\\development\\checkout\\djk-kicker\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": [
+      "module"
+    ],
+    "DatabaseDriversLRU": [
+      "sqlite",
+      "mysql",
+      "mariadb"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\wolfgang\development\checkout\djk-kicker\.idea" />
+      <recent name="D:\wolfgang\development\checkout\djk-kicker\app" />
+      <recent name="D:\wolfgang\development\checkout\djk-kicker\public\img" />
+      <recent name="D:\wolfgang\development\checkout\djk-kicker\app\components" />
+      <recent name="D:\wolfgang\development\checkout\djk-kicker" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\wolfgang\development\checkout\djk-kicker\app\components\admin" />
+      <recent name="D:\wolfgang\development\checkout\djk-kicker\app\components" />
+      <recent name="D:\wolfgang\development\checkout\djk-kicker" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="admin panel@admin.test.tsx by Vitest" type="NodeJSConfigurationType" temporary="true" application-parameters="run --threads false --coverage -t &quot;admin panel&quot; app/routes/application/admin.test.tsx" path-to-js-file="$PROJECT_DIR$/node_modules/vitest/vitest.mjs" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.admin panel@admin.test.tsx by Vitest" />
+        <item itemvalue="Node.js.admin panel@admin.test.tsx by Vitest" />
+        <item itemvalue="Node.js.admin panel@admin.test.tsx by Vitest" />
+        <item itemvalue="Node.js.admin panel@admin.test.tsx by Vitest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="16dd0235-7559-4cdb-afcd-ba948b864a67" name="Changes" comment="" />
+      <created>1666377960763</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1666377960763</updated>
+    </task>
+    <task id="LOCAL-00001" summary="initial project setup">
+      <created>1666727243146</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1666727243146</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Konfiguration und Run-Scripts für tailwindcss hinzugefügt.">
+      <created>1667317768565</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1667317768565</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Tailwind u. Prisma in package.json.">
+      <created>1667317831687</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1667317831687</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Prisma Setup + Schema">
+      <created>1667319393002</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1667319393002</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Login Formular">
+      <created>1667322828294</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1667322828294</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Anmelden u. Account Anlegen + Seitenlayout mit Navigation">
+      <created>1667334521016</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1667334521016</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Events im DB-Schema">
+      <created>1667422315969</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1667422315969</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Schema mit sqlite">
+      <created>1667424569618</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1667424569618</updated>
+    </task>
+    <task id="LOCAL-00009" summary="schema nochmal angepasst">
+      <created>1667425030406</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1667425030406</updated>
+    </task>
+    <task id="LOCAL-00010" summary="admin panels + vitest config">
+      <created>1667428893924</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1667428893924</updated>
+    </task>
+    <task id="LOCAL-00011" summary="ignoriere Test-Files in den remix-Routen">
+      <created>1667429889547</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1667429889547</updated>
+    </task>
+    <task id="LOCAL-00012" summary="events in games umbenannt (als Typealias bis prisma aktuell ist)">
+      <created>1667431060407</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1667431060407</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Anzeige der Liste mit Games">
+      <created>1667431682925</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1667431682925</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Landing-Page für die Verwaltung">
+      <created>1667490974806</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1667490974806</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Neues Spiel anlegen">
+      <created>1667572603589</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1667572603589</updated>
+    </task>
+    <task id="LOCAL-00016" summary="geparkt">
+      <created>1667577549523</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1667577549523</updated>
+    </task>
+    <task id="LOCAL-00017" summary="merge hin und her">
+      <created>1667582312179</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1667582312179</updated>
+    </task>
+    <task id="LOCAL-00018" summary="vcs + dependencies">
+      <created>1667582953154</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1667582953154</updated>
+    </task>
+    <task id="LOCAL-00019" summary="gametime anstelle von eventtime verwenden">
+      <created>1667583089814</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1667583089814</updated>
+    </task>
+    <task id="LOCAL-00020" summary="* Formular u. Action um ein Spiel anzulegen">
+      <created>1667595244489</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1667595244489</updated>
+    </task>
+    <task id="LOCAL-00021" summary="* Menüstruktur&#10;* Update eines Spiels (noch nicht fertig)">
+      <created>1667599517776</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1667599517776</updated>
+    </task>
+    <task id="LOCAL-00022" summary="games.server.ts zusammenfassen">
+      <created>1667605874718</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1667605874718</updated>
+    </task>
+    <task id="LOCAL-00023" summary="* Update eine Spiels - Name + Datum, Handling des Dates im Formular und beim Speichern/Anlegen">
+      <created>1667609061892</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1667609061892</updated>
+    </task>
+    <task id="LOCAL-00024" summary="* Loesche ein Spiels + Feedback&#10;* Es gibt einen Feedback über einen Toast.&#10;* Keine Rückfrage">
+      <created>1667664826182</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1667664826182</updated>
+    </task>
+    <task id="LOCAL-00025" summary="* Spielort kann jetzt auch gespeichert werden. &#10;* useEffect um den Wert im Select zu setzen, form.reset und setzen des Default-Values funktioniert nicht.">
+      <created>1667689197804</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1667689197804</updated>
+    </task>
+    <task id="LOCAL-00026" summary="* Layout-Anpassungen + Styling">
+      <created>1667690020736</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1667690020736</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/main" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/dev" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Konfiguration und Run-Scripts für tailwindcss hinzugefügt." />
+    <MESSAGE value="Tailwind u. Prisma in package.json." />
+    <MESSAGE value="Prisma Setup + Schema" />
+    <MESSAGE value="Login Formular" />
+    <MESSAGE value="Anmelden u. Account Anlegen + Seitenlayout mit Navigation" />
+    <MESSAGE value="Events im DB-Schema" />
+    <MESSAGE value="Schema mit sqlite" />
+    <MESSAGE value="schema nochmal angepasst" />
+    <MESSAGE value="admin panels + vitest config" />
+    <MESSAGE value="ignoriere Test-Files in den remix-Routen" />
+    <MESSAGE value="events in games umbenannt (als Typealias bis prisma aktuell ist)" />
+    <MESSAGE value="Anzeige der Liste mit Games" />
+    <MESSAGE value="Landing-Page für die Verwaltung" />
+    <MESSAGE value="Neues Spiel anlegen" />
+    <MESSAGE value="geparkt" />
+    <MESSAGE value="merge hin und her" />
+    <MESSAGE value="vcs + dependencies" />
+    <MESSAGE value="gametime anstelle von eventtime verwenden" />
+    <MESSAGE value="* Formular u. Action um ein Spiel anzulegen" />
+    <MESSAGE value="* Menüstruktur&#10;* Update eines Spiels (noch nicht fertig)" />
+    <MESSAGE value="games.server.ts zusammenfassen" />
+    <MESSAGE value="* Update eine Spiels - Name + Datum, Handling des Dates im Formular und beim Speichern/Anlegen" />
+    <MESSAGE value="* Loesche ein Spiels + Feedback&#10;* Es gibt einen Feedback über einen Toast.&#10;* Keine Rückfrage" />
+    <MESSAGE value="* Spielort kann jetzt auch gespeichert werden. &#10;* useEffect um den Wert im Select zu setzen, form.reset und setzen des Default-Values funktioniert nicht." />
+    <MESSAGE value="* Layout-Anpassungen + Styling" />
+    <option name="LAST_COMMIT_MESSAGE" value="* Layout-Anpassungen + Styling" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
