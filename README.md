@@ -51,6 +51,15 @@ Note: When running the Netlify CLI, file changes will rebuild assets, but you wi
 
 ## Deployment
 
+### Build
+
+* Prüfen, ob in schema.prisma als Provider mysql eingetragen ist
+* Build starten (css, schema, remix...)
+```sh
+ npm run build
+ ``` 
+
+### Netlify
 There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
 
 ```sh
