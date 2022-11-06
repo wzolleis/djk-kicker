@@ -9,7 +9,7 @@ generator client {
 // provider = "mysql"
 // provider = "sqlite"
 datasource db {
-  provider = "mysql"
+  provider = "sqllite"
   url      = env("DATABASE_URL")
 }
 
