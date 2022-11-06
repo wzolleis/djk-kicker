@@ -6,8 +6,7 @@ type ToolTipProps = {
 const ToolTip = ({text}: ToolTipProps) => {
 
     return (
-        <section className={`rounded-lg bg-indigo-200/50 border border-indigo-500 px-3 py-2 flex items-center gap-2`}>
-            <img src="/img/info.png" alt="" className={"h-6 w-6"}/>
+        <section className={`rounded-xl bg-indigo-100 py-3 px-3  ring ring-1 ring-indigo-200 flex items-center gap-2 shadow-lg shadow-indigo-500/20`}>
             <p className={`text-indigo-500 font-poppins-regular text-label-small`}>{text}</p>
         </section>
 

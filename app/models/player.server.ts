@@ -13,7 +13,7 @@ export async function getPlayer(id: Player["id"]) {
 
 
 export async function createPlayer(name: string, email: string) {
-  return prisma.player.create({
+  return await prisma.player.create({
     data: {
       name,
       email
