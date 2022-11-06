@@ -6,9 +6,11 @@ generator client {
 }
 
 // provider = "mysql"
+// provider = "sqlite"
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+  binaryTargets = ["native"]
 }
 
 model User {
