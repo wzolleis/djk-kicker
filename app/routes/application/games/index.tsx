@@ -2,8 +2,9 @@ import PageHeader from "~/components/common/PageHeader";
 import MainPageContent from "~/components/common/MainPageContent";
 import Games from "~/components/game/Games";
 import Selector from "~/components/common/Selector";
-import {json, LoaderFunction} from "@remix-run/node";
-import {getGameById, getGames, getMostRecentGame} from "~/models/games.server";
+import type {LoaderFunction} from "@remix-run/node";
+import {json} from "@remix-run/node";
+import {getGames, getMostRecentGame} from "~/models/games.server";
 import {useLoaderData, useSearchParams} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 
@@ -17,7 +18,7 @@ export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);
     const filter = url.searchParams.get("filter")
         ? url.searchParams.get("filter")!
-        : "all";
+        : "current";
 
     if (filter === messages.game.filters.values.current) {
         games = await getMostRecentGame();

@@ -12,7 +12,8 @@ async function generateGames() {
             data: {
                 name: `Fußball ${i}.10.22`,
                 link: `game${generateName()}`,
-                gameTime: new Date(`2022-09-${i}`)
+                gameTime: new Date(`2022-09-${i}`),
+
             }
         })
         games.push(game)
