@@ -73,6 +73,9 @@ const messages = {
             }
         }
     },
+    player: {
+        add: "Spieler hinzufügen"
+    },
 
     tooltips: {
         games: {

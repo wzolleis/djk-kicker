@@ -53,7 +53,7 @@ const GameIndex = () => {
                     className={`flex cursor-pointer items-center rounded-xl py-3 px-5 font-poppins-regular text-label-medium ${
                         isFilterActive(filter, filterAll)
                             ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/40"
-                            : "text-gray-600 ring ring-1 ring-gray-300"
+                            : "text-gray-600 shadow-lg shadow-inner shadow-slate-800/50"
                     }`}
                 >
                     {messages.game.filters.all}
@@ -63,7 +63,7 @@ const GameIndex = () => {
                     className={`flex cursor-pointer items-center rounded-xl py-3 px-5 font-poppins-regular text-label-medium ${
                         isFilterActive(filter, filterCurrent)
                             ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/40"
-                            : "text-gray-600 ring ring-1 ring-gray-300"
+                            : "text-gray-600 shadow-lg shadow-inner shadow-slate-800/50"
                     }`}
                 >
                     {messages.game.filters.current}
