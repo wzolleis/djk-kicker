@@ -29,6 +29,35 @@ netlify login
 netlify init
 ```
 
+# Projekt Setup
+* Projekt auschecken
+* npm install
+* schema.prisma auf die gewünschte DB setzen.
+  * z.B. sqlite:  
+  ```
+  datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+  }
+  ```
+Im Root Verzeichnis eine .env-Datei anlegen 
+```
+DATABASE_URL="file:./data.db"
+SESSION_SECRET="irgendwas kompliziertes hier eintragen, zb. mit einem Passwort-Generator"
+```
+* DB-Schema erzeugen
+```
+npx prisma db push
+```
+* DB mit Testdaten füttern
+```
+npm run setup
+```
+* Anwendung lokal starten
+```
+npm run dev
+```
+
 ## Development
 
 The Remix dev server starts your app in development mode, rebuilding assets on file changes. To start the Remix dev server:
@@ -66,8 +95,6 @@ datasource db {
  ``` 
 
 ### Netlify
-There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
-
 ```sh
 # preview deployment
 netlify deploy --build
