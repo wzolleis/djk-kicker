@@ -41,8 +41,7 @@ export const action: ActionFunction = async ({
     const userId = await requireUserId(request);
     const intent = formData.get("intent");
     const spielort = formData.get("spielort");
-    const validSpielort =
-        typeof spielort === "string" && !Number.isNaN(parseInt(spielort, 10));
+    const validSpielort = typeof spielort === "string" && !Number.isNaN(parseInt(spielort, 10));
 
     invariant(typeof gameId === "string", "GameId must be a string");
     invariant(typeof userId === "string", "UserId must be a string");
@@ -55,7 +54,7 @@ export const action: ActionFunction = async ({
 
     if (intent === "delete") {
         await deleteGame(gameId);
-        return redirect("application/admin/games");
+        return redirect("/application/admin/games");
     }
 
     if (intent === 'email') {
@@ -64,11 +63,13 @@ export const action: ActionFunction = async ({
 
     if (intent === 'update') {
         // update
+        const game = await findGameById(gameId)
+        invariant(!!game, `Spiel <${gameId}> existiert nicht`)
+
         const toUpdate: Game = {
-            id: gameId,
+            ...game,
             name,
             gameTime: dateTimeLocalInputValueToDateTime(gameTime).toJSDate(),
-            link: null, // todo
             spielort,
         };
         await updateGame(toUpdate);

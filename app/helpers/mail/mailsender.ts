@@ -22,11 +22,17 @@ const transport = nodemailer.createTransport({
 const mailSender = async () => {
     const mailTo = process.env.TEST_MAIL_TO
     const mailFrom = process.env.MAIL_FROM
-    if (!mailConfig.host || !mailConfig.auth.user || !mailConfig.auth.pass || !mailTo || !mailFrom) {
-        console.error("Keine Mailkonfiguration vorhanden")
-    } else {
+    if (!mailConfig.host) console.error('mail host not set')
+    if (!mailConfig.auth.user) console.error('mail user not set')
+    if (!mailConfig.auth.pass) console.error('mail pass not set')
+    if (!mailTo) console.error('mailTo not set')
+    if (!mailFrom) console.error('mailFrom not set')
 
+    if (!mailConfig.host || !mailConfig.auth.user || !mailConfig.auth.pass || !mailTo || !mailFrom) {
+        console.error("Fehlerhafte Mail-Konfiguration")
+    } else {
         try {
+            console.log("Sending mail....")
             const mailSender = `"${mailFrom}" <${mailFrom}>`
             const recipients = `${mailTo}`
 
@@ -38,9 +44,10 @@ const mailSender = async () => {
                 html: "<b>Das ist wirklich nur ein Test</b>", // html body
             });
 
-            console.debug("send mail: ", info)
-        } catch
-            (error) {
+            console.log("result sending mail: ", info)
+
+            return info
+        } catch (error) {
             console.log("ERROR SENDING MAIL", error)
         }
     }
