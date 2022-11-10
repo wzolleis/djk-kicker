@@ -41,7 +41,7 @@ const mailSender = async () => {
                 to: recipients, // list of receivers
                 subject: "Hello from DJK-Kicker-App✔", // Subject line
                 text: "Das ist ein Test - ignore me", // plain text body
-                html: "<b>Das ist wirklich nur ein Test</b>", // html body
+                html: "<b>Diese Mail wird direkt über Netlify gesendet, keine Functions</b>", // html body
             });
 
             console.log("result sending mail: ", info)
