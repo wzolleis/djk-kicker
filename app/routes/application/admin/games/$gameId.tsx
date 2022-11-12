@@ -13,6 +13,7 @@ import {DateTime} from "luxon";
 import toast from "react-hot-toast";
 import {useEffect, useRef} from "react";
 import mailSender from "~/helpers/mail/mailsender";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -54,7 +55,7 @@ export const action: ActionFunction = async ({
 
     if (intent === "delete") {
         await deleteGame(gameId);
-        return redirect("/application/admin/games");
+        return redirect(routeLinks.admin.games);
     }
 
     if (intent === 'email') {
@@ -74,7 +75,7 @@ export const action: ActionFunction = async ({
         };
         await updateGame(toUpdate);
     }
-    return redirect("/application/admin/games");
+    return redirect(routeLinks.admin.games);
 };
 
 const notify = (message: string) => {
@@ -86,6 +87,8 @@ const EditGame = () => {
     const transition = useTransition();
     const formRef = useRef<HTMLFormElement>(null);
     const submit = useSubmit();
+    const isUpdating = transition.submission?.formData.get("intent") === "update";
+    const isDeleting = transition.submission?.formData.get("intent") === "delete";
 
     useEffect(() => {
         if (formRef.current) {
@@ -95,8 +98,10 @@ const EditGame = () => {
         }
     }, [game]);
 
-    const isUpdating = transition.submission?.formData.get("intent") === "update";
-    const isDeleting = transition.submission?.formData.get("intent") === "delete";
+    useEffect(() => {
+        if (!isUpdating || !isDeleting)
+        formRef.current?.reset()
+    }, [isUpdating, isDeleting])
 
     const handleDelete = (event: any) => {
         if (confirm(messages.adminEditGameForm.deleteConfirmation)) {
@@ -104,6 +109,7 @@ const EditGame = () => {
             submit(event.currentTarget);
         }
     };
+
 
     return (
         <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
@@ -210,10 +216,12 @@ const EditGame = () => {
     );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export const ErrorBoundary = ({error}: { error: Error }) => {
     return <ErrorView error={error}/>;
 };
 
+// noinspection JSUnusedGlobalSymbols
 export const CatchBoundary = () => {
     const caught = useCatch();
     const {statusText, status} = caught;
