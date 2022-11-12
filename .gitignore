@@ -1,8 +1,12 @@
 node_modules
 
-.idea/shelf
-.idea/dataSources
-.idea/workspace.xml
+.idea
+!.idea/codeStyles
+!.idea/dataSources.xml
+!.idea/vcs.xml
+!.idea/misc.xml
+!.idea/modules.xml
+
 /.cache
 /public/build
 /.netlify
