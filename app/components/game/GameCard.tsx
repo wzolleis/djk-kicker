@@ -21,7 +21,7 @@ const GameCard = ({game}: GameCardProps) => {
 
 
             </div>
-            <Link className={"flex justify-center items-center"} to={`${game.id}`}>
+            <Link className={"flex justify-end items-center"} to={`${game.id}`}>
                 <div className={"p-3 shadow-lg shadow-indigo-500/40 rounded-full"}>
                     <img src="/img/arrow-indigo.png" className={"h-4 w-4 rounded-full "} alt=""/></div>
             </Link>
