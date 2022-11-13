@@ -1,5 +1,7 @@
 import type {Game} from "@prisma/client";
 import {prisma} from "~/db.server";
+import {getNextGameDay} from "~/utils";
+import {DateTime} from "luxon";
 
 export type {Game} from "@prisma/client";
 
@@ -24,12 +26,16 @@ export async function getGames() {
 }
 
 export async function getMostRecentGame() {
-    return prisma.game.findMany({
-        orderBy: {
-            gameTime: "desc"
+
+    return await prisma.game.findMany({
+        where: {
+            gameTime: {
+                gte: getNextGameDay().toJSDate()
+            }
         },
         take: 1
     })
+
 }
 
 
