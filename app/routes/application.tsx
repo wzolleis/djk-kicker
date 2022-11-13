@@ -11,7 +11,7 @@ const Application = () => {
     <div className="flex h-full min-h-screen flex-col">
       <AppNavBar appMenu={appMenu.app} user={user} />
       <main className="flex h-full">
-        <div className="flex-1 p-4">
+        <div className="flex-1 p-4 px-4 lg:px-10">
           <Toaster />
           <Outlet />
         </div>
