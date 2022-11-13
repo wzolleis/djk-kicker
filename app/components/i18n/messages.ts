@@ -66,7 +66,7 @@ const messages = {
         add: "Spiel hinzufügen",
         filters: {
             all: "Alle Spiele",
-            current: "Aktuelles Spiel",
+            current: "Nächstes Spiel",
             values: {
                 all: "all",
                 current: "current"

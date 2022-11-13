@@ -42,7 +42,7 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
         </div>
       </div>
       <Link
-        className={"flex items-center justify-center"}
+        className={"flex items-center justify-end"}
         to={`player/${player.id}`}
       >
         <div className={"rounded-full p-3 shadow-lg shadow-indigo-500/40"}>

@@ -118,3 +118,39 @@ export function getQueryParams(request: Request, inputParam: Array<QueryParamNam
 
     return result
 }
+
+
+export function getNextGameDay() {
+    const wednesday: number = 3;
+    const now = DateTime.now().set({hour: 0, minute: 55})
+
+    const today: number = now.weekday;
+    let gameDay
+
+    if (today < wednesday) {
+        gameDay = now.set({
+            weekday: wednesday
+        })
+    }
+    else {
+        gameDay = now.plus({weeks: 1}).set({
+            weekday: wednesday
+        })
+    }
+
+    // if (today < wednesday) {
+    //     gameDay = DateTime.now().plus({
+    //         days: wednesday - today
+    //     })
+    // } else if (today > wednesday) {
+    //     gameDay = DateTime.now().plus({
+    //         weeks: 1,
+    //     })
+    // }
+
+
+    console.log('gameday = ', gameDay.toJSDate())
+
+    return gameDay
+
+}
