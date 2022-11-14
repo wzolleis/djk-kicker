@@ -1,3 +1,5 @@
+import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+
 const messages = {
     app: {
         welcome: "Willkommen bei den DJK Kickern",
@@ -7,6 +9,9 @@ const messages = {
         administration: "Verwaltung",
         gameadministration: "Spieleverwaltung",
         games: "Alle Spiele"
+    },
+    commonForm: {
+        cancel: "Abbruch"
     },
     loginform: {
         welcome: "DJK Kicker - Anmeldung",
@@ -81,6 +86,14 @@ const messages = {
         games: {
             overview: "Du siehst dir gerade einer Übersicht aller Spiele an. Solltest du keinen gültigen Einladungslink haben, kannst du hier nach dem aktuellsten Spiel suchen."
         }
+    },
+    adminGameInvitationForm: {
+        titleGame: "Einadung für das Spiel am: ",
+        titleGameTime: "Spielort: ",
+        mailBody: "Mail Body",
+        spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? 'in der Halle' : 'draußen'}`,
+        player: "Spieler"
+
     }
 };
 
