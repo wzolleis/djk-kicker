@@ -84,16 +84,26 @@ const messages = {
 
     tooltips: {
         games: {
-            overview: "Du siehst dir gerade einer Übersicht aller Spiele an. Solltest du keinen gültigen Einladungslink haben, kannst du hier nach dem aktuellsten Spiel suchen."
+            overview: "Du siehst dir gerade einer Übersicht aller Spiele an. Solltest Du keinen gültigen Einladungslink haben, kannst Du hier nach dem aktuellsten Spiel suchen."
         }
     },
     adminGameInvitationForm: {
         titleGame: "Einadung für das Spiel am: ",
         titleGameTime: "Spielort: ",
-        mailBody: "Mail Body",
+        mailBodyLabel: "Nachricht",
+        mailReceiver: "An:",
         spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? 'in der Halle' : 'draußen'}`,
-        player: "Spieler"
+        mailSubjectLabel: "Betreff",
+        mailSubject: "Einladung für das Spiel am <Datum>",
+        mailBody: `Hallo <Name>
 
+Einladung für das Spiel am <Datum>.
+Spielort: <Spielort>
+Bitte klicke auf den <Einladungslink> und teile uns mit, ob Du kommen kannst.
+Verwende den Link bitte auch, wenn Du Deine Entscheidung ändern möchtest.
+
+Vielen Dank für deine Rückmeldung 
+`
     }
 };
 

@@ -1,6 +1,6 @@
 import {Game, Player, PrismaClient} from "@prisma/client";
 import bcrypt from "bcryptjs";
-import {g} from "msw/lib/glossary-dc3fd077";
+import {faker} from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
@@ -31,7 +31,6 @@ async function seed() {
     });
 
     const hashedPassword = await bcrypt.hash("test@test.de", 10);
-
 
     const user = await prisma.user.create({
         data: {
@@ -85,20 +84,16 @@ seed()
         await prisma.$disconnect();
     });
 
-
 function generateName() {
-    return (Math.random() + 1).toString(36).substring(2);
+    return faker.name.firstName()
 }
 
 function generateEmail() {
-    const pre = (Math.random() + 1).toString(36).substring(2);
-    const post = (Math.random() + 1).toString(36).substring(2);
-
-    return `${pre}@${post}.com`;
+    return faker.internet.exampleEmail(undefined, undefined, {allowSpecialCharacters: false})
 }
 
 async function generateFeedback(player: Player, game: Game) {
-    const feedback = await prisma.feedback.create({
+    await prisma.feedback.create({
         data: {
             gameId: game.id,
             playerId: player.id,
@@ -106,6 +101,4 @@ async function generateFeedback(player: Player, game: Game) {
             note: generateName() + generateEmail()
         }
     });
-
-
 }

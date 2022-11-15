@@ -6,3 +6,5 @@ node_modules
 
 /app/styles/tailwind.css
 
+#prisma/schema.prisma
+prisma/data.db
