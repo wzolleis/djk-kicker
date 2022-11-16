@@ -13,7 +13,7 @@ if (!sessionSecret) {
 export const {getSession, commitSession, destroySession} = createCookieSessionStorage({
     cookie: {
         name: "token-session",
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.ENVIRONMENT === "production",
         secrets: [sessionSecret],
         sameSite: "lax",
         path: "/",
