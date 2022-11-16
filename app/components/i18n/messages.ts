@@ -77,10 +77,8 @@ const messages = {
         add: "Spieler hinzufügen"
     },
 
-    tooltips: {
-        games: {
-            overview: "Du siehst dir gerade einer Übersicht aller Spiele an. Solltest du keinen gültigen Einladungslink haben, kannst du hier nach dem aktuellsten Spiel suchen."
-        }
+    warnings: {
+        noToken: "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
     }
 };
 

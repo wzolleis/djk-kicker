@@ -1,7 +1,7 @@
 import type { Player, Feedback } from "@prisma/client";
 import messages from "~/components/i18n/messages";
 import { Link } from "@remix-run/react";
-import {PlayerWithFeedback} from "~/models/player.server";
+import { PlayerWithFeedback } from "~/models/player.server";
 
 interface PlayerCardProps {
   player: PlayerWithFeedback;
@@ -38,7 +38,9 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
                 : messages.game.players.status.declined}
             </div>
           </div>
-          <p className={"text-label-medium text-gray-500"}>{player.feedback.note}</p>
+          <p className={"text-label-medium text-gray-500"}>
+            {player.feedback.note}
+          </p>
         </div>
       </div>
       <Link
