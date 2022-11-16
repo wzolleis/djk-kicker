@@ -12,9 +12,9 @@ import {dateTimeLocalInputValueToDateTime, dateTimeToDateTimeLocalInputFormValue
 import {DateTime} from "luxon";
 import toast from "react-hot-toast";
 import {useEffect, useRef} from "react";
-import mailSender from "~/helpers/mail/mailsender";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import mailsender from "~/helpers/mail/mailsender";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -28,7 +28,7 @@ export const loader: LoaderFunction = async ({params: {gameId}}) => {
 };
 
 const sendTestMail = async () => {
-    await mailSender()
+    await mailsender()
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -266,4 +266,5 @@ export const CatchBoundary = () => {
     );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default EditGame;

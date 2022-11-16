@@ -94,15 +94,16 @@ const messages = {
         mailReceiver: "An:",
         spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? 'in der Halle' : 'draußen'}`,
         mailSubjectLabel: "Betreff",
-        mailSubject: "Einladung für das Spiel am <Datum>",
-        mailBody: `Hallo <Name>
+        mailSubject: (datum: string) => `Einladung für das DJK-Kicker Fussballspiel am ${datum}`,
+        mailBody: (datum: string, spielOrt: string) => `Hallo <Name>
 
-Einladung für das Spiel am <Datum>.
-Spielort: <Spielort>
+Einladung für das Spiel am ${datum}.
+Spielort: ${spielOrt}
+
 Bitte klicke auf den <Einladungslink> und teile uns mit, ob Du kommen kannst.
-Verwende den Link bitte auch, wenn Du Deine Entscheidung ändern möchtest.
+Verwende den Link bitte auch, wenn Du Deine Entscheidung nochmal ändern möchtest.
 
-Vielen Dank für deine Rückmeldung 
+Vielen Dank 
 `
     }
 };

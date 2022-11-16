@@ -7,6 +7,8 @@ import messages from "~/components/i18n/messages";
 import {getPlayers} from "~/models/player.server";
 import {Player} from "@prisma/client";
 import routeLinks from "~/helpers/constants/routeLinks";
+import envHelper from "~/helpers/environment/envHelper";
+import {useEffect} from "react";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -66,6 +68,13 @@ const GameInvitation = () => {
     const gameTime = dateUtils.format(new Date(game.gameTime));
     const transition = useTransition();
 
+    useEffect(() => {
+        const host = envHelper.getHost()
+        console.log(host)
+
+        console.log(routeLinks.game.einladung(host, game.id, game.token))
+    }, [])
+
     return (
         <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
             <div className="pt-1 font-poppins-semibold md:col-span-2">
@@ -92,14 +101,16 @@ const GameInvitation = () => {
                     </div>
                     <div>
                         <label
-                            htmlFor="mailSubject"
+                            htmlFor="einladungsLink"
                             className="mb-2 pt-3 block font-poppins-bold text-gray-900"
                         >
                             {messages.adminGameInvitationForm.mailSubjectLabel}
                         </label>
                         <input
+                            id="einladungslink"
+                            name="einladungslink"
                             className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500 disabled:bg-amber-100"
-                            defaultValue={messages.adminGameInvitationForm.mailSubject}
+                            defaultValue={messages.adminGameInvitationForm.mailSubject(gameTime)}
                             disabled={true}
                         />
                     </div>
@@ -115,7 +126,7 @@ const GameInvitation = () => {
                                   disabled={true}
                                   required={true}
                                   className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 disabled:bg-amber-100"
-                                  defaultValue={messages.adminGameInvitationForm.mailBody}
+                                  defaultValue={messages.adminGameInvitationForm.mailBody(gameTime,messages.adminGameInvitationForm.spielort(game.spielort))}
                         />
                     </div>
                 </fieldset>
