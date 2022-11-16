@@ -10,7 +10,7 @@ import {PlayerWithFeedback} from "~/models/player.server";
 
 interface PlayerProps {
     players: PlayerWithFeedback[];
-    gameId: string
+    gameId: string,
 }
 
 

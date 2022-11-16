@@ -7,44 +7,52 @@ import Players from "~/components/game/Players";
 import PageHeader from "~/components/common/PageHeader";
 import {useDate} from "~/utils";
 import SmallTag from "~/components/common/tags/SmallTag";
-import {FeedBackWithPlayer, GameWithFeedback} from "~/routes/application/games/$gameId";
+import type {GameWithFeedback} from "~/routes/application/games/$gameId";
 import {DateTime} from "luxon";
-import {Prisma} from "@prisma/client";
-import {getPlayersWithUniqueFeedbackForGame, PlayerWithFeedback} from "~/models/player.server";
+import type {PlayerWithFeedback} from "~/models/player.server";
+import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
+import {authenticateUser} from "~/utils/session.server";
+import {NoTokenWarning} from "~/components/warnings/NoTokenWarning";
 
 
 type LoaderData = {
     game: GameWithFeedback;
-    players: PlayerWithFeedback[];
+    players: PlayerWithFeedback[],
+    isAuthenticated: boolean;
 };
 
-export const loader: LoaderFunction = async ({params}) => {
+export const loader: LoaderFunction = async ({params, request}) => {
     invariant(params.gameId, "Help");
     const gameId = params.gameId;
     const game: GameWithFeedback | null = await getGameById(gameId);
     const players: PlayerWithFeedback[] = await getPlayersWithUniqueFeedbackForGame(gameId)
-    return json({game, players});
+    const {isAuthenticated, cookieHeader} = await authenticateUser(params, request);
+    return json({game, players, isAuthenticated},
+        {
+            headers: {
+                'Set-Cookie': cookieHeader
+            }
+        });
 };
 
 const GameIndex = () => {
-    const {game, players} = useLoaderData<LoaderData>();
-    const d = DateTime.fromISO(game.gameTime).toJSDate()
-
-
+    const {game, players, isAuthenticated} = useLoaderData<LoaderData>();
     // @ts-ignore
     return (
-        <section className={"flex flex-col"}>
-            <header className={"space-y-2"}>
-                <div className={"flex justify-between"}>
-                    <PageHeader title={game.name}/>
-                </div>
-                <div className={"flex gap-2"}>
-                    <SmallTag text={useDate(d)}/>
-                </div>
-            </header>
-            {/*@ts-ignore*/}
-            <Players players={players} gameId={game.id}></Players>
-        </section>
+        <>
+            <section className={"flex flex-col gap-5"}>
+                <header className={"space-y-2"}>
+                    <div className={"flex justify-between"}>
+                        <PageHeader title={game.name}/>
+                    </div>
+                    <div className={"flex gap-2"}>
+                        <SmallTag text={useDate(DateTime.fromISO(game.gameTime).toJSDate())}/>
+                    </div>
+                </header>
+                <NoTokenWarning hidden={isAuthenticated}/>
+                <Players players={players} gameId={game.id}></Players>
+            </section>
+        </>
     );
 };
 
