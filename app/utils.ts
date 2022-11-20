@@ -100,7 +100,8 @@ export const dateTimeToDateTimeLocalInputFormValue = (dateTime: DateTime) => {
 export type QueryParamTypes = {
     player: string | null,
     gameid: string | null,
-    filter: string | null
+    filter: string | null,
+    token: string | null
 }
 
 export type QueryParamName = keyof QueryParamTypes
@@ -131,8 +132,7 @@ export function getNextGameDay() {
         gameDay = now.set({
             weekday: wednesday
         })
-    }
-    else {
+    } else {
         gameDay = now.plus({weeks: 1}).set({
             weekday: wednesday
         })
@@ -153,4 +153,13 @@ export function getNextGameDay() {
 
     return gameDay
 
+}
+
+export function getRedactedString(): string {
+    const redacted = '●'
+    let result = redacted;
+    for (let i = 0; i < 10; i++) {
+        result += redacted;
+    }
+    return result;
 }

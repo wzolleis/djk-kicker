@@ -9,10 +9,6 @@ export interface GameWithFeedback extends Game {
     feedback: FeedBackWithPlayer[]
 }
 
-
-
-
-
 export type GameWithFeedback2 = Prisma.GameGetPayload<{
     include: {
         feedback: {
