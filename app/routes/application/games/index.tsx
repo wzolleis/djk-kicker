@@ -7,6 +7,9 @@ import {json} from "@remix-run/node";
 import {getGames, getMostRecentGame} from "~/models/games.server";
 import {useLoaderData, useSearchParams} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
+import {AdminTokenOptions} from "~/models/classes/AdminTokenOption";
+import {DateTime} from "luxon";
+import {createEncryptedAdminToken} from "~/utils/token.server";
 
 type LoaderData = {
     games: Awaited<ReturnType<typeof getGames>>;
@@ -23,6 +26,7 @@ export const loader: LoaderFunction = async ({request}) => {
     if (filter === messages.game.filters.values.current) {
         games = await getMostRecentGame();
     } else games = await getGames();
+
 
     return json<LoaderData>({games, filter});
 };

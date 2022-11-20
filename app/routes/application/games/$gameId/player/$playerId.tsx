@@ -21,7 +21,6 @@ export type PlayerFeedbackForGame = Prisma.PlayerGetPayload<{
         }
     }
 }>
-
 type LoaderData = {
     player: PlayerFeedbackForGame,
     isAuthenticated: boolean;
