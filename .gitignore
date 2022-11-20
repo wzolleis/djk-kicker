@@ -18,3 +18,5 @@ node_modules
 /prisma/data.db-journal
 
 /coverage
+
+*.iml

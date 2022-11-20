@@ -1,13 +1,6 @@
 import { prisma } from "~/db.server";
 import type { Game } from "@prisma/client";
 
-export type GameActionData = {
-  gameTime: string | null,
-  name: string | null,
-  spielort: string | null
-}
-
-
 export const readGames = async (): Promise<Game[]> => {
   return await prisma.game.findMany({
     orderBy: {

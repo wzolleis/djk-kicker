@@ -2,7 +2,7 @@ import type {ActionFunction, LoaderFunction} from "@remix-run/node";
 import {json, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import ErrorView from "~/components/errorhandling/ErrorView";
-import {Form, useCatch, useLoaderData, useSubmit, useTransition,} from "@remix-run/react";
+import {Form, Outlet, useCatch, useLoaderData, useSubmit, useTransition,} from "@remix-run/react";
 import CatchView from "~/components/errorhandling/CatchView";
 import messages from "~/components/i18n/messages";
 import {deleteGame, findGameById, updateGame,} from "~/models/admin.games.server";
@@ -12,7 +12,9 @@ import {dateTimeLocalInputValueToDateTime, dateTimeToDateTimeLocalInputFormValue
 import {DateTime} from "luxon";
 import toast from "react-hot-toast";
 import {useEffect, useRef} from "react";
-import mailSender from "~/helpers/mail/mailsender";
+import routeLinks from "~/helpers/constants/routeLinks";
+import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import mailsender from "~/helpers/mail/mailsender";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -26,10 +28,10 @@ export const loader: LoaderFunction = async ({params: {gameId}}) => {
 };
 
 const sendTestMail = async () => {
-    await mailSender()
+    await mailsender()
 }
 
-
+// noinspection JSUnusedGlobalSymbols
 export const action: ActionFunction = async ({
                                                  params: {gameId},
                                                  request,
@@ -52,9 +54,13 @@ export const action: ActionFunction = async ({
     invariant(validSpielort, "Der Wert von Spielort muss eine Zahl sein");
 
 
+    if (intent === 'feedback') {
+        return redirect(routeLinks.admin.game.einladung(gameId))
+    }
+
     if (intent === "delete") {
         await deleteGame(gameId);
-        return redirect("/application/admin/games");
+        return redirect(routeLinks.admin.games);
     }
 
     if (intent === 'email') {
@@ -74,7 +80,7 @@ export const action: ActionFunction = async ({
         };
         await updateGame(toUpdate);
     }
-    return redirect("/application/admin/games");
+    return redirect(routeLinks.admin.games);
 };
 
 const notify = (message: string) => {
@@ -86,6 +92,10 @@ const EditGame = () => {
     const transition = useTransition();
     const formRef = useRef<HTMLFormElement>(null);
     const submit = useSubmit();
+    const intentValue = transition.submission?.formData.get("intent")
+    const isUpdating = intentValue === "update";
+    const isDeleting = intentValue === "delete";
+    const isGameAction = intentValue === 'feedback' || intentValue === 'absage' || intentValue === 'zusage'
 
     useEffect(() => {
         if (formRef.current) {
@@ -95,8 +105,10 @@ const EditGame = () => {
         }
     }, [game]);
 
-    const isUpdating = transition.submission?.formData.get("intent") === "update";
-    const isDeleting = transition.submission?.formData.get("intent") === "delete";
+    useEffect(() => {
+        if (!isUpdating || !isDeleting)
+            formRef.current?.reset()
+    }, [isUpdating, isDeleting])
 
     const handleDelete = (event: any) => {
         if (confirm(messages.adminEditGameForm.deleteConfirmation)) {
@@ -161,19 +173,49 @@ const EditGame = () => {
                             id="spielort"
                             className="rounded rounded border border-gray-300 outline-none"
                         >
-                            <option value={"0"}>
-                                {messages.adminEditGameForm.optionHalle}
+                            <option value={`${spielortOptions.halle.value}`}>
+                                {spielortOptions.halle.label}
                             </option>
-                            <option value={"1"}>
-                                {messages.adminEditGameForm.optionDraussen}
+                            <option value={`${spielortOptions.draussen.value}`}>
+                                {spielortOptions.draussen.label}
                             </option>
                         </select>
                     </div>
-
-                    <div className="flex justify-end gap-2">
+                    <div className={"flex justify-start gap-2 pt-2"}>
+                        <span className="ml-auto"/>
+                        <button
+                            type="submit"
+                            className="rounded mb-2 mt-2 bg-amber-600 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-amber-300"
+                            name="intent"
+                            value="feedback"
+                            disabled={isGameAction}
+                        >
+                            Einladung
+                        </button>
+                        <button
+                            type="submit"
+                            className="rounded mb-2 mt-2 bg-green-600 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-green-300"
+                            name="intent"
+                            value="zusage"
+                            disabled={isGameAction}
+                        >
+                            Zusagen
+                        </button>
+                        <button
+                            type="submit"
+                            className="rounded mb-2 mt-2 bg-red-600 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
+                            name="intent"
+                            value="absage"
+                            disabled={isGameAction}
+                        >
+                            Absagen
+                        </button>
+                    </div>
+                    <hr className="my-8 h-px bg-black border-0 "/>
+                    <div className="flex justify-start gap-2">
                         <button
                             type="button"
-                            className="mr-2 mb-2 mt-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
+                            className="mb-2 mt-2 rounded bg-red-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-red-300"
                             name="intent"
                             value="delete"
                             disabled={isDeleting}
@@ -183,9 +225,10 @@ const EditGame = () => {
                                 ? messages.adminEditGameForm.deleting
                                 : messages.adminEditGameForm.delete}
                         </button>
+                        <span className="ml-auto"/>
                         <button
                             type="submit"
-                            className="mr-2 mb-2 mt-2 rounded bg-blue-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-blue-300"
+                            className="mb-2 mt-2 rounded bg-blue-500 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-blue-300"
                             name="intent"
                             value="update"
                             disabled={isUpdating}
@@ -194,26 +237,22 @@ const EditGame = () => {
                                 ? messages.adminEditGameForm.updating
                                 : messages.adminEditGameForm.update}
                         </button>
-                        <button
-                            type="submit"
-                            className="rounded mb-2 mt-2 bg-gray-600 py-2 px-2 text-white hover:bg-blue-600 focus:border-2 disabled:bg-blue-300"
-                            name="intent"
-                            value="email"
-                            disabled={isUpdating}
-                        >
-                            Test-Mail
-                        </button>
                     </div>
                 </fieldset>
             </Form>
+
+            <Outlet/>
         </div>
+
     );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export const ErrorBoundary = ({error}: { error: Error }) => {
     return <ErrorView error={error}/>;
 };
 
+// noinspection JSUnusedGlobalSymbols
 export const CatchBoundary = () => {
     const caught = useCatch();
     const {statusText, status} = caught;
@@ -227,4 +266,5 @@ export const CatchBoundary = () => {
     );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default EditGame;

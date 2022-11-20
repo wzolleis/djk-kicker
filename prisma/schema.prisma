@@ -34,9 +34,23 @@ model Game {
   spielort String @default("0")
   feedback Feedback[]
   token String @default(cuid()) @unique
-
+  mail Mail[] // die Mails, die fuer dieses Spiel veschickt wurden
+  status String? // findet statt oder abgesagt
 }
 
+model Mail {
+  id    String @id @default(cuid())
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId String
+  player Player @relation (fields: [playerId], references: [id])
+  playerId String
+  status Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
+  statusTxt String? // Fehlermeldung
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Feedback der Spieler für ein Spiel
 model Feedback {
  id    String @id @default(cuid())
  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
@@ -46,8 +60,6 @@ model Feedback {
  status Boolean?
  note String?
  @@unique([playerId, gameId])
-
-
 }
 
 model Player {
@@ -55,8 +67,8 @@ id String @id @default(cuid())
 name String
 email String
 feedback Feedback[]
+mails Mail[]
 }
-
 
 model Password {
   hash String

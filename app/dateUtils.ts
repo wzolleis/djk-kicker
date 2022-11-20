@@ -1,7 +1,8 @@
 import { DateTime } from "luxon";
 
-const format = (date: Date,
+const format = (date: Date | undefined,
                 options: { format: string } = { format: "dd.MM.yyyy HH:mm" }): string => {
+  if (!date) return 'undefined'
   return DateTime.fromJSDate(date).toFormat(options.format);
 };
 

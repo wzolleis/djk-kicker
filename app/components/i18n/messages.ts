@@ -1,3 +1,5 @@
+import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+
 const messages = {
     app: {
         welcome: "Willkommen bei den DJK Kickern",
@@ -7,6 +9,9 @@ const messages = {
         administration: "Verwaltung",
         gameadministration: "Spieleverwaltung",
         games: "Alle Spiele"
+    },
+    commonForm: {
+        cancel: "Abbruch"
     },
     loginform: {
         welcome: "DJK Kicker - Anmeldung",
@@ -79,6 +84,25 @@ const messages = {
 
     warnings: {
         noToken: "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
+    },
+    adminGameInvitationForm: {
+        titleGame: "Einadung für das Spiel am: ",
+        titleGameTime: "Spielort: ",
+        mailBodyLabel: "Nachricht",
+        mailReceiver: "An:",
+        spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? 'in der Halle' : 'draußen'}`,
+        mailSubjectLabel: "Betreff",
+        mailSubject: (datum: string) => `Einladung für das DJK-Kicker Fussballspiel am ${datum}`,
+        mailBody: (datum: string, spielOrt: string) => `Hallo <Name>
+
+Einladung für das Spiel am ${datum}.
+Spielort: ${spielOrt}
+
+Bitte klicke auf den <Einladungslink> und teile uns mit, ob Du kommen kannst.
+Verwende den Link bitte auch, wenn Du Deine Entscheidung nochmal ändern möchtest.
+
+Vielen Dank 
+`
     }
 };
 
