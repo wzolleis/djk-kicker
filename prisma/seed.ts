@@ -1,8 +1,19 @@
 import {Game, Player, PrismaClient} from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {faker} from "@faker-js/faker";
+import {createPlayer} from "~/models/player.server";
+import {Simulate} from "react-dom/test-utils";
+import play = Simulate.play;
 
 const prisma = new PrismaClient();
+
+function generateName() {
+    return faker.name.firstName()
+}
+
+function generateEmail() {
+    return faker.internet.exampleEmail(undefined, undefined, {allowSpecialCharacters: false})
+}
 
 async function generateGames() {
     let i = 1
@@ -22,6 +33,19 @@ async function generateGames() {
     return games;
 }
 
+async function generatePlayers() {
+    const players: Player[] = [];
+    for (let index = 0; index < 10; index++) {
+        const player = await prisma.player.create({
+            data: {
+                name: generateName(),
+                email: generateEmail()
+            }
+        });
+        players.push(player);
+    }
+    return players
+}
 
 async function seed() {
     const email = "test@test.de";
@@ -29,6 +53,10 @@ async function seed() {
     // cleanup the existing database
     await prisma.user.delete({where: {email}}).catch(() => {
     });
+
+    await prisma.game.deleteMany()
+    await prisma.player.deleteMany()
+    await prisma.feedback.deleteMany()
 
     const hashedPassword = await bcrypt.hash("test@test.de", 10);
 
@@ -44,34 +72,18 @@ async function seed() {
             }
         }
     });
-
-
+    console.log("created user with id: ", user.id);
     const games = await generateGames();
+    console.log("created games")
+    const players = await generatePlayers()
+    console.log("created players")
 
-    const players: Player[] = [];
-
-    async function generatePlayers() {
-        let i = 0;
-        while (i < 10) {
-            const player = await prisma.player.create({
-                data: {
-                    name: generateName(),
-                    email: generateEmail()
-                }
-            });
-            players.push(player);
-            i++;
+    for (let i = 0; i < games.length; i++) {
+        for (let j = 0; j < players.length; j++) {
+            await generateFeedback(players[j], games[i])
         }
     }
-
-    await generatePlayers();
-    console.log("created user with id: ", user.id);
-
-    games.forEach(game => {
-        players.forEach(player => {
-            generateFeedback(player, game);
-        });
-    })
+    console.log("created feedback")
     console.log(`Database has been seeded. 🌱`);
 }
 
@@ -84,21 +96,13 @@ seed()
         await prisma.$disconnect();
     });
 
-function generateName() {
-    return faker.name.firstName()
-}
-
-function generateEmail() {
-    return faker.internet.exampleEmail(undefined, undefined, {allowSpecialCharacters: false})
-}
-
 async function generateFeedback(player: Player, game: Game) {
     await prisma.feedback.create({
         data: {
             gameId: game.id,
             playerId: player.id,
-            status: Math.random() > 0.5,
-            note: generateName() + generateEmail()
+            status:faker.datatype.boolean(),
+            note: faker.random.words(5)
         }
     });
 }
