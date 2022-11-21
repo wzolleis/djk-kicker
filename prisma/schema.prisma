@@ -48,6 +48,7 @@ model Mail {
   statusTxt String? // Fehlermeldung
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  mailType String? // Einladungslink, Zusage, Absage,...
 }
 
 // Feedback der Spieler für ein Spiel

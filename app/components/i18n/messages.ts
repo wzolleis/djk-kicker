@@ -107,6 +107,7 @@ Vielen Dank
     },
     adminGameInvitationForm: {
         titleGame: "Einadung für das Spiel am: ",
+        invitationLink: 'Einladungslink',
         titleGameTime: "Spielort: ",
         mailBodyLabel: "Nachricht",
         mailReceiver: "An:",

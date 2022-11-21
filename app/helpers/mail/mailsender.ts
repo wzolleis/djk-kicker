@@ -20,52 +20,12 @@ const transport = nodemailer.createTransport({
     ...mailConfig
 })
 
-// const mailSender = async (): Promise<SentMessageInfo | Error> => {
-//     const mailTo = process.env.TEST_MAIL_TO
-//     const mailFrom = process.env.MAIL_FROM
-//     if (!mailConfig.host) console.error('mail host not set')
-//     if (!mailConfig.auth.user) console.error('mail user not set')
-//     if (!mailConfig.auth.pass) console.error('mail pass not set')
-//     if (!mailTo) console.error('mailTo not set')
-//     if (!mailFrom) console.error('mailFrom not set')
-//
-//     if (!mailConfig.host || !mailConfig.auth.user || !mailConfig.auth.pass || !mailTo || !mailFrom) {
-//         console.error("Fehlerhafte Mail-Konfiguration")
-//         return new Error("Fehlerhafte Mail-Konfiguration")
-//     } else {
-//         try {
-//             if (process.env.FEATURE_SEND_MAIL_ACTIVE !== 'true') {
-//                 return new Error(`keine Mail gesendet, Feature ist nicht aktiv`)
-//             }
-//
-//             console.log("Sending mail....")
-//             const mailSender = `"${mailFrom}" <${mailFrom}>`
-//             const recipients = `${mailTo}`
-//
-//             const info = await transport.sendMail({
-//                 from: mailSender, // sender address
-//                 to: recipients, // list of receivers
-//                 subject: "Hello from DJK-Kicker-App✔", // Subject line
-//                 text: "Das ist ein Test - ignore me", // plain text body
-//                 html: "<b>Diese Mail wird direkt über Netlify gesendet, keine Functions</b>", // html body
-//             });
-//
-//             console.log("result sending mail: ", info)
-//
-//             return info
-//         } catch (error) {
-//             console.log("ERROR SENDING MAIL", error)
-//             return new Error(`Fehler beim Senden der Mail an ${mailTo}`)
-//         }
-//     }
-// }
-
 const mailSender = async ({
                               mailTo,
                               mailFrom,
                               subject,
                               body
-                          }: { mailTo: string, mailFrom: string, subject: string, body: string }): Promise<SentMessageInfo | Error> => {
+                          }: { mailTo: string, mailFrom: string, subject: string, body: string }): Promise<SentMessageInfo> => {
     if (!mailConfig.host) console.error('mail host not set')
     if (!mailConfig.auth.user) console.error('mail user not set')
     if (!mailConfig.auth.pass) console.error('mail pass not set')
@@ -74,7 +34,7 @@ const mailSender = async ({
 
     if (!mailConfig.host || !mailConfig.auth.user || !mailConfig.auth.pass || !mailTo || !mailFrom) {
         console.error("Fehlerhafte Mail-Konfiguration")
-        return new Error("Fehlerhafte Mail-Konfiguration")
+        throw new Error("Fehlerhafte Mail-Konfiguration")
     } else {
         try {
             if (process.env.FEATURE_SEND_MAIL_ACTIVE !== 'true') {
@@ -116,10 +76,10 @@ const sendTestMail = async () => {
     invariant(!!mailTo)
 }
 
-const sendMail = async ({mailTo, subject, body}: { mailTo: string, subject: string, body: string }) => {
+const sendMail = async ({mailTo, subject, body}: { mailTo: string, subject: string, body: string }): Promise<SentMessageInfo> => {
     const mailFrom = process.env.MAIL_FROM
     invariant(!!mailFrom)
-    await mailSender({mailTo, mailFrom, subject, body})
+    return await mailSender({mailTo, mailFrom, subject, body})
 }
 
 export default {
