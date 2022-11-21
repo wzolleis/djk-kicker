@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "windows", "rhel-openssl-1.0.x"]
 }
 
@@ -14,37 +14,37 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
-  name String?
+  id    String  @id @default(cuid())
+  email String  @unique
+  name  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   password Password?
-  admin Boolean @default(false)
-  testUser Boolean @default(false)
+  admin    Boolean   @default(false)
+  testUser Boolean   @default(false)
 }
 
 model Game {
-  id    String @id @default(cuid())
-  gameTime DateTime @default(now())
-  name String
-  link String?
-  spielort String @default("0")
+  id       String     @id @default(cuid())
+  gameTime DateTime   @default(now())
+  name     String
+  link     String?
+  spielort String     @default("0")
   feedback Feedback[]
-  token String @default(cuid()) @unique
-  mail Mail[] // die Mails, die fuer dieses Spiel veschickt wurden
-  status String? // findet statt oder abgesagt
+  token    String     @unique @default(cuid())
+  mail     Mail[] // die Mails, die fuer dieses Spiel veschickt wurden
+  status   String? // findet statt oder abgesagt
 }
 
 model Mail {
-  id    String @id @default(cuid())
-  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  gameId String
-  player Player @relation (fields: [playerId], references: [id])
-  playerId String
-  status Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
+  id        String   @id @default(cuid())
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    String
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String
+  status    Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
   statusTxt String? // Fehlermeldung
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,26 +52,36 @@ model Mail {
 
 // Feedback der Spieler für ein Spiel
 model Feedback {
- id    String @id @default(cuid())
- game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
- gameId String
- player Player @relation (fields: [playerId], references: [id])
- playerId String
- status Boolean?
- note String?
- @@unique([playerId, gameId])
+  id       String   @id @default(cuid())
+  game     Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId   String
+  player   Player   @relation(fields: [playerId], references: [id])
+  playerId String
+  status   Boolean?
+  note     String?
+
+  @@unique([playerId, gameId])
 }
 
 model Player {
-id String @id @default(cuid())
-name String
-email String
-feedback Feedback[]
-mails Mail[]
+  id       String     @id @default(cuid())
+  name     String
+  email    String
+  feedback Feedback[]
+  mails    Mail[]
 }
 
 model Password {
-  hash String
+  hash   String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
+}
+
+model AdminInvitation {
+  id         String   @id @default(cuid())
+  name       String
+  token      String
+  email      String
+  scope String
+  expires_at DateTime
 }
