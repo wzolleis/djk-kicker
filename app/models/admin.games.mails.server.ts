@@ -6,13 +6,19 @@ import dateUtils from "~/dateUtils";
 import mailSender from "~/helpers/mail/mailsender";
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {createMail} from "~/models/mails.server";
-import {mailTypes} from "~/helpers/constants/mailTypes";
+import {createGameAction, updateGameAction} from "~/models/gameActions.server";
 
 const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, host: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
     invariant(game !== null)
 
     const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId, token: game.token})
+
+    const action = await createGameAction({
+        gameId,
+        actionType: 'GAME_INVITATION'
+    })
+
     for (let i = 0; i < playerIds.length; i++) {
         const player = await getPlayerById(playerIds[i])
         invariant(player !== null)
@@ -30,18 +36,28 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
             await mailSender.sendMail({mailTo, subject, body})
             await createMail({
                 playerId: player.id,
-                gameId,
+                actionId: action.id,
                 status: 200,
-                statusTxt: `SUCCESS: ${subject}, ${mailTo}`,
-                mailType: mailTypes.game.invitation
+                statusTxt: `${subject}, ${mailTo}`,
+                mailType: 'GAME_INVITATION'
+            })
+            await updateGameAction({
+                ...action,
+                status: 200,
             })
         } catch(error) {
             await createMail({
                 playerId: player.id,
-                gameId,
+                actionId: action.id,
                 status: 500,
                 statusTxt: `ERROR: ${subject}, ${mailTo}, ${JSON.stringify(error)}`,
-                mailType: mailTypes.game.invitation
+                mailType: 'GAME_INVITATION'
+            })
+
+            await updateGameAction({
+                ...action,
+                status: 500,
+                statusTxt: `ERROR: ${JSON.stringify(error)}`
             })
         }
     }
