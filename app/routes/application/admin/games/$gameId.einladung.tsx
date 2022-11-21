@@ -9,6 +9,7 @@ import {Player} from "@prisma/client";
 import routeLinks from "~/helpers/constants/routeLinks";
 import envHelper from "~/helpers/environment/envHelper";
 import {useEffect, useRef, useState} from "react";
+import mailhelper from '~/models/admin.games.mails.server'
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -26,11 +27,12 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
     invariant(gameId, "Expected params.gameId");
     const formData = await request.formData();
     const intent = formData.get("intent")
-    // const host = formData.get("host")
-    // console.log(">>> host = ", host)
 
     if (intent === 'einladung') {
-        // const receiver = formData.getAll("receiver");
+        const playerIds = formData.getAll("receiver") as string[]
+        const host = formData.get("host")
+        invariant(host != null && typeof host === 'string')
+        await mailhelper.sendGameInvitation({host, gameId, playerIds})
         return redirect(routeLinks.admin.game.einladung(gameId));
     }
 
@@ -47,7 +49,7 @@ const PlayerList = ({players}: { players: Player[] }) => {
                         <div key={player.id}>
                             <input
                                 type="checkbox"
-                                defaultChecked={true}
+                                defaultChecked={false}
                                 id={player.email}
                                 name={'receiver'}
                                 className="form-checkbox"
@@ -118,7 +120,7 @@ const GameInvitation = () => {
                             id="einladungslink"
                             name="einladungslink"
                             className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500 disabled:bg-amber-100"
-                            defaultValue={messages.adminGameInvitationForm.mailSubject(gameTime)}
+                            defaultValue={messages.mailContent.invitationMail.mailSubject(gameTime)}
                             disabled={true}
                         />
                     </div>
@@ -134,7 +136,7 @@ const GameInvitation = () => {
                                   disabled={true}
                                   required={true}
                                   className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 disabled:bg-amber-100"
-                                  defaultValue={messages.adminGameInvitationForm.mailBody(gameTime, messages.adminGameInvitationForm.spielort(game.spielort))}
+                                  defaultValue={messages.adminGameInvitationForm.mailBody(gameTime)}
                         />
                     </div>
                 </fieldset>
@@ -155,7 +157,7 @@ const GameInvitation = () => {
                         value="einladung"
                         disabled={transition.state === 'submitting'}
                     >
-                        Einladung verschicken
+                        {messages.adminGameInvitationForm.sendInvitationBtn}
                     </button>
                 </div>
             </Form>

@@ -1,9 +1,7 @@
 import type {Player} from "@prisma/client";
 import {Feedback, Game} from "@prisma/client";
 import {prisma} from "~/db.server";
-import {getPlayerFeedbackForGame, getUniqueFeedbackForGameAndPlayer} from "~/models/feedback.server";
-import {Simulate} from "react-dom/test-utils";
-import play = Simulate.play;
+import {getUniqueFeedbackForGameAndPlayer} from "~/models/feedback.server";
 
 export type {Player} from "@prisma/client";
 
@@ -11,7 +9,7 @@ export async function getPlayers() {
     return prisma.player.findMany();
 }
 
-export async function getPlayer(id: Player["id"]) {
+export async function getPlayerById(id: Player["id"]) {
     return prisma.player.findUnique({where: {id}});
 }
 
