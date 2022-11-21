@@ -18,5 +18,5 @@ node_modules
 /prisma/data.db-journal
 
 /coverage
-
+/storage
 *.iml

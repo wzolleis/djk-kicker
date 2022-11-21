@@ -8,7 +8,9 @@ const messages = {
     appmenu: {
         administration: "Verwaltung",
         gameadministration: "Spieleverwaltung",
-        games: "Alle Spiele"
+        games: "Alle Spiele",
+        login: 'Anmelden',
+        logout: 'Abmelden'
     },
     commonForm: {
         cancel: "Abbruch"

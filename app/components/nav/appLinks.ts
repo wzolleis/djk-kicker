@@ -3,6 +3,7 @@ import messages from "~/components/i18n/messages";
 export type AppLink = {
     path: string
     label: string
+    admin: boolean
 }
 
 export const appLinks = {
@@ -15,8 +16,10 @@ export const appLinks = {
         },
         admin: {
             path: "admin",
+            admin: true,
             label: messages.appmenu.administration,
             games: {
+                admin: true,
                 path: "admin/games",
                 label: messages.appmenu.gameadministration
             }
