@@ -1,13 +1,13 @@
 import {DateTime} from "luxon";
 
 export class AdminTokenOptions {
-    username: string;
+    preferred_username: string;
     email: string
-    scope: Array<string>;
+    scope: string
     expires_at: DateTime
 
-    constructor(username: string, email: string, scope: Array<string>, expires_at: DateTime) {
-        this.username = username;
+    constructor(username: string, email: string, scope: string, expires_at: DateTime) {
+        this.preferred_username = username;
         this.email = email;
         this.scope = scope;
         this.expires_at = expires_at;
