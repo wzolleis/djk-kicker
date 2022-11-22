@@ -1,4 +1,4 @@
-import { GameAction } from "@prisma/client";
+import {GameAction} from "@prisma/client";
 import {prisma} from "~/db.server";
 import {ActionType} from "~/helpers/constants/gameTypes";
 
@@ -19,6 +19,14 @@ export const updateGameAction = async (action: GameAction) => {
         data: {
             status: action.status,
             statusTxt: action.statusTxt
+        }
+    })
+}
+
+export const findActionsByGameId = async ({gameId}: {gameId: string}) => {
+    return await prisma.gameAction.findMany({
+        where: {
+            gameId
         }
     })
 }

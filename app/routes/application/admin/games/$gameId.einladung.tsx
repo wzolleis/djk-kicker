@@ -34,7 +34,7 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
         const host = formData.get("host")
         invariant(host != null && typeof host === 'string')
         await mailhelper.sendGameInvitation({host, gameId, playerIds})
-        return redirect(routeLinks.admin.game.einladung(gameId));
+        return redirect(routeLinks.admin.game.details(gameId));
     }
 
     return redirect(routeLinks.admin.game.details(gameId))

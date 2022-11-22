@@ -39,6 +39,10 @@ const messages = {
         name: "Name",
         new: "Neu"
     },
+    adminGameActionsForm: {
+        title: 'Ausgeführte Aktionen',
+        noActions: 'Es wurden noch keine Aktionen ausgeführt'
+    },
     adminCreateGameForm: {
         newGame: "Neues Spiel anlegen",
         gameTime: "Datum",
