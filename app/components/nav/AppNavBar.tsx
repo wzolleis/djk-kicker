@@ -40,7 +40,7 @@ const AppNavBar = ({appMenu, user}: AppNavBarProps) => {
                     <Link key={menu.id}
                           className=" px-2 py-1 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
                           to={menu.appLink.path}
-                          hidden={menu.appLink.admin && !isLoggedIn}>
+                          hidden={menu.appLink.requiresAdmin && !isLoggedIn}>
                         {menu.appLink.label}
                     </Link>
                 )}

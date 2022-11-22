@@ -3,25 +3,32 @@ import messages from "~/components/i18n/messages";
 export type AppLink = {
     path: string
     label: string
-    admin: boolean
+    requiresAdmin: boolean
 }
 
 export const appLinks = {
     application: {
+        requiresAdmin: false,
         path: "/application",
         label: "Start",
         games: {
+            requiresAdmin: false,
             path: "games",
             label: messages.appmenu.games
         },
         admin: {
+            requiresAdmin: true,
             path: "admin",
-            admin: true,
             label: messages.appmenu.administration,
             games: {
-                admin: true,
+                requiresAdmin: true,
                 path: "admin/games",
                 label: messages.appmenu.gameadministration
+            },
+            users: {
+                requiresAdmin: true,
+                path: 'admin/users',
+                label: messages.appmenu.useradministration
             }
         }
     }

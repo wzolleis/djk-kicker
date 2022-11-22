@@ -5,9 +5,16 @@ const messages = {
         welcome: "Willkommen bei den DJK Kickern",
         title: "DJK Kicker"
     },
+    buttons: {
+        edit: 'Bearbeiten',
+        save: 'Speichern',
+        back: 'Zurück',
+        add: 'Hinzufügen'
+    },
     appmenu: {
         administration: "Verwaltung",
         gameadministration: "Spieleverwaltung",
+        useradministration: "Benutzerverwaltung",
         games: "Alle Spiele",
         login: 'Anmelden',
         logout: 'Abmelden'
@@ -60,6 +67,19 @@ const messages = {
         users: "Benutzerverwaltung",
         usersDescription: "Berechtigungen und so ein Quatsch"
     },
+    adminOverviewTable: {
+        name: 'Name',
+        email: 'E-Mail',
+        role: 'Rolle',
+    },
+
+    adminInvitationOverviewTable: {
+        name: 'Name',
+        email: 'E-Mail',
+        status: 'Status',
+        expiresAt: 'Läuft ab'
+    },
+
     game: {
         players: {
             title: "Spieler",
@@ -82,6 +102,13 @@ const messages = {
     },
     player: {
         add: "Spieler hinzufügen"
+    },
+
+    user: {
+        roles: {
+            admin: 'Admin',
+            player: 'Spieler'
+        }
     },
 
     warnings: {
