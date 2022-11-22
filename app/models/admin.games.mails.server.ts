@@ -4,15 +4,21 @@ import {getPlayerById} from "~/models/player.server";
 import messages from "~/components/i18n/messages";
 import dateUtils from "~/dateUtils";
 import mailSender from "~/helpers/mail/mailsender";
+import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
+import {createMail} from "~/models/mails.server";
+import {createGameAction, updateGameAction} from "~/models/gameActions.server";
 
-const sendGameInvitation = async ({gameId, host, playerIds}: {gameId: string, host: string, playerIds: string[]}) => {
+const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, host: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
     invariant(game !== null)
 
-    const isRemote = (host.startsWith("djk-kicker.netlify.app") || host.startsWith("kicker.timzolleis.com"))
-    const protocol = isRemote ? "https" :"http"
+    const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId, token: game.token})
 
-    const invitationLink = `${protocol}://${host}/application/games/${gameId}?token=${game.token}`
+    const action = await createGameAction({
+        gameId,
+        actionType: 'GAME_INVITATION'
+    })
+
     for (let i = 0; i < playerIds.length; i++) {
         const player = await getPlayerById(playerIds[i])
         invariant(player !== null)
@@ -24,11 +30,36 @@ const sendGameInvitation = async ({gameId, host, playerIds}: {gameId: string, ho
             einladungsLink: invitationLink,
             spielOrt: messages.adminGameInvitationForm.spielort(game.spielort),
             playerName: player.name
-        }, )
+        },)
         const mailTo = player.email
+        try {
+            await mailSender.sendMail({mailTo, subject, body})
+            await createMail({
+                playerId: player.id,
+                actionId: action.id,
+                status: 200,
+                statusTxt: `${subject}, ${mailTo}`,
+                mailType: 'GAME_INVITATION'
+            })
+            await updateGameAction({
+                ...action,
+                status: 200,
+            })
+        } catch(error) {
+            await createMail({
+                playerId: player.id,
+                actionId: action.id,
+                status: 500,
+                statusTxt: `ERROR: ${subject}, ${mailTo}, ${JSON.stringify(error)}`,
+                mailType: 'GAME_INVITATION'
+            })
 
-
-        await mailSender.sendMail({mailTo, subject, body})
+            await updateGameAction({
+                ...action,
+                status: 500,
+                statusTxt: `ERROR: ${JSON.stringify(error)}`
+            })
+        }
     }
 }
 

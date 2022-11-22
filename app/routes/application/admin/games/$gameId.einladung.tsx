@@ -10,6 +10,7 @@ import routeLinks from "~/helpers/constants/routeLinks";
 import envHelper from "~/helpers/environment/envHelper";
 import {useEffect, useRef, useState} from "react";
 import mailhelper from '~/models/admin.games.mails.server'
+import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -33,7 +34,7 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
         const host = formData.get("host")
         invariant(host != null && typeof host === 'string')
         await mailhelper.sendGameInvitation({host, gameId, playerIds})
-        return redirect(routeLinks.admin.game.einladung(gameId));
+        return redirect(routeLinks.admin.game.details(gameId));
     }
 
     return redirect(routeLinks.admin.game.details(gameId))
@@ -75,26 +76,29 @@ const GameInvitation = () => {
     const transition = useTransition();
     const [host, setHost] = useState<string>("")
     const formRef = useRef<HTMLFormElement>(null);
+    const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId: game.id, token: game.token})
 
     useEffect(() => {
         const host = envHelper.getHost()
         setHost(host)
     }, [])
 
-    // <input name="host" type="hidden" value={host}/>
     return (
         <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
             <div className="pt-1 font-poppins-semibold md:col-span-2">
                 <p>
                     <span
-                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameInvitationForm.titleGame}</span>
+                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameInvitationForm.titleGame}
+                    </span>
                     <span className="pl-2 font-poppins-bold ">{gameTime}</span>
                 </p>
                 <p>
                     <span
-                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameInvitationForm.titleGameTime}</span>
+                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameInvitationForm.titleGameTime}
+                    </span>
                     <span
-                        className="pl-2 font-poppins-bold">{messages.adminGameInvitationForm.spielort(game.spielort)}</span>
+                        className="pl-2 font-poppins-bold">{messages.adminGameInvitationForm.spielort(game.spielort)}
+                    </span>
                 </p>
             </div>
             <Form ref={formRef} method="post">
@@ -114,6 +118,21 @@ const GameInvitation = () => {
                             htmlFor="einladungsLink"
                             className="mb-2 pt-3 block font-poppins-bold text-gray-900"
                         >
+                            {messages.adminGameInvitationForm.invitationLink}
+                        </label>
+                        <input
+                            id="einladungslink"
+                            name="einladungslink"
+                            className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500 disabled:bg-amber-100"
+                            defaultValue={invitationLink}
+                            disabled={true}
+                        />
+                    </div>
+                    <div>
+                        <label
+                            htmlFor="einladungsLink"
+                            className="mb-2 pt-3 block font-poppins-bold text-gray-900"
+                        >
                             {messages.adminGameInvitationForm.mailSubjectLabel}
                         </label>
                         <input
@@ -122,21 +141,6 @@ const GameInvitation = () => {
                             className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500 disabled:bg-amber-100"
                             defaultValue={messages.mailContent.invitationMail.mailSubject(gameTime)}
                             disabled={true}
-                        />
-                    </div>
-                    <div>
-                        <label
-                            htmlFor="mailBody"
-                            className="mb-2 pt-3 block font-poppins-bold text-gray-900"
-                        >
-                            {messages.adminGameInvitationForm.mailBodyLabel}
-                        </label>
-                        <textarea id="mailBody"
-                                  rows={10}
-                                  disabled={true}
-                                  required={true}
-                                  className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 disabled:bg-amber-100"
-                                  defaultValue={messages.adminGameInvitationForm.mailBody(gameTime)}
                         />
                     </div>
                 </fieldset>

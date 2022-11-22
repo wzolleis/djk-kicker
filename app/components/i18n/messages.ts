@@ -39,6 +39,10 @@ const messages = {
         name: "Name",
         new: "Neu"
     },
+    adminGameActionsForm: {
+        title: 'Ausgeführte Aktionen',
+        noActions: 'Es wurden noch keine Aktionen ausgeführt'
+    },
     adminCreateGameForm: {
         newGame: "Neues Spiel anlegen",
         gameTime: "Datum",
@@ -134,6 +138,7 @@ Vielen Dank
     },
     adminGameInvitationForm: {
         titleGame: "Einadung für das Spiel am: ",
+        invitationLink: 'Einladungslink',
         titleGameTime: "Spielort: ",
         mailBodyLabel: "Nachricht",
         mailReceiver: "An:",

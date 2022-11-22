@@ -1,10 +1,6 @@
 import {Game, Player, PrismaClient} from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {faker} from "@faker-js/faker";
-import {createPlayer} from "~/models/player.server";
-import {Simulate} from "react-dom/test-utils";
-import play = Simulate.play;
-
 const prisma = new PrismaClient();
 
 function generateName() {
