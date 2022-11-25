@@ -63,6 +63,111 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
     }
 }
 
+const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: string[]}) => {
+    const game = await getGameById(gameId)
+    invariant(game !== null)
+
+    const action = await createGameAction({
+        gameId,
+        actionType: 'GAME_ZUSAGE'
+    })
+
+    for (let i = 0; i < playerIds.length; i++) {
+        const player = await getPlayerById(playerIds[i])
+        invariant(player !== null)
+
+        const gameTime = dateUtils.format(game.gameTime)
+        const subject = messages.mailContent.zusageMail.mailSubject(gameTime)
+        const body = messages.mailContent.zusageMail.mailBody({
+            datum: gameTime,
+            spielOrt: messages.adminGameInvitationForm.spielort(game.spielort),
+            playerName: player.name
+        },)
+        const mailTo = player.email
+        try {
+            await mailSender.sendMail({mailTo, subject, body})
+            await createMail({
+                playerId: player.id,
+                actionId: action.id,
+                status: 200,
+                statusTxt: `${subject}, ${mailTo}`,
+                mailType: 'GAME_ZUSAGE'
+            })
+            await updateGameAction({
+                ...action,
+                status: 200,
+            })
+        } catch(error) {
+            await createMail({
+                playerId: player.id,
+                actionId: action.id,
+                status: 500,
+                statusTxt: `ERROR: ${subject}, ${mailTo}, ${JSON.stringify(error)}`,
+                mailType: 'GAME_ZUSAGE'
+            })
+
+            await updateGameAction({
+                ...action,
+                status: 500,
+                statusTxt: `ERROR: ${JSON.stringify(error)}`
+            })
+        }
+    }
+}
+
+const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: string[]}) => {
+    const game = await getGameById(gameId)
+    invariant(game !== null)
+
+    const action = await createGameAction({
+        gameId,
+        actionType: 'GAME_ABSAGE'
+    })
+
+    for (let i = 0; i < playerIds.length; i++) {
+        const player = await getPlayerById(playerIds[i])
+        invariant(player !== null)
+
+        const gameTime = dateUtils.format(game.gameTime)
+        const subject = messages.mailContent.absageMail.mailSubject(gameTime)
+        const body = messages.mailContent.absageMail.mailBody({
+            datum: gameTime,
+            playerName: player.name
+        },)
+        const mailTo = player.email
+        try {
+            await mailSender.sendMail({mailTo, subject, body})
+            await createMail({
+                playerId: player.id,
+                actionId: action.id,
+                status: 200,
+                statusTxt: `${subject}, ${mailTo}`,
+                mailType: 'GAME_ABSAGE'
+            })
+            await updateGameAction({
+                ...action,
+                status: 200,
+            })
+        } catch(error) {
+            await createMail({
+                playerId: player.id,
+                actionId: action.id,
+                status: 500,
+                statusTxt: `ERROR: ${subject}, ${mailTo}, ${JSON.stringify(error)}`,
+                mailType: 'GAME_ABSAGE'
+            })
+
+            await updateGameAction({
+                ...action,
+                status: 500,
+                statusTxt: `ERROR: ${JSON.stringify(error)}`
+            })
+        }
+    }
+}
+
 export default {
-    sendGameInvitation
+    sendGameInvitation,
+    sendGameZusage,
+    sendGameAbsage
 }
