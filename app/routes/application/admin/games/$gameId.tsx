@@ -76,13 +76,12 @@ export const action: ActionFunction = async ({
     }
 
     if (intent === 'zusage') {
-        await createGameAction({gameId, actionType: "GAME_ZUSAGE"})
-        return redirect(routeLinks.admin.game.details(gameId));
+        return redirect(routeLinks.admin.game.zusage(gameId));
     }
 
     if (intent === 'absage') {
         await createGameAction({gameId, actionType: "GAME_ABSAGE"})
-        return redirect(routeLinks.admin.game.details(gameId));
+        return redirect(routeLinks.admin.game.absage(gameId));
     }
 
     return redirect(routeLinks.admin.games);
