@@ -1,5 +1,4 @@
 import {ReactNode} from "react";
-import {intersection} from "ts-interface-checker";
 
 type SelectorProps = {
     children: ReactNode[]

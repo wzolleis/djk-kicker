@@ -1,64 +1,89 @@
-import {Form, Link, useNavigate} from "@remix-run/react";
-import {PlayerFeedbackForGame} from "~/routes/application/games/$gameId/player/$playerId";
+import {Form, useNavigate} from "@remix-run/react";
+import type {PlayerFeedbackForGame} from "~/routes/application/games/$gameId/player/$playerId";
 import {getRedactedString} from "~/utils";
+import {useState} from "react";
+import SetStatusButton from "~/components/common/buttons/status/SetStatusButton";
+import {config} from "~/components/i18n/config";
 
 type PlayerFormProps = {
-    player: PlayerFeedbackForGame,
+    player: PlayerFeedbackForGame;
     isAuthenticated: boolean;
 };
 
 const EditPlayerStatusForm = ({player, isAuthenticated}: PlayerFormProps) => {
-
     const navigate = useNavigate();
+    const [status, setStatus] = useState(player.feedback[0].status);
+
     return (
+
         <Form method={"post"}>
             <main className={"flex flex-col gap-4"}>
-                <div className={"flex flex-col font-poppins-medium text-slate-600"}>
-                    <label htmlFor="name">Name</label>
-                    <input
-                        disabled={!isAuthenticated}
-                        defaultValue={player.name}
-                        name={"playerName"}
-                        id={"playerName"}
-                        className={
-                            "rounded-xl border border-gray-300 bg-white py-3 shadow-lg shadow-indigo-500/20 outline-none"
-                        }
-                        type="text"
-                    />
-                </div>
-                <div className={"flex flex-col font-poppins-medium text-slate-600"}>
-                    <label htmlFor="name">Email</label>
-                    <input
-                        disabled={!isAuthenticated}
-                        defaultValue={isAuthenticated ? player.email : getRedactedString()}
-                        name={"playerMail"}
-                        id={"playerMail"}
-                        className={
-                            "rounded-xl border border-gray-300 bg-white py-3 shadow-lg shadow-indigo-500/20 outline-none"
-                        }
-                        type="text"
-                    />
+                <div className={"md:grid md:grid-cols-2 gap-4"}>
+                    <div className={"flex flex-col font-poppins-medium text-slate-600"}>
+                        <label htmlFor="name">Name</label>
+                        <input
+                            disabled={!isAuthenticated}
+                            defaultValue={player.name}
+                            name={"playerName"}
+                            id={"playerName"}
+                            className={
+                                "rounded-xl ring ring-1 ring-indigo-100 border-none bg-white py-3 outline-none"
+                            }
+                            type="text"
+                        />
+                    </div>
+                    <div className={"flex flex-col font-poppins-medium text-slate-600"}>
+                        <label htmlFor="name">Email</label>
+                        <input
+                            disabled={!isAuthenticated}
+                            defaultValue={isAuthenticated ? player.email : getRedactedString()}
+                            name={"playerMail"}
+                            id={"playerMail"}
+                            className={
+                                "rounded-xl ring ring-1 ring-indigo-100 border-none bg-white py-3 outline-none"
+                            }
+                            type="text"
+                        />
+                    </div>
                 </div>
 
                 <div className={"flex flex-col font-poppins-medium text-slate-600"}>
                     <label htmlFor="name">Status</label>
-                    <select
-                        name={"feedbackStatus"}
-                        id={"feedbackStatus"}
-                        className={
-                            "rounded-xl border border-gray-300 bg-white py-3 shadow-lg shadow-indigo-500/20 outline-none"
-                        }
-                        defaultValue={
-                            player.feedback[0].status === null
-                                ? "unknown"
-                                : +player.feedback[0].status
-                        }
-                        disabled={!isAuthenticated}
-                    >
-                        <option value={1}>Zusage</option>
-                        <option value={0}>Absage</option>
-                        <option value={"unknown"}>Unbekannt</option>
-                    </select>
+                    <div>
+                        <input
+                            name={"feedbackStatus"}
+                            id={"feedbackStatus"}
+                            type={"hidden"}
+                            className={
+                                "rounded-xl  ring ring-1 ring-indigo-100 border-none bg-white py-3 outline-none"
+                            }
+                            defaultValue={status!}
+                            disabled={!isAuthenticated}
+                        ></input>
+
+                        <div
+                            className={"mt-5 flex w-full items-center justify-start gap-5"}
+                        >
+                            <SetStatusButton
+                                image={"/img/thumbs-up.png"}
+                                onClick={() => setStatus(config.status.confirmed)}
+                                isActive={status === config.status.confirmed}
+                                activeColor={"green-500"}
+                            />
+                            <SetStatusButton
+                                image={"/img/thumbs-down.png"}
+                                onClick={() => setStatus(config.status.declined)}
+                                isActive={status === config.status.declined}
+                                activeColor={"red-500"}
+                            />
+                            <SetStatusButton
+                                image={"/img/thinking.png"}
+                                onClick={() => setStatus(config.status.undecided)}
+                                isActive={status === config.status.undecided}
+                                activeColor={"yellow-500"}
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className={"flex flex-col font-poppins-medium text-slate-600"}>
                     <label htmlFor={"feedbackNote"}>Notiz</label>
@@ -67,23 +92,31 @@ const EditPlayerStatusForm = ({player, isAuthenticated}: PlayerFormProps) => {
                         id={"feedbackNote"}
                         disabled={!isAuthenticated}
                         className={
-                            "rounded-xl border border-gray-300 bg-white py-3 shadow-lg shadow-indigo-500/20 outline-none"
+                            "rounded-xl  ring ring-1 ring-indigo-100 border-none bg-white py-3 outline-none"
                         }
                         defaultValue={player.feedback[0].note || ""}
                     />
                 </div>
 
-                <button hidden={!isAuthenticated}
-                    className={"rounded-xl bg-indigo-600 p-3 shadow-lg shadow-indigo-500/40 font-inter-medium text-white"}
+                <button
+                    hidden={!isAuthenticated}
+                    className={
+                        "rounded-xl bg-indigo-600 p-3 font-inter-medium text-white "
+                    }
                 >
                     Status speichern
                 </button>
-                <button onClick={() => navigate(-1)} hidden={isAuthenticated}
-                        className={"rounded-xl bg-indigo-600 p-3 shadow-lg shadow-indigo-500/40 font-inter-medium text-white"}
+                <button
+                    onClick={() => navigate(-1)}
+                    hidden={isAuthenticated}
+                    className={
+                        "rounded-xl bg-indigo-600 p-3 font-inter-medium text-white "
+                    }
                 >
                     Zurück
                 </button>
             </main>
+
         </Form>
     );
 };

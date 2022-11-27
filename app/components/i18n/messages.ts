@@ -84,11 +84,25 @@ const messages = {
         players: {
             title: "Spieler",
             add: "Hinzufügen",
+        },
+        count: {
+            confirmedPlayers: "Zusagen",
+            declinedPlayers: "Absagen",
+            undecidedPlayers: "Unentschlossen",
+            unknownPlayers: "Unbekannt"
+        },
+        feedback: {
             status: {
-                undefined: "Unbekannt",
-                confirmed: "Zugesagt",
-                declined: "Abgesagt"
+                translations: {
+                    unknown: "Unbekannt",
+                    declined: "Abgesagt",
+                    confirmed: "Zugesagt",
+                    undecided: "Unsicher"
+
+                }
             }
+
+
         },
         add: "Spiel hinzufügen",
         filters: {
