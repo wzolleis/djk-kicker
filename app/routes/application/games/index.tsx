@@ -7,7 +7,9 @@ import {json} from "@remix-run/node";
 import {getGames, getMostRecentGame} from "~/models/games.server";
 import {useLoaderData, useSearchParams} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
+
 import {FilterTranslations, FilterTranslationsKey, FilterValues} from "~/config/filters";
+
 
 type LoaderData = {
     games: Awaited<ReturnType<typeof getGames>>;
