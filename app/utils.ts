@@ -99,7 +99,7 @@ export type QueryParamTypes = {
 
 export function useDate(date: Date) {
 
-    return DateTime.fromISO(date.toISOString()).toString()
+    return DateTime.fromJSDate(new Date(date)).toFormat("dd.MM.yyyy")
 }
 
 

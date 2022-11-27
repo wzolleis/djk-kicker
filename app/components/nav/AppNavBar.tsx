@@ -18,7 +18,7 @@ const AppNavBar = ({appMenu, user}: AppNavBarProps) => {
     const isLoggedIn: boolean = !!useOptionalUser()
 
     return (
-        <header className="bg-slate-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 text-white">
+        <header className="bg-black sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 text-white">
             <div className="flex items-center justify-between px-4 py-3 sm:p-0">
                 <div className="flex items-center justify-between">
                     <img src="/img/logo.png" alt="" className={"h-10"}/>
