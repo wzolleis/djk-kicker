@@ -4,22 +4,20 @@ import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import dateUtils from "~/dateUtils";
 import messages from "~/components/i18n/messages";
-import {getPlayers} from "~/models/player.server";
+import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
 import {Player} from "@prisma/client";
 import routeLinks from "~/helpers/constants/routeLinks";
-import envHelper from "~/helpers/environment/envHelper";
-import {useEffect, useRef, useState} from "react";
+import {useRef} from "react";
 import mailhelper from '~/models/admin.games.mails.server'
-import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
-    players: Awaited<ReturnType<typeof getPlayers>>;
+    players: Awaited<ReturnType<typeof getPlayersWithUniqueFeedbackForGame>>;
 };
 
 export const loader: LoaderFunction = async ({params: {gameId}}) => {
     invariant(gameId, "Expected params.gameId");
-    const [game, players] = await Promise.all([findGameById(gameId), getPlayers()])
+    const [game, players] = await Promise.all([findGameById(gameId), getPlayersWithUniqueFeedbackForGame(gameId)])
     return json<LoaderData>({game, players});
 };
 
@@ -29,11 +27,9 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
     const formData = await request.formData();
     const intent = formData.get("intent")
 
-    if (intent === 'einladung') {
+    if (intent === 'zusage') {
         const playerIds = formData.getAll("receiver") as string[]
-        const host = formData.get("host")
-        invariant(host != null && typeof host === 'string')
-        await mailhelper.sendGameInvitation({host, gameId, playerIds})
+        await mailhelper.sendGameZusage({gameId, playerIds})
         return redirect(routeLinks.admin.game.details(gameId));
     }
 
@@ -70,78 +66,40 @@ const PlayerList = ({players}: { players: Player[] }) => {
     )
 }
 
-const GameInvitation = () => {
+const GameZusage = () => {
     const {game, players} = useLoaderData<LoaderData>();
     const gameTime = dateUtils.format(new Date(game.gameTime));
     const transition = useTransition();
-    const [host, setHost] = useState<string>("")
     const formRef = useRef<HTMLFormElement>(null);
-    const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId: game.id, token: game.token})
-
-    useEffect(() => {
-        const host = envHelper.getHost()
-        setHost(host)
-    }, [])
 
     return (
         <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
             <div className="pt-1 font-poppins-semibold md:col-span-2">
                 <p>
                     <span
-                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameInvitationForm.titleGame}
+                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameZusageForm.titleGame}
                     </span>
                     <span className="pl-2 font-poppins-bold ">{gameTime}</span>
                 </p>
                 <p>
                     <span
-                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameInvitationForm.titleGameTime}
+                        className="text-gray-500 text-sm md:text-xl">{messages.adminGameZusageForm.titleGameTime}
                     </span>
                     <span
-                        className="pl-2 font-poppins-bold">{messages.adminGameInvitationForm.spielort(game.spielort)}
+                        className="pl-2 font-poppins-bold">{messages.adminGameZusageForm.spielort(game.spielort)}
                     </span>
                 </p>
             </div>
             <Form ref={formRef} method="post">
                 <fieldset disabled={transition.state === "submitting"}>
-                    <input type={"hidden"} name="host" defaultValue={host}/>
                     <div className="col-span-2">
                         <label
                             htmlFor="player"
                             className="mb-2 block font-poppins-bold text-gray-900"
                         >
-                            {messages.adminGameInvitationForm.mailReceiver}
+                            {messages.adminGameZusageForm.mailReceiver}
                         </label>
                         <PlayerList players={players}/>
-                    </div>
-                    <div>
-                        <label
-                            htmlFor="einladungsLink"
-                            className="mb-2 pt-3 block font-poppins-bold text-gray-900"
-                        >
-                            {messages.adminGameInvitationForm.invitationLink}
-                        </label>
-                        <input
-                            id="einladungslink"
-                            name="einladungslink"
-                            className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500 disabled:bg-amber-100"
-                            defaultValue={invitationLink}
-                            disabled={true}
-                        />
-                    </div>
-                    <div>
-                        <label
-                            htmlFor="einladungsLink"
-                            className="mb-2 pt-3 block font-poppins-bold text-gray-900"
-                        >
-                            {messages.adminGameInvitationForm.mailSubjectLabel}
-                        </label>
-                        <input
-                            id="einladungslink"
-                            name="einladungslink"
-                            className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500 disabled:bg-amber-100"
-                            defaultValue={messages.mailContent.invitationMail.mailSubject(gameTime)}
-                            disabled={true}
-                        />
                     </div>
                 </fieldset>
                 <div className={"flex justify-start gap-2 pt-2"}>
@@ -158,10 +116,10 @@ const GameInvitation = () => {
                         type="submit"
                         className="rounded mb-2 mt-2 ml-auto bg-blue-600 py-2 px-2 text-white hover:bg-blue-400 focus:border-2 disabled:bg-blue-200"
                         name="intent"
-                        value="einladung"
+                        value="zusage"
                         disabled={transition.state === 'submitting'}
                     >
-                        {messages.adminGameInvitationForm.sendInvitationBtn}
+                        {messages.adminGameZusageForm.sendZusageBtn}
                     </button>
                 </div>
             </Form>
@@ -171,4 +129,4 @@ const GameInvitation = () => {
 
 }
 
-export default GameInvitation
+export default GameZusage

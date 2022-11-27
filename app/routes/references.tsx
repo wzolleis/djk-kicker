@@ -31,6 +31,9 @@ const References = () => {
                     </a>
                     auf Freepik
                 </li>
+                <li>
+                    <a href="https://www.clipartmax.com/png/small/297-2978358_back-back-arrow-png-blue.png">Back - Back Arrow Png Blue @clipartmax.com</a>
+                </li>
             </ul>
         </div>
     );
