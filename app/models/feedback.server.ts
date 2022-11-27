@@ -1,6 +1,7 @@
 import type {Feedback, Game, Player} from "@prisma/client";
 import {prisma} from "~/db.server";
 import {Nullable} from "vitest";
+import {config} from "~/components/i18n/config";
 
 
 export async function getFeedbackForGame(gameId: Feedback["gameId"]) {
@@ -37,7 +38,7 @@ export async function getPlayerFeedbackForGame(id: Player["id"], gameId: Feedbac
     });
 }
 
-export async function updateFeedback(playerId: Player["id"], gameId: Game["id"], status: Nullable<boolean>, note: Nullable<string>) {
+export async function updateFeedback(playerId: Player["id"], gameId: Game["id"], status: number, note: Nullable<string>) {
     return await prisma.feedback.updateMany({
         where: {
             AND: [{
@@ -53,7 +54,7 @@ export async function updateFeedback(playerId: Player["id"], gameId: Game["id"],
 }
 
 
-export async function createFeedback(playerId: Player["id"], gameId: Game["id"], status: Nullable<boolean>, note: Nullable<string>) {
+export async function createFeedback(playerId: Player["id"], gameId: Game["id"], status: number, note: Nullable<string>) {
     return await prisma.feedback.create({
         data: {
             playerId: playerId,
@@ -70,7 +71,7 @@ export async function createDefaultFeedback(gameId: Game["id"], playerId: Player
         data: {
             gameId: gameId,
             playerId: playerId,
-            status: null
+            status: config.status.unknown
         }
     })
 }

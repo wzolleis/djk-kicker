@@ -40,6 +40,9 @@ export const loader: LoaderFunction = async ({params, request}) => {
 export const action: ActionFunction = async ({params, request}) => {
     const formData = await request.formData();
     const submittedForm: FeedbackForm = getFeedbackForm(formData);
+    console.log(submittedForm);
+
+
     const {isAuthenticated} = await authenticateUser(params, request)
     if (!isAuthenticated) {
         throw  json('no permission', 403)

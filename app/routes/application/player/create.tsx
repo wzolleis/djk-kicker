@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
     const {gameid} = getQueryParams(request, "gameid");
     const player = await createPlayer(formData.get("name")!.toString(), formData.get("mail")!.toString())
     if (gameid) {
-        await createFeedback(player.id, gameid, determineStatus(formData.get("status")!.toString()), formData.get("note")!.toString())
+        await createFeedback(player.id, gameid, parseInt(formData.get("status")!.toString()), formData.get("note")!.toString())
     }
     return redirect(`application/games${gameid ? `/${gameid}` : ""}`)
 

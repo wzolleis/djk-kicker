@@ -97,7 +97,6 @@ async function generateFeedback(player: Player, game: Game) {
         data: {
             gameId: game.id,
             playerId: player.id,
-            status:faker.datatype.boolean(),
             note: faker.random.words(5)
         }
     });

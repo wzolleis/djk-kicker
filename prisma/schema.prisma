@@ -70,7 +70,8 @@ model Feedback {
   gameId   String
   player   Player   @relation(fields: [playerId], references: [id])
   playerId String
-  status   Boolean?
+  status   Int? @default(0)
+  playerCount Int @default(1)
   note     String?
 
   @@unique([playerId, gameId])

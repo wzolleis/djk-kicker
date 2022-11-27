@@ -3,6 +3,7 @@ import {useMemo} from "react";
 
 import type {User} from "~/models/user.server";
 import {DateTime} from "luxon";
+import {EnumParams} from "ajv";
 
 const DEFAULT_REDIRECT = "/";
 
@@ -152,6 +153,7 @@ export function getNextGameDay() {
     console.log('gameday = ', gameDay.toJSDate())
 
     return gameDay
+
 
 }
 

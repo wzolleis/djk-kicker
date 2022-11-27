@@ -2,6 +2,12 @@ import {Link} from "@remix-run/react";
 
 import {useOptionalUser} from "~/utils";
 import messages from "~/components/i18n/messages";
+import {LoaderFunction, redirect} from "@remix-run/node";
+
+export const loader: LoaderFunction = () => {
+  return redirect("/application/games")
+}
+
 
 export default function Index() {
   const user = useOptionalUser();
