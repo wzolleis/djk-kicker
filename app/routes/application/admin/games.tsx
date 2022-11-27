@@ -8,6 +8,8 @@ import type {Game} from "@prisma/client";
 import GameCard from "~/components/game/GameCard";
 import PageHeader from "~/components/common/PageHeader";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
+import GamesTableRow from "~/components/tables/admin/games/GamesTableRow";
+import GamesTable from "~/components/tables/admin/games/GamesTable";
 
 type LoaderData = {
     games: Awaited<ReturnType<typeof readGames>>
@@ -25,14 +27,12 @@ const isOldGame = (game: Game): boolean => !!game.gameTime && (new Date() > new 
 const GameList = ({games}: { games: Game[] }) => {
     return (
         <>
-            <main className={""}>
+            <main className={"space-y-4"}>
                 <div className={"flex justify-between"}>
                     <PageHeader title={messages.appmenu.games}/>
                     <DefaultButton><Link to={"new"}>{messages.adminGamesForm.new}</Link></DefaultButton>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 py-5">
-                    {games.map((game) => <GameCard key={game.id} game={game}/>)}
-                </div>
+                <GamesTable games={games}/>
             </main>
         </>
     );
@@ -43,9 +43,9 @@ const Games = () => {
 
     return (
         <>
-            <section className={"flex gap-4"}>
-            <GameList games={games}/>
-            <Outlet/>
+            <section className={"flex flex-col gap-4"}>
+                <GameList games={games}/>
+                <Outlet/>
             </section>
         </>
     );

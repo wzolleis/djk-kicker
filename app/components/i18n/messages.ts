@@ -35,6 +35,11 @@ const messages = {
         backToLogin: "Zur Anmeldung",
         createAccount: "Neuen Account anlegen"
     },
+    adminGamesTable: {
+        name: "Spielname",
+        gametime: "Zeit",
+        location: "Spielort"
+    },
     adminGamesForm: {
         name: "Name",
         new: "Neues Spiel"
