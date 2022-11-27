@@ -5,7 +5,9 @@ import {requireUserId} from "~/session.server";
 import {Link, Outlet, useLoaderData} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import type {Game} from "@prisma/client";
-import dateUtils from "~/dateUtils";
+import GameCard from "~/components/game/GameCard";
+import PageHeader from "~/components/common/PageHeader";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
 
 type LoaderData = {
     games: Awaited<ReturnType<typeof readGames>>
@@ -20,49 +22,32 @@ export const loader = async ({request}: LoaderArgs) => {
 
 const isOldGame = (game: Game): boolean => !!game.gameTime && (new Date() > new Date(game.gameTime));
 
-const GameView = ({game}: { game: Game }) => {
-    let oldGame = isOldGame(game);
-    const gameTime = dateUtils.format(new Date(game.gameTime));
+const GameList = ({games}: { games: Game[] }) => {
     return (
-        <li>
-            <Link to={game.id}
-                  className={`font-medium block px-2 py-1 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300 ${oldGame ? "text-gray-100" : ""}`}
-            >
-                <div className="flex align-center">
-                    <i className="fa-solid fa-futbol"/>
-                    <span className="flex-1 ml-2">{`${game.name} - ${gameTime}`}</span>
+        <>
+            <main className={""}>
+                <div className={"flex justify-between"}>
+                    <PageHeader title={messages.appmenu.games}/>
+                    <DefaultButton><Link to={"new"}>{messages.adminGamesForm.new}</Link></DefaultButton>
                 </div>
-            </Link>
-        </li>
-
-    );
-};
-
-type GameListProps = { games: Game[] }
-const GameList = ({games}: GameListProps) => {
-    return (
-        <div className="mb-2 p-2 bg-gray-300 overflow-auto">
-            <ul className="mb-2">
-                {games.map((game) => <GameView key={game.id} game={game}/>)}
-            </ul>
-            <Link to="new"
-                  className="py-2 hover:bg-gray-100 rounded border-gray-300">
-                <i className="fa-solid fa-square-plus"/>
-                <span className="m-2">{messages.adminGamesForm.new}</span>
-            </Link>
-        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 py-5">
+                    {games.map((game) => <GameCard key={game.id} game={game}/>)}
+                </div>
+            </main>
+        </>
     );
 };
 
 const Games = () => {
-    const {games} = useLoaderData<LoaderData>();
+    const {games} = useLoaderData() as unknown as LoaderData;
 
     return (
-        <main className="flex:col w-full h-full">
-            {  /* @ts-ignore */}
+        <>
+            <section className={"flex gap-4"}>
             <GameList games={games}/>
             <Outlet/>
-        </main>
+            </section>
+        </>
     );
 };
 

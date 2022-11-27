@@ -118,9 +118,9 @@ const EditGame = () => {
     };
 
     return (
-        <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
+        <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2 w-full">
             <div className="pt-2 font-poppins-semibold md:col-span-2">
-                {messages.adminEditGameForm.title}
+                {}
             </div>
             <Form ref={formRef} method="post" className="pt-2">
                 <fieldset disabled={transition.state === "submitting"}>

@@ -37,7 +37,7 @@ const messages = {
     },
     adminGamesForm: {
         name: "Name",
-        new: "Neu"
+        new: "Neues Spiel"
     },
     adminCreateGameForm: {
         newGame: "Neues Spiel anlegen",
