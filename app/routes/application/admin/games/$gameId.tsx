@@ -11,10 +11,12 @@ import type {Game} from "@prisma/client";
 import {dateTimeLocalInputValueToDateTime, dateTimeToDateTimeLocalInputFormValue,} from "~/utils";
 import {DateTime} from "luxon";
 import toast from "react-hot-toast";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {spielortOptions} from "~/helpers/constants/admin.game.constants";
-import mailsender from "~/helpers/mail/mailsender";
+import {createGameAction} from "~/models/gameActions.server";
+import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
+import envHelper from "~/helpers/environment/envHelper";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -26,10 +28,6 @@ export const loader: LoaderFunction = async ({params: {gameId}}) => {
         game: await findGameById(gameId),
     });
 };
-
-const sendTestMail = async () => {
-    await mailsender()
-}
 
 // noinspection JSUnusedGlobalSymbols
 export const action: ActionFunction = async ({
@@ -53,7 +51,6 @@ export const action: ActionFunction = async ({
     invariant(!!gameId, "GameId muss gesetzt sein");
     invariant(validSpielort, "Der Wert von Spielort muss eine Zahl sein");
 
-
     if (intent === 'feedback') {
         return redirect(routeLinks.admin.game.einladung(gameId))
     }
@@ -61,10 +58,6 @@ export const action: ActionFunction = async ({
     if (intent === "delete") {
         await deleteGame(gameId);
         return redirect(routeLinks.admin.games);
-    }
-
-    if (intent === 'email') {
-        await sendTestMail()
     }
 
     if (intent === 'update') {
@@ -79,7 +72,18 @@ export const action: ActionFunction = async ({
             spielort,
         };
         await updateGame(toUpdate);
+        return redirect(routeLinks.admin.games);
     }
+
+    if (intent === 'zusage') {
+        return redirect(routeLinks.admin.game.zusage(gameId));
+    }
+
+    if (intent === 'absage') {
+        await createGameAction({gameId, actionType: "GAME_ABSAGE"})
+        return redirect(routeLinks.admin.game.absage(gameId));
+    }
+
     return redirect(routeLinks.admin.games);
 };
 
@@ -92,10 +96,13 @@ const EditGame = () => {
     const transition = useTransition();
     const formRef = useRef<HTMLFormElement>(null);
     const submit = useSubmit();
+    const [host, setHost] = useState<string>("")
+
     const intentValue = transition.submission?.formData.get("intent")
     const isUpdating = intentValue === "update";
     const isDeleting = intentValue === "delete";
     const isGameAction = intentValue === 'feedback' || intentValue === 'absage' || intentValue === 'zusage'
+    const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId: game.id, token: game.token})
 
     useEffect(() => {
         if (formRef.current) {
@@ -109,6 +116,11 @@ const EditGame = () => {
         if (!isUpdating || !isDeleting)
             formRef.current?.reset()
     }, [isUpdating, isDeleting])
+
+    useEffect(() => {
+        const host = envHelper.getHost()
+        setHost(host)
+    }, [])
 
     const handleDelete = (event: any) => {
         if (confirm(messages.adminEditGameForm.deleteConfirmation)) {
@@ -181,6 +193,22 @@ const EditGame = () => {
                             </option>
                         </select>
                     </div>
+                    <div className={"flex flex-col"}>
+                        <label
+                            htmlFor="einladungsLink"
+                            className="mb-2 block pt-2 text-sm font-medium text-gray-900"
+                        >
+                            {messages.adminGameInvitationForm.invitationLink}
+                        </label>
+                        <input
+                            id="einladungslink"
+                            name="einladungslink"
+                            className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500"
+                            defaultValue={invitationLink}
+                            disabled={true}
+                        />
+                    </div>
+
                     <div className={"flex justify-start gap-2 pt-2"}>
                         <span className="ml-auto"/>
                         <button
@@ -240,7 +268,6 @@ const EditGame = () => {
                     </div>
                 </fieldset>
             </Form>
-
             <Outlet/>
         </div>
 
