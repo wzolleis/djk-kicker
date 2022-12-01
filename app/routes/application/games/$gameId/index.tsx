@@ -8,7 +8,6 @@ import PageHeader from "~/components/common/PageHeader";
 import {useDate} from "~/utils";
 import SmallTag from "~/components/common/tags/SmallTag";
 import type {GameWithFeedback} from "~/routes/application/games/$gameId";
-import {DateTime} from "luxon";
 import type {PlayerWithFeedback} from "~/models/player.server";
 import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
 import {authenticateUser} from "~/utils/session.server";
@@ -73,7 +72,7 @@ const GameIndex = () => {
                 </div>
 
                 <NoTokenWarning hidden={isAuthenticated}/>
-                <Players players={players} gameId={game.id}></Players>
+                <Players players={players} gameId={game.id} isAuthenticated={isAuthenticated}></Players>
             </section>
         </>
     );
