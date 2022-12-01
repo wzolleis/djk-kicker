@@ -7,17 +7,20 @@ import type {PlayerWithFeedback} from "~/models/player.server";
 interface PlayerProps {
     players: PlayerWithFeedback[];
     gameId: string,
+    isAuthenticated: boolean
 }
 
 
-const Players = ({players, gameId}: PlayerProps) => {
+const Players = ({players, gameId, isAuthenticated}: PlayerProps) => {
     return (
         <>
             <MainPageContent>
                 <header className={"flex justify-between items-center"}>
                     <p className={"font-poppins-medium text-headline-small text-darkblue"}>Spieler</p>
-                    <SmallButton title={"Spieler hinzufügen"}
-                                 link={`/application/player/create?gameid=${gameId}`}></SmallButton>
+                    {isAuthenticated && <SmallButton title={"Spieler hinzufügen"}
+                                                     link={`/application/player/create?gameid=${gameId}`}
+                    />
+                    }
                 </header>
                 <main className={"flex flex-col gap-3 mt-5 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
                     {
