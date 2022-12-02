@@ -7,20 +7,22 @@ import messages from "~/components/i18n/messages";
 import {getPlayers} from "~/models/player.server";
 import {Player} from "@prisma/client";
 import routeLinks from "~/helpers/constants/routeLinks";
-import envHelper from "~/helpers/environment/envHelper";
-import {useEffect, useRef, useState} from "react";
+import {useRef} from "react";
 import mailhelper from '~/models/admin.games.mails.server'
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
     players: Awaited<ReturnType<typeof getPlayers>>;
+    hostName: string
 };
 
 export const loader: LoaderFunction = async ({params: {gameId}}) => {
     invariant(gameId, "Expected params.gameId");
+
+    const hostName = process.env.HOSTNAME || 'djk-kicker.netlify.app'
     const [game, players] = await Promise.all([findGameById(gameId), getPlayers()])
-    return json<LoaderData>({game, players});
+    return json<LoaderData>({game, players, hostName});
 };
 
 
@@ -30,9 +32,9 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
     const intent = formData.get("intent")
 
     if (intent === 'einladung') {
+        const host = process.env.HOSTNAME || ''
         const playerIds = formData.getAll("receiver") as string[]
-        const host = formData.get("host")
-        invariant(host != null && typeof host === 'string')
+        invariant(!!host)
         await mailhelper.sendGameInvitation({host, gameId, playerIds})
         return redirect(routeLinks.admin.game.details(gameId));
     }
@@ -71,17 +73,12 @@ const PlayerList = ({players}: { players: Player[] }) => {
 }
 
 const GameInvitation = () => {
-    const {game, players} = useLoaderData<LoaderData>();
+    const {game, players, hostName} = useLoaderData<LoaderData>();
     const gameTime = dateUtils.format(new Date(game.gameTime));
     const transition = useTransition();
-    const [host, setHost] = useState<string>("")
     const formRef = useRef<HTMLFormElement>(null);
-    const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId: game.id, token: game.token})
 
-    useEffect(() => {
-        const host = envHelper.getHost()
-        setHost(host)
-    }, [])
+    const invitationLink = mailLinkBuilder.gameInvitationLink({host: hostName, gameId: game.id, token: game.token})
 
     return (
         <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
@@ -103,7 +100,6 @@ const GameInvitation = () => {
             </div>
             <Form ref={formRef} method="post">
                 <fieldset disabled={transition.state === "submitting"}>
-                    <input type={"hidden"} name="host" defaultValue={host}/>
                     <div className="col-span-2">
                         <label
                             htmlFor="player"
