@@ -8,8 +8,7 @@ import type {Game} from "@prisma/client";
 import GameCard from "~/components/game/GameCard";
 import PageHeader from "~/components/common/PageHeader";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import GamesTableRow from "~/components/tables/admin/games/GamesTableRow";
-import GamesTable from "~/components/tables/admin/games/GamesTable";
+import GamesList from "~/components/game/admin/GamesList";
 
 type LoaderData = {
     games: Awaited<ReturnType<typeof readGames>>
@@ -24,7 +23,10 @@ export const loader = async ({request}: LoaderArgs) => {
 
 const isOldGame = (game: Game): boolean => !!game.gameTime && (new Date() > new Date(game.gameTime));
 
-const GameList = ({games}: { games: Game[] }) => {
+
+const Games = () => {
+    const {games} = useLoaderData() as unknown as LoaderData;
+
     return (
         <>
             <main className={"space-y-4"}>
@@ -32,21 +34,9 @@ const GameList = ({games}: { games: Game[] }) => {
                     <PageHeader title={messages.appmenu.games}/>
                     <DefaultButton><Link to={"new"}>{messages.adminGamesForm.new}</Link></DefaultButton>
                 </div>
-                <GamesTable games={games}/>
+                <GamesList games={games}></GamesList>
             </main>
-        </>
-    );
-};
-
-const Games = () => {
-    const {games} = useLoaderData() as unknown as LoaderData;
-
-    return (
-        <>
-            <section className={"flex flex-col gap-4"}>
-                <GameList games={games}/>
-                <Outlet/>
-            </section>
+            <Outlet></Outlet>
         </>
     );
 };

@@ -4,7 +4,7 @@ const DefaultButton = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <div
-        className={"flex items-center justify-center rounded bg-indigo-600  text-white transition hover:bg-indigo-400 p-3 font-poppins-medium"}
+        className={"flex items-center justify-center rounded bg-red-600  text-white p-3 font-poppins-medium hover:bg-red-400"}
       >
         {children}
       </div>
