@@ -4,8 +4,8 @@ type TagProps = {
 
 const SmallTag = ({text}: TagProps) => {
     return (
-        <div className={"px-4 py-2 rounded-xl ring ring-1 ring-indigo-100 bg-white"}>
-            <p className={"font-poppins-regular text-label-medium text-slate-900"}>{text}</p>
+        <div className={"px-3 py-1.5 rounded-full bg-neutral-200 "}>
+            <p className={"font-default-regular text-label-medium text-black"}>{text}</p>
         </div>
     )
 }

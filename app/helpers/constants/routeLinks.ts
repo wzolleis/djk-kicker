@@ -7,6 +7,7 @@ const routeLinks = {
             zusage: (gameId: string) => `/application/admin/games/${gameId}/zusage`,
             absage: (gameId: string) => `/application/admin/games/${gameId}/absage`,
             actions: (gameId: string) => `/application/admin/games/${gameId}/actions`,
+            invitation: (gameId: string) => `/application/admin/games/${gameId}/invitation`,
         }
     },
     game: {

@@ -35,9 +35,14 @@ const messages = {
         backToLogin: "Zur Anmeldung",
         createAccount: "Neuen Account anlegen"
     },
+    adminGamesTable: {
+        name: "Spielname",
+        gametime: "Zeit",
+        location: "Spielort"
+    },
     adminGamesForm: {
         name: "Name",
-        new: "Neu"
+        new: "Neues Spiel"
     },
     adminGameActionsForm: {
         title: 'Ausgeführte Aktionen',
@@ -51,7 +56,7 @@ const messages = {
         submitting: "Speichere..."
     },
     adminEditGameForm: {
-        title: "Spiel aktualisieren",
+        title: "Spiel bearbeiten",
         gameTime: "Datum",
         name: "Name",
         spielort: "Spielort",
@@ -62,7 +67,12 @@ const messages = {
         delete: "Löschen",
         deleting: "Lösche...",
         deleteConfirmation: "Das Spiel wirklich löschen ?",
-        gameDeleted: "Das Spiel wurde gelöscht"
+        gameDeleted: "Das Spiel wurde gelöscht",
+        buttons: {
+            confirm: "Zusagen",
+            decline: "Absagen",
+            invite: "Einladung versenden"
+        }
     },
     adminLandingPage: {
         title: "Verwaltung",
