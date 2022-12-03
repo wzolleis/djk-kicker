@@ -36,9 +36,8 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
     const formData = await request.formData();
     const intent = formData.get("intent")
     if (intent === 'invitation') {
-        const host = process.env.HOSTNAME || ''
+        const host = request.headers.get("host")!;
         const playerIds = formData.getAll("receiver") as string[]
-        invariant(!!host)
         await mailhelper.sendGameInvitation({host, gameId, playerIds})
         return redirect(routeLinks.admin.game.details(gameId));
     }
