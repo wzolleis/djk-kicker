@@ -82,7 +82,7 @@ const GameInvitation = () => {
                                 <PlayerSelector players={players}/>
                             </div>
                         </fieldset>
-                        <div className={"flex gap-2 mt-5 justify-end"}>
+                        <div className={"grid grid-cols-2 md:flex gap-2 mt-5 justify-end"}>
                             <DeleteButton>
                                 <img className={"h-6"} src="/img/icons/close-white.png" alt=""/>
                                 <button
