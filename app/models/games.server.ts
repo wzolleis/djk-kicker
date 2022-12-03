@@ -17,6 +17,15 @@ export async function getGameById(id: Game["id"]) {
     });
 }
 
+
+export async function findGameById(id: Game['id']) {
+    return await prisma.game.findUnique({
+        where: {id}
+    })
+
+
+}
+
 export async function getGames() {
     return prisma.game.findMany({
         orderBy: {

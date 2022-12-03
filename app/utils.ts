@@ -73,15 +73,7 @@ export function validateEmail(email: unknown): email is string {
     return typeof email === "string" && email.length > 3 && email.includes("@");
 }
 
-export function useDate(date: Date): string {
-    if (date === null) {
-        return "Unbekannt";
-    }
-    const parsedDate = new Date(date);
-    return `${parsedDate.getDate()}.${
-        parsedDate.getMonth() + 1
-    }.${parsedDate.getFullYear()}`;
-}
+
 
 /**
  * Wandelt den Input-Value eines datetime-local Input-Feldes in ein JS-Date
@@ -104,6 +96,12 @@ export type QueryParamTypes = {
     filter: string | null,
     token: string | null
 }
+
+export function useDate(date: Date) {
+
+    return DateTime.fromJSDate(new Date(date)).toFormat("dd.MM.yyyy")
+}
+
 
 export type QueryParamName = keyof QueryParamTypes
 
