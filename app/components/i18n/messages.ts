@@ -20,7 +20,15 @@ const messages = {
         logout: 'Abmelden'
     },
     commonForm: {
-        cancel: "Abbruch"
+        cancel: "Abbruch",
+        date: "Datum",
+        suggestion: "Vorschlag",
+        time: "Uhrzeit",
+        year: "Jahr",
+        month: "Monat",
+        day: "Tag",
+        hour: "Stunde",
+        minute: "Minuten"
     },
     loginform: {
         welcome: "DJK Kicker - Anmeldung",

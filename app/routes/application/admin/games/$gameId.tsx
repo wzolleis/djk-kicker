@@ -8,7 +8,7 @@ import messages from "~/components/i18n/messages";
 import {deleteGame, findGameById, updateGame,} from "~/models/admin.games.server";
 import {requireUserId} from "~/session.server";
 import type {Game} from "@prisma/client";
-import {dateTimeLocalInputValueToDateTime, dateTimeToDateTimeLocalInputFormValue,} from "~/utils";
+import {dateTimeLocalInputValueToDateTime,} from "~/utils";
 import {DateTime} from "luxon";
 import toast from "react-hot-toast";
 import {useEffect, useRef, useState} from "react";
@@ -17,6 +17,7 @@ import {spielortOptions} from "~/helpers/constants/admin.game.constants";
 import {createGameAction} from "~/models/gameActions.server";
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import envHelper from "~/helpers/environment/envHelper";
+import DateTimeInput from "~/components/common/datetime/datetime";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -153,26 +154,7 @@ const EditGame = () => {
                             defaultValue={game.name}
                         />
                     </div>
-                    <div>
-                        <label
-                            htmlFor="eventTime"
-                            className="mb-2 block pt-2 text-sm font-medium text-gray-900"
-                        >
-                            {messages.adminEditGameForm.gameTime}
-                        </label>
-                        <input
-                            type="datetime-local"
-                            id="gameTime"
-                            name="gameTime"
-                            required
-                            autoFocus
-                            placeholder={messages.adminEditGameForm.gameTime}
-                            className="block w-full rounded-lg border border-2 border-gray-600 p-2.5 text-sm placeholder-gray-400 focus:border-blue-500"
-                            defaultValue={dateTimeToDateTimeLocalInputFormValue(
-                                DateTime.fromISO(game.gameTime)
-                            )}
-                        />
-                    </div>
+                    <DateTimeInput name={'eventTime'} defaultValue={DateTime.fromJSDate(new Date(game.gameTime))}/>
                     <div className={"flex flex-col"}>
                         <label
                             className="mb-2 block pt-2 text-sm font-medium text-gray-900"
