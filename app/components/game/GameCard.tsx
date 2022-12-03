@@ -14,10 +14,10 @@ const GameCard = ({game, children}: GameCardProps) => {
             <div className={"col-span-5 flex flex-col justify-start"}>
 
                 <div className={"flex flex-col py-1"}>
-                    <p className={"font-poppins-semibold text-label-large text-darkblue"}>
+                    <p className={"font-default-bold text-title-medium text-darkblue"}>
                         {game.name}
                     </p>
-                    <p className={"text-gray-500 text-label-medium"}>{useDate(game.gameTime)}</p>
+                    <p className={"text-gray-500 font-default-light  text-label-medium"}>{useDate(game.gameTime)}</p>
                 </div>
 
             </div>

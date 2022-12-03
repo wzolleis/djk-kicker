@@ -1,6 +1,7 @@
 import {prisma} from "~/db.server";
 import type {Game} from "@prisma/client";
 import {GameFromForm} from "~/utils/game.server";
+import toast from "react-hot-toast/headless";
 
 export const readGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
@@ -27,6 +28,7 @@ export const deleteGame = async (gameId: string) => {
 export const findGameById = async (gameId: string): Promise<Game> => {
     const game = await prisma.game.findUnique({where: {id: gameId}});
     if (!game) {
+        toast.error(`Es gibt kein Spiel mit der ID ${gameId}`)
         throw new Response("Not Found", {
             status: 404,
             statusText: `Es gibt kein Spiel mit der ID ${gameId}`

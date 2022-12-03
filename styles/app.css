@@ -64,5 +64,96 @@
     src: url("/fonts/Inter-SemiBold.woff2");
 }
 
+@font-face {
+    font-family: 'Karla Bold';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-Bold.ttf");
+}
+
+@font-face {
+    font-family: 'Karla BoldItalic';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-BoldItalic.ttf");
+}
+
+@font-face {
+    font-family: 'Karla ExtraBold';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-ExtraBold.ttf");
+}
+
+@font-face {
+    font-family: 'Karla ExtraBoldItalic';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-ExtraBoldItalic.ttf");
+}
+
+@font-face {
+    font-family: 'Karla ExtraLight';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-ExtraLight.ttf");
+
+}
+
+@font-face {
+    font-family: 'Karla ExtraLightItalic';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-ExtraLightItalic.ttf");
+}
+
+@font-face {
+    font-family: 'Karla Italic';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-Italic.ttf");
+}
+
+@font-face {
+    font-family: 'Karla Light';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-Light.ttf");
+}
+
+@font-face {
+    font-family: 'Karla LightItalic';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-LightItalic.ttf");
+}
+
+@font-face {
+    font-family: 'Karla Medium';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-Medium.ttf");
+}
+
+@font-face {
+    font-family: 'Karla MediumItalic';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-MediumItalic.ttf");
+
+}
+
+@font-face {
+    font-family: 'Karla Regular';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-Regular.ttf");
+
+}
+
+@font-face {
+    font-family: 'Karla SemiBold';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-SemiBold.ttf");
+}
+@font-face {
+    font-family: 'Karla SemiBoldItalic';
+    font-style: normal;
+    src: url("/fonts/karla/Karla-SemiBoldItalic.ttf");
+}
+
+
+
+
+
+
 
 

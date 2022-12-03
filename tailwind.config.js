@@ -13,7 +13,23 @@ module.exports = {
         "inter-light": ["Inter Light"],
         "inter-medium": ["Inter Medium"],
         "inter-regular": ["Inter Regular"],
-        "inter-semibold": ["Inter SemiBold"]
+        "inter-semibold": ["Inter SemiBold"],
+
+        'default-bold': ['Karla Bold'],
+        'default-bold-italic': ['Karla BoldItalic'],
+        'default-extrabold': ['Karla ExtraBold'],
+        'default-extrabold-italic': ['Karla ExtraBoldItalic'],
+        'default-extralight': ['Karla ExtraLight'],
+        'default-extralight-italic': ['Karla ExtraLightItalic'],
+        'default-italic': ['Karla Italic'],
+        'default-light': ['Karla Light'],
+        'default-light-italic': ['Karla LightItalic'],
+        'default-medium': ['Karla Medium'],
+        'default-medium-italic': ['Karla MediumItalic'],
+        'default-regular': ['Karla Regular'],
+        'default-semibold': ['Karla SemiBold'],
+        'default-semibold-italic': ['Karla SemiBoldItalic'],
+
 
       },
       fontSize: {

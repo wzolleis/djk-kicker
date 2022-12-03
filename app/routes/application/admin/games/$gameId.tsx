@@ -1,105 +1,73 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Modal from "~/components/common/modal/Modal";
 import messages from "~/components/i18n/messages";
-import EditGameForm from "~/components/game/admin/EditGameForm";
 import type {Game} from "@prisma/client";
 import type {ActionFunction, LoaderFunction} from "@remix-run/node";
 import {json, redirect} from "@remix-run/node";
-import {findGameById} from "~/models/games.server";
-import {useLoaderData} from "@remix-run/react";
+import {Outlet, useLoaderData, useNavigate} from "@remix-run/react";
 import invariant from "tiny-invariant";
-import InviteToGame from "~/components/game/admin/functionButtons/InviteToGame";
-import ConfirmGame from "~/components/game/admin/functionButtons/ConfirmGame";
-import DeclineGame from "~/components/game/admin/functionButtons/DeclineGame";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
-import DeleteButton from "~/components/common/buttons/status/DeleteButton";
+
 import {GameFromForm, getGameFromFormData} from "~/utils/game.server";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {dateTimeLocalInputValueToDateTime} from "~/utils";
-import {deleteGame, updateGame} from "~/models/admin.games.server";
+import {deleteGame, findGameById, updateGame} from "~/models/admin.games.server";
 import {requireUserId} from "~/session.server";
+import TabContainer from "~/components/common/tabs/TabContainer";
+import Tab from "~/components/common/tabs/Tab";
+import {config} from "~/components/i18n/config";
 
-type LoaderData = {
-    game: Game;
-}
+
 
 export const loader: LoaderFunction = async ({params, request}) => {
-    invariant(params.gameId, "Help")
-    const gameId = params.gameId!
-    const game = await findGameById(gameId);
-    if (!game) {
-        return redirect("/application/games")
+    if(!Object.keys(config.url.editGameForm.values).includes(request.url.split("/").pop()!)){
+        return redirect("/application/admin/games")
     }
-    return json<LoaderData>({game})
-}
-
-
-export const action: ActionFunction = async ({params, request}) => {
-
-    console.log("action received");
-    const formData = await request.formData();
-    const gameFromForm: GameFromForm = getGameFromFormData(formData);
-    const userId = await requireUserId(request);
-    const gameId = params.gameId!
-
-    if (gameFromForm.intent === "update") {
-        const game = await findGameById(gameId);
-        invariant(!!game, `Spiel <${gameId}> existiert nicht`)
-        const toUpdate: Game = {
-            ...game,
-            name: gameFromForm.name.toString(),
-            gameTime: dateTimeLocalInputValueToDateTime(gameFromForm.gameTime.toString()).toJSDate(),
-            spielort: "0"
-        };
-        await updateGame(toUpdate)
-        return redirect(routeLinks.admin.games);
-    } else if (gameFromForm.intent === "invite") {
-        return redirect(routeLinks.admin.game.invitation(params.gameId!))
-
-    } else if (gameFromForm.intent === "delete") {
-        await deleteGame(gameId);
-        return redirect(routeLinks.admin.games);
-    }
+    return json({hello: "hello"})
 }
 
 
 const EditGame = () => {
-    const {game} = useLoaderData() as unknown as LoaderData
-    const [showModal, setShowModal] = useState(true);
 
-    const toggleModal = () => {
-        setShowModal(!showModal)
+    const [showModal, setShowModal] = useState(true);
+    const navigate = useNavigate();
+
+    const toggleModal = (e: MouseEvent) => {
+        return navigate("/application/admin/games")
+    }
+    const [currentUrl, setCurrentUrl] = useState('')
+    useEffect(() => {
+        const lastUrlElement: string = (window.location.pathname.split("/").pop()!)
+        setCurrentUrl(lastUrlElement)
+    },)
+
+    const handleNavigate = (url: string) => {
+        navigate(`${window.location.pathname}/${url}`)
     }
     return (
         <>
+            <Modal title={messages.adminEditGameForm.title} show={showModal}
+                   onClose={(e: MouseEvent) => toggleModal(e)}>
+                <div className={"flex flex-col gap-3"}>
+                    <TabContainer>
+                        <Tab url={'edit'} title={config.url.editGameForm.translations.edit}
+                             isActive={currentUrl === config.url.editGameForm.values.edit}>
+                            <img className={"h-6"} src="/img/icons/pencil-line.png" alt=""/>
+                        </Tab>
+                        <Tab url={'status'} title={config.url.editGameForm.translations.status}
+                             isActive={currentUrl === config.url.editGameForm.values.status}>
+                            <img className={"h-6"} src="/img/icons/status.png" alt=""/>
+                        </Tab>
+                        <Tab url={'invite'} title={config.url.editGameForm.translations.invite}
+                             isActive={currentUrl == config.url.editGameForm.values.invite}>
+                            <img className={"h-6"} src="/img/icons/mail.png" alt=""/>
+                        </Tab>
+                    </TabContainer>
+                    <Outlet></Outlet>
+                </div>
+            </Modal>
+        </>
+    )
+}
 
-                <Modal title={messages.adminEditGameForm.title} show={showModal} onClose={() => toggleModal}>
-                    <EditGameForm game={game}>
-                        <div className={"flex items-center justify-between"}>
-                            <div className={"flex gap-3"}>
-                                <ConfirmGame/>
-                                <DeclineGame/>
-                                <InviteToGame/>
-                            </div>
-                            <div className={"flex gap-2"}>
-                                <DefaultButton>
-                                    <button type={"submit"}
-                                            name={"intent"} value={"update"}>
-                                        {messages.adminEditGameForm.update}
-                                    </button>
-                                </DefaultButton>
-                                <DeleteButton>
-                                    <button type={"submit"}
-                                            name={"intent"} value={"delete"}>
-                                        {messages.adminEditGameForm.delete}
-                                    </button>
-                                </DeleteButton>
-                            </div>
-                        </div>
-                    </EditGameForm>
-                </Modal>
-            </>
-            )
-            }
 
-            export default EditGame;
+export default EditGame;

@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 
-const DefaultButton = ({ children }: { children: ReactNode }) => {
+const DeleteButton = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <div
-        className={"flex items-center justify-center rounded bg-red-600  text-white p-3 font-poppins-medium hover:bg-red-400"}
+        className={
+          "flex items-center justify-center gap-2 rounded bg-red-600  p-3 font-default-medium text-white hover:bg-red-400"
+        }
       >
         {children}
       </div>
@@ -12,4 +14,4 @@ const DefaultButton = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default DefaultButton;
+export default DeleteButton;
