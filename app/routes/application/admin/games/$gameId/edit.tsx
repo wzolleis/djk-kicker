@@ -61,16 +61,11 @@ export const action: ActionFunction = async ({params, request}) => {
 const EditGame = () => {
     const {game} = useLoaderData() as unknown as LoaderData
     return (
+        <>
+            <h1 className={"font-default-bold text-title-large"}>{messages.adminEditGameForm.title}</h1>
         <EditGameForm game={game}>
             <div className={"flex items-center justify-end"}>
                 <div className={"flex gap-2"}>
-                    <DefaultButton>
-                        <img className={"h-6"} src="/img/icons/check.png" alt=""/>
-                        <button type={"submit"}
-                                name={"intent"} value={"update"}>
-                            {messages.adminEditGameForm.update}
-                        </button>
-                    </DefaultButton>
                     <DeleteButton>
                         <img className={"h-6"} src="/img/icons/delete.png" alt=""/>
                         <button type={"submit"}
@@ -78,9 +73,17 @@ const EditGame = () => {
                             {messages.adminEditGameForm.delete}
                         </button>
                     </DeleteButton>
+                    <DefaultButton>
+                        <img className={"h-6"} src="/img/icons/check.png" alt=""/>
+                        <button type={"submit"}
+                                name={"intent"} value={"update"}>
+                            {messages.adminEditGameForm.update}
+                        </button>
+                    </DefaultButton>
                 </div>
             </div>
         </EditGameForm>
+        </>
     )
 }
 

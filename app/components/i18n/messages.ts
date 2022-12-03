@@ -74,6 +74,12 @@ const messages = {
             invite: "Einladung versenden"
         }
     },
+    adminSendInvitationForm: {
+        title: "Einladung versenden"
+    },
+    adminChangeStatusForm: {
+        title: "Status ändern"
+    },
     adminLandingPage: {
         title: "Verwaltung",
         games: "Spiele",

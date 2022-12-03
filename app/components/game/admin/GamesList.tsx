@@ -15,13 +15,13 @@ const GamesList = ({games}: GamesListProps) => {
             <section className={"flex flex-col gap-2"}>
                 {games.map((game) => (
                     <GameCard key={game.id} game={game}>
-                        <DefaultButton>
-                            <img className={"h-6"} src={"/img/icons/pencil-line.png"} alt={"edit"}/>
-                            <Link
-                                  to={`${game.id}/edit`}>
+                        <Link
+                            to={`${game.id}/edit`}>
+                            <DefaultButton>
+                                <img className={"h-6"} src={"/img/icons/pencil-line.png"} alt={"edit"}/>
                                 Bearbeiten
-                            </Link>
-                        </DefaultButton>
+                            </DefaultButton>
+                        </Link>
                     </GameCard>
                 ))}
             </section>
