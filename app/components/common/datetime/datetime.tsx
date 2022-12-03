@@ -7,86 +7,176 @@ type DateTimeInputProps = {
     name: string
 }
 
-const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
-    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now)
+const calculateDateSuggestions = (startDate: DateTime = DateTime.now()): DateTime[] => {
+    const dayOfWeek = startDate.weekday // 1 Monday, 7 Sunday, 3 Wednesday
+    const wednesday: number = 3;
+    const weekNumber = dayOfWeek <= wednesday ? startDate.weekNumber : startDate.weekNumber + 1
+    const keys = [...Array(10).keys()]
+    return keys.map((index) => DateTime.now().set({weekday: wednesday, weekNumber: weekNumber + index}))
+}
 
-    const handleDatePicker = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value
-        const datePickerValue = DateTime.fromFormat(value, 'yyyy-MM-dd')
-        setDateValue(datePickerValue.set({hour: dateValue.hour, minute: dateValue.minute}))
+const calculateTimeSuggestions = ({start, end, step}: { start: DateTime, end: DateTime, step: number }): DateTime[] => {
+    let currentTime = start
+    const times = []
+    while (currentTime < end) {
+        times.push(currentTime)
+        currentTime = currentTime.plus({minute: step})
     }
+    return times
+}
 
-    const handleTimePicker = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value
-        const timePickerValue = DateTime.fromFormat(value, 'HH:mm')
-        setDateValue(timePickerValue.set({hour: timePickerValue.hour, minute: timePickerValue.minute}))
-    }
+const formatForDatePicker = (value: DateTime): string => value.toFormat('yyyy-MM-dd')
+const formatForTimePicker = (value: DateTime): string => value.toFormat('HH:mm')
+const formatLabelForDatePicker = (value: DateTime): string => `${value.toFormat('dd.MM.yyyy')}`
 
-    const handleDefaultValueSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value
-        console.log(value)
-        const timePickerValue = DateTime.fromFormat(value, 'HH:mm')
-        setDateValue(timePickerValue.set({hour: timePickerValue.hour, minute: timePickerValue.minute}))
-    }
-
-    const datePickerTimeAsString = dateValue.toFormat('yyyy-MM-dd')
-    const timePickerValueAsString = dateValue.toFormat('HH:mm')
-
+const DateInput = ({
+                       onChange,
+                       value,
+                       name
+                   }: { onChange: (value: string) => void, value: string, name: string }) => {
     return (
-        <div className={'grid grid-cols-1 xl:grid-cols-12 py-2 gap-2'}>
-            <datalist id={"timevalues"}>
-                <option value={"18:00"}/>
-                <option value={"18:30"}/>
-                <option value={"19:00"}/>
-                <option value={"19:30"}/>
-                <option value={"20:00"}/>
-            </datalist>
+        <>
             <div className={"flex flex-col col-span-2"}>
                 <label
-                    htmlFor={`${name}-date`}
+                    htmlFor={`${name}`}
                     className="mb-2 block md:font-medium text-gray-900"
                 >
                     {messages.commonForm.date}
                 </label>
                 <input className={"rounded-lg border border-2 border-gray-600 focus:border-blue-500"}
-                       id={`${name}-date`}
+                       id={`${name}`}
                        type={'date'}
-                       name={'datepicker-date'}
-                       value={datePickerTimeAsString}
-                       onChange={handleDatePicker}/>
+                       name={name}
+                       value={value}
+                       onChange={(event) => onChange(event.target.value)}/>
             </div>
-            <div className={"flex flex-col col-span-2"}>
-                <label
-                    htmlFor={`${name}-time`}
-                    className="mb-2 block md:font-medium text-gray-900"
-                >
-                    {messages.commonForm.time}
-                </label>
-                <input className={"rounded-lg border border-2 border-gray-600"}
-                       type={'time'}
-                       name={`${name}-time`}
-                       list={"timevalues"}
-                       value={timePickerValueAsString}
-                       onChange={handleTimePicker}/>
-            </div>
-            <div className={"flex flex-col col-span-2"}>
-                <label
-                    htmlFor={`${name}-predefined-time`}
-                    className="mb-2 block md:font-medium text-gray-900"
-                >
-                    {messages.commonForm.suggestion}
-                </label>
-                <select className={"rounded-lg border border-2 border-gray-600"}
-                        name={`${name}-predefinedtime`}
-                        onChange={handleDefaultValueSelect}
-                >
-                    <option value={"18:00"}>{"18:00"}</option>
-                    <option value={"18:30"}>{"18:30"}</option>
-                    <option value={"19:00"}>{"19:00"}</option>
-                    <option value={"19:30"}>{"19:30"}</option>
-                    <option value={"20:00"}>{"20:00"}</option>
-                </select>
-            </div>
+        </>
+    )
+}
+
+const TimeInput = ({
+                       onChange,
+                       value,
+                       name
+                   }: { onChange: (value: string) => void, value: string, name: string }) => {
+
+    return (
+        <div className={"flex flex-col col-span-2"}>
+            <label
+                htmlFor={`${name}-time`}
+                className="mb-2 block md:font-medium text-gray-900"
+            >
+                {messages.commonForm.time}
+            </label>
+            <input className={"rounded-lg border border-2 border-gray-600"}
+                   type={'time'}
+                   name={`${name}-time`}
+                   list={"timevalues"}
+                   value={value}
+                   onChange={(event) => onChange(event.target.value)}/>
+        </div>
+    )
+}
+
+const DateSuggestion = ({
+                            suggestions,
+                            onChange,
+                            name
+                        }: { suggestions: DateTime[], onChange: (value: string) => void, name: string }) => {
+    return (
+        <div className={"flex flex-col col-span-2"}>
+            <label
+                htmlFor={`${name}`}
+                className="mb-2 block md:font-medium text-gray-900"
+            >
+                {messages.commonForm.dateSuggestion}
+            </label>
+            <select className={"rounded-lg border border-2 border-gray-600"}
+                    id={name}
+                    name={name}
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) => onChange(event.target.value)}
+            >
+                {
+                    suggestions.map((dateValue) => {
+                        const value = formatForDatePicker(dateValue)
+                        const label = formatLabelForDatePicker(dateValue)
+                        return (
+                            <option key={value} value={value}>{label}</option>
+                        )
+                    })
+                }
+            </select>
+        </div>
+    )
+}
+
+const TimeSuggestion = ({
+                            suggestions,
+                            onChange,
+                            name
+                        }: { suggestions: DateTime[], onChange: (value: string) => void, name: string }) => {
+    return (
+        <div className={"flex flex-col col-span-2"}>
+            <label
+                htmlFor={name}
+                className="mb-2 block md:font-medium text-gray-900"
+            >
+                {messages.commonForm.timeSuggestion}
+            </label>
+            <select className={"rounded-lg border border-2 border-gray-600"}
+                    name={name}
+                    id={name}
+                    onChange={(event) => onChange(event.target.value)}
+            >
+                {suggestions.map((time) => {
+                    const value = formatForTimePicker(time)
+                    const label = formatForTimePicker(time)
+                    return (
+                        <option key={label} value={value}>{label}</option>
+                    )
+                })}
+            </select>
+        </div>
+    )
+}
+
+const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
+    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now)
+
+    const onTimeValueSelect = (value: string) => {
+        const timePickerValue = DateTime.fromFormat(value, 'HH:mm')
+        const newValue = dateValue.set({hour: timePickerValue.hour, minute: timePickerValue.minute})
+        setDateValue(newValue)
+    }
+
+    const onDateValueSelect = (value: string) => {
+        const datePickerValue = DateTime.fromFormat(value, 'yyyy-MM-dd')
+        setDateValue(dateValue.set({
+            year: datePickerValue.year,
+            month: datePickerValue.month,
+            day: datePickerValue.day
+        }))
+    }
+
+    const dateSuggestions = calculateDateSuggestions()
+    const timeSuggestions = calculateTimeSuggestions({
+        start: DateTime.now().set({hour: 18, minute: 0}),
+        end: DateTime.now().set({hour: 20, minute: 0}),
+        step: 15
+    })
+
+    return (
+        <div className={'grid grid-cols-1 xl:grid-cols-12 py-2 gap-2'}>
+            <datalist id={"timevalues"}>
+                {timeSuggestions.map((time) => {
+                    const value = formatForTimePicker(time)
+                    return <option key={value} value={value}/>
+                })}
+            </datalist>
+            <DateInput onChange={onDateValueSelect} value={formatForDatePicker(dateValue)} name={`${name}-date`}/>
+            <TimeInput onChange={onTimeValueSelect} value={formatForTimePicker(dateValue)} name={`${name}-time`}/>
+            <DateSuggestion suggestions={dateSuggestions} onChange={onDateValueSelect} name={`${name}-datesuggestion`}/>
+            <TimeSuggestion suggestions={timeSuggestions} onChange={onTimeValueSelect} name={`${name}-timesuggestion`}/>
         </div>
     )
 }
