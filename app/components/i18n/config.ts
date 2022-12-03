@@ -1,3 +1,5 @@
+import {ac} from "vitest/dist/global-58e8e951";
+
 export enum statusInConfig {
     unknown,
     declined,
@@ -18,9 +20,18 @@ export enum gameLocations {
 }
 
 
+export enum actionTypes {
+    GAME_ZUSAGE = "Zusage",
+    GAME_ABSAGE = "Absage",
+    GAME_INVITATION = "Einladung"
+}
+
+export type actionTypeKey = keyof typeof actionTypes;
+
 export const config = {
     status: statusInConfig,
     gameLocations: gameLocations,
+    actionTypes: actionTypes,
     url: {
         links: {
             admin: {
@@ -31,12 +42,14 @@ export const config = {
             translations: {
                 edit: "Bearbeiten",
                 status: "Status",
-                invite: "Einladung"
+                invite: "Einladung",
+                actions: "Verlauf"
             },
             values: {
                 edit: "edit",
                 status: "status",
-                invite: "invite"
+                invite: "invite",
+                actions: "actions"
             }
         }
 

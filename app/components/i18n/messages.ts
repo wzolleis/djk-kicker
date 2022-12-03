@@ -45,7 +45,7 @@ const messages = {
         new: "Neues Spiel"
     },
     adminGameActionsForm: {
-        title: 'Ausgeführte Aktionen',
+        title: 'Verlauf',
         noActions: 'Es wurden noch keine Aktionen ausgeführt'
     },
     adminCreateGameForm: {
