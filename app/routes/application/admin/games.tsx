@@ -30,7 +30,7 @@ const Games = () => {
     return (
         <>
             <main className={"space-y-4"}>
-                <div className={"flex justify-between"}>
+                <div className={"flex justify-between items-center"}>
                     <PageHeader title={messages.appmenu.games}/>
                     <Link to={"new"}>
                         <DefaultButton>

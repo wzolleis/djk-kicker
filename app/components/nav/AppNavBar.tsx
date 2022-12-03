@@ -20,10 +20,12 @@ const AppNavBar = ({appMenu, user}: AppNavBarProps) => {
     return (
         <header className="bg-black sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 text-white">
             <div className="flex items-center justify-between px-4 py-3 sm:p-0">
-                <div className="flex items-center justify-between">
-                    <img src="/img/logo.png" alt="" className={"h-10"}/>
-                    <span className="px-2 text-4xl font-poppins-semibold">{messages.app.title}</span>
-                </div>
+                <Link to={"/"}>
+                    <div className="flex items-center justify-between">
+                        <img src="/img/logo.png" alt="" className={"h-10"}/>
+                        <span className="px-2 text-4xl font-poppins-semibold">{messages.app.title}</span>
+                    </div>
+                </Link>
                 <div className="sm:hidden">
                     <button type="button"
                             className="block hover:text-white focus:text-white focus:outline-none"
@@ -49,7 +51,7 @@ const AppNavBar = ({appMenu, user}: AppNavBarProps) => {
                         type="submit"
                         className="block px-2 py-1 font-semibold rounded hover:bg-gray-800 hover:text-yellow-300"
                     >
-                        { messages.appmenu.logout}
+                        {messages.appmenu.logout}
                     </button>
                 </Form>
                 <Form action="/login" method="get" hidden={isLoggedIn}>

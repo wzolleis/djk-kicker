@@ -63,7 +63,7 @@ const GameInvitation = () => {
 
         <>
             <div className="flex flex-col gap-2">
-                <h1 className={"font-default-bold text-title-large"}>Status ändern:</h1>
+                <h1 className={"font-default-bold text-title-large"}>{messages.adminChangeStatusForm.title}</h1>
 
                 <ContentContainer>
                     <div className={"flex flex-col justify-center items-start"}>
