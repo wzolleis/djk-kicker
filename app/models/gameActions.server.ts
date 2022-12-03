@@ -10,7 +10,6 @@ export const createGameAction = async ({gameId, actionType}: {gameId: string, ac
         }
     })
 }
-
 export const updateGameAction = async (action: GameAction) => {
     return await prisma.gameAction.update({
         where: {

@@ -58,8 +58,6 @@ export const action: ActionFunction = async ({params, request}) => {
         return redirect(routeLinks.admin.games);
     }
 }
-
-
 const EditGame = () => {
     const {game} = useLoaderData() as unknown as LoaderData
     return (

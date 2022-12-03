@@ -9,12 +9,12 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import SelectWithLabel from "~/components/common/form/SelectWithLabel";
 import {config} from "~/components/i18n/config";
 
+
 type EditGameFormProps = {
     game: Game,
     children: ReactNode;
 }
 const EditGameForm = ({game, children}: EditGameFormProps) => {
-
     return (
         <>
             <ContentContainer>
@@ -25,9 +25,9 @@ const EditGameForm = ({game, children}: EditGameFormProps) => {
                     <InputWithLabel id={"gameTime"} type={"datetime-local"}
                                     name={"gameTime"} label={messages.adminEditGameForm.gameTime}
                                     defaultValue={dateTimeToDateTimeLocalInputFormValue(DateTime.fromJSDate(new Date(game.gameTime)))}/>
-                    <SelectWithLabel id={"location"} name={"location"} defaultValue={config.gameLocations[config.gameLocations[game.spielort as unknown as number]]} label={messages.adminEditGameForm.spielort}>
+                    <SelectWithLabel id={"location"} name={"location"} defaultValue={config.gameLocations[config.gameLocations[game.spielort as unknown as number] as unknown as number]} label={messages.adminEditGameForm.spielort}>
                         {Object.keys(config.gameLocations).map((gameLocation) => (
-                            <option value={config.gameLocations[gameLocation]} hidden={!isNaN(Number(gameLocation))} key={gameLocation}>{gameLocation}</option>
+                            <option value={config.gameLocations[gameLocation as unknown as number]} hidden={!isNaN(Number(gameLocation))} key={gameLocation}>{gameLocation}</option>
                         ) )}
                     </SelectWithLabel>
                     {children}

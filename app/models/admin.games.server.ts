@@ -1,7 +1,7 @@
 import {prisma} from "~/db.server";
 import type {Game} from "@prisma/client";
-import {GameFromForm} from "~/utils/game.server";
 import toast from "react-hot-toast/headless";
+import {DateTime} from "luxon";
 
 export const readGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
@@ -11,8 +11,14 @@ export const readGames = async (): Promise<Game[]> => {
     });
 };
 
-export const createGame = async (game: Pick<Game, "gameTime" | "name" | "spielort">) => {
-    await prisma.game.create({data: game});
+export const createGame = async (gameTime: DateTime, name: string, location: string) => {
+    await prisma.game.create({
+        data: {
+            name: name,
+            gameTime: gameTime.toJSDate(),
+            spielort: location
+        }
+    });
 };
 
 export const updateGame = async (game: Game) => {
@@ -21,7 +27,7 @@ export const updateGame = async (game: Game) => {
 };
 
 export const deleteGame = async (gameId: string) => {
-    await prisma.game.delete({where: {id: gameId}});
+    await prisma.game.delete({where: {id: gameId}}).then(() => toast.success("Game successfully deleted"));
 };
 
 
