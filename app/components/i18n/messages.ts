@@ -22,8 +22,8 @@ const messages = {
     commonForm: {
         cancel: "Abbruch",
         date: "Datum",
-        timeSuggestion: "Zeit-Vorschlag",
-        dateSuggestion: "Datum-Vorschlag",
+        timeSuggestion: "Zeiten",
+        dateSuggestion: "Nächste Termine",
         time: "Uhrzeit",
         year: "Jahr",
         month: "Monat",

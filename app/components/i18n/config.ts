@@ -1,5 +1,3 @@
-import {ac} from "vitest/dist/global-58e8e951";
-
 export enum statusInConfig {
     unknown,
     declined,
@@ -7,18 +5,12 @@ export enum statusInConfig {
     undecided
 }
 
-
-type statusInConfigType = {
-    [key: string]: number
-}
-
 export type statusInConfigKey = keyof typeof statusInConfig
 
 export enum gameLocations {
-    "Halle",
-    "Draussen"
+    Halle,
+    Draussen
 }
-
 
 export enum actionTypes {
     GAME_ZUSAGE = "Zusage",
@@ -52,8 +44,6 @@ export const config = {
                 actions: "actions"
             }
         }
-
-
     }
 }
 

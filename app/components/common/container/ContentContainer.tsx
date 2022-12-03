@@ -1,10 +1,6 @@
-import { ReactNode } from "react";
+import {PropsWithChildren} from "react";
 
-type ContentContainerProps = {
-  children: ReactNode;
-};
-
-const ContentContainer = ({ children }: ContentContainerProps) => {
+const ContentContainer = ({ children }: PropsWithChildren<{}>) => {
   return <div className={"rounded-xl bg-white p-3 ring ring-1 ring-indigo-100"}>{children}</div>;
 };
 

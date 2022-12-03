@@ -1,6 +1,7 @@
 import {DateTime} from "luxon";
 import messages from "~/components/i18n/messages";
 import {ChangeEvent, useState} from "react";
+import dateUtils from "~/dateUtils";
 
 type DateTimeInputProps = {
     defaultValue?: DateTime | undefined
@@ -87,11 +88,11 @@ const DateSuggestion = ({
         <div className={"flex flex-col col-span-2"}>
             <label
                 htmlFor={`${name}`}
-                className="mb-2 block md:font-medium text-gray-900"
+                className="mb-2 block md:font-medium text-gray-400"
             >
                 {messages.commonForm.dateSuggestion}
             </label>
-            <select className={"rounded-lg border border-2 border-gray-600"}
+            <select className={"rounded-lg border border-2 border-gray-600 text-gray-400"}
                     id={name}
                     name={name}
                     onChange={(event: ChangeEvent<HTMLSelectElement>) => onChange(event.target.value)}
@@ -119,7 +120,7 @@ const TimeSuggestion = ({
         <div className={"flex flex-col col-span-2"}>
             <label
                 htmlFor={name}
-                className="mb-2 block md:font-medium text-gray-900"
+                className="mb-2 block md:font-medium text-gray-400"
             >
                 {messages.commonForm.timeSuggestion}
             </label>
@@ -161,10 +162,11 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
     const dateSuggestions = calculateDateSuggestions()
     const timeSuggestions = calculateTimeSuggestions({
         start: DateTime.now().set({hour: 18, minute: 0}),
-        end: DateTime.now().set({hour: 20, minute: 0}),
+        end: DateTime.now().set({hour: 20, minute: 15}),
         step: 15
     })
 
+    const dateValueTxt = dateUtils.dateTimeToFormat({value: dateValue})
     return (
         <div className={'grid grid-cols-1 xl:grid-cols-12 py-2 gap-2'}>
             <datalist id={"timevalues"}>
@@ -173,8 +175,9 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
                     return <option key={value} value={value}/>
                 })}
             </datalist>
-            <DateInput onChange={onDateValueSelect} value={formatForDatePicker(dateValue)} name={`${name}-date`}/>
-            <TimeInput onChange={onTimeValueSelect} value={formatForTimePicker(dateValue)} name={`${name}-time`}/>
+            <input name={name} type={'hidden'} value={dateValueTxt}/>
+            <DateInput onChange={onDateValueSelect} value={formatForDatePicker(dateValue)} name={`${name}.date`}/>
+            <TimeInput onChange={onTimeValueSelect} value={formatForTimePicker(dateValue)} name={`${name}.time`}/>
             <DateSuggestion suggestions={dateSuggestions} onChange={onDateValueSelect} name={`${name}-datesuggestion`}/>
             <TimeSuggestion suggestions={timeSuggestions} onChange={onTimeValueSelect} name={`${name}-timesuggestion`}/>
         </div>
