@@ -9,7 +9,6 @@ import SelectWithLabel from "~/components/common/form/SelectWithLabel";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {configuration} from "~/config";
 
-
 type EditGameFormProps = {
     game: Game,
 }

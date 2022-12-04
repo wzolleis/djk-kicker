@@ -142,7 +142,7 @@ const TimeSuggestion = ({
 }
 
 const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
-    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now)
+    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now())
 
     const onTimeValueSelect = (value: string) => {
         const timePickerValue = DateTime.fromFormat(value, 'HH:mm')
