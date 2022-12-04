@@ -36,7 +36,7 @@ const NewGame = () => {
 
     return (
         <>
-            <Modal title={messages.adminCreateGameForm.newGame} show={showModal} onClose={() => closeModal()}>
+            <Modal title={messages.adminCreateGameForm.newGame} show={showModal} onClose={closeModal}>
                 <CreateGameForm></CreateGameForm>
             </Modal>
         </>
