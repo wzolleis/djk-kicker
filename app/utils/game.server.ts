@@ -1,4 +1,4 @@
-import {gameLocations} from "~/components/i18n/config";
+import {gameLocations} from "~/config/locations";
 
 export type GameFromForm = {
     name: string;

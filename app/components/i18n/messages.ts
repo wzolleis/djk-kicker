@@ -1,5 +1,5 @@
 import {spielortOptions} from "~/helpers/constants/admin.game.constants";
-import {gameLocations} from "~/components/i18n/config";
+import {gameLocations} from "~/config/locations";
 
 const messages = {
     app: {
@@ -11,6 +11,11 @@ const messages = {
         save: 'Speichern',
         back: 'Zurück',
         add: 'Hinzufügen'
+    },
+    actionType: {
+        GAME_INVITATION: 'Einladung',
+        GAME_ZUSAGE: 'Zusage',
+        GAME_ABSAGE: 'Absage'
     },
     appmenu: {
         administration: "Verwaltung",

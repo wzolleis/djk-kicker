@@ -13,8 +13,8 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import SmallTag from "~/components/common/tags/SmallTag";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import DeleteButton from "~/components/common/buttons/status/DeleteButton";
-import {config} from "~/components/i18n/config";
 import SuccessButton from "~/components/common/buttons/status/SuccessButton";
+import {configuration} from "~/config";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -44,9 +44,9 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
         return redirect(routeLinks.admin.game.details(gameId));
     }
     if (intent === "cancel") {
-        return redirect(config.url.links.admin.gamesOverView)
+        return redirect(configuration.url.links.admin.gamesOverView)
     }
-    return redirect(config.url.links.admin.gamesOverView)
+    return redirect(configuration.url.links.admin.gamesOverView)
 
 }
 
