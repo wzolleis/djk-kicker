@@ -1,12 +1,11 @@
-import { render, screen } from "@testing-library/react";
-import Admin from "~/routes/application/admin";
-import messages from "~/components/i18n/messages";
+import {render, screen} from "@testing-library/react";
+import AdminIndex from "~/routes/application/index";
 
 const setup = () => {
-  render(<Admin />);
+  render(<AdminIndex />);
 };
 
 it("should render without crash", () => {
   setup();
-  expect(screen.getByText(messages.adminLandingPage.title)).toBeDefined();
+  expect(screen.getByText(/Weiterleitung/i)).toBeDefined();
 });

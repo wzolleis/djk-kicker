@@ -2,6 +2,7 @@ import {DateTime} from "luxon";
 import messages from "~/components/i18n/messages";
 import {ChangeEvent, useState} from "react";
 import dateUtils from "~/dateUtils";
+import {EuropeBerlin} from "~/config/locales";
 
 type DateTimeInputProps = {
     defaultValue?: DateTime | undefined
@@ -142,7 +143,7 @@ const TimeSuggestion = ({
 }
 
 const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
-    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now)
+    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now().setLocale(EuropeBerlin))
 
     const onTimeValueSelect = (value: string) => {
         const timePickerValue = DateTime.fromFormat(value, 'HH:mm')

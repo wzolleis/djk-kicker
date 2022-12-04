@@ -102,12 +102,11 @@ export function getQueryParams(request: Request, inputParam: Array<QueryParamNam
 }
 
 
-export const getNextGameDay = (): DateTime => {
-    const now = DateTime.now()
-    const dayOfWeek = now.weekday // 1 Monday, 7 Sunday, 3 Wednesday
+export const getNextGameDay = (startDate: DateTime = DateTime.local().startOf("day")): DateTime => {
+    const dayOfWeek = startDate.weekday // 1 Monday, 7 Sunday, 3 Wednesday
     const wednesday: number = 3;
-    const weekNumber = dayOfWeek <= wednesday ? now.weekNumber : now.weekNumber + 1
-    return now.set({weekday: wednesday, weekNumber: weekNumber, hour: 20, minute: 0})
+    const weekNumber = dayOfWeek <= wednesday ? startDate.weekNumber : startDate.weekNumber + 1
+    return startDate.set({weekday: wednesday, weekNumber: weekNumber, hour: 20, minute: 0})
 }
 
 export function getRedactedString(): string {

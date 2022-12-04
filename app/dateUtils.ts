@@ -1,4 +1,5 @@
-import { DateTime } from "luxon";
+import {DateTime} from "luxon";
+import {EuropeBerlin} from "~/config/locales";
 
 const format = (date: Date | undefined,
                 options: { format: string } = { format: "dd.MM.yyyy HH:mm" }): string => {
@@ -14,11 +15,11 @@ const parse = (text: string | null | undefined): Date | undefined => {
 const now = () => DateTime.now().toJSDate();
 
 const dateTimeToFormat = ({value, options} : {value: DateTime, options?: {format: string}}): string => {
-  return value.toFormat(options?.format ?? "dd.MM.yyyy HH:mm")
+  return value.toFormat(options?.format ?? "dd.MM.yyyy HH:mm", {locale: EuropeBerlin})
 }
 
 const dateTimeFromFormat = ({text, options} : {text: string, options?: {format: string}}): DateTime => {
-  return DateTime.fromFormat(text, options?.format ?? "dd.MM.yyyy HH:mm")
+  return DateTime.fromFormat(text, options?.format ?? "dd.MM.yyyy HH:mm", {locale: EuropeBerlin})
 }
 
 export default {
