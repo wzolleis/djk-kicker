@@ -7,29 +7,35 @@ import messages from "~/components/i18n/messages";
 import MainPageContent from "~/components/common/MainPageContent";
 import {createPlayer} from "~/models/player.server";
 import {createFeedback} from "~/models/feedback.server";
-import {determineStatus} from "~/helpers/formdata/feedback.formdata.server";
+import invariant from "tiny-invariant";
 
 
 type LoaderData = {
     gameid: string,
 }
 
-export const loader = async ({params, request}: { params: any, request: any }) => {
+export const loader = async ({request}: { params: any, request: any }) => {
     const {gameid} = getQueryParams(request, "gameid")
     return json({gameid})
-
-
 };
 
 export const action: ActionFunction = async ({request}: { request: Request }) => {
     const formData = await request.formData();
     const {gameid} = getQueryParams(request, "gameid");
-    const player = await createPlayer(formData.get("name")!.toString(), formData.get("mail")!.toString())
-    if (gameid) {
-        await createFeedback(player.id, gameid, parseInt(formData.get("status")!.toString()), formData.get("note")!.toString())
-    }
-    return redirect(`application/games${gameid ? `/${gameid}` : ""}`)
+    const playerName = formData.get("name")
+    const playerMail = formData.get("mail")
+    const playerStatus = formData.get("status")
+    const note= formData.get("note")
 
+    invariant(typeof playerName === "string")
+    invariant(typeof playerMail === "string")
+    invariant(typeof playerStatus === "string")
+    invariant(typeof note === "string")
+    invariant(!!gameid, "GameId must be defined")
+
+    const player = await createPlayer(playerName.trim(), playerMail.trim())
+    await createFeedback(player.id, gameid, parseInt(playerStatus), note)
+    return redirect(`application/games/${gameid}`)
 }
 
 
