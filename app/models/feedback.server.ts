@@ -1,7 +1,7 @@
 import type {Feedback, Game, Player} from "@prisma/client";
 import {prisma} from "~/db.server";
 import {Nullable} from "vitest";
-import {config} from "~/components/i18n/config";
+import {configuration} from "~/config";
 
 
 export async function getFeedbackForGame(gameId: Feedback["gameId"]) {
@@ -71,7 +71,7 @@ export async function createDefaultFeedback(gameId: Game["id"], playerId: Player
         data: {
             gameId: gameId,
             playerId: playerId,
-            status: config.status.unknown
+            status: configuration.status.unknown
         }
     })
 }

@@ -1,16 +1,15 @@
-import {Link, useLoaderData} from "@remix-run/react";
+import {useLoaderData} from "@remix-run/react";
 import {findGameById} from "~/models/admin.games.server";
 import {findActionsByGameId} from "~/models/gameActions.server";
 import {json, LoaderFunction} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import {Game, GameAction} from "@prisma/client";
-import dateUtils from "~/dateUtils";
 import messages from "~/components/i18n/messages";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import SmallTag from "~/components/common/tags/SmallTag";
-import {config} from "~/components/i18n/config";
 import {useDate} from "~/utils";
 import ActionCard from "~/components/actions/ActionCard";
+import {configuration} from "~/config";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -52,7 +51,7 @@ const ActionList = ({actions, game}: { actions: GameAction[], game: Game }) => {
                         {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
                         <SmallTag text={useDate(new Date(game.gameTime.toString()))}></SmallTag>
                         <SmallTag
-                            text={config.gameLocations[game.spielort as unknown as number]}></SmallTag>
+                            text={configuration.gameLocations[game.spielort as unknown as number]}></SmallTag>
                     </div>
                 </div>
             </ContentContainer>

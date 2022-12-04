@@ -6,8 +6,8 @@ import {Form} from "@remix-run/react";
 import {PropsWithChildren} from "react";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import SelectWithLabel from "~/components/common/form/SelectWithLabel";
-import {config} from "~/components/i18n/config";
 import DateTimeInput from "~/components/common/datetime/datetime";
+import {configuration} from "~/config";
 
 
 type EditGameFormProps = {
@@ -25,10 +25,10 @@ const EditGameForm = ({game, children}: PropsWithChildren<EditGameFormProps>) =>
                 <DateTimeInput name='gameTime' defaultValue={DateTime.fromJSDate(new Date(game.gameTime))}/>
                 <SelectWithLabel id={"location"}
                                  name={"location"}
-                                 defaultValue={config.gameLocations[Number.parseInt(game.spielort)]}
+                                 defaultValue={configuration.gameLocations[Number.parseInt(game.spielort)]}
                                  label={messages.adminEditGameForm.spielort}>
-                    <option value={config.gameLocations.Halle}>{messages.adminEditGameForm.optionHalle}</option>
-                    <option value={config.gameLocations.Draussen}>{messages.adminEditGameForm.optionDraussen}</option>
+                    <option value={configuration.gameLocations.Halle}>{messages.adminEditGameForm.optionHalle}</option>
+                    <option value={configuration.gameLocations.Draussen}>{messages.adminEditGameForm.optionDraussen}</option>
                 </SelectWithLabel>
                 {children}
             </Form>

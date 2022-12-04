@@ -1,12 +1,12 @@
 import {LoaderFunction, redirect} from "@remix-run/node";
 
-export const loader: LoaderFunction = async ({request}) => {
+export const loader: LoaderFunction = async () => {
     return redirect("/application/games")
 }
 
 const AppIndex = () => {
   return (
-    <div>DJK App Index!!!</div>
+    <div>Weiterleitung auf games</div>
   )
 }
 

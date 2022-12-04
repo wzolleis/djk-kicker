@@ -2,11 +2,12 @@ import {Form, useNavigate} from "@remix-run/react";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import SelectWithLabel from "~/components/common/form/SelectWithLabel";
-import {config, gameLocations} from "~/components/i18n/config";
 import messages from "~/components/i18n/messages";
 import DeleteButton from "~/components/common/buttons/status/DeleteButton";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {getNextGameDay} from "~/utils";
+import {gameLocations} from "~/config/locations";
+import {configuration} from "~/config";
 
 const CreateGameForm = () => {
     const navigate = useNavigate();
@@ -16,8 +17,8 @@ const CreateGameForm = () => {
             <DateTimeInput name={"gameTime"} defaultValue={getNextGameDay()}/>
             <SelectWithLabel id={"location"} name={"location"} defaultValue={gameLocations.Draussen.toString()}
                              label={messages.adminEditGameForm.spielort}>
-                {Object.keys(config.gameLocations).map((gameLocation) => (
-                    <option value={config.gameLocations[gameLocation as unknown as number]} hidden={!isNaN(Number(gameLocation))}
+                {Object.keys(configuration.gameLocations).map((gameLocation) => (
+                    <option value={configuration.gameLocations[gameLocation as unknown as number]} hidden={!isNaN(Number(gameLocation))}
                             key={gameLocation}>{gameLocation}</option>
                 ))}
             </SelectWithLabel>

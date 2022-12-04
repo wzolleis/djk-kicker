@@ -1,7 +1,6 @@
-import {config, statusInConfig} from "~/components/i18n/config";
-import messages from "~/components/i18n/messages";
 import {parseStatus} from "~/utils/statusUtils";
-import {ReactNode} from "react";
+import {statusInConfig} from "~/config/status";
+import {configuration} from "~/config";
 
 type playerStatusTagProps = {
     status: number;
@@ -10,13 +9,13 @@ type playerStatusTagProps = {
 const PlayerStatusTag = ({status}: playerStatusTagProps) => {
     const getStatusColor = (status: statusInConfig) => {
         switch (status) {
-            case config.status.unknown:
+            case configuration.status.unknown:
                 return "bg-white text-gray-500 ring ring-1 ring-gray-500";
-            case config.status.confirmed:
+            case configuration.status.confirmed:
                 return "bg-green-100 text-green-600 ring-green-600";
-            case config.status.declined:
+            case configuration.status.declined:
                 return "bg-red-100 text-red-600 ring-red-600";
-            case config.status.undecided:
+            case configuration.status.undecided:
                 return "bg-yellow-100 text-yellow-600 ring-yellow-600";
         }
     };
@@ -24,13 +23,13 @@ const PlayerStatusTag = ({status}: playerStatusTagProps) => {
 
     const getStatusImageUrl = () => {
         switch (status) {
-            case config.status.unknown:
+            case configuration.status.unknown:
                 return "/img/unknown.png";
-            case config.status.confirmed:
+            case configuration.status.confirmed:
                 return "/img/thumbs-up.png";
-            case config.status.declined:
+            case configuration.status.declined:
                 return "/img/thumbs-down.png";
-            case config.status.undecided:
+            case configuration.status.undecided:
                 return "/img/thinking.png";
         }
     }

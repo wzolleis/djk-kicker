@@ -1,8 +1,9 @@
 import {Form} from "@remix-run/react";
-import {config, statusInConfig} from "~/components/i18n/config";
 import SetStatusButton from "~/components/common/buttons/status/SetStatusButton";
 import {useState} from "react";
 import messages from "~/components/i18n/messages";
+import {statusInConfig} from "~/config/status";
+import {configuration} from "~/config";
 
 
 type PlayerFormProps = {
@@ -55,20 +56,20 @@ const CreatePlayerForm = ({gameId}: PlayerFormProps) => {
                                     <div className={"mt-5 flex w-full items-center justify-start gap-5"}>
                                         <SetStatusButton
                                             image={"/img/thumbs-up.png"}
-                                            onClick={() => setStatus(config.status.confirmed)}
-                                            isActive={status === config.status.confirmed}
+                                            onClick={() => setStatus(configuration.status.confirmed)}
+                                            isActive={status === configuration.status.confirmed}
                                             activeColor={"green-500"}
                                         />
                                         <SetStatusButton
                                             image={"/img/thumbs-down.png"}
-                                            onClick={() => setStatus(config.status.declined)}
-                                            isActive={status === config.status.declined}
+                                            onClick={() => setStatus(configuration.status.declined)}
+                                            isActive={status === configuration.status.declined}
                                             activeColor={"red-500"}
                                         />
                                         <SetStatusButton
                                             image={"/img/thinking.png"}
-                                            onClick={() => setStatus(config.status.undecided)}
-                                            isActive={status === config.status.undecided}
+                                            onClick={() => setStatus(configuration.status.undecided)}
+                                            isActive={status === configuration.status.undecided}
                                             activeColor={"yellow-500"}
                                         />
                                     </div>

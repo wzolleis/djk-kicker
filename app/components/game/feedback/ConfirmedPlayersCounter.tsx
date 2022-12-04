@@ -1,7 +1,7 @@
 import {GameWithFeedback} from "~/routes/application/games/$gameId";
 import Counter from "~/components/common/counter/Counter";
-import {config} from "~/components/i18n/config";
 import messages from "~/components/i18n/messages";
+import {configuration} from "~/config";
 
 type ConfirmedPlayersCounterProps = {
     game: GameWithFeedback;
@@ -10,7 +10,7 @@ type ConfirmedPlayersCounterProps = {
 const ConfirmedPlayersCounter = ({game}: ConfirmedPlayersCounterProps) => {
     let confirmedPlayerCount = 0;
     game.feedback.map((feedback) => {
-        if (feedback.status === config.status.confirmed) {
+        if (feedback.status === configuration.status.confirmed) {
             confirmedPlayerCount++;
         }
     });
