@@ -10,7 +10,7 @@ const ActionCard = ({action}: { action: GameAction }) => {
     switch (action.actionType) {
         case 'GAME_INVITATION':
             background = 'ring-indigo-600'
-            image = 'mail'
+            image = 'mail-black'
             break
         case 'GAME_ZUSAGE':
             background = 'ring-green-600'
