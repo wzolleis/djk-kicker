@@ -1,4 +1,5 @@
 import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import {gameLocations} from "~/components/i18n/config";
 
 const messages = {
     app: {
@@ -29,7 +30,9 @@ const messages = {
         month: "Monat",
         day: "Tag",
         hour: "Stunde",
-        minute: "Minuten"
+        minute: "Minuten",
+        spielort: (spielortOption: string) => Number.parseInt(spielortOption) === gameLocations.Halle ? messages.adminEditGameForm.optionHalle : messages.adminEditGameForm.optionDraussen,
+        gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => gameDateIsInThePast ? '(Game over)' : ''
     },
     loginform: {
         welcome: "DJK Kicker - Anmeldung",

@@ -1,8 +1,10 @@
 import type {Game} from "@prisma/client";
-import {useDate} from "~/utils";
+import {getNextGameDay} from "~/utils";
 import type {ReactNode} from "react";
 import SmallTag from "~/components/common/tags/SmallTag";
-import {config} from "~/components/i18n/config";
+import messages from "~/components/i18n/messages";
+import dateUtils from "~/dateUtils";
+import {DateTime} from "luxon";
 
 type GameCardProps = {
     game: Game;
@@ -10,18 +12,23 @@ type GameCardProps = {
 };
 
 const GameCard = ({game, children}: GameCardProps) => {
+    const nextGameDate = getNextGameDay()
+    const gameTime = DateTime.fromJSDate(new Date(game.gameTime))
+    const isFutureGame = gameTime >= nextGameDate
+
     return (
         <main
-            className={"rounded-xl gap-3 bg-white ring ring-1 ring-indigo-100 py-3 px-5 flex justify-between items-center"}>
+            className={`rounded-xl gap-3 ring ring-1 ring-indigo-100 py-3 px-5 flex justify-between items-center` }>
             <div className={"col-span-5 flex flex-col justify-start"}>
-
                 <div className={"flex flex-col py-1"}>
-                    <p className={"font-default-bold text-title-medium text-darkblue"}>
-                        {game.name}
+                    <p className={`font-default-bold text-title-medium ${isFutureGame ? 'text-darkblue' : 'text-red-200'}`}>
+                        {`${game.name} ${messages.commonForm.gameOverCommentOrNothing(!isFutureGame)}`}
                     </p>
                     <div className={"flex flex-col items-start"}>
-                        <p className={"text-gray-500 font-default-light  text-label-medium"}>{useDate(game.gameTime)}</p>
-                        <SmallTag text={config.gameLocations[game.spielort as unknown as number]}></SmallTag>
+                        <p className={`font-default-light text-label-medium ${isFutureGame ? 'text-gray-500' : 'text-red-200'}`}>
+                            {`${dateUtils.dateTimeToFormat({value: gameTime})}`}
+                        </p>
+                        <SmallTag text={messages.commonForm.spielort(game.spielort)}></SmallTag>
                     </div>
                 </div>
 

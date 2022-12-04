@@ -124,7 +124,7 @@ const TimeSuggestion = ({
             >
                 {messages.commonForm.timeSuggestion}
             </label>
-            <select className={"rounded-lg border border-2 border-gray-600"}
+            <select className={"rounded-lg border border-2 border-gray-600 text-gray-400"}
                     name={name}
                     id={name}
                     onChange={(event) => onChange(event.target.value)}

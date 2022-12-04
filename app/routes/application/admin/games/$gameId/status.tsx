@@ -8,11 +8,9 @@ import {getPlayers} from "~/models/player.server";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {useRef} from "react";
 import mailhelper from '~/models/admin.games.mails.server'
-import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import PlayerSelector from "~/components/game/forms/PlayerSelector";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import SmallTag from "~/components/common/tags/SmallTag";
-import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import DeleteButton from "~/components/common/buttons/status/DeleteButton";
 import {config} from "~/components/i18n/config";
@@ -71,7 +69,7 @@ const GameInvitation = () => {
                         <div className={"flex gap-2"}>
                             <SmallTag text={gameTime}></SmallTag>
                             <SmallTag
-                                text={config.gameLocations[game.spielort as unknown as number]}></SmallTag>
+                                text={messages.commonForm.spielort(game.spielort)}></SmallTag>
                         </div>
                     </div>
                 </ContentContainer>
