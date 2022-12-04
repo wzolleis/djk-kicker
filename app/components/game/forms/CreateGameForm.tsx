@@ -5,13 +5,15 @@ import SelectWithLabel from "~/components/common/form/SelectWithLabel";
 import {config, gameLocations} from "~/components/i18n/config";
 import messages from "~/components/i18n/messages";
 import DeleteButton from "~/components/common/buttons/status/DeleteButton";
+import DateTimeInput from "~/components/common/datetime/datetime";
+import {getNextGameDay} from "~/utils";
 
 const CreateGameForm = () => {
     const navigate = useNavigate();
     return (
         <Form method={"post"} className={"flex flex-col gap-3"}>
             <InputWithLabel type={"text"} id={"name"} name={"name"} label={"Spielname"}/>
-            <InputWithLabel type={"date"} id={"gameTime"} name={"gameTime"} label={"Spieldatum"}/>
+            <DateTimeInput name={"gameTime"} defaultValue={getNextGameDay()}/>
             <SelectWithLabel id={"location"} name={"location"} defaultValue={gameLocations.Draussen.toString()}
                              label={messages.adminEditGameForm.spielort}>
                 {Object.keys(config.gameLocations).map((gameLocation) => (

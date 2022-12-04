@@ -7,6 +7,7 @@ import mailSender from "~/helpers/mail/mailsender";
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {createMail} from "~/models/mails.server";
 import {createGameAction, updateGameAction} from "~/models/gameActions.server";
+import {DateTime} from "luxon";
 
 const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, host: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
@@ -22,8 +23,7 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
     for (let i = 0; i < playerIds.length; i++) {
         const player = await getPlayerById(playerIds[i])
         invariant(player !== null)
-
-        const gameTime = dateUtils.format(game.gameTime)
+        const gameTime = dateUtils.dateTimeToFormat({value: DateTime.fromJSDate(new Date(game.gameTime))})
         const subject = messages.mailContent.invitationMail.mailSubject(gameTime)
         const body = messages.mailContent.invitationMail.mailBody({
             datum: gameTime,
@@ -76,7 +76,7 @@ const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: 
         const player = await getPlayerById(playerIds[i])
         invariant(player !== null)
 
-        const gameTime = dateUtils.format(game.gameTime)
+        const gameTime = dateUtils.dateTimeToFormat({value: DateTime.fromJSDate(new Date(game.gameTime))})
         const subject = messages.mailContent.zusageMail.mailSubject(gameTime)
         const body = messages.mailContent.zusageMail.mailBody({
             datum: gameTime,
@@ -128,7 +128,7 @@ const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: 
         const player = await getPlayerById(playerIds[i])
         invariant(player !== null)
 
-        const gameTime = dateUtils.format(game.gameTime)
+        const gameTime = dateUtils.dateTimeToFormat({value: DateTime.fromJSDate(new Date(game.gameTime))})
         const subject = messages.mailContent.absageMail.mailSubject(gameTime)
         const body = messages.mailContent.absageMail.mailBody({
             datum: gameTime,
