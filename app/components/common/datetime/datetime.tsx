@@ -9,12 +9,12 @@ type DateTimeInputProps = {
     name: string
 }
 
-const calculateDateSuggestions = (startDate: DateTime = DateTime.now()): DateTime[] => {
+const calculateDateSuggestions = (startDate: DateTime = DateTime.local().setLocale(EuropeBerlin)): DateTime[] => {
     const dayOfWeek = startDate.weekday // 1 Monday, 7 Sunday, 3 Wednesday
     const wednesday: number = 3;
     const weekNumber = dayOfWeek <= wednesday ? startDate.weekNumber : startDate.weekNumber + 1
     const keys = [...Array(10).keys()]
-    return keys.map((index) => DateTime.now().set({weekday: wednesday, weekNumber: weekNumber + index}))
+    return keys.map((index) => DateTime.local().set({weekday: wednesday, weekNumber: weekNumber + index}).setLocale(EuropeBerlin))
 }
 
 const calculateTimeSuggestions = ({start, end, step}: { start: DateTime, end: DateTime, step: number }): DateTime[] => {
@@ -22,7 +22,7 @@ const calculateTimeSuggestions = ({start, end, step}: { start: DateTime, end: Da
     const times = []
     while (currentTime < end) {
         times.push(currentTime)
-        currentTime = currentTime.plus({minute: step})
+        currentTime = currentTime.plus({minute: step}).setLocale(EuropeBerlin)
     }
     return times
 }
@@ -147,7 +147,7 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
 
     const onTimeValueSelect = (value: string) => {
         const timePickerValue = DateTime.fromFormat(value, 'HH:mm')
-        const newValue = dateValue.set({hour: timePickerValue.hour, minute: timePickerValue.minute})
+        const newValue = dateValue.set({hour: timePickerValue.hour, minute: timePickerValue.minute}).setLocale(EuropeBerlin)
         setDateValue(newValue)
     }
 
