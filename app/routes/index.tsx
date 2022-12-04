@@ -4,8 +4,8 @@ import {useOptionalUser} from "~/utils";
 import messages from "~/components/i18n/messages";
 import {LoaderFunction, redirect} from "@remix-run/node";
 
-export const loader: LoaderFunction = () => {
-  return redirect("/application/games")
+export const loader: LoaderFunction = async ({request}) => {
+    return redirect("/application/games")
 }
 
 
