@@ -162,8 +162,8 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
 
     const dateSuggestions = calculateDateSuggestions()
     const timeSuggestions = calculateTimeSuggestions({
-        start: DateTime.now().set({hour: 18, minute: 0}),
-        end: DateTime.now().set({hour: 20, minute: 15}),
+        start: DateTime.now().set({hour: 18, minute: 0}).setLocale(EuropeBerlin),
+        end: DateTime.now().set({hour: 20, minute: 15}).setLocale(EuropeBerlin),
         step: 15
     })
 

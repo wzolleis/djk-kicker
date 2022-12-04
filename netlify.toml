@@ -2,6 +2,9 @@
   command = "remix build"
   publish = "public"
 
+[build.environment]
+  TZ = "Europe/Berlin"
+
 [dev]
   command = "remix watch"
   port = 3000
