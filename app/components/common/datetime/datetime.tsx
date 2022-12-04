@@ -2,19 +2,18 @@ import {DateTime} from "luxon";
 import messages from "~/components/i18n/messages";
 import {ChangeEvent, useState} from "react";
 import dateUtils from "~/dateUtils";
-import {EuropeBerlin} from "~/config/locales";
 
 type DateTimeInputProps = {
     defaultValue?: DateTime | undefined
     name: string
 }
 
-const calculateDateSuggestions = (startDate: DateTime = DateTime.local().setLocale(EuropeBerlin)): DateTime[] => {
+const calculateDateSuggestions = (startDate: DateTime = DateTime.now()): DateTime[] => {
     const dayOfWeek = startDate.weekday // 1 Monday, 7 Sunday, 3 Wednesday
     const wednesday: number = 3;
     const weekNumber = dayOfWeek <= wednesday ? startDate.weekNumber : startDate.weekNumber + 1
     const keys = [...Array(10).keys()]
-    return keys.map((index) => DateTime.local().set({weekday: wednesday, weekNumber: weekNumber + index}).setLocale(EuropeBerlin))
+    return keys.map((index) => DateTime.now().set({weekday: wednesday, weekNumber: weekNumber + index}))
 }
 
 const calculateTimeSuggestions = ({start, end, step}: { start: DateTime, end: DateTime, step: number }): DateTime[] => {
@@ -22,7 +21,7 @@ const calculateTimeSuggestions = ({start, end, step}: { start: DateTime, end: Da
     const times = []
     while (currentTime < end) {
         times.push(currentTime)
-        currentTime = currentTime.plus({minute: step}).setLocale(EuropeBerlin)
+        currentTime = currentTime.plus({minute: step})
     }
     return times
 }
@@ -143,11 +142,11 @@ const TimeSuggestion = ({
 }
 
 const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
-    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now().setLocale(EuropeBerlin))
+    const [dateValue, setDateValue] = useState<DateTime>(defaultValue || DateTime.now())
 
     const onTimeValueSelect = (value: string) => {
         const timePickerValue = DateTime.fromFormat(value, 'HH:mm')
-        const newValue = dateValue.set({hour: timePickerValue.hour, minute: timePickerValue.minute}).setLocale(EuropeBerlin)
+        const newValue = dateValue.set({hour: timePickerValue.hour, minute: timePickerValue.minute})
         setDateValue(newValue)
     }
 
@@ -162,8 +161,8 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
 
     const dateSuggestions = calculateDateSuggestions()
     const timeSuggestions = calculateTimeSuggestions({
-        start: DateTime.now().set({hour: 18, minute: 0}).setLocale(EuropeBerlin),
-        end: DateTime.now().set({hour: 20, minute: 15}).setLocale(EuropeBerlin),
+        start: DateTime.now().set({hour: 18, minute: 0}),
+        end: DateTime.now().set({hour: 20, minute: 15}),
         step: 15
     })
 

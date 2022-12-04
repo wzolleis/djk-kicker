@@ -8,8 +8,6 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import SelectWithLabel from "~/components/common/form/SelectWithLabel";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {configuration} from "~/config";
-import {EuropeBerlin} from "~/config/locales";
-
 
 type EditGameFormProps = {
     game: Game,
@@ -23,7 +21,7 @@ const EditGameForm = ({game, children}: PropsWithChildren<EditGameFormProps>) =>
                                 name={"name"}
                                 label={messages.adminEditGameForm.name} defaultValue={game.name}
                 />
-                <DateTimeInput name='gameTime' defaultValue={DateTime.fromJSDate(new Date(game.gameTime)).setLocale(EuropeBerlin)}/>
+                <DateTimeInput name='gameTime' defaultValue={DateTime.fromJSDate(new Date(game.gameTime))}/>
                 <SelectWithLabel id={"location"}
                                  name={"location"}
                                  defaultValue={configuration.gameLocations[Number.parseInt(game.spielort)]}

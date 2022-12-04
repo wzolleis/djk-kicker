@@ -5,7 +5,6 @@ import SmallTag from "~/components/common/tags/SmallTag";
 import messages from "~/components/i18n/messages";
 import dateUtils from "~/dateUtils";
 import {DateTime} from "luxon";
-import {EuropeBerlin} from "~/config/locales";
 
 type GameCardProps = {
     game: Game;
@@ -14,7 +13,7 @@ type GameCardProps = {
 
 const GameCard = ({game, children}: GameCardProps) => {
     const nextGameDate = getNextGameDay()
-    const gameTime = DateTime.fromJSDate(new Date(game.gameTime)).setLocale(EuropeBerlin)
+    const gameTime = DateTime.fromJSDate(new Date(game.gameTime))
     const isFutureGame = gameTime >= nextGameDate
 
     return (

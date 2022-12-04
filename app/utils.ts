@@ -3,7 +3,6 @@ import {useMemo} from "react";
 
 import type {User} from "~/models/user.server";
 import {DateTime} from "luxon";
-import {EuropeBerlin} from "~/config/locales";
 
 const DEFAULT_REDIRECT = "/";
 
@@ -102,7 +101,7 @@ export function getQueryParams(request: Request, inputParam: Array<QueryParamNam
     return result
 }
 
-export const getNextGameDay = (startDate: DateTime = DateTime.now().startOf("day").setLocale(EuropeBerlin)): DateTime => {
+export const getNextGameDay = (startDate: DateTime = DateTime.now().startOf("day")): DateTime => {
     const wednesday: number = 3;
     if (startDate.weekday === wednesday) return startDate
     if (startDate.weekday < wednesday) return startDate.set({weekday: wednesday})
