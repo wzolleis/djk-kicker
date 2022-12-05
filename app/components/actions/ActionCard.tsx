@@ -1,11 +1,10 @@
 import {GameAction} from "@prisma/client";
 import dateUtils from "~/dateUtils";
-import {Link} from "@remix-run/react";
-import {actionTypeKey, actionTypes, config} from "~/components/i18n/config";
 import HTTPStatusTag from "~/components/common/tags/HTTPStatusTag";
+import {actionTypeLabel, isActionType} from "~/config/action";
 
 const ActionCard = ({action}: { action: GameAction }) => {
-    let background = ''
+    let background
     let image = ''
     switch (action.actionType) {
         case 'GAME_INVITATION':
@@ -24,8 +23,7 @@ const ActionCard = ({action}: { action: GameAction }) => {
             background = ''
             break
     }
-
-    console.log(action);
+    const {actionType} = action
     return (
         <div className={`flex items-center p-3 rounded-xl ring ring-1 ${background}`}>
 
@@ -34,7 +32,7 @@ const ActionCard = ({action}: { action: GameAction }) => {
                 <div className={"flex gap-2 items-center"}>
                     <img className={"h-4"} src={`/img/icons/${image}.png`} alt=""/>
                     <p className="text-title-medium text-black font-default-bold">
-                        {config.actionTypes[action.actionType as actionTypeKey]}
+                        {isActionType(actionType) ? actionTypeLabel(actionType) : `unknown action type: ${actionType}`}
                     </p>
                 </div>
                 <p className="text-sm text-gray-500 truncate">

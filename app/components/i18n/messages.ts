@@ -1,4 +1,5 @@
 import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import {gameLocations} from "~/config/locations";
 
 const messages = {
     app: {
@@ -11,6 +12,11 @@ const messages = {
         back: 'Zurück',
         add: 'Hinzufügen'
     },
+    actionType: {
+        GAME_INVITATION: 'Einladung',
+        GAME_ZUSAGE: 'Zusage',
+        GAME_ABSAGE: 'Absage'
+    },
     appmenu: {
         administration: "Verwaltung",
         gameadministration: "Spieleverwaltung",
@@ -20,7 +26,18 @@ const messages = {
         logout: 'Abmelden'
     },
     commonForm: {
-        cancel: "Abbruch"
+        cancel: "Abbruch",
+        date: "Datum",
+        timeSuggestion: "Zeiten",
+        dateSuggestion: "Nächste Termine",
+        time: "Uhrzeit",
+        year: "Jahr",
+        month: "Monat",
+        day: "Tag",
+        hour: "Stunde",
+        minute: "Minuten",
+        spielort: (spielortOption: string) => Number.parseInt(spielortOption) === gameLocations.Halle ? messages.adminEditGameForm.optionHalle : messages.adminEditGameForm.optionDraussen,
+        gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => gameDateIsInThePast ? '(Game over)' : ''
     },
     loginform: {
         welcome: "DJK Kicker - Anmeldung",

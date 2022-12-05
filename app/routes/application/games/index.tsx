@@ -21,10 +21,9 @@ export const loader: LoaderFunction = async ({request}) => {
     const url = new URL(request.url);
     const [allGames, recentGame] = await Promise.all([getGames(), getMostRecentGame()])
 
-
-    if (url.searchParams.get("filter") === messages.game.filters.values.current && recentGame.length > 0) {
+    if (url.searchParams.get("filter") === messages.game.filters.values.current) {
         const filter = url.searchParams.get("filter")!;
-        const games = recentGame;
+        const games = !!recentGame ? [recentGame] : []
         return json<LoaderData>({games, filter});
     } else {
         const games = allGames;
@@ -41,7 +40,7 @@ function isFilterActive(filter: string, id: string) {
 
 const GameIndex = () => {
     const {games, filter} = useLoaderData() as unknown as LoaderData;
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [_, setSearchParams] = useSearchParams();
 
     const filterAll: string = FilterValues.all
     const filterCurrent: string = FilterValues.current

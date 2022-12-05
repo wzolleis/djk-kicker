@@ -1,24 +1,12 @@
-import type {Nullable} from "vitest";
-
-export function determineStatus(status: string) {
-
-    if (status === "unknown") {
-        return null;
-    } else return Boolean(parseInt(status));
-}
-
-
 export type FeedbackForm = {
     player: {
         name: string,
         email: string
     },
     feedback: {
-        status: Nullable<number>,
-        note: Nullable<string>
+        status: number | null,
+        note: string | null
     }
-
-
 }
 
 

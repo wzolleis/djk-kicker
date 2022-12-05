@@ -3,7 +3,6 @@ import {useMemo} from "react";
 
 import type {User} from "~/models/user.server";
 import {DateTime} from "luxon";
-import {EnumParams} from "ajv";
 
 const DEFAULT_REDIRECT = "/";
 
@@ -73,23 +72,6 @@ export function validateEmail(email: unknown): email is string {
     return typeof email === "string" && email.length > 3 && email.includes("@");
 }
 
-
-
-/**
- * Wandelt den Input-Value eines datetime-local Input-Feldes in ein JS-Date
- * @param dateTime Der Wert des datetime-local Input als ISO-String
- */
-export const dateTimeLocalInputValueToDateTime = (dateTime: string): DateTime =>
-    DateTime.fromISO(dateTime);
-
-/**
- * Wandelt den DateTime in einen String, der als Default-Wert in einem datetime-local verwendet werden kann
- * @param dateTime ein DateTime (luxon) Wert, ist etwas allgemeiner verwendbar als das normale JS-Date
- */
-export const dateTimeToDateTimeLocalInputFormValue = (dateTime: DateTime) => {
-    return `${dateTime.toFormat("yyyy-MM-dd")}T${dateTime.toFormat("T")}`;
-};
-
 export type QueryParamTypes = {
     player: string | null,
     gameid: string | null,
@@ -119,40 +101,11 @@ export function getQueryParams(request: Request, inputParam: Array<QueryParamNam
     return result
 }
 
-
-export function getNextGameDay() {
+export const getNextGameDay = (startDate: DateTime = DateTime.now().startOf("day")): DateTime => {
     const wednesday: number = 3;
-    const now = DateTime.now().set({hour: 0, minute: 55})
-
-    const today: number = now.weekday;
-    let gameDay
-
-    if (today < wednesday) {
-        gameDay = now.set({
-            weekday: wednesday
-        })
-    } else {
-        gameDay = now.plus({weeks: 1}).set({
-            weekday: wednesday
-        })
-    }
-
-    // if (today < wednesday) {
-    //     gameDay = DateTime.now().plus({
-    //         days: wednesday - today
-    //     })
-    // } else if (today > wednesday) {
-    //     gameDay = DateTime.now().plus({
-    //         weeks: 1,
-    //     })
-    // }
-
-
-    console.log('gameday = ', gameDay.toJSDate())
-
-    return gameDay
-
-
+    if (startDate.weekday === wednesday) return startDate
+    if (startDate.weekday < wednesday) return startDate.set({weekday: wednesday})
+    return startDate.set({weekday: wednesday, weekNumber: startDate.weekNumber + 1})
 }
 
 export function getRedactedString(): string {

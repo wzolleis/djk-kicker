@@ -1,7 +1,7 @@
 import type {ActionFunction, LoaderFunction} from "@remix-run/node";
 import {json, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
-import {Link, useLoaderData} from "@remix-run/react";
+import {useLoaderData} from "@remix-run/react";
 import type {Prisma} from "@prisma/client";
 import {getPlayerFeedbackForGame, updateFeedback} from "~/models/feedback.server";
 import type {FeedbackForm} from "~/helpers/formdata/feedback.formdata.server";
@@ -27,10 +27,11 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({params, request}) => {
-    invariant(params.gameId, "Help");
-    invariant(params.playerId, "Help");
     const gameId = params.gameId;
     const playerId = params.playerId;
+    invariant(gameId, "Help");
+    invariant(playerId, "Help");
+
     const playerWithFeedback: PlayerFeedbackForGame | null = await getPlayerFeedbackForGame(playerId, gameId);
     const {isAuthenticated} = await authenticateUser(params, request)
     return json({player: playerWithFeedback, isAuthenticated});
@@ -38,16 +39,20 @@ export const loader: LoaderFunction = async ({params, request}) => {
 
 
 export const action: ActionFunction = async ({params, request}) => {
-    const formData = await request.formData();
-    const submittedForm: FeedbackForm = getFeedbackForm(formData);
-    console.log(submittedForm);
-
-
+    const gameId = params.gameId;
+    const playerId = params.playerId;
+    invariant(gameId, "Help");
+    invariant(playerId, "Help");
     const {isAuthenticated} = await authenticateUser(params, request)
     if (!isAuthenticated) {
         throw  json('no permission', 403)
     }
-    await updateFeedback(params.playerId!, params.gameId!, submittedForm.feedback.status, submittedForm.feedback.note);
+
+    const formData = await request.formData();
+    const submittedForm: FeedbackForm = getFeedbackForm(formData);
+    invariant(submittedForm.feedback.status, "invalid Feedback")
+
+    await updateFeedback(params.playerId!, gameId, submittedForm.feedback.status, submittedForm.feedback.note);
     await updatePlayer(params.playerId!, submittedForm.player.name, submittedForm.player.email);
     return redirect(`/application/games/${params.gameId}`);
 };

@@ -1,6 +1,14 @@
-import type { EntryContext } from "@remix-run/node";
-import { RemixServer } from "@remix-run/react";
-import { renderToString } from "react-dom/server";
+import type {EntryContext} from "@remix-run/node";
+import {RemixServer} from "@remix-run/react";
+import {renderToString} from "react-dom/server";
+import {Settings} from "luxon";
+
+// Configure the time zone
+Settings.defaultZone = "Europe/Berlin"
+Settings.defaultLocale = "de-de"
+
+console.log(Settings.defaultZone); // Reading the configured time zone.
+console.log(Settings.defaultLocale); // Reading the configured time zone.
 
 export default function handleRequest(
   request: Request,
