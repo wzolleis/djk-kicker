@@ -28,10 +28,9 @@ const GameCard = ({game, children}: GameCardProps) => {
                         <p className={`font-default-light text-label-medium ${isFutureGame ? 'text-gray-500' : 'text-red-200'}`}>
                             {`${dateUtils.dateTimeToFormat({value: gameTime})}`}
                         </p>
-                        <SmallTag text={messages.commonForm.spielort(game.spielort)}></SmallTag>
+                        <SmallTag text={messages.commonForm.spielort(game.spielort)} isDisabled={!isFutureGame}></SmallTag>
                     </div>
                 </div>
-
             </div>
             {children}
         </main>

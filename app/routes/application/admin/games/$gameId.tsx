@@ -8,6 +8,7 @@ import {Outlet, useNavigate} from "@remix-run/react";
 import TabContainer from "~/components/common/tabs/TabContainer";
 import Tab from "~/components/common/tabs/Tab";
 import {configuration} from "~/config";
+import TabSwitcher from "~/components/test/TabSwitcher";
 
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -20,14 +21,25 @@ export const loader: LoaderFunction = async ({request}) => {
 
 const EditGame = () => {
 
-    const [showModal] = useState(true);
+    const [showModal, setShowModal] = useState(true);
     const navigate = useNavigate();
 
-    const toggleModal = (_: MouseEvent) => {
+
+
+    const toggleModal = () => {
+        if (showModal) {
+            setShowModal(false);
+            document.body.style.overflow = 'auto';
+        } else {
+            setShowModal(true);
+            document.body.style.overflow = 'hidden';
+        }
+
         return navigate("/application/admin/games")
     }
     const [currentUrl, setCurrentUrl] = useState('')
     useEffect(() => {
+        document.body.style.overflow = 'hidden'
         const lastUrlElement: string = (window.location.pathname.split("/").pop()!)
         setCurrentUrl(lastUrlElement)
     },)
@@ -35,15 +47,18 @@ const EditGame = () => {
         <Modal title={messages.adminEditGameForm.title} show={showModal} onClose={toggleModal}>
             <div className={"flex flex-col gap-3"}>
                 <TabContainer>
-                    <Tab url={configuration.url.editGameForm.values.edit} title={configuration.url.editGameForm.translations.edit}
+                    <Tab url={configuration.url.editGameForm.values.edit}
+                         title={configuration.url.editGameForm.translations.edit}
                          isActive={currentUrl === configuration.url.editGameForm.values.edit}>
                         <img className={"h-6"} src="/img/icons/pencil-line.png" alt=""/>
                     </Tab>
-                    <Tab url={configuration.url.editGameForm.values.status} title={configuration.url.editGameForm.translations.status}
+                    <Tab url={configuration.url.editGameForm.values.status}
+                         title={configuration.url.editGameForm.translations.status}
                          isActive={currentUrl === configuration.url.editGameForm.values.status}>
                         <img className={"h-6"} src="/img/icons/status.png" alt=""/>
                     </Tab>
-                    <Tab url={configuration.url.editGameForm.values.invite} title={configuration.url.editGameForm.translations.invite}
+                    <Tab url={configuration.url.editGameForm.values.invite}
+                         title={configuration.url.editGameForm.translations.invite}
                          isActive={currentUrl == configuration.url.editGameForm.values.invite}>
                         <img className={"h-6"} src="/img/icons/mail.png" alt=""/>
                     </Tab>
@@ -53,6 +68,7 @@ const EditGame = () => {
                         <img className={"h-6"} src="/img/icons/history.png" alt=""/>
                     </Tab>
                 </TabContainer>
+                <TabSwitcher></TabSwitcher>
                 <Outlet></Outlet>
             </div>
         </Modal>
