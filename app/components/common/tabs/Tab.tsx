@@ -16,9 +16,8 @@ const TabComponent = ({isActive, title, children, url}: TabProps) => {
             className={`rounded-full py-1.5 px-3 flex items-center gap-2 justify-center text-white text-label-medium font-default-medium transition hover:scale-90 ${isActive ? 'bg-black hover:bg-gray-800' : 'bg-slate-400'}`}
         >
             {children}
-            {isActive &&
+
                 <p className={"text-center"}>{title}</p>
-            }
         </div>
     )
 }
