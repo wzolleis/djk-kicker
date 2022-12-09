@@ -8,7 +8,6 @@ import {Outlet, useNavigate} from "@remix-run/react";
 import TabContainer from "~/components/common/tabs/TabContainer";
 import Tab from "~/components/common/tabs/Tab";
 import {configuration} from "~/config";
-import TabSwitcher from "~/components/test/TabSwitcher";
 
 
 export const loader: LoaderFunction = async ({request}) => {
@@ -68,7 +67,6 @@ const EditGame = () => {
                         <img className={"h-6"} src="/img/icons/history.png" alt=""/>
                     </Tab>
                 </TabContainer>
-                <TabSwitcher></TabSwitcher>
                 <Outlet></Outlet>
             </div>
         </Modal>
