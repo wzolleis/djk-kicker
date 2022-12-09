@@ -1,15 +1,16 @@
-import { json, LoaderFunction } from "@remix-run/node";
-import { requireUserId } from "~/session.server";
-import { getUsers } from "~/models/user.server";
-import { Player, User } from "@prisma/client";
-import { Link, useLoaderData } from "@remix-run/react";
+import {json, LoaderFunction} from "@remix-run/node";
+import {requireUserId} from "~/session.server";
+import {getUsers} from "~/models/user.server";
+import {Player, User} from "@prisma/client";
+import {Link, Outlet, useLoaderData} from "@remix-run/react";
 import AdminTable from "~/components/users/admin/AdminTable";
 import messages from "~/components/i18n/messages";
 import PageHeader from "~/components/common/PageHeader";
 import MainPageContent from "~/components/common/MainPageContent";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import { getPlayers } from "~/models/player.server";
+import {getPlayers} from "~/models/player.server";
 import PlayerTable from "~/components/users/player/table/PlayerTable";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 type LoaderData = {
   users: User[];
@@ -35,7 +36,7 @@ const Users = () => {
       <div className={"flex gap-5 "}>
         <PageHeader title={messages.adminLandingPage.users} />
         <DefaultButton>
-          <Link to={"new"}>{messages.buttons.add}</Link>
+          <Link to={routeLinks.admin.users.create}>{messages.buttons.add}</Link>
         </DefaultButton>
       </div>
       <MainPageContent>
@@ -55,6 +56,7 @@ const Users = () => {
           </section>
         </div>
       </MainPageContent>
+      <Outlet/>
     </>
   );
 };

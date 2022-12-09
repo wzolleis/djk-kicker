@@ -1,12 +1,7 @@
-import type {ReactNode} from "react";
+import type {PropsWithChildren} from "react";
 
 
-type MainPageContentProps = {
-    children: ReactNode | ReactNode[];
-}
-
-
-const MainPageContent = ({children}: MainPageContentProps) => {
+const MainPageContent = ({children}: PropsWithChildren<{}>) => {
     return (
         <main className={"flex flex-col py-3"}>
             {children}
