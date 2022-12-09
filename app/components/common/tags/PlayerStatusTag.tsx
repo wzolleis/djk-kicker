@@ -10,13 +10,13 @@ const PlayerStatusTag = ({status}: playerStatusTagProps) => {
     const getStatusColor = (status: statusInConfig) => {
         switch (status) {
             case configuration.status.unknown:
-                return "bg-white text-gray-500 ring ring-1 ring-gray-500";
+                return "bg-white text-gray-500 ring ring-1 ring-gray-200";
             case configuration.status.confirmed:
-                return "bg-green-100 text-green-600 ring-green-600";
+                return "bg-green-100 text-green-600 ring-green-200";
             case configuration.status.declined:
-                return "bg-red-100 text-red-600 ring-red-600";
+                return "bg-red-100 text-red-600 ring-red-200";
             case configuration.status.undecided:
-                return "bg-yellow-100 text-yellow-600 ring-yellow-600";
+                return "bg-yellow-100 text-yellow-600 ring-yellow-200";
         }
     };
 

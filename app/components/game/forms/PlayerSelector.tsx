@@ -34,7 +34,7 @@ const PlayerSelector = ({players}: PlayerSelectorProps) => {
         <section className={"flex flex-col gap-2"}>
             <div className={"w-full flex flex-col gap-2"}>
                 <p className={"text-gray-600 font-default-medium border-b border-1 w-full"}>Einladung an:</p>
-                <div className={"grid grid-cols-2 gap-2 md:flex"}>
+                <div className={"flex flex-wrap gap-3"}>
                     {receivingPlayers.map(receivingPlayer => (
                         <div  className={"flex "} key={receivingPlayer.id}>
                             <input type={"hidden"} name={"receiver"} value={receivingPlayer.id}/>
@@ -47,7 +47,7 @@ const PlayerSelector = ({players}: PlayerSelectorProps) => {
 
             <div className={"w-full flex flex-col gap-2"}>
                 <p className={"text-gray-600 font-default-medium border-b border-1 w-full"}>Keine Einladung an:</p>
-                <div className={"flex gap-2"}>
+                <div className={"flex gap-3 flex-wrap"}>
                     {excludedPlayers.map(excludedPlayer => (
                         <div key={excludedPlayer.id}>
                             <PlayerTag onClick={() => addPlayerToReceiversList(excludedPlayer)}

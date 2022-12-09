@@ -24,15 +24,9 @@ export async function findGameById(id: Game['id']) {
 }
 
 export async function getGames() {
-    const nextGameDate = getNextGameDay()
     return prisma.game.findMany({
-            where: {
-                gameTime: {
-                    gte: nextGameDate.toJSDate()
-                }
-            },
             orderBy: {
-                gameTime: 'asc'
+                gameTime: 'desc'
             }
         }
     )

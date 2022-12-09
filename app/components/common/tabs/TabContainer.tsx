@@ -4,7 +4,7 @@ const TabContainer = ({ children }: { children: ReactNode }) => {
 
   return <>
 
-  <section className={"flex gap-2"}>
+  <section className={"flex flex-wrap gap-2"}>
     {children}
   </section>
 
