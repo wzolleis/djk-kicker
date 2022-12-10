@@ -2,7 +2,7 @@ import {Form} from "@remix-run/react"
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
-import RedButton from "~/components/common/RedButton";
+import RedButton from "~/components/common/buttons/RedButton";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 
 export type CreateUserProps = {

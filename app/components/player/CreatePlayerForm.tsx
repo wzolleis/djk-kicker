@@ -1,11 +1,11 @@
 import {Form} from "@remix-run/react";
-import SetStatusButton from "~/components/common/buttons/status/SetStatusButton";
+import SetStatusButton from "~/components/common/buttons/SetStatusButton";
 import {useState} from "react";
 import messages from "~/components/i18n/messages";
 import {statusInConfig} from "~/config/status";
 import {configuration} from "~/config";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
-import RedButton from "~/components/common/RedButton";
+import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 
 

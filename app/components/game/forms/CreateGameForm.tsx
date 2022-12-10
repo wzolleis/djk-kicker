@@ -3,11 +3,11 @@ import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import SelectWithLabel from "~/components/common/form/SelectWithLabel";
 import messages from "~/components/i18n/messages";
-import DeleteButton from "~/components/common/buttons/status/DeleteButton";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {getNextGameDay} from "~/utils";
 import {gameLocations} from "~/config/locations";
 import {configuration} from "~/config";
+import RedButton from "~/components/common/buttons/RedButton";
 
 const CreateGameForm = () => {
     const navigate = useNavigate();
@@ -23,13 +23,13 @@ const CreateGameForm = () => {
                 ))}
             </SelectWithLabel>
             <div className={"flex gap-3 items-center w-full justify-end"}>
-                <DeleteButton>
+                <RedButton className={'mr-auto'}>
                     <img className={"h-6"} src={"/img/icons/close-white.png"} alt={""} />
-                    <button type={"button"} onClick={() => navigate(-1)}>Abbrechen</button>
-                </DeleteButton>
+                    <button type={"button"} onClick={() => navigate(-1)}>{messages.buttons.cancel}</button>
+                </RedButton>
                 <DefaultButton>
                     <img className={"h-6"} src="/img/icons/check.png" alt=""/>
-                    <button type={"submit"}>Speichern</button>
+                    <button type={"submit"}>{messages.buttons.save}</button>
                 </DefaultButton>
             </div>
         </Form>
