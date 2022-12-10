@@ -125,6 +125,11 @@ const messages = {
         password: 'Passwort*',
         passwordRepeat: 'Passwort (Wiederholung)*'
     },
+    adminInviteUserForm: {
+        title: 'Administrator einladen',
+        email: 'E-Mail*',
+        validUntil: 'Gültig bis'
+    },
     game: {
         players: {
             title: "Spieler",
