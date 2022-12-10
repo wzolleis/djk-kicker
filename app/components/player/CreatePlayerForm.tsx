@@ -4,6 +4,9 @@ import {useState} from "react";
 import messages from "~/components/i18n/messages";
 import {statusInConfig} from "~/config/status";
 import {configuration} from "~/config";
+import InputWithLabel from "~/components/common/form/InputWithLabel";
+import RedButton from "~/components/common/RedButton";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
 
 
 type PlayerFormProps = {
@@ -18,27 +21,8 @@ const CreatePlayerForm = ({gameId}: PlayerFormProps) => {
         <>
             <Form method={"post"}>
                 <main className={"flex flex-col gap-4"}>
-                    <div className={"flex flex-col font-poppins-medium text-slate-600"}>
-                        <label htmlFor="name">Name</label>
-                        <input
-                            name={"name"}
-                            id={"name"}
-                            className="rounded-xl border border-gray-300 bg-white py-3 shadow-lg shadow-indigo-500/20 outline-none"
-                            type="text"
-                        />
-                    </div>
-                    <div className={"flex flex-col font-poppins-medium text-slate-600"}>
-                        <label htmlFor="mail">Email</label>
-                        <input
-                            name={"mail"}
-                            id={"mail"}
-                            className={
-                                "rounded-xl border border-gray-300 bg-white py-3 shadow-lg shadow-indigo-500/20 outline-none"
-                            }
-                            type="email"
-                        />
-                    </div>
-
+                    <InputWithLabel id={'name'} type={'text'} name={'name'} label={messages.createPlayerForm.name}/>
+                    <InputWithLabel id={'mail'} type={'email'} name={'mail'} label={messages.createPlayerForm.email}/>
                     {gameId != null &&
                         <>
                             <div className={"flex flex-col font-poppins-medium text-slate-600"}>
@@ -48,9 +32,6 @@ const CreatePlayerForm = ({gameId}: PlayerFormProps) => {
                                         name={"status"}
                                         id={"status"}
                                         type={"hidden"}
-                                        className={
-                                            "rounded-xl  ring ring-1 ring-indigo-100 border-none bg-white py-3 outline-none"
-                                        }
                                         defaultValue={status}
                                     />
                                     <div className={"mt-5 flex w-full items-center justify-start gap-5"}>
@@ -84,11 +65,14 @@ const CreatePlayerForm = ({gameId}: PlayerFormProps) => {
                             </div>
                         </>
                     }
-
-                    <button
-                        className="rounded-xl bg-indigo-600 p-3 shadow-lg shadow-indigo-500/40 font-inter-medium text-white">
-                        {messages.buttons.save}
-                    </button>
+                    <div className={"flex justify-start gap-2 pt-2"}>
+                        <RedButton>
+                            <button name='intent' value={'cancel'} type={'submit'}>{messages.buttons.cancel}</button>
+                        </RedButton>
+                        <DefaultButton className={'ml-auto'}>
+                            <button name={'intent'} value={'save'}>{messages.buttons.save}</button>
+                        </DefaultButton>
+                    </div>
                 </main>
             </Form>
         </>

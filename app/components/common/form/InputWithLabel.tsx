@@ -1,14 +1,17 @@
+import {HTMLInputTypeAttribute} from "react";
+
 type InputProps = {
     id: string,
-    type: string,
+    type: HTMLInputTypeAttribute | undefined,
     name: string,
     defaultValue?: string,
     label: string
+
+    required?: boolean | undefined
 }
 
-
-const InputWithLabel = ({id, name, label, type, defaultValue}: InputProps) => {
-
+const InputWithLabel = (props: InputProps) => {
+    const {id, name, label, type, defaultValue} = props
     return (
         <div className={"flex flex-col gap-2 w-full"}>
             <label className={"text-gray-600 font-default-medium"} htmlFor={name}>{label}</label>

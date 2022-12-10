@@ -25,13 +25,19 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
     const playerName = formData.get("name")
     const playerMail = formData.get("mail")
     const playerStatus = formData.get("status")
+    const intent = formData.get('intent')
     const note= formData.get("note")
 
+    invariant(typeof intent === "string")
     invariant(typeof playerName === "string")
     invariant(typeof playerMail === "string")
     invariant(typeof playerStatus === "string")
     invariant(typeof note === "string")
     invariant(!!gameid, "GameId must be defined")
+
+    if (intent === 'cancel'){
+        return redirect(`application/games/${gameid}`)
+    }
 
     const player = await createPlayer(playerName.trim(), playerMail.trim())
     await createFeedback(player.id, gameid, parseInt(playerStatus), note)
