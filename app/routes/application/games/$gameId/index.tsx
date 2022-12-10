@@ -17,8 +17,6 @@ import ConfirmedPlayersCounter from "~/components/game/feedback/ConfirmedPlayers
 import DeclinedPlayersCounter from "~/components/game/feedback/DeclinedPlayersCounter";
 import UnknownPlayersCounter from "~/components/game/feedback/UnknownPlayersCounter";
 import UndecidedPlayersCounter from "~/components/game/feedback/UndecidedPlayersCounter";
-import Modal from "~/components/common/modal/Modal";
-import CreateGameForm from "~/components/game/forms/CreateGameForm";
 
 
 type LoaderData = {

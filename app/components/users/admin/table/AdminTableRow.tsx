@@ -2,6 +2,9 @@ import {User} from "@prisma/client";
 import AdminRole from "~/components/users/admin/table/AdminRole";
 import {Link} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import ButtonContainer from "~/components/common/container/ButtonContainer";
+import RedButton from "~/components/common/RedButton";
 
 export type AdminTableRowProps = {
     user: User;
@@ -9,7 +12,7 @@ export type AdminTableRowProps = {
 
 const AdminTableRow = ({user}: AdminTableRowProps) => {
     return (
-        <>
+        <tr>
             <td className={"py-5"}>{user.name}</td>
             <td className={"text-indigo-500 underline"}>
                 <a href={`mailto:${user.email}`}>{user.email}</a>
@@ -18,15 +21,16 @@ const AdminTableRow = ({user}: AdminTableRowProps) => {
                 <AdminRole admin={user.admin}/>
             </td>
             <td className={"text-right"}>
-                <Link
-                    to={`${user.id}`}
-                    className={
-                        "rounded bg-indigo-500 shadow shadow-lg  shadow-indigo-500/40 px-3 py-2 font-sans  text-white "
-                    }
-                >{messages.buttons.edit}
-                </Link>
+                <ButtonContainer className={'justify-end'}>
+                    <DefaultButton>
+                        <Link to={`${user.id}`}>{messages.buttons.edit}</Link>
+                    </DefaultButton>
+                    <RedButton>
+                        <Link to={`${user.id}`}>{messages.buttons.delete}</Link>
+                    </RedButton>
+                </ButtonContainer>
             </td>
-        </>
+        </tr>
     );
 };
 

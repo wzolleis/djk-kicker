@@ -10,7 +10,10 @@ const messages = {
         edit: 'Bearbeiten',
         save: 'Speichern',
         back: 'Zurück',
-        add: 'Hinzufügen'
+        add: 'Hinzufügen',
+        cancel: 'Abbruch',
+        delete: 'Löschen',
+        invite: 'Einladen'
     },
     actionType: {
         GAME_INVITATION: 'Einladung',
@@ -116,7 +119,12 @@ const messages = {
         status: 'Status',
         expiresAt: 'Läuft ab'
     },
-
+    adminCreateUserForm: {
+        name: 'Name*',
+        email: 'E-Mail*',
+        password: 'Passwort*',
+        passwordRepeat: 'Passwort (Wiederholung)*'
+    },
     game: {
         players: {
             title: "Spieler",
@@ -138,8 +146,6 @@ const messages = {
 
                 }
             }
-
-
         },
         add: "Spiel hinzufügen",
         filters: {
@@ -152,16 +158,19 @@ const messages = {
         }
     },
     player: {
-        add: "Spieler hinzufügen"
+        add: "Spieler hinzufügen",
     },
-
+    createPlayerForm: {
+        status: 'Status',
+        name: 'Name',
+        email: 'E-Mail',
+    },
     user: {
         roles: {
             admin: 'Admin',
             player: 'Spieler'
         }
     },
-
     warnings: {
         noToken: "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
     },

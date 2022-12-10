@@ -22,7 +22,7 @@ const AdminTable = ({players}: AdminTableProps) => {
                     </thead>
                     <tbody className={"mt-5"}>
                     {players.map((player: Player) => (
-                        <tr  className={"border-b"} key={player.id}>
+                        <tr className={"border-b"} key={player.id}>
                             <PlayerTableRow player={player}/>
                         </tr>
                     ))}
