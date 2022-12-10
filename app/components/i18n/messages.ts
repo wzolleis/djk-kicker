@@ -128,7 +128,7 @@ const messages = {
     adminInviteUserForm: {
         title: 'Administrator einladen',
         email: 'E-Mail*',
-        validUntil: 'Gültig bis'
+        validUntil: 'Einladung gültig bis'
     },
     game: {
         players: {

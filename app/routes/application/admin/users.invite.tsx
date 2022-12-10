@@ -1,9 +1,9 @@
 import type {LoaderFunction} from "@remix-run/node";
 import {ActionFunction, json, redirect} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
-import CreateUserForm from "~/components/users/admin/CreateUserForm";
 import invariant from "tiny-invariant";
 import {createUser} from "~/models/user.server";
+import InviteUserForm from "~/components/users/admin/InviteUserForm";
 
 
 export const loader: LoaderFunction = async ({request}: { request: Request }) => {
@@ -36,7 +36,7 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
 
 export const NewAdmin = () => {
     return (
-        <CreateUserForm/>
+        <InviteUserForm/>
     )
 }
 

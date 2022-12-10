@@ -4,6 +4,9 @@ import messages from "~/components/i18n/messages";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import RedButton from "~/components/common/buttons/RedButton";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
+import {DateInput, formatForDatePicker} from "~/components/common/datetime/datetime";
+import {DateTime} from "luxon";
+import {useState} from "react";
 
 export type CreateUserProps = {
     name?: string
@@ -11,6 +14,17 @@ export type CreateUserProps = {
 }
 
 const CreateUserForm = ({name, email}: CreateUserProps) => {
+    const [dateValue, setDateValue] = useState<DateTime>(DateTime.now().endOf('day').plus({day: 7}))
+
+    const onDateValueSelect = (value: string) => {
+        const datePickerValue = DateTime.fromFormat(value, 'yyyy-MM-dd')
+        setDateValue(dateValue.set({
+            year: datePickerValue.year,
+            month: datePickerValue.month,
+            day: datePickerValue.day
+        }))
+    }
+
     return (
         <>
             <Form method={"post"}>
@@ -21,17 +35,12 @@ const CreateUserForm = ({name, email}: CreateUserProps) => {
                                     id={'email'}
                                     defaultValue={email || ''}
                     />
-                    <InputWithLabel label={messages.adminInviteUserForm.validUntil}
-                                    type='password'
-                                    name={'password'}
-                                    id={'password'}
+                    <DateInput onChange={onDateValueSelect}
+                               value={formatForDatePicker(dateValue)}
+                               name='validUntil'
+                               label={messages.adminInviteUserForm.validUntil}
                     />
-                    <InputWithLabel
-                        label={messages.adminCreateUserForm.passwordRepeat}
-                        type='password'
-                        name={'passwordRepeat'}
-                        id={'passwordRepeat'}
-                    />
+
                     <ButtonContainer>
                         <RedButton>
                             <button name='intent' value={'cancel'} type={'submit'}>{messages.buttons.cancel}</button>
