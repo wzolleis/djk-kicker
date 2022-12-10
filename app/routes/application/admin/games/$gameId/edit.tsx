@@ -1,7 +1,6 @@
 import EditGameForm from "~/components/game/admin/EditGameForm";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
-import DeleteButton from "~/components/common/buttons/status/DeleteButton";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import toast from "react-hot-toast";
 import {deleteGame, findGameById, updateGame} from "~/models/admin.games.server";
@@ -12,6 +11,7 @@ import {requireUserId} from "~/session.server";
 import invariant from "tiny-invariant";
 import routeLinks from "~/helpers/constants/routeLinks";
 import dateUtils from "~/dateUtils";
+import RedButton from "~/components/common/buttons/RedButton";
 
 
 type LoaderData = {
@@ -67,13 +67,13 @@ const EditGame = () => {
             <EditGameForm game={game}>
                 <div className={"flex items-center justify-end"}>
                     <div className={"flex gap-2"}>
-                        <DeleteButton>
+                        <RedButton>
                             <img className={"h-6"} src="/img/icons/delete.png" alt=""/>
                             <button type={"submit"}
                                     name={"intent"} value={"delete"}>
                                 {messages.adminEditGameForm.delete}
                             </button>
-                        </DeleteButton>
+                        </RedButton>
                         <DefaultButton>
                             <img className={"h-6"} src="/img/icons/check.png" alt=""/>
                             <button type={"submit"}

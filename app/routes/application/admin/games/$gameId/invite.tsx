@@ -14,8 +14,8 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import SmallTag from "~/components/common/tags/SmallTag";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import DeleteButton from "~/components/common/buttons/status/DeleteButton";
 import {configuration} from "~/config";
+import RedButton from "~/components/common/buttons/RedButton";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -83,7 +83,7 @@ const GameInvitation = () => {
                             </div>
                         </fieldset>
                         <div className={"grid grid-cols-2 md:flex gap-2 mt-5 justify-end"}>
-                            <DeleteButton>
+                            <RedButton>
                                 <img className={"h-6"} src="/img/icons/close-white.png" alt=""/>
                                 <button
                                     type="submit"
@@ -93,7 +93,7 @@ const GameInvitation = () => {
                                 >
                                     {messages.commonForm.cancel}
                                 </button>
-                            </DeleteButton>
+                            </RedButton>
                             <DefaultButton>
                                 <img className={"h-6"} src="/img/icons/mail-check-white.png" alt=""/>
                                 <button

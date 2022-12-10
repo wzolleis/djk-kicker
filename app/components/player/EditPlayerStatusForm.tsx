@@ -2,7 +2,7 @@ import {Form, useNavigate} from "@remix-run/react";
 import type {PlayerFeedbackForGame} from "~/routes/application/games/$gameId/player/$playerId";
 import {getRedactedString} from "~/utils";
 import {useState} from "react";
-import SetStatusButton from "~/components/common/buttons/status/SetStatusButton";
+import SetStatusButton from "~/components/common/buttons/SetStatusButton";
 import {statusInConfig} from "~/config/status";
 import {configuration} from "~/config";
 
