@@ -15,7 +15,7 @@ const HTTPStatusTag = ({status}: { status: number }) => {
 
     return (
         <>
-            <div className={`px-1 py-2 rounded text-white flex items-center justify-center ${backgroundColor}`}>
+            <div className={`p-1 rounded-full text-white flex items-center justify-center ${backgroundColor}`}>
                 <p className={"text-label-medium font-default-medium"}>Status: {status}</p>
             </div>
 
