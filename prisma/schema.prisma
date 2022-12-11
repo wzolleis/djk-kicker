@@ -98,4 +98,5 @@ model AdminInvitation {
   email      String
   scope String
   expires_at DateTime
+  status   Int? @default(200)
 }

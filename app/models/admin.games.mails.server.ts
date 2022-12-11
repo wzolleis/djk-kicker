@@ -8,6 +8,7 @@ import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {createMail} from "~/models/mails.server";
 import {createGameAction, updateGameAction} from "~/models/gameActions.server";
 import {DateTime} from "luxon";
+import {mailContent} from "~/components/i18n/mailcontent";
 
 const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, host: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
@@ -24,8 +25,8 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
         const player = await getPlayerById(playerIds[i])
         invariant(player !== null)
         const gameTime = dateUtils.dateTimeToFormat({value: DateTime.fromJSDate(new Date(game.gameTime))})
-        const subject = messages.mailContent.invitationMail.mailSubject(gameTime)
-        const body = messages.mailContent.invitationMail.mailBody({
+        const subject = mailContent.invitationMail.mailSubject(gameTime)
+        const body = mailContent.invitationMail.mailBody({
             datum: gameTime,
             einladungsLink: invitationLink,
             spielOrt: messages.adminGameInvitationForm.spielort(game.spielort),
@@ -77,8 +78,8 @@ const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: 
         invariant(player !== null)
 
         const gameTime = dateUtils.dateTimeToFormat({value: DateTime.fromJSDate(new Date(game.gameTime))})
-        const subject = messages.mailContent.zusageMail.mailSubject(gameTime)
-        const body = messages.mailContent.zusageMail.mailBody({
+        const subject = mailContent.zusageMail.mailSubject(gameTime)
+        const body = mailContent.zusageMail.mailBody({
             datum: gameTime,
             spielOrt: messages.adminGameInvitationForm.spielort(game.spielort),
             playerName: player.name
@@ -129,8 +130,8 @@ const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: 
         invariant(player !== null)
 
         const gameTime = dateUtils.dateTimeToFormat({value: DateTime.fromJSDate(new Date(game.gameTime))})
-        const subject = messages.mailContent.absageMail.mailSubject(gameTime)
-        const body = messages.mailContent.absageMail.mailBody({
+        const subject = mailContent.absageMail.mailSubject(gameTime)
+        const body = mailContent.absageMail.mailBody({
             datum: gameTime,
             playerName: player.name
         },)

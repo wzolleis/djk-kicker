@@ -16,6 +16,7 @@ import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
+import {mailContent} from "~/components/i18n/mailcontent";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -79,7 +80,7 @@ const GameInvitation = () => {
                                                 defaultValue={invitationLink}/>
                                 <InputWithLabel id={"emailSubject"} type={"text"} name={"emailSubject"}
                                                 label={messages.adminGameInvitationForm.mailSubjectLabel}
-                                                defaultValue={messages.mailContent.invitationMail.mailSubject(gameTime)}/>
+                                                defaultValue={mailContent.invitationMail.mailSubject(gameTime)}/>
                             </div>
                         </fieldset>
                         <div className={"grid grid-cols-2 md:flex gap-2 mt-5 justify-end"}>

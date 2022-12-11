@@ -14,9 +14,6 @@ const routeLinks = {
             invite: '/application/admin/users/invite',
         }
     },
-    game: {
-        einladung: (host: string, gameId: string, token: string) => `https://${host}/application/games/${gameId}?token=${token}`
-    }
 }
 
 export default routeLinks

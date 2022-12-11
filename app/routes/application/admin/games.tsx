@@ -2,10 +2,8 @@ import {readGames} from "~/models/admin.games.server";
 import type {LoaderArgs} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
-import {Link, Outlet, useLoaderData} from "@remix-run/react";
+import {Link, useLoaderData} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
-import type {Game} from "@prisma/client";
-import GameCard from "~/components/game/GameCard";
 import PageHeader from "~/components/common/PageHeader";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import GamesList from "~/components/game/admin/GamesList";
@@ -20,9 +18,6 @@ export const loader = async ({request}: LoaderArgs) => {
     const games = await readGames();
     return json<LoaderData>({games});
 };
-
-const isOldGame = (game: Game): boolean =>
-    !!game.gameTime && new Date() > new Date(game.gameTime);
 
 const Games = () => {
     const {games} = useLoaderData() as unknown as LoaderData;
@@ -41,7 +36,6 @@ const Games = () => {
                 </div>
                 <GamesList games={games}></GamesList>
             </main>
-            <Outlet></Outlet>
         </>
     );
 };

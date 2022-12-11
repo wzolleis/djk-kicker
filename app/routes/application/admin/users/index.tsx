@@ -1,6 +1,8 @@
 import type {LoaderFunction} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
+import React from "react";
+import {Outlet} from "@remix-run/react";
 
 
 export const loader: LoaderFunction = async ({request}: { request: Request }) => {
@@ -10,7 +12,7 @@ export const loader: LoaderFunction = async ({request}: { request: Request }) =>
 
 export const NewAdmin = () => {
     return (
-        <div>New Admin!!</div>
+        <Outlet/>
     )
 }
 
