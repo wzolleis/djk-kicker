@@ -8,6 +8,8 @@ import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {createMail} from "~/models/mails.server";
 import {createGameAction, updateGameAction} from "~/models/gameActions.server";
 import {DateTime} from "luxon";
+import {render} from "@react-email/render";
+import InvitationMail from "~/components/email/InvitationMail";
 
 const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, host: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
@@ -45,7 +47,7 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
                 ...action,
                 status: 200,
             })
-        } catch(error) {
+        } catch (error) {
             await createMail({
                 playerId: player.id,
                 actionId: action.id,
@@ -63,7 +65,7 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
     }
 }
 
-const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: string[]}) => {
+const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
     invariant(game !== null)
 
@@ -97,7 +99,7 @@ const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: 
                 ...action,
                 status: 200,
             })
-        } catch(error) {
+        } catch (error) {
             await createMail({
                 playerId: player.id,
                 actionId: action.id,
@@ -115,7 +117,7 @@ const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: 
     }
 }
 
-const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: string[]}) => {
+const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
     invariant(game !== null)
 
@@ -130,6 +132,7 @@ const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: 
 
         const gameTime = dateUtils.dateTimeToFormat({value: DateTime.fromJSDate(new Date(game.gameTime))})
         const subject = messages.mailContent.absageMail.mailSubject(gameTime)
+
         const body = messages.mailContent.absageMail.mailBody({
             datum: gameTime,
             playerName: player.name
@@ -148,7 +151,7 @@ const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: 
                 ...action,
                 status: 200,
             })
-        } catch(error) {
+        } catch (error) {
             await createMail({
                 playerId: player.id,
                 actionId: action.id,
