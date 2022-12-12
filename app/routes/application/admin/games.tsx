@@ -1,43 +1,13 @@
-import {readGames} from "~/models/admin.games.server";
-import type {LoaderArgs} from "@remix-run/node";
-import {json} from "@remix-run/node";
-import {requireUserId} from "~/session.server";
-import {Link, useLoaderData} from "@remix-run/react";
-import messages from "~/components/i18n/messages";
-import PageHeader from "~/components/common/PageHeader";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
-import GamesList from "~/components/game/admin/GamesList";
+import {Outlet} from "@remix-run/react";
 
-type LoaderData = {
-    games: Awaited<ReturnType<typeof readGames>>;
-};
-
-export const loader = async ({request}: LoaderArgs) => {
-    await requireUserId(request);
-
-    const games = await readGames();
-    return json<LoaderData>({games});
-};
 
 const Games = () => {
-    const {games} = useLoaderData() as unknown as LoaderData;
 
     return (
-        <>
-            <main className={"space-y-4"}>
-                <div className={"flex justify-between items-center"}>
-                    <PageHeader title={messages.appmenu.games}/>
-                    <Link to={"new"}>
-                        <DefaultButton>
-                            <img className={"h-6"} src="/img/icons/add.png" alt=""/>
-                            {messages.adminGamesForm.new}
-                        </DefaultButton>
-                    </Link>
-                </div>
-                <GamesList games={games}></GamesList>
-            </main>
-        </>
-    );
+        <div className="h-full min-h-screen">
+            <Outlet></Outlet>
+        </div>
+    )
 };
 
 export default Games;

@@ -46,7 +46,7 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
                 ...action,
                 status: 200,
             })
-        } catch(error) {
+        } catch (error) {
             await createMail({
                 playerId: player.id,
                 actionId: action.id,
@@ -64,7 +64,7 @@ const sendGameInvitation = async ({gameId, host, playerIds}: { gameId: string, h
     }
 }
 
-const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: string[]}) => {
+const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
     invariant(game !== null)
 
@@ -98,7 +98,7 @@ const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: 
                 ...action,
                 status: 200,
             })
-        } catch(error) {
+        } catch (error) {
             await createMail({
                 playerId: player.id,
                 actionId: action.id,
@@ -116,7 +116,7 @@ const sendGameZusage = async ({gameId, playerIds}: { gameId: string, playerIds: 
     }
 }
 
-const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: string[]}) => {
+const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: string[] }) => {
     const game = await getGameById(gameId)
     invariant(game !== null)
 
@@ -149,7 +149,7 @@ const sendGameAbsage = async ({gameId, playerIds}: { gameId: string, playerIds: 
                 ...action,
                 status: 200,
             })
-        } catch(error) {
+        } catch (error) {
             await createMail({
                 playerId: player.id,
                 actionId: action.id,
