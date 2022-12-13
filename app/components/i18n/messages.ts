@@ -64,6 +64,9 @@ const messages = {
         name: "Name",
         new: "Neues Spiel"
     },
+    adminUsersForm: {
+        invitations: "Einladungen"
+    },
     adminGameActionsForm: {
         title: 'Verlauf',
         noActions: 'Es wurden noch keine Aktionen ausgeführt'
@@ -174,7 +177,7 @@ const messages = {
     },
     user: {
         roles: {
-            admin: 'Admin',
+            admin: 'Administratoren',
             player: 'Spieler'
         }
     },

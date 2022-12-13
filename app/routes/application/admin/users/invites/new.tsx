@@ -21,10 +21,14 @@ export const loader: LoaderFunction = async ({request}: { request: Request }) =>
 
 export const action: ActionFunction = async ({request}: { request: Request }) => {
     const formData = await request.formData();
-    const hostName = request.headers.get("host")!
-
-    const email = formData.get("email")
     const intent = formData.get('intent')
+
+    if (intent === 'cancel') {
+        return redirect('application/admin/users')
+    }
+
+    const hostName = request.headers.get("host")!
+    const email = formData.get("email")
     const adminName = formData.get('adminName')
     const scope = formData.get('scope')
     const validUnitTxt = formData.get('validUntil')?.toString() || ''
@@ -36,11 +40,6 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
     invariant(typeof email === "string", `Die Mail-Adresse ${email} ist ungültig`)
     invariant(email.includes('@'), `Die Mail-Adresse ${email} ist ungültig`)
     invariant(validUntil > DateTime.now(), `Datum ${validUnitTxt} muss in der Zukunft liegen`)
-
-
-    if (intent === 'cancel') {
-        return redirect('application/admin/users')
-    }
 
     const token = await createEncryptedAdminToken({
         email,

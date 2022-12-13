@@ -152,7 +152,7 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
     }
 
     const onDateValueSelect = (value: string) => {
-        const datePickerValue = DateTime.fromFormat(value, 'yyyy-MM-dd')
+        const datePickerValue = DateTime.fromFormat(value, dateUtils.datePickerFormat)
         setDateValue(dateValue.set({
             year: datePickerValue.year,
             month: datePickerValue.month,

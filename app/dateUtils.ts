@@ -29,6 +29,8 @@ const dateTimeFromFormat = ({text, options}: { text: string, options?: { format:
     return DateTime.fromFormat(text, options?.format ?? "dd.MM.yyyy HH:mm")
 }
 
+const datePickerFormat = 'yyyy-MM-dd'
+
 export default {
     format,
     parse,
@@ -36,5 +38,6 @@ export default {
     dateTimeFromFormat,
     dateTimeToFormat,
     dateToFormat,
-    dateFromFormat
+    dateFromFormat,
+    datePickerFormat
 };

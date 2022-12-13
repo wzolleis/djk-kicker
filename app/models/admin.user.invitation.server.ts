@@ -21,3 +21,7 @@ export const createAdminInvitation = async ({
         }
     });
 };
+
+export const getAdminInvitations = async (): Promise<AdminInvitation[]> => {
+    return await prisma.adminInvitation.findMany()
+}

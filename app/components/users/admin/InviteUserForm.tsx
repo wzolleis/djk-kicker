@@ -19,7 +19,7 @@ const CreateUserForm = ({email}: CreateUserProps) => {
     const [dateValue, setDateValue] = useState<DateTime>(DateTime.now().endOf('day').plus({day: 7}))
 
     const onDateValueSelect = (value: string) => {
-        const datePickerValue =dateUtils.dateFromFormat({text: value})
+        const datePickerValue = dateUtils.dateFromFormat({text: value, options: {format: dateUtils.datePickerFormat}})
         setDateValue(dateValue.set({
             year: datePickerValue.year,
             month: datePickerValue.month,
@@ -39,13 +39,11 @@ const CreateUserForm = ({email}: CreateUserProps) => {
                                     name={'email'}
                                     id={'email'}
                                     defaultValue={email || ''}
-                                    required={true}
                     />
                     <InputWithLabel label={messages.adminInviteUserForm.name}
                                     type='text'
                                     name={'adminName'}
                                     id={'adminName'}
-                                    required={true}
                     />
                     <DateInput onChange={onDateValueSelect}
                                value={formatForDatePicker(dateValue)}

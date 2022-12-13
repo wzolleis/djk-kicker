@@ -26,11 +26,11 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
     invariant(typeof passwordRepeat === "string")
     invariant(password === passwordRepeat)
 
-    if (intent === 'cancel'){
+    if (intent === 'cancel') {
         return redirect('application/admin/users')
     }
 
-    const user = await createUser(userMail, password)
+    await createUser(userMail, password)
     return redirect('application/admin/users')
 }
 

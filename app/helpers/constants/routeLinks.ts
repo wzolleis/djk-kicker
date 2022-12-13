@@ -11,8 +11,10 @@ const routeLinks = {
         },
         users: {
             create: '/application/admin/users/new',
-            invite: '/application/admin/users/invite',
-        }
+            invite: {
+                create: '/application/admin/users/invites/new',
+            }
+        },
     },
 }
 
