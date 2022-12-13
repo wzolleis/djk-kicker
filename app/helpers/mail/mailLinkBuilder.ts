@@ -7,6 +7,15 @@ const gameInvitationLink = ({
     return `${protocol}://${host}/application/games/${gameId}?token=${token}`
 }
 
+const adminInvitationLink = ({
+                                 host,
+                                 inviteId,
+                                 token,
+                             }: { host: string, inviteId: string, token: string }): string => {
+    const protocol = urlProtocol(host)
+    return `${protocol}://${host}/application/admin/users/invite/${inviteId}?token=${token}`
+}
+
 const isSecureProtocol = (host: string) => (host.startsWith("djk-kicker.netlify.app") || host.startsWith("kicker.timzolleis.com"))
 
 const urlProtocol = (host: string): string => isSecureProtocol(host) ? "https" : "http"
@@ -15,6 +24,7 @@ const urlProtocol = (host: string): string => isSecureProtocol(host) ? "https" :
 export default {
     gameInvitationLink,
     isSecureProtocol,
-    urlProtocol
+    urlProtocol,
+    adminInvitationLink
 }
 

@@ -26,15 +26,16 @@ const calculateTimeSuggestions = ({start, end, step}: { start: DateTime, end: Da
     return times
 }
 
-const formatForDatePicker = (value: DateTime): string => value.toFormat('yyyy-MM-dd')
+export const formatForDatePicker = (value: DateTime): string => value.toFormat('yyyy-MM-dd')
 const formatForTimePicker = (value: DateTime): string => value.toFormat('HH:mm')
-const formatLabelForDatePicker = (value: DateTime): string => `${value.toFormat('dd.MM.yyyy')}`
+export const formatLabelForDatePicker = (value: DateTime): string => `${value.toFormat('dd.MM.yyyy')}`
 
-const DateInput = ({
-                       onChange,
-                       value,
-                       name
-                   }: { onChange: (value: string) => void, value: string, name: string }) => {
+export const DateInput = ({
+                              onChange,
+                              value,
+                              name,
+                              label
+                          }: { onChange: (value: string) => void, value: string, name: string, label: string }) => {
     return (
         <>
             <div className={"flex flex-col col-span-2"}>
@@ -42,7 +43,7 @@ const DateInput = ({
                     htmlFor={`${name}`}
                     className="mb-2 block md:font-medium text-gray-900"
                 >
-                    {messages.commonForm.date}
+                    {label}
                 </label>
                 <input className={"rounded-lg border border-2 border-gray-600 focus:border-blue-500"}
                        id={`${name}`}
@@ -151,7 +152,7 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
     }
 
     const onDateValueSelect = (value: string) => {
-        const datePickerValue = DateTime.fromFormat(value, 'yyyy-MM-dd')
+        const datePickerValue = DateTime.fromFormat(value, dateUtils.datePickerFormat)
         setDateValue(dateValue.set({
             year: datePickerValue.year,
             month: datePickerValue.month,
@@ -176,7 +177,12 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
                 })}
             </datalist>
             <input name={name} type={'hidden'} value={dateValueTxt}/>
-            <DateInput onChange={onDateValueSelect} value={formatForDatePicker(dateValue)} name={`${name}.date`}/>
+            <DateInput
+                onChange={onDateValueSelect}
+                value={formatForDatePicker(dateValue)}
+                name={`${name}.date`}
+                label={messages.commonForm.date}
+            />
             <TimeInput onChange={onTimeValueSelect} value={formatForTimePicker(dateValue)} name={`${name}.time`}/>
             <DateSuggestion suggestions={dateSuggestions} onChange={onDateValueSelect} name={`${name}-datesuggestion`}/>
             <TimeSuggestion suggestions={timeSuggestions} onChange={onTimeValueSelect} name={`${name}-timesuggestion`}/>

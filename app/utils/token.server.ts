@@ -1,9 +1,10 @@
 import {prisma} from "~/db.server";
+import type {JWTDecryptResult} from "jose";
 import * as jose from 'jose'
 import type {KeyObject} from "crypto";
-import type {AdminTokenOptions} from "~/models/classes/AdminTokenOption";
 import {createSecretKey} from "crypto";
-import type {JWTDecryptResult} from "jose";
+import type {AdminTokenOptions} from "~/models/classes/AdminTokenOption";
+import {DateTime, Interval} from "luxon";
 
 
 async function getTokenForGame(gameId: string): Promise<string> {
@@ -21,10 +22,14 @@ export async function checkToken(gameId: string, userToken: string): Promise<boo
 }
 
 export async function createEncryptedAdminToken(adminTokenOptions: AdminTokenOptions): Promise<string> {
+    const diff = Interval.fromDateTimes(DateTime.now(), adminTokenOptions.expires_at)
+    const days = Math.floor(diff.length('days'))
+    const expirationTime = `${days}d`
+
     const secretKey: KeyObject = createSecretKey(getArrayBufferFromSecret(process.env.JWT_SECRET!));
     return await new jose.EncryptJWT({...adminTokenOptions})
         .setProtectedHeader({alg: 'dir', enc: 'A256GCM'})
-        .setExpirationTime('7d')
+        .setExpirationTime(expirationTime)
         .encrypt(secretKey)
 }
 
