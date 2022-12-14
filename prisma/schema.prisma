@@ -73,6 +73,7 @@ model Feedback {
   status   Int? @default(0)
   playerCount Int @default(1)
   note     String?
+  invitationToken String
 
   @@unique([playerId, gameId])
 }

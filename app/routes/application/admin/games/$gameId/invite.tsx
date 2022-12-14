@@ -16,6 +16,9 @@ import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
+import SelectWithLabel from "~/components/common/form/SelectWithLabel";
+import {prisma} from "~/db.server";
+import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {mailContent} from "~/components/i18n/mailcontent";
 
 type LoaderData = {
@@ -26,8 +29,23 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({request, params: {gameId}}) => {
     invariant(gameId, "Expected params.gameId");
+    const url = new URL(request.url)
     const hostName = request.headers.get("host")!
     const [game, players] = await Promise.all([findGameById(gameId), getPlayers()])
+    if (url.searchParams.get("player")) {
+        const feedback = await prisma.feedback.findFirstOrThrow({
+            where: {
+                gameId: gameId,
+                playerId: url.searchParams.get("player")!
+            }
+        });
+
+        return json(
+            feedback
+        )
+    }
+
+
     return json<LoaderData>({game, players, hostName});
 };
 
@@ -51,6 +69,15 @@ const GameInvitation = () => {
     const gameTime = dateUtils.format(new Date(game.gameTime));
     const transition = useTransition();
     const formRef = useRef<HTMLFormElement>(null);
+    const playerToken = useFetcher();
+    const [invitationLink, setInvitationLink] = useState("initLink");
+    useEffect(() => {
+        setInvitationLink(() => mailLinkBuilder.gameInvitationLink({
+            host: hostName,
+            gameId: game.id,
+            token: playerToken.data?.invitationToken
+        }))
+    }, [playerToken.data?.id],)
 
     const invitationLink = mailLinkBuilder.gameInvitationLink({host: hostName, gameId: game.id, token: game.token})
 
@@ -75,12 +102,23 @@ const GameInvitation = () => {
                         <fieldset disabled={transition.state === "submitting"}>
                             <div className={"flex flex-col gap-2"}>
                                 <PlayerSelector players={players}/>
+                                <playerToken.Form method="get">
+                                    <SelectWithLabel id={"player"} name={"player"}
+                                                     onChange={(event) => playerToken.submit(event.target.form)}
+                                                     label={"Spieler"}>
+                                        {players.map((player) => (
+                                            <option key={player.id} value={player.id}>{player.name}</option>
+                                        ))}
+
+
+                                    </SelectWithLabel>
+                                </playerToken.Form>
                                 <InputWithLabel id={"invitationLink"} type={"text"} name={"invitationLink"}
                                                 label={messages.adminGameInvitationForm.invitationLink}
                                                 defaultValue={invitationLink}/>
                                 <InputWithLabel id={"emailSubject"} type={"text"} name={"emailSubject"}
                                                 label={messages.adminGameInvitationForm.mailSubjectLabel}
-                                                defaultValue={mailContent.invitationMail.mailSubject(gameTime)}/>
+                                                defaultValue={messages.mailContent.invitationMail.mailSubject(gameTime)}/>
                             </div>
                         </fieldset>
                         <div className={"grid grid-cols-2 md:flex gap-2 mt-5 justify-end"}>
