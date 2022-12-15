@@ -27,63 +27,72 @@ model User {
 }
 
 model Game {
-  id       String     @id @default(cuid())
-  gameTime DateTime   @default(now())
+  id       String       @id @default(cuid())
+  gameTime DateTime     @default(now())
   name     String
   link     String?
-  spielort String     @default("0")
+  spielort String       @default("0")
   feedback Feedback[]
-  token    String     @unique @default(cuid())
-  action GameAction[]
+  token    String       @unique @default(cuid())
+  action   GameAction[]
   status   String? // findet statt oder abgesagt
 }
 
 model GameAction {
-    id          String @id @default(cuid())
-    game         Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
-    gameId      String
-    actionType  String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    mail Mail[] // die Mails, die fuer dieses Spiel veschickt wurden
-    status Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
-    statusTxt String? // Fehlermeldung
+  id         String   @id @default(cuid())
+  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId     String
+  actionType String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  mail       Mail[] // die Mails, die fuer dieses Spiel veschickt wurden
+  status     Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
+  statusTxt  String? // Fehlermeldung
 }
 
 model Mail {
-  id    String @id @default(cuid())
-  action GameAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
-  actionId String
-  player Player @relation (fields: [playerId], references: [id])
-  playerId String
-  status Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
+  id        String     @id @default(cuid())
+  action    GameAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
+  actionId  String
+  player    Player     @relation(fields: [playerId], references: [id])
+  playerId  String
+  status    Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
   statusTxt String? // Fehlermeldung
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  mailType String? // Einladungslink, Zusage, Absage,...
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  mailType  String? // Einladungslink, Zusage, Absage,...
 }
 
 // Feedback der Spieler für ein Spiel
 model Feedback {
-  id       String   @id @default(cuid())
-  game     Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  gameId   String
-  player   Player   @relation(fields: [playerId], references: [id])
-  playerId String
-  status   Int? @default(0)
-  playerCount Int @default(1)
-  note     String?
+  id              String  @id @default(cuid())
+  game            Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId          String
+  player          Player  @relation(fields: [playerId], references: [id])
+  playerId        String
+  status          Int?    @default(0)
+  playerCount     Int     @default(1)
+  note            String?
   invitationToken String
 
   @@unique([playerId, gameId])
 }
 
 model Player {
-  id       String     @id @default(cuid())
-  name     String
-  email    String
-  feedback Feedback[]
-  mails    Mail[]
+  id              String            @id @default(cuid())
+  name            String
+  email           String
+  feedback        Feedback[]
+  mails           Mail[]
+  DefaultFeedback DefaultFeedback[]
+}
+
+model DefaultFeedback {
+  id          String @id @default(cuid())
+  playerId    String @unique
+  player      Player @relation(fields: [playerId], references: [id])
+  status      Int    @default(0)
+  playerCount Int    @default(1)
 }
 
 model Password {
@@ -97,7 +106,7 @@ model AdminInvitation {
   name       String
   token      String
   email      String
-  scope String
+  scope      String
   expires_at DateTime
-  status   Int? @default(200)
+  status     Int?     @default(200)
 }

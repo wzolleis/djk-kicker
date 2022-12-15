@@ -1,4 +1,6 @@
-/** @type {import('eslint').Linter.Config} */
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
-  extends: ["@remix-run/eslint-config", "@remix-run/eslint-config/node"],
+  plugins: ["prettier"],
+  extends: ["@remix-run/eslint-config", "@remix-run/eslint-config/node", "prettier"],
+  rules: {},
 };
