@@ -137,6 +137,10 @@ const messages = {
     validUntil: "Gültig bis",
   },
   game: {
+    headings: {
+      gameData: "Spieldaten",
+      feedback: "Status",
+    },
     players: {
       title: "Spieler",
       add: "Hinzufügen",
@@ -148,6 +152,11 @@ const messages = {
       unknownPlayers: "Unbekannt",
     },
     feedback: {
+      headings: {
+        feedback: "Status",
+        playerCount: "Spielerzahl",
+        note: "Notiz",
+      },
       status: {
         translations: {
           unknown: "Unbekannt",

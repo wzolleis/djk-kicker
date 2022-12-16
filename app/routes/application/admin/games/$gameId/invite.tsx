@@ -88,7 +88,7 @@ const GameInvitation = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-2">
+      <div className="flex w-full flex-col gap-2">
         <h1 className={"font-default-bold text-title-large"}>{messages.adminSendInvitationForm.title}</h1>
 
         <ContentContainer>
@@ -120,24 +120,14 @@ const GameInvitation = () => {
                     ))}
                   </SelectWithLabel>
                 </playerToken.Form>
-                <div className={"flex w-full flex-col gap-1"}>
-                  <label className={"font-default-medium text-gray-600"}>{messages.adminGameInvitationForm.invitationLink}</label>
-                  <span className={"flex gap-3"}>
-                    <div
-                      className={"max-w-screen-md overflow-hidden truncate rounded-xl bg-neutral-50 p-3 font-default-medium text-violet-500 ring ring-1 ring-indigo-100"}
-                      id={"invitationLink"}>
-                      {invitationLink}
-                    </div>
-                    <DefaultButton>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(invitationLink);
-                        }}
-                        type={"button"}>
-                        Kopieren
-                      </button>
-                    </DefaultButton>
-                  </span>
+                <label className={"font-default-medium text-gray-600"}>{messages.adminGameInvitationForm.invitationLink}</label>
+                <div className={"flex gap-2"}>
+                  <div
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(invitationLink);
+                    }}>
+                    <DefaultButton>Kopieren</DefaultButton>
+                  </div>
                 </div>
                 <InputWithLabel
                   id={"emailSubject"}

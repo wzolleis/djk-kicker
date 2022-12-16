@@ -2,9 +2,9 @@ import type { Session } from "@remix-run/node";
 import { createCookieSessionStorage } from "@remix-run/node";
 import { checkToken, decryptPlayerToken } from "~/utils/token.server";
 import type { Params } from "react-router";
-import { getPlayerById } from "~/models/player.server";
 import { Player } from "@prisma/client";
 import { PlayerSession } from "~/models/classes/PlayerSession";
+import { getPlayerById } from "~/models/player.server";
 
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {

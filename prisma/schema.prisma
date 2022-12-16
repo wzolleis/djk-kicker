@@ -92,6 +92,7 @@ model DefaultFeedback {
   playerId    String @unique
   player      Player @relation(fields: [playerId], references: [id])
   status      Int    @default(0)
+  note String?
   playerCount Int    @default(1)
 }
 
