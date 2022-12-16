@@ -13,7 +13,7 @@ const adminInvitationLink = ({
                                  token,
                              }: { host: string, inviteId: string, token: string }): string => {
     const protocol = urlProtocol(host)
-    return `${protocol}://${host}/application/admin/users/invite/${inviteId}?token=${token}`
+    return `${protocol}://${host}/application/admin/users/invites/${inviteId}?token=${token}`
 }
 
 const isSecureProtocol = (host: string) => (host.startsWith("djk-kicker.netlify.app") || host.startsWith("kicker.timzolleis.com"))
