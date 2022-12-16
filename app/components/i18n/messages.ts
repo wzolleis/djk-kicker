@@ -136,14 +136,17 @@ const messages = {
         validUntil: 'Gültig bis',
     },
     adminInviteUserResponseForm: {
-        title: 'Administrator Einladung - Antwort',
+        title: 'Neuer Administrator',
         email: 'E-Mail',
         name: 'Name',
         scope: 'Scope',
-        validUntil: 'Gültig bis',
+        validUntil: 'Einladung gültig bis',
         password: 'Passwort',
         passwordRepeat: 'Passwort (Wiederholung)',
-        rejectInvitation: 'Einladung ablehnen'
+        rejectInvitation: 'Einladung ablehnen',
+        warnings: {
+            invalidToken: "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
+        },
     },
     game: {
         players: {
@@ -201,7 +204,6 @@ const messages = {
         mailReceiver: "An:",
         sendZusageBtn: 'Zusage',
         spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? 'in der Halle' : 'draußen'}`,
-        mailSubjectLabel: "Betreff",
     },
     adminGameAbsageForm: {
         titleGame: "Absage für das Spiel am: ",
@@ -220,16 +222,6 @@ const messages = {
         mailReceiver: "An:",
         sendInvitationBtn: 'Senden',
         spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? 'in der Halle' : 'draußen'}`,
-        mailSubjectLabel: "Betreff",
-        mailBody: (datum: string) => `Hallo Spieler
-Einladung für das Spiel am ${datum}.
-Spielort: Halle/Draußen 
-
-Bitte klicke auf die Einladung und teile uns mit, ob Du kommen kannst.
-Verwende den Link bitte auch, wenn Du Deine Entscheidung nochmal ändern möchtest.
-
-Vielen Dank 
-`
     }
 };
 

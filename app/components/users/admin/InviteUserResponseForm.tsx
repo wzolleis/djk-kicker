@@ -29,12 +29,6 @@ const InviteUserResponseForm = ({email, name, validUntil}: InviteUserResponseFor
                                     disabled={true}
                                     defaultValue={email || ''}
                     />
-                    <InputWithLabel label={messages.adminInviteUserResponseForm.name}
-                                    type='text'
-                                    name={'adminName'}
-                                    id={'adminName'}
-                                    defaultValue={name}
-                    />
                     <InputWithLabel label={messages.adminInviteUserResponseForm.validUntil}
                                     type='text'
                                     name={'validUntil'}
@@ -42,10 +36,26 @@ const InviteUserResponseForm = ({email, name, validUntil}: InviteUserResponseFor
                                     disabled={true}
                                     defaultValue={dateUtils.dateToFormat({value: validUntil})}
                     />
-
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.name}
+                                    type='text'
+                                    name={'adminName'}
+                                    id={'adminName'}
+                                    defaultValue={name}
+                    />
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.password}
+                                    type='password'
+                                    name={'password'}
+                                    id={'password'}
+                    />
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.passwordRepeat}
+                                    type='password'
+                                    name={'passwordRepeat'}
+                                    id={'passwordRepeat'}
+                    />
                     <ButtonContainer>
                         <RedButton>
-                            <button name='intent' value={'cancel'} type={'submit'}>{messages.adminInviteUserResponseForm.rejectInvitation}</button>
+                            <button name='intent' value={'reject'}
+                                    type={'submit'}>{messages.adminInviteUserResponseForm.rejectInvitation}</button>
                         </RedButton>
                         <DefaultButton className='ml-auto'>
                             <button type={'submit'} name={'intent'} value='save'>{messages.buttons.save}</button>

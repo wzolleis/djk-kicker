@@ -3,8 +3,8 @@ import {DateTime} from "luxon";
 import {prisma} from "~/db.server";
 
 export const createAdminInvitation = async ({
-                                           name, email, validUntil, token, scope
-                                       }: {
+                                                name, email, validUntil, token, scope
+                                            }: {
     name: string
     email: string
     validUntil: DateTime
@@ -24,4 +24,12 @@ export const createAdminInvitation = async ({
 
 export const getAdminInvitations = async (): Promise<AdminInvitation[]> => {
     return await prisma.adminInvitation.findMany()
+}
+
+export const getAdminInvitation = async (inviteId: string) => {
+    return await prisma.adminInvitation.findUnique({
+        where: {
+            id: inviteId
+        }
+    })
 }
