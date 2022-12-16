@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
     invariant(adminInvitation.email === tokenObject.payload['email'])
 
     const validUntil = DateTime.fromISO(tokenObject.payload["expires_at"] as string)
-    invariant(validUntil.endOf('day') > DateTime.now().startOf('day'))
+    invariant(validUntil.endOf('day') > DateTime.now(), "Das Token ist abgelaufen")
 
     return json({adminInvitation: adminInvitation});
 };
