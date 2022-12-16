@@ -133,7 +133,17 @@ const messages = {
         email: 'E-Mail',
         name: 'Name',
         scope: 'Scope',
-        validUntil: 'Gültig bis'
+        validUntil: 'Gültig bis',
+    },
+    adminInviteUserResponseForm: {
+        title: 'Administrator Einladung - Antwort',
+        email: 'E-Mail',
+        name: 'Name',
+        scope: 'Scope',
+        validUntil: 'Gültig bis',
+        password: 'Passwort',
+        passwordRepeat: 'Passwort (Wiederholung)',
+        rejectInvitation: 'Einladung ablehnen'
     },
     game: {
         players: {
