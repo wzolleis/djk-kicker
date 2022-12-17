@@ -19,7 +19,10 @@ const routeLinks = {
 
         },
     },
-    games: '/application/games'
+    games: '/application/games',
+    player: {
+        delete: (playerId: string) => `/application/player/${playerId}/delete`
+    }
 }
 
 export default routeLinks

@@ -109,6 +109,5 @@ model AdminInvitation {
   scope                 String
   expires_at            DateTime
   status                Int?
-  mailStatus            Int?
   invitationStatus     String?
 }

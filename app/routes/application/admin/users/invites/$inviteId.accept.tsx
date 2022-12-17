@@ -1,12 +1,14 @@
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {AdminInvitation} from "@prisma/client";
-import {useCatch, useLoaderData, useParams} from "@remix-run/react";
+import {useActionData, useCatch, useLoaderData} from "@remix-run/react";
 import {DateTime} from "luxon";
-import {getAdminInvitation} from "~/models/admin.user.invitation.server";
+import {getAdminInvitation, updateAdminInvitation} from "~/models/admin.user.invitation.server";
 import {decryptEncryptedAdminToken} from "~/utils/token.server";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {Params} from "react-router";
-import InviteUserResponseForm from "~/components/users/admin/InviteUserResponseForm";
+import InviteUserResponseForm, {InviteUserResponseErrors} from "~/components/users/admin/InviteUserResponseForm";
+import invariant from "tiny-invariant";
+import {createUser, getUserByEmail} from "~/models/user.server";
 
 type LoaderData = {
     adminInvitation: AdminInvitation,
@@ -19,14 +21,37 @@ type AdminToken = {
 
 export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
     const formData = await request.formData();
+    const adminName = formData.get('adminName')
+    const email = formData.get('email')
+    const password = formData.get('password')
+    const passwordRepeat = formData.get('passwordRepeat')
     const inviteId = params.inviteId;
-    if (!inviteId) {
-        throw new Response("Ungültige Einladung", {status: 400, statusText: "Keine Einladung in der URL"})
+
+    invariant(typeof inviteId === 'string', "Keine Einladung in der URL enthalten")
+    invariant(typeof email === 'string', "EMail fehlt")
+    invariant(typeof password === 'string', "Passwort fehlt")
+    invariant(typeof passwordRepeat === 'string', "Passwortwiederholung fehlt")
+    invariant(typeof adminName === 'string', "Name fehlt")
+
+    const invitation = await getAdminInvitation(inviteId)
+    invariant(!!invitation, `Einladung mit der ID "${inviteId}" nicht gefunden`)
+    const userByMail = await getUserByEmail(email!)
+    invariant(!userByMail, "Es existiert bereits ein Anwender für diese Mail-Adresse")
+
+    const errors: InviteUserResponseErrors = {
+        adminName: adminName ? null : "Name eingeben",
+        password: password ? null : "Passwort eingeben",
+        passwordRepeat: (password === passwordRepeat) ? null : "Passwortwiederholung",
+    };
+    const hasErrors = Object.values(errors).some(
+        (errorMessage) => errorMessage
+    );
+    if (hasErrors) {
+        return json(errors);
     }
-    const intent = formData.get('intent')
-    if (intent === 'reject') {
-        return redirect(routeLinks.games)
-    }
+
+    await createUser(email, password, adminName)
+    await updateAdminInvitation(inviteId, {invitationStatus: 'accepted', name: invitation.name})
 
     return redirect(routeLinks.admin.users.home)
 }
@@ -34,12 +59,18 @@ export const action: ActionFunction = async ({params, request}: { params: Params
 export const loader: LoaderFunction = async ({params, request}) => {
     const inviteId = params.inviteId;
     if (!inviteId || inviteId === "undefined") {
-        throw new Response("Keine Einladungsid im Link", {status: 400, statusText: `Die Einladung "${inviteId}" im Link ist ungültig`})
+        throw new Response("Keine Einladungsid im Link", {
+            status: 400,
+            statusText: `Die Einladung "${inviteId}" im Link ist ungültig`
+        })
     }
 
     const adminInvitation = await getAdminInvitation(inviteId)
     if (!adminInvitation) {
-        throw new Response("Einladung nicht gefunden", {status: 404, statusText: `Die Einladung "${inviteId}" ist ungültig` })
+        throw new Response("Einladung nicht gefunden", {
+            status: 404,
+            statusText: `Die Einladung "${inviteId}" ist ungültig`
+        })
     }
 
     const url = new URL(request.url);
@@ -61,12 +92,16 @@ export const loader: LoaderFunction = async ({params, request}) => {
 };
 
 const InviteResponseView = () => {
+    const errors = useActionData<typeof action>();
     // @ts-ignore
     const {adminInvitation} = useLoaderData() as LoaderData;
     const validUntil = DateTime.fromJSDate(new Date(adminInvitation.expires_at))
     return (
         <>
-            <InviteUserResponseForm validUntil={validUntil} name={adminInvitation.name} email={adminInvitation.email}/>
+            <InviteUserResponseForm validUntil={validUntil}
+                                    name={adminInvitation.name}
+                                    email={adminInvitation.email}
+                                    errors={errors}/>
         </>
     )
 }
@@ -83,10 +118,18 @@ export const CatchBoundary = () => {
     throw new Error(`Unhandled error: ${caught.status}`);
 }
 
-export const ErrorBoundary = () => {
-    const { invitedId } = useParams<{invitedId: string}>();
+export const ErrorBoundary = ({error}: { error: Error }) => {
     return (
-        <div className="error-container">{`There was an error loading the invitation by the id ${invitedId}. Sorry.`}</div>
+        <>
+            <section>
+                <h5 className={"font-default-bold text-display-small tracking-tighter text-black"}>
+                    {`Die Einladung kann nicht bearbeitet werden.`}
+                </h5>
+            </section>
+            <section>
+                {`${error.message}`}
+            </section>
+        </>
     );
 }
 

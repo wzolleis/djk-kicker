@@ -6,8 +6,14 @@ import {Link} from "@remix-run/react";
 import RedButton from "~/components/common/buttons/RedButton";
 import dateUtils from "~/dateUtils";
 import {DateTime} from "luxon";
+import {isAdminInvitationStatus} from "~/config/status";
 
 const AdminInvitationTableRow = ({invitation}: { invitation: AdminInvitation }) => {
+    let statusTxt = ''
+    if (isAdminInvitationStatus(invitation.invitationStatus)) {
+        statusTxt = messages.adminInvitationOverviewTable.invitationStatus(invitation.invitationStatus)
+    }
+
     return (
         <tr>
             <td className={"py-5"}>{invitation.name}</td>
@@ -17,9 +23,7 @@ const AdminInvitationTableRow = ({invitation}: { invitation: AdminInvitation }) 
             <td>
                 {dateUtils.dateToFormat({value: DateTime.fromJSDate(new Date(invitation.expires_at))})}
             </td>
-            <td>
-                {invitation.status}
-            </td>
+            <td>{statusTxt}</td>
             <td className={"text-right"}>
                 <ButtonContainer className={'justify-end'}>
                     <DefaultButton>

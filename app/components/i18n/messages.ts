@@ -1,5 +1,6 @@
-import { spielortOptions } from "~/helpers/constants/admin.game.constants";
-import { gameLocations } from "~/config/locations";
+import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import {gameLocations} from "~/config/locations";
+import {AdminInvitationStatus} from "~/config/status";
 
 const messages = {
   app: {
@@ -121,7 +122,16 @@ const messages = {
     name: "Name",
     email: "E-Mail",
     status: "Status",
-    expiresAt: "Läuft ab",
+    expiresAt: "Gültig bis",
+
+    invitationStatus: (status: AdminInvitationStatus) => {
+      switch (status) {
+        case "accepted": return 'Akzeptiert'
+        case "rejected": return 'Abgelehnt'
+        case "active": return 'Wartet auf Antwort'
+        default: return 'Unbekannt'
+      }
+    }
   },
   adminCreateUserForm: {
     name: "Name",

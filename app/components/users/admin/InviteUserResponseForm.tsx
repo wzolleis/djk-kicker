@@ -7,16 +7,24 @@ import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {DateTime} from "luxon";
 import PageHeader from "~/components/common/PageHeader";
 import dateUtils from "~/dateUtils";
+import routeLinks from "~/helpers/constants/routeLinks";
+import React from "react";
 
 export type InviteUserResponseFormProps = {
     name?: string
     email?: string
     validUntil: DateTime
+    errors: InviteUserResponseErrors
 }
 
-const InviteUserResponseForm = ({email, name, validUntil}: InviteUserResponseFormProps) => {
-    const navigate = useNavigate()
+export type InviteUserResponseErrors = {
+    adminName: string | null
+    password: string | null
+    passwordRepeat: string | null
+}
 
+const InviteUserResponseForm = ({email, name, validUntil, errors}: InviteUserResponseFormProps) => {
+    const navigate = useNavigate()
     return (
         <>
             <header>
@@ -43,28 +51,28 @@ const InviteUserResponseForm = ({email, name, validUntil}: InviteUserResponseFor
                                     name={'adminName'}
                                     id={'adminName'}
                                     defaultValue={name}
+                                    error={errors?.adminName}
                     />
                     <InputWithLabel label={messages.adminInviteUserResponseForm.password}
                                     type='password'
                                     name={'password'}
                                     id={'password'}
+                                    error={errors?.password}
                     />
                     <InputWithLabel label={messages.adminInviteUserResponseForm.passwordRepeat}
                                     type='password'
                                     name={'passwordRepeat'}
                                     id={'passwordRepeat'}
+                                    error={errors?.passwordRepeat}
                     />
                     <ButtonContainer>
                         <RedButton>
-                            <button onClick={() => navigate(-1)}>
-                                {messages.buttons.back}
-                            </button>
+                            <button onClick={() => navigate(routeLinks.games)}>{messages.appmenu.games}</button>
                         </RedButton>
                         <DefaultButton className='ml-auto'>
-                            <button type={'submit'} name={'intent'} value='save'>{messages.buttons.save}</button>
+                            <button type={'submit'}>{messages.buttons.save}</button>
                         </DefaultButton>
                     </ButtonContainer>
-
                 </main>
             </Form>
         </>
