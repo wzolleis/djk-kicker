@@ -135,6 +135,14 @@ const messages = {
         scope: 'Scope',
         validUntil: 'Gültig bis',
     },
+    adminInviteUserChoiceForm: {
+        title: 'Administrator-Einladung',
+        email: 'E-Mail',
+        name: 'Name',
+        validUntil: 'Einladung gültig bis',
+        rejectInvitation: 'Einladung ablehnen',
+        acceptInvitation: 'Account anlegen',
+    },
     adminInviteUserResponseForm: {
         title: 'Neuer Administrator',
         email: 'E-Mail',

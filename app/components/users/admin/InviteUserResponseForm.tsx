@@ -1,4 +1,4 @@
-import {Form} from "@remix-run/react"
+import {Form, useNavigate} from "@remix-run/react"
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
@@ -15,12 +15,14 @@ export type InviteUserResponseFormProps = {
 }
 
 const InviteUserResponseForm = ({email, name, validUntil}: InviteUserResponseFormProps) => {
+    const navigate = useNavigate()
+
     return (
         <>
             <header>
                 <PageHeader title={messages.adminInviteUserResponseForm.title}/>
             </header>
-            <Form method={"post"} className="w-1/2">
+            <Form method={"post"} className="md:w-1/2">
                 <main className={"flex flex-col gap-4"}>
                     <InputWithLabel label={messages.adminInviteUserResponseForm.email}
                                     type='email'
@@ -54,8 +56,9 @@ const InviteUserResponseForm = ({email, name, validUntil}: InviteUserResponseFor
                     />
                     <ButtonContainer>
                         <RedButton>
-                            <button name='intent' value={'reject'}
-                                    type={'submit'}>{messages.adminInviteUserResponseForm.rejectInvitation}</button>
+                            <button onClick={() => navigate(-1)}>
+                                {messages.buttons.back}
+                            </button>
                         </RedButton>
                         <DefaultButton className='ml-auto'>
                             <button type={'submit'} name={'intent'} value='save'>{messages.buttons.save}</button>
