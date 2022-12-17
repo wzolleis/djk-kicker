@@ -73,7 +73,7 @@ model Feedback {
   status          Int?    @default(0)
   playerCount     Int     @default(1)
   note            String?
-  invitationToken String
+  invitationToken String @default("")
 
   @@unique([playerId, gameId])
 }
@@ -102,11 +102,13 @@ model Password {
 }
 
 model AdminInvitation {
-  id         String   @id @default(cuid())
-  name       String
-  token      String
-  email      String
-  scope      String
-  expires_at DateTime
-  status     Int?     @default(200)
+  id                    String   @id @default(cuid())
+  name                  String
+  token                 String
+  email                 String
+  scope                 String
+  expires_at            DateTime
+  status                Int?
+  mailStatus            Int?
+  invitationStatus     String?
 }
