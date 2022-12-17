@@ -1,0 +1,11 @@
+{
+  "semi": true,
+  "quotes": false,
+  "arrowParens": "always",
+  "tabWidth": 2,
+  "printWidth": 180,
+  "bracketSpacing": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "bracketSameLine": true,
+  "organizeImportsSkipDestructiveCodeActions": true
+}

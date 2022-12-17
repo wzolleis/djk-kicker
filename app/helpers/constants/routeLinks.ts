@@ -10,12 +10,16 @@ const routeLinks = {
             invitation: (gameId: string) => `/application/admin/games/${gameId}/invitation`,
         },
         users: {
+            home: '"/application/admin/users',
             create: '/application/admin/users/new',
             invite: {
                 create: '/application/admin/users/invites/new',
-            }
+                accept: ({inviteId, token} : {inviteId: string, token: string}) => `/application/admin/users/invites/${inviteId}/accept?token=${token}`
+            },
+
         },
     },
+    games: '/application/games'
 }
 
 export default routeLinks

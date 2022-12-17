@@ -17,6 +17,9 @@ const AdminInvitationTableRow = ({invitation}: { invitation: AdminInvitation }) 
             <td>
                 {dateUtils.dateToFormat({value: DateTime.fromJSDate(new Date(invitation.expires_at))})}
             </td>
+            <td>
+                {invitation.status}
+            </td>
             <td className={"text-right"}>
                 <ButtonContainer className={'justify-end'}>
                     <DefaultButton>
