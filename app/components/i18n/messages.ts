@@ -206,6 +206,9 @@ const messages = {
     name: "Name",
     email: "E-Mail",
   },
+  deletePlayerForm: {
+    confirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" löschen ?`
+  },
   user: {
     roles: {
       admin: "Administratoren",

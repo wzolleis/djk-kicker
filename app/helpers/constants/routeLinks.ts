@@ -10,7 +10,7 @@ const routeLinks = {
             invitation: (gameId: string) => `/application/admin/games/${gameId}/invitation`,
         },
         users: {
-            home: '"/application/admin/users',
+            home: '/application/admin/users',
             create: '/application/admin/users/new',
             invite: {
                 create: '/application/admin/users/invites/new',
