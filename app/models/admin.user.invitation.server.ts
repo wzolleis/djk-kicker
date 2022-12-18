@@ -33,11 +33,11 @@ export const getAdminInvitations = async (): Promise<AdminInvitation[]> => {
 }
 
 export const getAdminInvitation = async (inviteId: string) => {
-    return await prisma.adminInvitation.findUnique({
-        where: {
-            id: inviteId
-        }
-    })
+    return await prisma.adminInvitation.findUnique({where: {id: inviteId}})
+}
+
+export const deleteAdminInvitation = async (inviteId: string) => {
+    return await prisma.adminInvitation.delete({where: {id: inviteId}})
 }
 
 export const updateAdminInvitation = async (invitationid: string, updateData: AdminInvitationUpdate) => {

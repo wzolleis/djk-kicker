@@ -14,6 +14,7 @@ const routeLinks = {
             create: '/application/admin/users/new',
             invite: {
                 create: '/application/admin/users/invites/new',
+                delete: (inviteId: string) => `/application/admin/users/invites/${inviteId}/delete`,
                 accept: ({inviteId, token} : {inviteId: string, token: string}) => `/application/admin/users/invites/${inviteId}/accept?token=${token}`
             },
 

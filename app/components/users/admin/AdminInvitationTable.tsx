@@ -7,6 +7,7 @@ import RedButton from "~/components/common/buttons/RedButton";
 import dateUtils from "~/dateUtils";
 import {DateTime} from "luxon";
 import {isAdminInvitationStatus} from "~/config/status";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 const AdminInvitationTableRow = ({invitation}: { invitation: AdminInvitation }) => {
     let statusTxt = ''
@@ -30,7 +31,7 @@ const AdminInvitationTableRow = ({invitation}: { invitation: AdminInvitation }) 
                         <Link to={`${invitation.id}`}>{messages.buttons.edit}</Link>
                     </DefaultButton>
                     <RedButton>
-                        <Link to={`${invitation.id}`}>{messages.buttons.delete}</Link>
+                        <Link to={routeLinks.admin.users.invite.delete(invitation.id)}>{messages.buttons.delete}</Link>
                     </RedButton>
                 </ButtonContainer>
             </td>
