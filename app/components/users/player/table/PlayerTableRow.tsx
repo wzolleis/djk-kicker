@@ -4,6 +4,7 @@ import messages from "~/components/i18n/messages";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import RedButton from "~/components/common/buttons/RedButton";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export type AdminTableRowProps = {
     player: Player;
@@ -22,7 +23,7 @@ const AdminTableRow = ({player}: AdminTableRowProps) => {
                         <Link to={`edit/?player=${player.id}`}>{messages.buttons.edit}</Link>
                     </DefaultButton>
                     <RedButton className={'bg-red-600'}>
-                        <Link to={`delete/?player=${player.id}`}>{messages.buttons.delete}</Link>
+                        <Link to={routeLinks.player.delete(player.id)}>{messages.buttons.delete}</Link>
                     </RedButton>
                 </ButtonContainer>
             </td>

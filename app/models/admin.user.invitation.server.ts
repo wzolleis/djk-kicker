@@ -1,6 +1,12 @@
 import {AdminInvitation} from "@prisma/client";
 import {DateTime} from "luxon";
 import {prisma} from "~/db.server";
+import {AdminInvitationStatus} from "~/config/status";
+
+export type AdminInvitationUpdate = {
+    name: string
+    invitationStatus: AdminInvitationStatus
+}
 
 export const createAdminInvitation = async ({
                                                 name, email, validUntil, token, scope
@@ -27,9 +33,21 @@ export const getAdminInvitations = async (): Promise<AdminInvitation[]> => {
 }
 
 export const getAdminInvitation = async (inviteId: string) => {
-    return await prisma.adminInvitation.findUnique({
+    return await prisma.adminInvitation.findUnique({where: {id: inviteId}})
+}
+
+export const deleteAdminInvitation = async (inviteId: string) => {
+    return await prisma.adminInvitation.delete({where: {id: inviteId}})
+}
+
+export const updateAdminInvitation = async (invitationid: string, updateData: AdminInvitationUpdate) => {
+    const {name, invitationStatus} = updateData
+    return await prisma.adminInvitation.update({
         where: {
-            id: inviteId
+            id: invitationid
+        },
+        data: {
+            name, invitationStatus
         }
     })
 }

@@ -1,12 +1,14 @@
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {AdminInvitation} from "@prisma/client";
-import {useCatch, useLoaderData, useParams} from "@remix-run/react";
+import {useCatch, useLoaderData, useNavigate, useParams} from "@remix-run/react";
 import {DateTime} from "luxon";
-import {getAdminInvitation} from "~/models/admin.user.invitation.server";
-import {decryptEncryptedAdminToken} from "~/utils/token.server";
+import {getAdminInvitation, updateAdminInvitation} from "~/models/admin.user.invitation.server";
 import InviteChoiceForm from "~/components/users/admin/InviteChoiceForm";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {Params} from "react-router";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import messages from "~/components/i18n/messages";
+import React from "react";
 
 type LoaderData = {
     adminInvitation: AdminInvitation,
@@ -29,14 +31,23 @@ export const action: ActionFunction = async ({params, request}: { params: Params
     if (!inviteId) {
         throw new Response("Ungültige Einladung", {status: 400, statusText: "Keine Einladung in der URL"})
     }
+    const invitation = await getAdminInvitation(inviteId)
+    if (!invitation) {
+        throw new Response("Einladung nicht gefunden", {
+            status: 400,
+            statusText: `Einladung mit der ID "${inviteId}" nicht gefunden`
+        })
+    }
+
     const intent = formData.get('intent')
     if (intent === 'reject') {
+        await updateAdminInvitation(inviteId, {invitationStatus: 'rejected', name: invitation.name})
         return redirect(routeLinks.games)
     }
     return redirect(routeLinks.admin.users.invite.accept({inviteId, token}))
 }
 
-export const loader: LoaderFunction = async ({params, request}) => {
+export const loader: LoaderFunction = async ({params}) => {
     const inviteId = params.inviteId;
     if (!inviteId) {
         throw new Response("Ungültiger Link", {status: 400, statusText: "Ungültiger Link"})
@@ -44,24 +55,8 @@ export const loader: LoaderFunction = async ({params, request}) => {
 
     const adminInvitation = await getAdminInvitation(inviteId)
     if (!adminInvitation) {
-        throw new Response("Einladung nicht gefunden", {status: 404, statusText: "Die Einladung ist ungültig"})
+        throw new Response("Einladung nicht gefunden", {status: 404, statusText: "Die Einladung wurde nicht gefunden."})
     }
-
-    const url = new URL(request.url);
-    const token = url.searchParams.get("token")
-    if (!token) {
-        throw new Response("Es ist kein Token gesetzt", {status: 400, statusText: "Es ist kein Token gesetzt"})
-    }
-
-    const adminToken = (await decryptEncryptedAdminToken(token)).payload as AdminToken
-    if (adminToken.email !== adminInvitation.email) {
-        throw new Response("Das Token ist ungültig", {status: 400, statusText: "Das Token ist ungültig"})
-    }
-    const validUntil = DateTime.fromISO(adminToken.expires_at)
-    if (validUntil.endOf('day') < DateTime.now()) {
-        throw new Response("Das Token ist abgelaufen", {status: 400, statusText: "Das Token ist abgelaufen"})
-    }
-
     return json({adminInvitation: adminInvitation});
 };
 
@@ -76,29 +71,28 @@ const InviteChoiceView = () => {
 
 export const CatchBoundary = () => {
     const caught = useCatch();
-    const params = useParams<{invitedId: string}>();
+    const navigate = useNavigate()
+    const params = useParams<{ invitedId: string }>();
     if (caught.status === 404) {
         return (
             <div className="error-container">
-                Huh? What the heck is "{params.invitedId}"?
+                Die Einladung "{params.invitedId}" wurde nicht gefunden.
             </div>
         );
     }
     if (caught.status === 400) {
         return (
             <div className="error-container">
-                {`Huh? What the heck are u doing: ${caught.statusText}`}
+                <h4 className={"font-default-bold text-display-small tracking-tighter text-black"}>
+                    {`Die Einladung kann nicht bearbeitet werden: ${caught.statusText}`}
+                </h4>
+                <DefaultButton className={"flex justify-center"}>
+                    <button onClick={() => navigate(routeLinks.games)}>{messages.appmenu.games}</button>
+                </DefaultButton>
             </div>
         );
     }
     throw new Error(`Unhandled error: ${caught.status}`);
-}
-
-export const ErrorBoundary = () => {
-    const { invitedId } = useParams<{invitedId: string}>();
-    return (
-        <div className="error-container">{`There was an error loading the invitation by the id ${invitedId}. Sorry.`}</div>
-    );
 }
 
 export default InviteChoiceView
