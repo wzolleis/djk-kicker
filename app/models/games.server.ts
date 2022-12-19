@@ -33,7 +33,7 @@ export async function getGames() {
 
 export async function getMostRecentGame(): Promise<Game | null> {
   const nextGameDate = getNextGameDay();
-  return await prisma.game.findFirst({
+  const nextGame = await prisma.game.findFirst({
     where: {
       gameTime: {
         gte: nextGameDate.toJSDate(),
@@ -43,6 +43,12 @@ export async function getMostRecentGame(): Promise<Game | null> {
       gameTime: "asc",
     },
   });
+
+  if (!nextGame) {
+    return await getLastGame();
+  }
+
+  return nextGame;
 }
 
 export async function getLastGame(): Promise<Game | null> {
