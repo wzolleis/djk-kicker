@@ -10,7 +10,6 @@ export async function getUserById(id: User["id"]) {
 }
 
 
-
 export async function getUsers(): Promise<User[]> {
     return await prisma.user.findMany();
 }
@@ -34,6 +33,11 @@ export async function createUser(email: User["email"], password: string, name: s
             },
         },
     });
+}
+
+
+export async function deleteUserById(userId: string) {
+    return prisma.user.delete({where: {id: userId}});
 }
 
 export async function deleteUserByEmail(email: User["email"]) {

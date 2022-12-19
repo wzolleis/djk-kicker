@@ -172,6 +172,9 @@ const messages = {
             invalidToken: "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
         },
     },
+    adminUserDeleteForm: {
+        confirmationQuestion: (adminName: string) => `Den Account "${adminName}" löschen?`
+    },
     adminInvitationDeleteForm: {
         confirmationQuestion: (adminName: string) => `Die Einladung für "${adminName}" löschen?`
     },
