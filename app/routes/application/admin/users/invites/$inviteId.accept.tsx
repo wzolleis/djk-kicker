@@ -1,14 +1,21 @@
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {AdminInvitation} from "@prisma/client";
-import {useActionData, useCatch, useLoaderData} from "@remix-run/react";
+import {Form, useActionData, useCatch, useLoaderData, useNavigate} from "@remix-run/react";
 import {DateTime} from "luxon";
 import {getAdminInvitation, updateAdminInvitation} from "~/models/admin.user.invitation.server";
 import {decryptEncryptedAdminToken} from "~/utils/token.server";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {Params} from "react-router";
-import InviteUserResponseForm, {InviteUserResponseErrors} from "~/components/users/admin/InviteUserResponseForm";
 import invariant from "tiny-invariant";
 import {createUser, getUserByEmail} from "~/models/user.server";
+import PageHeader from "~/components/common/PageHeader";
+import messages from "~/components/i18n/messages";
+import InputWithLabel from "~/components/common/form/InputWithLabel";
+import dateUtils from "~/dateUtils";
+import ButtonContainer from "~/components/common/container/ButtonContainer";
+import RedButton from "~/components/common/buttons/RedButton";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import React from "react";
 
 type LoaderData = {
     adminInvitation: AdminInvitation,
@@ -19,29 +26,32 @@ type AdminToken = {
     expires_at: string
 }
 
+type InviteUserResponseErrors = {
+    adminName: string | null
+    password: string | null
+    passwordRepeat: string | null
+}
+
 export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
     const formData = await request.formData();
     const adminName = formData.get('adminName')
-    const email = formData.get('email')
     const password = formData.get('password')
     const passwordRepeat = formData.get('passwordRepeat')
     const inviteId = params.inviteId;
 
     invariant(typeof inviteId === 'string', "Keine Einladung in der URL enthalten")
-    invariant(typeof email === 'string', "EMail fehlt")
     invariant(typeof password === 'string', "Passwort fehlt")
-    invariant(typeof passwordRepeat === 'string', "Passwortwiederholung fehlt")
     invariant(typeof adminName === 'string', "Name fehlt")
 
     const invitation = await getAdminInvitation(inviteId)
     invariant(!!invitation, `Einladung mit der ID "${inviteId}" nicht gefunden`)
-    const userByMail = await getUserByEmail(email!)
+    const userByMail = await getUserByEmail(invitation.email)
     invariant(!userByMail, "Es existiert bereits ein Anwender für diese Mail-Adresse")
 
     const errors: InviteUserResponseErrors = {
         adminName: adminName ? null : "Name eingeben",
         password: password ? null : "Passwort eingeben",
-        passwordRepeat: (password === passwordRepeat) ? null : "Passwortwiederholung",
+        passwordRepeat: (password === passwordRepeat) ? null : "Passwort stimmt nicht überein",
     };
     const hasErrors = Object.values(errors).some(
         (errorMessage) => errorMessage
@@ -50,7 +60,7 @@ export const action: ActionFunction = async ({params, request}: { params: Params
         return json(errors);
     }
 
-    await createUser(email, password, adminName)
+    await createUser(invitation.email, password, adminName)
     await updateAdminInvitation(inviteId, {invitationStatus: 'accepted', name: invitation.name})
 
     return redirect(routeLinks.admin.users.home)
@@ -66,6 +76,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
     }
 
     const adminInvitation = await getAdminInvitation(inviteId)
+    console.log('>>>>>> invitation = ', adminInvitation)
     if (!adminInvitation) {
         throw new Response("Einladung nicht gefunden", {
             status: 404,
@@ -92,16 +103,61 @@ export const loader: LoaderFunction = async ({params, request}) => {
 };
 
 const InviteResponseView = () => {
+    const navigate = useNavigate()
     const errors = useActionData<typeof action>();
     // @ts-ignore
     const {adminInvitation} = useLoaderData() as LoaderData;
     const validUntil = DateTime.fromJSDate(new Date(adminInvitation.expires_at))
     return (
         <>
-            <InviteUserResponseForm validUntil={validUntil}
-                                    name={adminInvitation.name}
-                                    email={adminInvitation.email}
-                                    errors={errors}/>
+            <header>
+                <PageHeader title={messages.adminInviteUserResponseForm.title}/>
+            </header>
+            <Form method={"post"} className="md:w-1/2">
+                <main className={"flex flex-col gap-4"}>
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.email}
+                                    type='email'
+                                    name={'email'}
+                                    id={'email'}
+                                    disabled={true}
+                                    defaultValue={adminInvitation.email || ''}
+                    />
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.validUntil}
+                                    type='text'
+                                    name={'validUntil'}
+                                    id={'validUntil'}
+                                    disabled={true}
+                                    defaultValue={dateUtils.dateToFormat({value: validUntil})}
+                    />
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.name}
+                                    type='text'
+                                    name={'adminName'}
+                                    id={'adminName'}
+                                    defaultValue={adminInvitation.name}
+                                    error={errors?.adminName}
+                    />
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.password}
+                                    type='password'
+                                    name={'password'}
+                                    id={'password'}
+                                    error={errors?.password}
+                    />
+                    <InputWithLabel label={messages.adminInviteUserResponseForm.passwordRepeat}
+                                    type='password'
+                                    name={'passwordRepeat'}
+                                    id={'passwordRepeat'}
+                                    error={errors?.passwordRepeat}
+                    />
+                    <ButtonContainer>
+                        <RedButton>
+                            <button onClick={() => navigate(routeLinks.games)}>{messages.appmenu.games}</button>
+                        </RedButton>
+                        <DefaultButton className='ml-auto'>
+                            <button type={'submit'}>{messages.buttons.save}</button>
+                        </DefaultButton>
+                    </ButtonContainer>
+                </main>
+            </Form>
         </>
     )
 }

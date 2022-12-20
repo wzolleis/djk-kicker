@@ -33,7 +33,8 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   invariant(playerId, "Help");
 
   const playerWithFeedback: PlayerFeedbackForGame | null = await getPlayerFeedbackForGame(playerId, gameId);
-  const { isAuthenticated } = await authenticatePlayer(params, request);
+  const { player } = await authenticatePlayer(params, request);
+  const isAuthenticated = player!.id === playerId;
   return json({ player: playerWithFeedback, isAuthenticated });
 };
 
@@ -42,7 +43,9 @@ export const action: ActionFunction = async ({ params, request }) => {
   const playerId = params.playerId;
   invariant(gameId, "Help");
   invariant(playerId, "Help");
-  const { isAuthenticated } = await authenticatePlayer(params, request);
+  const { player } = await authenticatePlayer(params, request);
+  const isAuthenticated = player!.id === playerId;
+
   if (!isAuthenticated) {
     throw json("no permission", 403);
   }

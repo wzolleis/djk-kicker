@@ -12,6 +12,7 @@ const routeLinks = {
         users: {
             home: '/application/admin/users',
             create: '/application/admin/users/new',
+            delete: (userId: string) => `/application/admin/users/${userId}/delete`,
             invite: {
                 create: '/application/admin/users/invites/new',
                 delete: (inviteId: string) => `/application/admin/users/invites/${inviteId}/delete`,
