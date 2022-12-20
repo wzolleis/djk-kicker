@@ -1,9 +1,9 @@
 import {Outlet} from "@remix-run/react";
 
-const InviteId = () => {
+const PlayerId = () => {
     return (
         <Outlet/>
     )
 }
 
-export default InviteId
+export default PlayerId

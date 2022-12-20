@@ -52,3 +52,7 @@ export async function updatePlayer(id: Player["id"], name: string, email: string
     },
   });
 }
+
+export async function deletePlayer(id: Player["id"]) {
+    return prisma.player.delete({where: {id}});
+}

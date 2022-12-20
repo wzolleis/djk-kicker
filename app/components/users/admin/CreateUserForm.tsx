@@ -4,6 +4,7 @@ import messages from "~/components/i18n/messages";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import RedButton from "~/components/common/buttons/RedButton";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
+import PageHeader from "~/components/common/PageHeader";
 
 export type CreateUserProps = {
     name?: string
@@ -13,6 +14,9 @@ export type CreateUserProps = {
 const CreateUserForm = ({name, email}: CreateUserProps) => {
     return (
         <>
+            <header>
+                <PageHeader title={messages.adminCreateUserForm.title}/>
+            </header>
             <Form method={"post"}>
                 <main className={"flex flex-col gap-4"}>
                     <InputWithLabel label={messages.adminCreateUserForm.name}
