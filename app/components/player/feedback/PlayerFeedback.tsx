@@ -1,4 +1,4 @@
-import { DefaultFeedback } from "@prisma/client";
+import { DefaultFeedback, Feedback } from "@prisma/client";
 import { PlayerStatus } from "~/components/player/feedback/PlayerStatus";
 import TextAreaWithLabel from "~/components/common/form/TextareaWithLabel";
 import { useEffect, useState } from "react";
@@ -9,14 +9,14 @@ import { PlayerCount } from "~/components/common/counter/PlayerCount";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import { motion } from "framer-motion";
 
-type DefaultFeedbackProps = {
-  defaultFeedback: DefaultFeedback;
+type PlayerFeedbackProps = {
+  playerFeedback: Feedback;
 };
 
-const DefaultFeedbackComponent = ({ defaultFeedback }: DefaultFeedbackProps) => {
-  const [feedbackStatus, setFeedbackStatus] = useState(defaultFeedback.status);
-  const [note, setNote] = useState(defaultFeedback?.note || "");
-  const [playerCount, setPlayerCount] = useState(defaultFeedback.playerCount);
+const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
+  const [feedbackStatus, setFeedbackStatus] = useState(playerFeedback.status);
+  const [note, setNote] = useState(playerFeedback?.note || "");
+  const [playerCount, setPlayerCount] = useState(playerFeedback.playerCount);
   const fetcher = useFetcher();
   useEffect(() => {
     if (fetcher.data?.defaultFeedback) {
@@ -57,11 +57,12 @@ const DefaultFeedbackComponent = ({ defaultFeedback }: DefaultFeedbackProps) => 
       {
         status: feedbackStatus.toString(),
         note: note,
+        gameId: playerFeedback.gameId,
         playerCount: playerCount.toString(),
       },
       {
         method: "post",
-        action: "/application/dashboard?index",
+        action: `/application/games/${playerFeedback.gameId}/player/${playerFeedback.playerId}`,
       }
     );
   }
@@ -103,4 +104,4 @@ const DefaultFeedbackComponent = ({ defaultFeedback }: DefaultFeedbackProps) => 
   );
 };
 
-export default DefaultFeedbackComponent;
+export default PlayerFeedback;

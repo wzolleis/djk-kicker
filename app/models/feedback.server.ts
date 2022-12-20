@@ -59,18 +59,17 @@ export async function findFeedbackWithPlayerIdAndGameId(id: Player["id"], gameId
   });
 }
 
-export async function updateFeedback(playerId: Player["id"], gameId: Game["id"], status: number, note: Nullable<string>) {
-  return await prisma.feedback.updateMany({
+export async function updateFeedback(playerId: Player["id"], gameId: Game["id"], status: number, playerCount: number, note: Nullable<string>) {
+  return await prisma.feedback.update({
     where: {
-      AND: [
-        {
-          gameId,
-        },
-        { playerId },
-      ],
+      playerId_gameId: {
+        playerId,
+        gameId,
+      },
     },
     data: {
       status,
+      playerCount,
       note,
     },
   });
