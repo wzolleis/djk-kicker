@@ -58,6 +58,7 @@ const DefaultFeedbackComponent = ({ defaultFeedback }: DefaultFeedbackProps) => 
         status: feedbackStatus.toString(),
         note: note,
         playerCount: playerCount.toString(),
+        intent: "defaultFeedback",
       },
       {
         method: "post",

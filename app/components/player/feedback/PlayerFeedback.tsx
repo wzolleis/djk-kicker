@@ -59,10 +59,11 @@ const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
         note: note,
         gameId: playerFeedback.gameId,
         playerCount: playerCount.toString(),
+        origin: "dashboard",
       },
       {
         method: "post",
-        action: `/application/games/${playerFeedback.gameId}/player/${playerFeedback.playerId}`,
+        action: `/application/games/${playerFeedback.gameId}/player/${playerFeedback.playerId}?index`,
       }
     );
   }

@@ -1,5 +1,3 @@
-import player from "~/routes/application/games/$gameId/player";
-
 export function getFeedbackValues(formData: FormData) {
   const statusFromForm = formData.get("status");
   const noteFromForm = formData.get("note");

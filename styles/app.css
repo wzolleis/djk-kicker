@@ -150,6 +150,19 @@
     src: url("/fonts/karla/Karla-SemiBoldItalic.ttf");
 }
 
+@font-face {
+    font-family: 'Unbounded Black';
+    font-style: normal;
+    src: url("/fonts/Unbounded-Black.ttf");
+}
+
+
+@font-face {
+    font-family: 'Unbounded Bold';
+    font-style: normal;
+    src: url("/fonts/Unbounded-Bold.ttf");
+}
+
 
 
 

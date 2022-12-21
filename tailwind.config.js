@@ -1,10 +1,7 @@
 /** @type {import("tailwindcss").Config} */
 module.exports = {
-  content: ["./app/**/*.{js,ts,jsx,tsx}",],
-  safelist: [
-      'bg-red-500',
-      'bg-green-500'
-  ],
+  content: ["./app/**/*.{js,ts,jsx,tsx}"],
+  safelist: ["bg-red-500", "bg-green-500"],
   theme: {
     extend: {
       fontFamily: {
@@ -19,30 +16,31 @@ module.exports = {
         "inter-regular": ["Inter Regular"],
         "inter-semibold": ["Inter SemiBold"],
 
-        'default-bold': ['Karla Bold'],
-        'default-bold-italic': ['Karla BoldItalic'],
-        'default-extrabold': ['Karla ExtraBold'],
-        'default-extrabold-italic': ['Karla ExtraBoldItalic'],
-        'default-extralight': ['Karla ExtraLight'],
-        'default-extralight-italic': ['Karla ExtraLightItalic'],
-        'default-italic': ['Karla Italic'],
-        'default-light': ['Karla Light'],
-        'default-light-italic': ['Karla LightItalic'],
-        'default-medium': ['Karla Medium'],
-        'default-medium-italic': ['Karla MediumItalic'],
-        'default-regular': ['Karla Regular'],
-        'default-semibold': ['Karla SemiBold'],
-        'default-semibold-italic': ['Karla SemiBoldItalic'],
+        "default-bold": ["Karla Bold"],
+        "default-bold-italic": ["Karla BoldItalic"],
+        "default-extrabold": ["Karla ExtraBold"],
+        "default-extrabold-italic": ["Karla ExtraBoldItalic"],
+        "default-extralight": ["Karla ExtraLight"],
+        "default-extralight-italic": ["Karla ExtraLightItalic"],
+        "default-italic": ["Karla Italic"],
+        "default-light": ["Karla Light"],
+        "default-light-italic": ["Karla LightItalic"],
+        "default-medium": ["Karla Medium"],
+        "default-medium-italic": ["Karla MediumItalic"],
+        "default-regular": ["Karla Regular"],
+        "default-semibold": ["Karla SemiBold"],
+        "default-semibold-italic": ["Karla SemiBoldItalic"],
 
-
+        "unbounded-bold": ["Unbounded Bold"],
+        "unbounded-black": ["Unbounded Black"],
       },
       fontSize: {
-        "heading": "34px",
-        "subheading": "24px",
+        heading: "34px",
+        subheading: "24px",
         "item-heading": "17px",
         "item-caption": "13px",
-        "tag": "10px ",
-        "button": "10px",
+        tag: "10px ",
+        button: "10px",
 
         "display-large": "64px",
         "display-medium": "48px",
@@ -58,9 +56,7 @@ module.exports = {
         "label-small": "12px",
         "body-large": "16px",
         "body-medium": "14px",
-        "body small": "12px"
-
-
+        "body small": "12px",
       },
       lineHeight: {
         "display-large": "72px",
@@ -77,8 +73,7 @@ module.exports = {
         "label-small": "16px",
         "body-large": "24px",
         "body-medium": "20px",
-        "body-small": "16px"
-
+        "body-small": "16px",
       },
 
       colors: {
@@ -86,11 +81,9 @@ module.exports = {
         pale: "#9FFFCB",
         buttongreen: "#25A18E",
         avatar: "#FFF3C7",
-        darkblue: "#1D253A"
-      }
-    }
+        darkblue: "#1D253A",
+      },
+    },
   },
-  plugins: [
-    require("@tailwindcss/forms")
-  ]
+  plugins: [require("@tailwindcss/forms")],
 };

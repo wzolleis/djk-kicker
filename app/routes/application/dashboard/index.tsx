@@ -28,6 +28,7 @@ type ActionData = {
 };
 
 export const action: ActionFunction = async ({ params, request }) => {
+  console.log("Action called");
   const { isAuthenticated, player } = await authenticatePlayer(params, request);
   const body = await request.formData();
   const { status, note, playerCount, gameId } = getFeedbackValues(body);
@@ -43,6 +44,7 @@ export const action: ActionFunction = async ({ params, request }) => {
     if (!gameId) {
       throw new Error("No GameId provided");
     }
+    console.log("Test");
     const newFeedback = await updateFeedback(player.id, gameId, status, playerCount, note);
     return json<ActionData>({ gameFeedback: newFeedback });
   }
