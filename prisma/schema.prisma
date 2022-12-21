@@ -70,7 +70,7 @@ model Feedback {
   gameId          String
   player          Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId        String
-  status          Int?    @default(0)
+  status          Int    @default(0)
   playerCount     Int     @default(1)
   note            String?
   invitationToken String @default("")

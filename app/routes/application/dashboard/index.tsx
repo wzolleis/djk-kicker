@@ -3,15 +3,16 @@ import { DefaultFeedback, Feedback, Game, Player } from "@prisma/client";
 import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getMostRecentGame } from "~/models/games.server";
-import { findFeedbackWithPlayerIdAndGameId, getDefaultFeedback, updateDefaultFeedback } from "~/models/feedback.server";
+import { findFeedbackWithPlayerIdAndGameId, getDefaultFeedback, updateDefaultFeedback, updateFeedback } from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
 import { getPlayerGreeting } from "~/utils";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import Subheading from "~/components/common/header/Subheading";
-import { getDefaultFeedbackValues } from "~/utils/form.session";
+import { getFeedbackValues } from "~/utils/form.session";
 import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedbackComponent";
 import { NextGame } from "~/components/game/NextGame";
 import { motion } from "framer-motion";
+import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
 
 type LoaderData = {
   isAuthenticated: boolean;
@@ -22,20 +23,31 @@ type LoaderData = {
 };
 
 type ActionData = {
-  newFeedback: DefaultFeedback;
+  defaultFeedback?: DefaultFeedback;
+  gameFeedback?: Feedback;
 };
 
 export const action: ActionFunction = async ({ params, request }) => {
+  console.log("Action called");
   const { isAuthenticated, player } = await authenticatePlayer(params, request);
   const body = await request.formData();
-  const { status, note, playerCount } = getDefaultFeedbackValues(body);
+  const { status, note, playerCount, gameId } = getFeedbackValues(body);
   if (!player) {
     return redirect("/application/games");
   }
-  const newFeedback = await updateDefaultFeedback(player.id, status, playerCount, note);
-  return json<ActionData>({
-    newFeedback,
-  });
+  if (body.get("intent") === "defaultFeedback") {
+    const newFeedback = await updateDefaultFeedback(player.id, status, playerCount, note);
+    return json<ActionData>({
+      defaultFeedback: newFeedback,
+    });
+  } else if (body.get("intent") === "feedback") {
+    if (!gameId) {
+      throw new Error("No GameId provided");
+    }
+    console.log("Test");
+    const newFeedback = await updateFeedback(player.id, gameId, status, playerCount, note);
+    return json<ActionData>({ gameFeedback: newFeedback });
+  }
 };
 
 export const loader: LoaderFunction = async ({ params, request }) => {
@@ -51,6 +63,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 };
 const Dashboard = () => {
   const { player, nextGame, nextGameFeedback, defaultFeedback } = useLoaderData() as unknown as LoaderData;
+
   const container = {
     initial: {
       opacity: 0,
@@ -91,6 +104,7 @@ const Dashboard = () => {
           <ContentContainer>
             <Subheading title={"Nächstes Spiel"} />
             <NextGame game={nextGame!}></NextGame>
+            {nextGameFeedback!! && <PlayerFeedback playerFeedback={nextGameFeedback}></PlayerFeedback>}
           </ContentContainer>
         </motion.div>
         <motion.div variants={items}>
