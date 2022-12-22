@@ -1,15 +1,14 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import type {ActionFunction, LoaderFunction} from "@remix-run/node";
+import {json, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
-import { useLoaderData } from "@remix-run/react";
-import type { Prisma } from "@prisma/client";
-import { getPlayerFeedbackForGame, updateFeedback } from "~/models/feedback.server";
+import {useLoaderData} from "@remix-run/react";
+import type {Prisma} from "@prisma/client";
+import {getPlayerFeedbackForGame, updateFeedback} from "~/models/feedback.server";
 import EditPlayerStatusForm from "~/components/player/EditPlayerStatusForm";
-import PageHeader from "~/components/common/PageHeader";
-import { authenticatePlayer } from "~/utils/session.server";
-import { NoTokenWarning } from "~/components/warnings/NoTokenWarning";
-import { getFeedbackValues } from "~/utils/form.session";
-import { errors } from "~/components/i18n/errors";
+import {authenticatePlayer} from "~/utils/session.server";
+import {NoTokenWarning} from "~/components/warnings/NoTokenWarning";
+import {getFeedbackValues} from "~/utils/form.session";
+import {errors} from "~/components/i18n/errors";
 
 export type PlayerFeedbackForGame = Prisma.PlayerGetPayload<{
   include: {
@@ -33,7 +32,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
   const playerWithFeedback: PlayerFeedbackForGame | null = await getPlayerFeedbackForGame(playerId, gameId);
   const { player } = await authenticatePlayer(params, request);
-  const isAuthenticated = player!.id === playerId;
+  const isAuthenticated = player?.id === playerId;
   return json({ player: playerWithFeedback, isAuthenticated });
 };
 
@@ -41,7 +40,7 @@ export const action: ActionFunction = async ({ params, request }) => {
   const playerId = params.playerId;
   const gameId = params.gameId!;
   const { player } = await authenticatePlayer(params, request);
-  const isAuthenticated = player!.id === playerId;
+  const isAuthenticated = player?.id === playerId;
   if (!isAuthenticated) {
     throw json("no permission", 403);
   }
