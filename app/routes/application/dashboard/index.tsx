@@ -18,6 +18,7 @@ import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedba
 import {NextGame} from "~/components/game/NextGame";
 import {motion} from "framer-motion";
 import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
+import PlayerProfile from "~/components/game/players/PlayerProfile";
 
 type LoaderData = {
   isAuthenticated: boolean;
@@ -114,7 +115,8 @@ const Dashboard = () => {
         </motion.div>
         <motion.div variants={items}>
           <ContentContainer>
-            <Subheading title={"Letzte Spiele"} />
+            <Subheading title={"Profil"} />
+            <PlayerProfile/>
           </ContentContainer>
         </motion.div>
       </motion.div>

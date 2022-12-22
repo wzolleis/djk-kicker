@@ -175,6 +175,10 @@ const messages = {
   player: {
     add: "Spieler hinzufügen",
   },
+  playerProfileForm: {
+    name: "Name",
+    email: "E-Mail",
+  },
   createPlayerForm: {
     status: "Status",
     name: "Name",
