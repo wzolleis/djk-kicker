@@ -11,6 +11,12 @@ export const appLinks = {
         requiresAdmin: false,
         path: "/application",
         label: "Start",
+        dashboard: {
+            requiresAdmin: false,
+            path: "dashboard",
+            label: messages.appmenu.dashboard
+        },
+
         games: {
             requiresAdmin: false,
             path: "games",
