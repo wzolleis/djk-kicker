@@ -16,7 +16,7 @@ const Players = ({ players, gameId, isAuthenticated, onClick }: PlayerProps) => 
     <>
       <MainPageContent>
         <header className={"flex items-center justify-between"}>
-          <p className={"font-poppins-medium text-headline-small text-darkblue"}>Spieler</p>
+          <p className={"font-default-medium text-headline-small text-darkblue"}>Spieler</p>
           {isAuthenticated && <SmallButton title={"Spieler hinzufügen"} link={`/application/player/create?gameid=${gameId}`} />}
         </header>
         <main className={"mt-5 flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>

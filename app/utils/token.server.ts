@@ -6,6 +6,8 @@ import { createSecretKey } from "crypto";
 import type { AdminTokenOptions } from "~/models/classes/AdminTokenOption";
 import { DateTime, Interval } from "luxon";
 import { PlayerToken } from "~/models/classes/PlayerToken";
+import { getPlayerById } from "~/models/player.server";
+import { Player } from "@prisma/client";
 
 function createEncryptionArguments() {
   const algorithm: string = "aes-256-ctr";
@@ -62,9 +64,11 @@ export function decryptPlayerToken(encryptedToken: string): PlayerToken {
   return JSON.parse(decryptedToken.toString());
 }
 
-export async function checkToken(gameId: string, userToken: string): Promise<boolean> {
+export async function verifyToken(gameId: string, playerToken?: PlayerToken) {
   const gameToken: string = await getTokenForGame(gameId);
-  return gameToken === userToken;
+  const tokenMatches: boolean = gameToken === playerToken?.gameToken || false;
+  const player = playerToken?.playerId ? await getPlayerById(playerToken?.playerId) : null;
+  return { tokenMatches, player, playerToken };
 }
 
 export async function createEncryptedAdminToken(adminTokenOptions: AdminTokenOptions): Promise<string> {

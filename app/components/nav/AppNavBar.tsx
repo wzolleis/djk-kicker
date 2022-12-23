@@ -23,7 +23,7 @@ const AppNavBar = ({ appMenu, user }: AppNavBarProps) => {
         <Link to={"/application/dashboard"}>
           <div className="flex items-center justify-between">
             <img src="/img/logo.png" alt="" className={"h-10"} />
-            <span className="px-2 font-poppins-semibold text-4xl">{messages.app.title}</span>
+            <span className="px-2 font-default-semibold text-4xl">{messages.app.title}</span>
           </div>
         </Link>
         <div className="sm:hidden">

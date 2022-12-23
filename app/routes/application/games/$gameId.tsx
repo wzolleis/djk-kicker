@@ -54,7 +54,6 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const { cookieHeader, player, isFirstAuthentication } = await authenticatePlayer(params, request);
   const isAuthenticated = player?.id === playerId;
 
-  console.log("Loader called");
 
   if (player && isFirstAuthentication) {
     return redirect("/application/dashboard", {

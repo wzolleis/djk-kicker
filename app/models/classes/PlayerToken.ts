@@ -1,7 +1,6 @@
 export class PlayerToken {
   gameId: string;
   playerId: string;
-
   gameToken: string;
 
   constructor(gameId: string, playerId: string, gameToken: string) {

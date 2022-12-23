@@ -25,7 +25,7 @@ const CreatePlayerForm = ({gameId}: PlayerFormProps) => {
                     <InputWithLabel id={'mail'} type={'email'} name={'mail'} label={messages.createPlayerForm.email}/>
                     {gameId != null &&
                         <>
-                            <div className={"flex flex-col font-poppins-medium text-slate-600"}>
+                            <div className={"flex flex-col font-default-medium text-slate-600"}>
                                 <label htmlFor="name">Status</label>
                                 <div>
                                     <input

@@ -2,20 +2,17 @@
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}"],
   safelist: ["bg-red-500", "bg-green-500"],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       fontFamily: {
-        "poppins-bold": ["Poppins Bold"],
-        "poppins-light": ["Poppins Light"],
-        "poppins-medium": ["Poppins Medium"],
-        "poppins-regular": ["Poppins Regular"],
-        "poppins-semibold": ["Poppins SemiBold"],
         "inter-bold": ["Inter Bold"],
         "inter-light": ["Inter Light"],
         "inter-medium": ["Inter Medium"],
         "inter-regular": ["Inter Regular"],
         "inter-semibold": ["Inter SemiBold"],
-
         "default-bold": ["Karla Bold"],
         "default-bold-italic": ["Karla BoldItalic"],
         "default-extrabold": ["Karla ExtraBold"],
@@ -34,14 +31,8 @@ module.exports = {
         "unbounded-bold": ["Unbounded Bold"],
         "unbounded-black": ["Unbounded Black"],
       },
-      fontSize: {
-        heading: "34px",
-        subheading: "24px",
-        "item-heading": "17px",
-        "item-caption": "13px",
-        tag: "10px ",
-        button: "10px",
 
+      fontSize: {
         "display-large": "64px",
         "display-medium": "48px",
         "display-small": "40px",

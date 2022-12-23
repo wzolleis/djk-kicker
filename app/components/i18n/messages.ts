@@ -174,6 +174,9 @@ const messages = {
   },
   player: {
     add: "Spieler hinzufügen",
+    confirmChange: "Es wurde ein anderer Spieler erkannt! Möchtest du die Spielerzuweisung wechseln?",
+    confirmChangeButton: (playerName: string) => `Ja, ich bin eigentlich ${playerName}!`,
+    declineChangeButton: (playerName: string) => `Nein, ich möchte ${playerName} bleiben!`
   },
   playerProfileForm: {
     name: "Name",
