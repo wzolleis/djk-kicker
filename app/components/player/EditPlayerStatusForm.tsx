@@ -21,7 +21,7 @@ const EditPlayerStatusForm = ({ player, isAuthenticated, onSubmit }: PlayerFormP
   return (
     <Form method={"post"} onSubmit={onSubmit}>
       <main className={"flex flex-col gap-4"}>
-        <div className={"flex flex-col font-poppins-medium text-slate-600"}>
+        <div className={"flex flex-col font-default-medium text-slate-600"}>
           <label htmlFor="name">Status</label>
           <div>
             <input
@@ -56,7 +56,7 @@ const EditPlayerStatusForm = ({ player, isAuthenticated, onSubmit }: PlayerFormP
         </div>
         <input type="hidden" name={"playerCount"} value={playerCount} />
         <PlayerCount playerCount={playerCount} onAdd={() => setPlayerCount(playerCount + 1)} onSubtract={() => setPlayerCount(playerCount > 1 ? playerCount - 1 : 1)}></PlayerCount>
-        <div className={"flex flex-col font-poppins-medium text-slate-600"}>
+        <div className={"flex flex-col font-default-medium text-slate-600"}>
           <label htmlFor={"feedbackNote"}>Notiz</label>
           <textarea
             name={"note"}

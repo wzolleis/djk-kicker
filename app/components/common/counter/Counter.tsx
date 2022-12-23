@@ -23,7 +23,7 @@ const Counter = ({ value, color }: CounterProps) => {
 
   return (
     <>
-      <p className={`font-poppins-bold text-headline-medium ${color} `}>{count}</p>
+      <p className={`font-default-bold text-headline-medium ${color} `}>{count}</p>
     </>
   );
 };

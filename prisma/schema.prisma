@@ -112,3 +112,9 @@ model AdminInvitation {
   status                Int?
   invitationStatus     String?
 }
+
+
+model Session {
+id String @id @default(cuid())
+data String @db.VarChar(5000)
+}

@@ -11,6 +11,9 @@ export async function getPlayers() {
 }
 
 export async function getPlayerById(id: Player["id"]) {
+  if (!id) {
+    throw new Error("No player Id provided");
+  }
   return await prisma.player.findUnique({ where: { id } });
 }
 
@@ -54,5 +57,5 @@ export async function updatePlayer(id: Player["id"], name: string, email: string
 }
 
 export async function deletePlayer(id: Player["id"]) {
-    return prisma.player.delete({where: {id}});
+  return prisma.player.delete({ where: { id } });
 }

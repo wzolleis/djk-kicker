@@ -18,7 +18,7 @@ const ConfirmedPlayersCounter = ({game}: ConfirmedPlayersCounterProps) => {
     return (
         <>
             <div className={"flex flex-col items-center px-3 py-2"}>
-                <p className={"text-label-medium text-gray-500 font-poppins-medium"}>{messages.game.count.confirmedPlayers}</p>
+                <p className={"text-label-medium text-gray-500 font-default-medium"}>{messages.game.count.confirmedPlayers}</p>
                 <Counter color={"text-green-500"} value={confirmedPlayerCount}/>
             </div>
         </>

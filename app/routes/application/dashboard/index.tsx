@@ -5,14 +5,15 @@ import { useLoaderData } from "@remix-run/react";
 import { getMostRecentGame } from "~/models/games.server";
 import { findFeedbackWithPlayerIdAndGameId, getDefaultFeedback, updateDefaultFeedback, updateFeedback } from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
-import { getPlayerGreeting } from "~/utils";
+import {getPlayerGreeting} from "~/utils";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import Subheading from "~/components/common/header/Subheading";
-import { getFeedbackValues } from "~/utils/form.session";
+import {getFeedbackValues} from "~/utils/form.session";
 import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedbackComponent";
-import { NextGame } from "~/components/game/NextGame";
-import { motion } from "framer-motion";
+import {NextGame} from "~/components/game/NextGame";
+import {motion} from "framer-motion";
 import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
+import classNames from "classnames";
 
 type LoaderData = {
   isAuthenticated: boolean;
@@ -29,7 +30,7 @@ type ActionData = {
 
 export const action: ActionFunction = async ({ params, request }) => {
   console.log("Action called");
-  const { isAuthenticated, player } = await authenticatePlayer(params, request);
+  const { player } = await authenticatePlayer(params, request);
   const body = await request.formData();
   const { status, note, playerCount, gameId } = getFeedbackValues(body);
   if (!player) {
@@ -57,7 +58,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   }
   const defaultFeedback = await getDefaultFeedback(player.id);
   const nextGame = await getMostRecentGame();
-  const nextGameFeedback = await findFeedbackWithPlayerIdAndGameId(player!.id, nextGame!.id);
+  const nextGameFeedback = await findFeedbackWithPlayerIdAndGameId(player?.id, nextGame!.id);
 
   return json<LoaderData>({ isAuthenticated, player, nextGame, nextGameFeedback, defaultFeedback });
 };
