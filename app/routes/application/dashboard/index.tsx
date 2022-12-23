@@ -115,6 +115,7 @@ const Dashboard = () => {
         </motion.div>
         <motion.div variants={items}>
           <ContentContainer>
+            {/* TODO: Profil als Outlet anzeigen, dann funktioniert auch der POST */}
             <Subheading title={"Profil"} />
             <PlayerProfile/>
           </ContentContainer>
