@@ -18,6 +18,7 @@ import UndecidedPlayersCounter from "~/components/game/feedback/UndecidedPlayers
 import {Feedback, Game, Player, Prisma} from "@prisma/client";
 import Modal from "~/components/common/modal/Modal";
 import {useEffect, useState} from "react";
+import AdditionalPlayersCounter from "~/components/game/feedback/ConfirmedAdditionalsCounter";
 
 export type FeedBackWithPlayer = Feedback & {
   player: Player;
@@ -82,7 +83,7 @@ const GameIndex = () => {
 
   useEffect(() => {
     setShowModal(false);
-  }, [game]);
+  }, [game.id]);
 
   function closeModal() {
     setShowModal(false);
@@ -107,9 +108,12 @@ const GameIndex = () => {
             </div>
           </header>
         </ContentContainer>
-        <div className={" grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"}>
+        <div className={" grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-5"}>
           <ContentContainer>
             <ConfirmedPlayersCounter game={game} />
+          </ContentContainer>
+          <ContentContainer>
+            <AdditionalPlayersCounter game={game} />
           </ContentContainer>
           <ContentContainer>
             <DeclinedPlayersCounter game={game} />

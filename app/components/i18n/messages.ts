@@ -142,6 +142,7 @@ const messages = {
       add: "Hinzufügen",
     },
     count: {
+      additionalPlayers: "Gäste",
       confirmedPlayers: "Zusagen",
       declinedPlayers: "Absagen",
       undecidedPlayers: "Unentschlossen",
@@ -150,7 +151,7 @@ const messages = {
     feedback: {
       headings: {
         feedback: "Status",
-        playerCount: "Spielerzahl",
+        playerCount: "Weitere Spieler",
         note: "Notiz",
       },
       status: {

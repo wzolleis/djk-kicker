@@ -1,6 +1,5 @@
-import type { ReactNode } from "react";
+import type {ReactNode} from "react";
 import classNames from "classnames";
-import { useTransition } from "@remix-run/react";
 
 const DefaultButton = ({
     children,
