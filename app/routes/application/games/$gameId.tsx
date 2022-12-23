@@ -53,9 +53,8 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   const game: GameWithFeedback | null = await getGameById(gameId);
   const players: PlayerWithFeedback[] = await getPlayersWithUniqueFeedbackForGame(gameId);
   const { cookieHeader, player, isFirstAuthentication } = await authenticatePlayer(params, request);
-  const isAuthenticated = player!.id === playerId;
+  const isAuthenticated = player?.id === playerId;
 
-  console.log("Loader called");
 
   if (player && isFirstAuthentication) {
     return redirect("/application/dashboard", {

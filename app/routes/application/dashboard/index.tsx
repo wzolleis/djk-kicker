@@ -1,7 +1,7 @@
 import { authenticatePlayer } from "~/utils/session.server";
 import { DefaultFeedback, Feedback, Game, Player } from "@prisma/client";
 import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useTransition } from "@remix-run/react";
 import { getMostRecentGame } from "~/models/games.server";
 import { findFeedbackWithPlayerIdAndGameId, getDefaultFeedback, updateDefaultFeedback, updateFeedback } from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
@@ -13,6 +13,7 @@ import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedba
 import { NextGame } from "~/components/game/NextGame";
 import { motion } from "framer-motion";
 import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
+import classNames from "classnames";
 
 type LoaderData = {
   isAuthenticated: boolean;
@@ -28,8 +29,7 @@ type ActionData = {
 };
 
 export const action: ActionFunction = async ({ params, request }) => {
-  console.log("Action called");
-  const { isAuthenticated, player } = await authenticatePlayer(params, request);
+  const {player } = await authenticatePlayer(params, request);
   const body = await request.formData();
   const { status, note, playerCount, gameId } = getFeedbackValues(body);
   if (!player) {
@@ -44,7 +44,6 @@ export const action: ActionFunction = async ({ params, request }) => {
     if (!gameId) {
       throw new Error("No GameId provided");
     }
-    console.log("Test");
     const newFeedback = await updateFeedback(player.id, gameId, status, playerCount, note);
     return json<ActionData>({ gameFeedback: newFeedback });
   }
