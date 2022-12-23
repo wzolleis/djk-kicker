@@ -1,6 +1,6 @@
-import { spielortOptions } from "~/helpers/constants/admin.game.constants";
-import { gameLocations } from "~/config/locations";
-import { AdminInvitationStatus } from "~/config/status";
+import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import {gameLocations} from "~/config/locations";
+import {AdminInvitationStatus} from "~/config/status";
 
 const messages = {
   app: {
@@ -26,6 +26,7 @@ const messages = {
     gameadministration: "Spieleverwaltung",
     useradministration: "Benutzerverwaltung",
     games: "Alle Spiele",
+    dashboard: 'Dashboard',
     login: "Anmelden",
     logout: "Abmelden",
   },
@@ -276,12 +277,15 @@ Vielen Dank
           "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator.",
       },
     },
-    adminInvitationDeleteForm: {
-      confirmationQuestion: (adminName: string) => `Die Einladung für "${adminName}" löschen?`,
-    },
-    deletePlayerForm: {
-      confirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" löschen ?`,
-    },
+  },
+  deletePlayerForm: {
+    confirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" löschen ?`,
+  },
+  adminUserDeleteForm: {
+    confirmationQuestion: (adminName: string) => `Den Account "${adminName}" löschen?`
+  },
+  adminInvitationDeleteForm: {
+    confirmationQuestion: (adminName: string) => `Die Einladung für "${adminName}" löschen?`,
   },
 };
 

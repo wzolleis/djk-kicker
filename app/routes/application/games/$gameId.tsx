@@ -1,24 +1,23 @@
-import type { LoaderFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import type {LoaderFunction} from "@remix-run/node";
+import {json, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
-import { getGameById } from "~/models/games.server";
-import { Outlet, useLoaderData, useNavigate } from "@remix-run/react";
+import {getGameById} from "~/models/games.server";
+import {Outlet, useLoaderData, useNavigate} from "@remix-run/react";
 import Players from "~/components/game/Players";
 import PageHeader from "~/components/common/PageHeader";
-import { useDate } from "~/utils";
+import {useDate} from "~/utils";
 import SmallTag from "~/components/common/tags/SmallTag";
-import type { PlayerWithFeedback } from "~/models/player.server";
-import { getPlayersWithUniqueFeedbackForGame } from "~/models/player.server";
-import { authenticatePlayer } from "~/utils/session.server";
-import { NoTokenWarning } from "~/components/warnings/NoTokenWarning";
+import type {PlayerWithFeedback} from "~/models/player.server";
+import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
+import {authenticatePlayer} from "~/utils/session.server";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import ConfirmedPlayersCounter from "~/components/game/feedback/ConfirmedPlayersCounter";
 import DeclinedPlayersCounter from "~/components/game/feedback/DeclinedPlayersCounter";
 import UnknownPlayersCounter from "~/components/game/feedback/UnknownPlayersCounter";
 import UndecidedPlayersCounter from "~/components/game/feedback/UndecidedPlayersCounter";
-import { Feedback, Game, Player, Prisma } from "@prisma/client";
+import {Feedback, Game, Player, Prisma} from "@prisma/client";
 import Modal from "~/components/common/modal/Modal";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 export type FeedBackWithPlayer = Feedback & {
   player: Player;
@@ -74,8 +73,9 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   );
 };
 
+
 const GameIndex = () => {
-  const { game, players, isAuthenticated, player, playerId } = useLoaderData() as unknown as LoaderData;
+  const { game, players, isAuthenticated } = useLoaderData() as unknown as LoaderData;
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();

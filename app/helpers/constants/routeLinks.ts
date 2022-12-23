@@ -22,6 +22,7 @@ const routeLinks = {
         },
     },
     games: '/application/games',
+    dashboard: '/application/dashboard',
     player: {
         delete: (playerId: string) => `/application/player/${playerId}/delete`
     }
