@@ -150,7 +150,7 @@ const messages = {
     feedback: {
       headings: {
         feedback: "Status",
-        playerCount: "Spielerzahl",
+        playerCount: "Spieler (insgesamt)",
         note: "Notiz",
       },
       status: {
@@ -177,6 +177,10 @@ const messages = {
     confirmChange: "Es wurde ein anderer Spieler erkannt! Möchtest du die Spielerzuweisung wechseln?",
     confirmChangeButton: (playerName: string) => `Ja, ich bin eigentlich ${playerName}!`,
     declineChangeButton: (playerName: string) => `Nein, ich möchte ${playerName} bleiben!`
+  },
+  playerProfileForm: {
+    name: "Name",
+    email: "E-Mail",
   },
   createPlayerForm: {
     status: "Status",

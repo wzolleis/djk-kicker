@@ -1,13 +1,15 @@
-import { DefaultFeedback, Feedback } from "@prisma/client";
-import { PlayerStatus } from "~/components/player/feedback/PlayerStatus";
+import {Feedback} from "@prisma/client";
+import {PlayerStatus} from "~/components/player/feedback/PlayerStatus";
 import TextAreaWithLabel from "~/components/common/form/TextareaWithLabel";
-import { useEffect, useState } from "react";
-import { useFetcher } from "@remix-run/react";
+import {useEffect, useState} from "react";
+import {useFetcher} from "@remix-run/react";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
-import { PlayerCount } from "~/components/common/counter/PlayerCount";
+import {PlayerCount} from "~/components/common/counter/PlayerCount";
 import ContentContainer from "~/components/common/container/ContentContainer";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
+import playerCountHelper from "~/utils/playerCountHelper";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 type PlayerFeedbackProps = {
   playerFeedback: Feedback;
@@ -52,6 +54,13 @@ const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
     },
   };
 
+  const onAdd = () => {
+    setPlayerCount(playerCountHelper.add(playerCount))
+  }
+  const onSubtract = () => {
+    setPlayerCount(playerCountHelper.subtract(playerCount))
+  }
+
   function postStatus() {
     fetcher.submit(
       {
@@ -63,14 +72,11 @@ const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
       },
       {
         method: "post",
-        action: `/application/games/${playerFeedback.gameId}/player/${playerFeedback.playerId}?index`,
+        action: routeLinks.player.feedback({gameId: playerFeedback.gameId, playerId: playerFeedback.playerId}),
       }
     );
   }
 
-  function add() {
-    setPlayerCount(playerCount + 1);
-  }
 
   return (
     <>
@@ -84,7 +90,7 @@ const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
         <motion.div variants={items}>
           <p className={"font-default-medium text-gray-600"}>{messages.game.feedback.headings.playerCount}</p>
           <ContentContainer>
-            <PlayerCount playerCount={playerCount} onAdd={() => add()} onSubtract={() => setPlayerCount(playerCount > 1 ? playerCount - 1 : 1)}></PlayerCount>
+            <PlayerCount playerCount={playerCount} onAdd={onAdd} onSubtract={onSubtract}></PlayerCount>
           </ContentContainer>
         </motion.div>
         <motion.div variants={items}>

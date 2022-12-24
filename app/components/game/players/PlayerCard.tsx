@@ -1,10 +1,6 @@
-import type { Player, Feedback } from "@prisma/client";
-import messages from "~/components/i18n/messages";
-import { Link } from "@remix-run/react";
-import { PlayerWithFeedback } from "~/models/player.server";
+import {PlayerWithFeedback} from "~/models/player.server";
 import PlayerStatusTag from "~/components/common/tags/PlayerStatusTag";
 import DefaultArrowButton from "~/components/common/buttons/DefaultArrowButton";
-import { an } from "vitest/dist/global-58e8e951";
 
 interface PlayerCardProps {
   player: PlayerWithFeedback;

@@ -1,11 +1,11 @@
-import { Form, useNavigate } from "@remix-run/react";
-import { getRedactedString } from "~/utils";
-import { useState } from "react";
+import {Form} from "@remix-run/react";
+import {useState} from "react";
 import SetStatusButton from "~/components/common/buttons/SetStatusButton";
-import { statusInConfig } from "~/config/status";
-import { configuration } from "~/config";
-import { PlayerFeedbackForGame } from "~/routes/application/games/$gameId/player/$playerId/index";
-import { PlayerCount } from "~/components/common/counter/PlayerCount";
+import {statusInConfig} from "~/config/status";
+import {configuration} from "~/config";
+import {PlayerFeedbackForGame} from "~/routes/application/games/$gameId/player/$playerId/index";
+import {PlayerCount} from "~/components/common/counter/PlayerCount";
+import playerCountHelper from "~/utils/playerCountHelper";
 
 type PlayerFormProps = {
   player: PlayerFeedbackForGame;
@@ -14,9 +14,15 @@ type PlayerFormProps = {
 };
 
 const EditPlayerStatusForm = ({ player, isAuthenticated, onSubmit }: PlayerFormProps) => {
-  const navigate = useNavigate();
   const [status, setStatus] = useState(player.feedback[0].status ?? statusInConfig.undecided);
   const [playerCount, setPlayerCount] = useState(player.feedback[0].playerCount);
+
+  const onAdd = () => {
+    setPlayerCount(playerCountHelper.add(playerCount))
+  }
+  const onSubtract = () => {
+    setPlayerCount(playerCountHelper.subtract(playerCount))
+  }
 
   return (
     <Form method={"post"} onSubmit={onSubmit}>
@@ -55,7 +61,7 @@ const EditPlayerStatusForm = ({ player, isAuthenticated, onSubmit }: PlayerFormP
           </div>
         </div>
         <input type="hidden" name={"playerCount"} value={playerCount} />
-        <PlayerCount playerCount={playerCount} onAdd={() => setPlayerCount(playerCount + 1)} onSubtract={() => setPlayerCount(playerCount > 1 ? playerCount - 1 : 1)}></PlayerCount>
+        <PlayerCount playerCount={playerCount} onAdd={onAdd} onSubtract={onSubtract}></PlayerCount>
         <div className={"flex flex-col font-default-medium text-slate-600"}>
           <label htmlFor={"feedbackNote"}>Notiz</label>
           <textarea

@@ -2,7 +2,7 @@ const routeLinks = {
     admin: {
         games: "/application/admin/games",
         game: {
-            details:  (gameId: string) => `/application/admin/games/${gameId}`,
+            details: (gameId: string) => `/application/admin/games/${gameId}`,
             einladung: (gameId: string) => `/application/admin/games/${gameId}/einladung`,
             zusage: (gameId: string) => `/application/admin/games/${gameId}/zusage`,
             absage: (gameId: string) => `/application/admin/games/${gameId}/absage`,
@@ -16,15 +16,23 @@ const routeLinks = {
             invite: {
                 create: '/application/admin/users/invites/new',
                 delete: (inviteId: string) => `/application/admin/users/invites/${inviteId}/delete`,
-                accept: ({inviteId, token} : {inviteId: string, token: string}) => `/application/admin/users/invites/${inviteId}/accept?token=${token}`
+                accept: ({
+                             inviteId,
+                             token
+                         }: { inviteId: string, token: string }) => `/application/admin/users/invites/${inviteId}/accept?token=${token}`
             },
 
         },
     },
     games: '/application/games',
+    game: (gameId: string) => `/application/games/${gameId}`,
     dashboard: '/application/dashboard',
     player: {
-        delete: (playerId: string) => `/application/player/${playerId}/delete`
+        delete: (playerId: string) => `/application/player/${playerId}/delete`,
+        feedback: ({
+                       gameId,
+                       playerId
+                   }: { gameId: string, playerId: string }): string => `/application/games/${gameId}/player/${playerId}?index`
     }
 }
 
