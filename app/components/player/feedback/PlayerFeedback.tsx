@@ -9,6 +9,7 @@ import {PlayerCount} from "~/components/common/counter/PlayerCount";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import {motion} from "framer-motion";
 import playerCountHelper from "~/utils/playerCountHelper";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 type PlayerFeedbackProps = {
   playerFeedback: Feedback;
@@ -71,7 +72,7 @@ const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
       },
       {
         method: "post",
-        action: `/application/games/${playerFeedback.gameId}/player/${playerFeedback.playerId}?index`,
+        action: routeLinks.player.feedback({gameId: playerFeedback.gameId, playerId: playerFeedback.playerId}),
       }
     );
   }

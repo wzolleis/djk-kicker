@@ -22,6 +22,7 @@ import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
 import EditProfile from "~/routes/application/dashboard/$playerId.profile.edit";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 type LoaderData = {
     isAuthenticated: boolean;
@@ -42,7 +43,7 @@ export const action: ActionFunction = async ({params, request}) => {
     const body = await request.formData();
     const {status, note, playerCount, gameId} = getFeedbackValues(body);
     if (!player) {
-        return redirect("/application/games");
+        return redirect(routeLinks.games);
     }
     if (body.get("intent") === "defaultFeedback") {
         const newFeedback = await updateDefaultFeedback(player.id, status, playerCount, note);
@@ -62,7 +63,7 @@ export const action: ActionFunction = async ({params, request}) => {
 export const loader: LoaderFunction = async ({params, request}) => {
     const {isAuthenticated, player} = await authenticatePlayer(params, request);
     if (!player) {
-        return redirect("/application/games");
+        return redirect(routeLinks.games);
     }
     const defaultFeedback = await getDefaultFeedback(player.id);
     const nextGame = await getMostRecentGame();

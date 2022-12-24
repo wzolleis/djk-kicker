@@ -20,6 +20,7 @@ import Modal from "~/components/common/modal/Modal";
 import {useEffect, useState} from "react";
 import PlayerCounter from "~/components/game/feedback/PlayerCounter";
 import {calculateCompleteNumberOfPlayers} from "~/utils/playerCountHelper";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export type FeedBackWithPlayer = Feedback & {
     player: Player;
@@ -88,7 +89,7 @@ const GameIndex = () => {
 
     function closeModal() {
         setShowModal(false);
-        navigate(`/application/games/${game.id}`);
+        navigate(routeLinks.game(game.id));
     }
 
     function openModal() {

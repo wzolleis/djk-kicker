@@ -7,6 +7,7 @@ import {createUserSession, getUserId} from "~/session.server";
 import {verifyLogin} from "~/models/user.server";
 import {safeRedirect, validateEmail} from "~/utils";
 import messages from "~/components/i18n/messages";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export async function loader({request}: LoaderArgs) {
   const userId = await getUserId(request);
@@ -67,7 +68,7 @@ export const meta: MetaFunction = () => {
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/application/games";
+  const redirectTo = searchParams.get("redirectTo") || routeLinks.games;
   const actionData = useActionData<typeof action>();
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);

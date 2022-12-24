@@ -9,6 +9,7 @@ import {authenticatePlayer} from "~/utils/session.server";
 import {NoTokenWarning} from "~/components/warnings/NoTokenWarning";
 import {getFeedbackValues} from "~/utils/form.session";
 import {errors} from "~/components/i18n/errors";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export type PlayerFeedbackForGame = Prisma.PlayerGetPayload<{
     include: {
@@ -62,7 +63,7 @@ export const action: ActionFunction = async ({ params, request }) => {
     if (formData.get("origin") === "dashboard") {
         return json({ newFeedback });
     }
-    return redirect(`/application/games/${gameId}`);
+    return redirect(routeLinks.game(gameId));
 };
 
 const EditPlayerFeedback = () => {
