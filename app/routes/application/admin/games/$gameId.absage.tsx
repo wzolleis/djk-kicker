@@ -53,9 +53,9 @@ const PlayerList = ({players}: { players: Player[] }) => {
                             />
                             <label className="form-check-label inline-block text-gray-800" htmlFor="receiver">
                                 <span
-                                    className="pl-1 font-poppins-semibold text-sm md:text-xl">{`${player.name}`}</span>
+                                    className="pl-1 font-default-semibold text-sm md:text-xl">{`${player.name}`}</span>
                                 <span
-                                    className="font-poppins-medium text-gray-500 text-sm md:text-xl pl-2 hidden md:inline">{`(${player.email})`}</span>
+                                    className="font-default-medium text-gray-500 text-sm md:text-xl pl-2 hidden md:inline">{`(${player.email})`}</span>
                             </label>
                         </div>
                     )
@@ -73,19 +73,19 @@ const GameAbsage = () => {
 
     return (
         <div className="mb-6 grid gap-6 bg-gray-300 px-4 md:grid-cols-2">
-            <div className="pt-1 font-poppins-semibold md:col-span-2">
+            <div className="pt-1 font-default-semibold md:col-span-2">
                 <p>
                     <span
                         className="text-gray-500 text-sm md:text-xl">{messages.adminGameAbsageForm.titleGame}
                     </span>
-                    <span className="pl-2 font-poppins-bold ">{gameTime}</span>
+                    <span className="pl-2 font-default-bold ">{gameTime}</span>
                 </p>
                 <p>
                     <span
                         className="text-gray-500 text-sm md:text-xl">{messages.adminGameAbsageForm.titleGameTime}
                     </span>
                     <span
-                        className="pl-2 font-poppins-bold">{messages.adminGameAbsageForm.spielort(game.spielort)}
+                        className="pl-2 font-default-bold">{messages.adminGameAbsageForm.spielort(game.spielort)}
                     </span>
                 </p>
             </div>
@@ -94,7 +94,7 @@ const GameAbsage = () => {
                     <div className="col-span-2">
                         <label
                             htmlFor="player"
-                            className="mb-2 block font-poppins-bold text-gray-900"
+                            className="mb-2 block font-default-bold text-gray-900"
                         >
                             {messages.adminGameAbsageForm.mailReceiver}
                         </label>

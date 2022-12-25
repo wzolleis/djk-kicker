@@ -53,14 +53,14 @@ const GameIndex = () => {
       <Selector>
         <button
           onClick={() => setFilter(filterAll)}
-          className={`flex cursor-pointer items-center rounded-xl py-3 px-5 font-poppins-regular text-label-medium ${
+          className={`flex cursor-pointer items-center rounded-xl py-3 px-5 font-default-regular text-label-medium ${
             isFilterActive(filter, filterAll) ? "bg-black text-white" : "text-gray-600 ring ring-1 ring-gray-500"
           }`}>
           {FilterTranslations.all}
         </button>
         <button
           onClick={() => setFilter(filterCurrent)}
-          className={`flex cursor-pointer items-center rounded-xl py-3 px-5 font-poppins-regular text-label-medium ${
+          className={`flex cursor-pointer items-center rounded-xl py-3 px-5 font-default-regular text-label-medium ${
             isFilterActive(filter, filterCurrent) ? "bg-black text-white" : "text-gray-600 ring ring-1 ring-gray-500"
           }`}>
           {FilterTranslations.current}

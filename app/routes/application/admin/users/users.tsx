@@ -52,20 +52,20 @@ const Users = () => {
             <MainPageContent>
                 <div className={"space-y-3"}>
                     <section className={"space-y-2"}>
-                        <p className={"font-poppins-medium text-headline-small"}>
+                        <p className={"font-default-medium text-headline-small"}>
                             {messages.user.roles.admin}
                         </p>
                         <AdminTable users={users}/>
                     </section>
                     <section className={"space-y-2"}>
-                        <p className={"font-poppins-medium text-headline-small"}>
+                        <p className={"font-default-medium text-headline-small"}>
                             {messages.adminUsersForm.invitations}
                         </p>
                         <AdminInvitationTable invitations={invitations}/>
                     </section>
 
                     <section className={"space-y-2"}>
-                        <p className={"font-poppins-medium text-headline-small"}>
+                        <p className={"font-default-medium text-headline-small"}>
                             {messages.user.roles.player}
                         </p>
                         <PlayerTable players={players}/>

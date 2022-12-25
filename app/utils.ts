@@ -1,8 +1,8 @@
-import { useMatches } from "@remix-run/react";
-import { useMemo } from "react";
+import {useMatches} from "@remix-run/react";
+import {useMemo} from "react";
 
-import type { User } from "~/models/user.server";
-import { DateTime } from "luxon";
+import type {User} from "~/models/user.server";
+import {DateTime} from "luxon";
 import messages from "~/components/i18n/messages";
 
 const DEFAULT_REDIRECT = "/";
@@ -72,6 +72,10 @@ export type QueryParamTypes = {
 
 export function useDate(date: Date) {
   return DateTime.fromJSDate(new Date(date)).toFormat("dd.MM.yyyy");
+}
+
+export function useDateTime(date: Date) {
+  return DateTime.fromJSDate(new Date(date)).toFormat("dd.MM.yyyy HH:mm");
 }
 
 export type QueryParamName = keyof QueryParamTypes;

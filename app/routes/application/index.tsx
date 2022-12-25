@@ -1,7 +1,8 @@
 import {LoaderFunction, redirect} from "@remix-run/node";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export const loader: LoaderFunction = async () => {
-    return redirect("/application/games")
+    return redirect(routeLinks.games)
 }
 
 const AppIndex = () => {

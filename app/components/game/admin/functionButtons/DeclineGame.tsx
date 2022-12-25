@@ -7,7 +7,7 @@ const DeclineGame = () => {
 
     return (
         <>
-            <button className={"rounded p-3 bg-red-400 text-white font-poppins-medium"} type={"submit"} name={"intent"} value={"decline"}>
+            <button className={"rounded p-3 bg-red-400 text-white font-default-medium"} type={"submit"} name={"intent"} value={"decline"}>
                 {messages.adminEditGameForm.buttons.decline}
             </button>
         </>

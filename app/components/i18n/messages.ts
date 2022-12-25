@@ -1,10 +1,11 @@
 import { spielortOptions } from "~/helpers/constants/admin.game.constants";
 import { gameLocations } from "~/config/locations";
+import { AdminInvitationStatus } from "~/config/status";
 
 const messages = {
   app: {
     welcome: "Willkommen bei den DJK Kickern",
-    title: "DJK Kicker",
+    title: "DJK Kicker"
   },
   buttons: {
     edit: "Bearbeiten",
@@ -13,20 +14,21 @@ const messages = {
     add: "Hinzufügen",
     cancel: "Abbruch",
     delete: "Löschen",
-    invite: "Einladen",
+    invite: "Einladen"
   },
   actionType: {
     GAME_INVITATION: "Einladung",
     GAME_ZUSAGE: "Zusage",
-    GAME_ABSAGE: "Absage",
+    GAME_ABSAGE: "Absage"
   },
   appmenu: {
     administration: "Verwaltung",
     gameadministration: "Spieleverwaltung",
     useradministration: "Benutzerverwaltung",
     games: "Alle Spiele",
+    dashboard: "Dashboard",
     login: "Anmelden",
-    logout: "Abmelden",
+    logout: "Abmelden"
   },
   commonForm: {
     cancel: "Abbruch",
@@ -41,7 +43,7 @@ const messages = {
     minute: "Minuten",
     spielort: (spielortOption: string) =>
       Number.parseInt(spielortOption) === gameLocations.Halle ? messages.adminEditGameForm.optionHalle : messages.adminEditGameForm.optionDraussen,
-    gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => (gameDateIsInThePast ? "(Game over)" : ""),
+    gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => (gameDateIsInThePast ? "(Game over)" : "")
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",
@@ -50,34 +52,34 @@ const messages = {
     password: "Passwort",
     login: "Anmelden",
     rememberMe: "Anmeldedaten speichern",
-    createAccount: "Neuen Account anlegen",
+    createAccount: "Neuen Account anlegen"
   },
   joinForm: {
     backToLogin: "Zur Anmeldung",
-    createAccount: "Neuen Account anlegen",
+    createAccount: "Neuen Account anlegen"
   },
   adminGamesTable: {
     name: "Spielname",
     gametime: "Zeit",
-    location: "Spielort",
+    location: "Spielort"
   },
   adminGamesForm: {
     name: "Name",
-    new: "Neues Spiel",
+    new: "Neues Spiel"
   },
   adminUsersForm: {
-    invitations: "Einladungen",
+    invitations: "Einladungen"
   },
   adminGameActionsForm: {
     title: "Verlauf",
-    noActions: "Es wurden noch keine Aktionen ausgeführt",
+    noActions: "Es wurden noch keine Aktionen ausgeführt"
   },
   adminCreateGameForm: {
     newGame: "Neues Spiel anlegen",
     gameTime: "Datum",
     name: "Name",
     submit: "Speichern",
-    submitting: "Speichere...",
+    submitting: "Speichere..."
   },
   adminEditGameForm: {
     title: "Spiel bearbeiten",
@@ -95,67 +97,70 @@ const messages = {
     buttons: {
       confirm: "Zusagen",
       decline: "Absagen",
-      invite: "Einladung versenden",
-    },
+      invite: "Einladung versenden"
+    }
   },
   adminSendInvitationForm: {
-    title: "Einladung versenden",
+    title: "Einladung versenden"
   },
   adminChangeStatusForm: {
-    title: "Status ändern",
+    title: "Status ändern"
   },
   adminLandingPage: {
     title: "Verwaltung",
     games: "Spiele",
     gamesDescription: "Spiele anlegen, Spiele absagen, usw...",
     users: "Benutzerverwaltung",
-    usersDescription: "Berechtigungen und so ein Quatsch",
+    usersDescription: "Berechtigungen und so ein Quatsch"
   },
   adminOverviewTable: {
     name: "Name",
     email: "E-Mail",
-    role: "Rolle",
-  },
-
-  adminInvitationOverviewTable: {
-    name: "Name",
-    email: "E-Mail",
-    status: "Status",
-    expiresAt: "Läuft ab",
+    role: "Rolle"
   },
   adminCreateUserForm: {
+    title: "Neuen Administrator anlegen",
     name: "Name",
     email: "E-Mail",
     password: "Passwort",
-    passwordRepeat: "Passwort (Wiederholung)",
+    passwordRepeat: "Passwort (Wiederholung)"
   },
   adminInviteUserForm: {
     title: "Administrator einladen",
     email: "E-Mail",
     name: "Name",
     scope: "Scope",
-    validUntil: "Gültig bis",
+    validUntil: "Gültig bis"
   },
   game: {
+    headings: {
+      gameData: "Spieldaten",
+      feedback: "Status"
+    },
     players: {
       title: "Spieler",
-      add: "Hinzufügen",
+      add: "Hinzufügen"
     },
     count: {
       confirmedPlayers: "Zusagen",
       declinedPlayers: "Absagen",
       undecidedPlayers: "Unentschlossen",
-      unknownPlayers: "Unbekannt",
+      unknownPlayers: "Unbekannt"
     },
     feedback: {
+      headings: {
+        feedback: "Status",
+        playerCount: "Spieler (insgesamt)",
+        note: "Notiz"
+      },
       status: {
         translations: {
           unknown: "Unbekannt",
           declined: "Abgesagt",
           confirmed: "Zugesagt",
-          undecided: "Unsicher",
-        },
-      },
+          undecided: "Unsicher"
+        }
+      }
     },
     add: "Spiel hinzufügen",
     filters: {
@@ -163,27 +168,34 @@ const messages = {
       current: "Nächstes Spiel",
       values: {
         all: "all",
-        current: "current",
-      },
-    },
+        current: "current"
+      }
+    }
   },
   player: {
     add: "Spieler hinzufügen",
+    confirmChange: "Es wurde ein anderer Spieler erkannt! Möchtest du die Spielerzuweisung wechseln?",
+    confirmChangeButton: (playerName: string) => `Ja, ich bin eigentlich ${playerName}!`,
+    declineChangeButton: (playerName: string) => `Nein, ich möchte ${playerName} bleiben!`
+  },
+  playerProfileForm: {
+    name: "Name",
+    email: "E-Mail"
   },
   createPlayerForm: {
     status: "Status",
     name: "Name",
-    email: "E-Mail",
+    email: "E-Mail"
   },
   user: {
     roles: {
       admin: "Administratoren",
-      player: "Spieler",
-    },
+      player: "Spieler"
+    }
   },
   warnings: {
     noToken:
-      "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator.",
+      "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
   },
   adminGameZusageForm: {
     titleGame: "Zusage für das Spiel am: ",
@@ -192,7 +204,7 @@ const messages = {
     mailReceiver: "An:",
     sendZusageBtn: "Zusage",
     spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? "in der Halle" : "draußen"}`,
-    mailSubjectLabel: "Betreff",
+    mailSubjectLabel: "Betreff"
   },
   adminGameAbsageForm: {
     titleGame: "Absage für das Spiel am: ",
@@ -201,7 +213,7 @@ const messages = {
     mailReceiver: "An:",
     sendAbsageBtn: "Absage",
     spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? "in der Halle" : "draußen"}`,
-    mailSubjectLabel: "Betreff",
+    mailSubjectLabel: "Betreff"
   },
   adminGameInvitationForm: {
     titleGame: "Einadung für das Spiel am: ",
@@ -220,15 +232,64 @@ Bitte klicke auf die Einladung und teile uns mit, ob Du kommen kannst.
 Verwende den Link bitte auch, wenn Du Deine Entscheidung nochmal ändern möchtest.
 
 Vielen Dank 
-`,
+`
   },
-
+  deletePlayerForm: {
+    confirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" löschen ?`
+  },
+  adminUserDeleteForm: {
+    confirmationQuestion: (adminName: string) => `Den Account "${adminName}" löschen?`
+  },
+  adminInvitationDeleteForm: {
+    confirmationQuestion: (adminName: string) => `Die Einladung für "${adminName}" löschen?`
+  },
   playerGreeting: {
     morning: "Guten Morgen",
     noon: "Mahlzeit",
     afternoon: "Guten Nachmittag",
-    evening: "Guten Abend",
+    evening: "Guten Abend"
   },
+  adminInvitationOverviewTable: {
+    name: "Name",
+    email: "E-Mail",
+    status: "Status",
+    expiresAt: "Gültig bis",
+
+    invitationStatus: (status: AdminInvitationStatus) => {
+      switch (status) {
+        case "accepted":
+          return "Akzeptiert";
+        case "rejected":
+          return "Abgelehnt";
+        case "active":
+          return "Wartet auf Antwort";
+        default:
+          return "Unbekannt";
+      }
+    }
+  },
+  adminInviteUserChoiceForm: {
+    title: "Administrator-Einladung",
+    email: "E-Mail",
+    name: "Name",
+    validUntil: "Einladung gültig bis",
+    rejectInvitation: "Einladung ablehnen",
+    acceptInvitation: "Account anlegen"
+  },
+  adminInviteUserResponseForm: {
+    title: "Neuer Administrator",
+    email: "E-Mail",
+    name: "Name",
+    scope: "Scope",
+    validUntil: "Einladung gültig bis",
+    password: "Passwort",
+    passwordRepeat: "Passwort (Wiederholung)",
+    rejectInvitation: "Einladung ablehnen",
+    warnings: {
+      invalidToken:
+        "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
+    }
+  }
 };
 
 export default messages;

@@ -18,7 +18,7 @@ const UndecidedPlayersCounter = ({game}: UndecidedPlayerProps) => {
     return (
         <>
             <div className={"flex flex-col items-center px-3 py-2"}>
-                <p className={"text-label-medium text-gray-500 font-poppins-medium"}>{messages.game.count.undecidedPlayers}</p>
+                <p className={"text-label-medium text-gray-500 font-default-medium"}>{messages.game.count.undecidedPlayers}</p>
                 <Counter color={"text-yellow-500"} value={undecidedPlayerCounter}/>
             </div>
         </>

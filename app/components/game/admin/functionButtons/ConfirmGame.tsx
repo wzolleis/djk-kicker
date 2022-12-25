@@ -7,7 +7,7 @@ const ConfirmGame = () => {
 
     return (
         <>
-            <button className={"rounded p-3 bg-green-400 text-white font-poppins-medium"} type={"submit"} name={"intent"} value={"confirm"}>
+            <button className={"rounded p-3 bg-green-400 text-white font-default-medium"} type={"submit"} name={"intent"} value={"confirm"}>
                 {messages.adminEditGameForm.buttons.confirm}
             </button>
         </>

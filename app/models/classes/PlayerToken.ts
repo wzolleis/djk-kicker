@@ -1,12 +1,7 @@
 export class PlayerToken {
-  gameId: string;
-  playerId: string;
+    playerId: string;
 
-  gameToken: string;
-
-  constructor(gameId: string, playerId: string, gameToken: string) {
-    this.gameId = gameId;
-    this.playerId = playerId;
-    this.gameToken = gameToken;
-  }
+    constructor(playerId: string) {
+        this.playerId = playerId;
+    }
 }
