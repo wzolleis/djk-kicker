@@ -1,22 +1,27 @@
-import {authenticatePlayer} from "~/utils/session.server";
-import {DefaultFeedback, Feedback, Game, Player} from "@prisma/client";
-import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
-import {Form, useLoaderData} from "@remix-run/react";
-import {getMostRecentGame} from "~/models/games.server";
+import { authenticatePlayer } from "~/utils/session.server";
+import { DefaultFeedback, Feedback, Game, Player } from "@prisma/client";
+import {
+    ActionFunction,
+    json,
+    LoaderFunction,
+    redirect,
+} from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import { getMostRecentGame } from "~/models/games.server";
 import {
     findFeedbackWithPlayerIdAndGameId,
     getDefaultFeedback,
     updateDefaultFeedback,
-    updateFeedback
+    updateFeedback,
 } from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
-import {getPlayerGreeting} from "~/utils";
+import { getPlayerGreeting } from "~/utils";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import Subheading from "~/components/common/header/Subheading";
-import {getFeedbackValues} from "~/utils/form.session";
+import { getFeedbackValues } from "~/utils/form.session";
 import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedbackComponent";
-import {NextGame} from "~/components/game/NextGame";
-import {motion} from "framer-motion";
+import { NextGame } from "~/components/game/NextGame";
+import { motion } from "framer-motion";
 import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
@@ -37,16 +42,21 @@ type ActionData = {
     gameFeedback?: Feedback;
 };
 
-export const action: ActionFunction = async ({params, request}) => {
-    console.log("Action called");
-    const {player} = await authenticatePlayer(params, request);
+export const action: ActionFunction = async ({ params, request }) => {
+    const { player } = await authenticatePlayer(params, request);
+    console.log(player);
     const body = await request.formData();
-    const {status, note, playerCount, gameId} = getFeedbackValues(body);
+    const { status, note, playerCount, gameId } = getFeedbackValues(body);
     if (!player) {
         return redirect(routeLinks.games);
     }
     if (body.get("intent") === "defaultFeedback") {
-        const newFeedback = await updateDefaultFeedback(player.id, status, playerCount, note);
+        const newFeedback = await updateDefaultFeedback(
+            player.id,
+            status,
+            playerCount,
+            note
+        );
         return json<ActionData>({
             defaultFeedback: newFeedback,
         });
@@ -54,25 +64,43 @@ export const action: ActionFunction = async ({params, request}) => {
         if (!gameId) {
             throw new Error("No GameId provided");
         }
-        console.log("Test");
-        const newFeedback = await updateFeedback(player.id, gameId, status, playerCount, note);
-        return json<ActionData>({gameFeedback: newFeedback});
+        const newFeedback = await updateFeedback(
+            player.id,
+            gameId,
+            status,
+            playerCount,
+            note
+        );
+        return json<ActionData>({ gameFeedback: newFeedback });
     }
 };
 
-export const loader: LoaderFunction = async ({params, request}) => {
-    const {isAuthenticated, player} = await authenticatePlayer(params, request);
+export const loader: LoaderFunction = async ({ params, request }) => {
+    const { isAuthenticated, player } = await authenticatePlayer(
+        params,
+        request
+    );
     if (!player) {
         return redirect(routeLinks.games);
     }
     const defaultFeedback = await getDefaultFeedback(player.id);
     const nextGame = await getMostRecentGame();
-    const nextGameFeedback = await findFeedbackWithPlayerIdAndGameId(player?.id, nextGame!.id);
+    const nextGameFeedback = await findFeedbackWithPlayerIdAndGameId(
+        player?.id,
+        nextGame!.id
+    );
 
-    return json<LoaderData>({isAuthenticated, player, nextGame, nextGameFeedback, defaultFeedback});
+    return json<LoaderData>({
+        isAuthenticated,
+        player,
+        nextGame,
+        nextGameFeedback,
+        defaultFeedback,
+    });
 };
 const Dashboard = () => {
-    const {player, nextGame, nextGameFeedback, defaultFeedback} = useLoaderData() as unknown as LoaderData;
+    const { player, nextGame, nextGameFeedback, defaultFeedback } =
+        useLoaderData() as unknown as LoaderData;
     const container = {
         initial: {
             opacity: 0,
@@ -102,28 +130,42 @@ const Dashboard = () => {
     return (
         <>
             <PageHeader title={getPlayerGreeting(player.name)}></PageHeader>
-            <motion.div className={"flex flex-col gap-4 md:grid-cols-3 lg:grid"} variants={container}
-                        initial={"initial"} animate={"animate"}>
+            <motion.div
+                className={"flex flex-col gap-4 md:grid-cols-3 lg:grid"}
+                variants={container}
+                initial={"initial"}
+                animate={"animate"}>
                 <motion.div variants={items}>
                     <ContentContainer>
-                        <Subheading title={"Standard-Status"}/>
-                        <DefaultFeedbackComponent defaultFeedback={defaultFeedback}/>
+                        <Subheading title={"Standard-Status"} />
+                        <DefaultFeedbackComponent
+                            defaultFeedback={defaultFeedback}
+                        />
                     </ContentContainer>
                 </motion.div>
                 <motion.div variants={items}>
                     <ContentContainer>
-                        <Subheading title={"Nächstes Spiel"}/>
+                        <Subheading title={"Nächstes Spiel"} />
                         <NextGame game={nextGame!}></NextGame>
-                        {nextGameFeedback!! && <PlayerFeedback playerFeedback={nextGameFeedback}></PlayerFeedback>}
+                        {nextGameFeedback!! && (
+                            <PlayerFeedback
+                                playerFeedback={
+                                    nextGameFeedback
+                                }></PlayerFeedback>
+                        )}
                     </ContentContainer>
                 </motion.div>
                 <motion.div variants={items}>
                     <ContentContainer>
-                        <Form action={`${player.id}/profile/edit`} method={"post"}>
-                            <EditProfile player={player}/>
-                            <ButtonContainer className={'mt-2'}>
-                                <DefaultButton className={'ml-auto'}>
-                                   <button type={'submit'}>{messages.buttons.save}</button>
+                        <Form
+                            action={`${player.id}/profile/edit`}
+                            method={"post"}>
+                            <EditProfile player={player} />
+                            <ButtonContainer className={"mt-2"}>
+                                <DefaultButton className={"ml-auto"}>
+                                    <button type={"submit"}>
+                                        {messages.buttons.save}
+                                    </button>
                                 </DefaultButton>
                             </ButtonContainer>
                         </Form>

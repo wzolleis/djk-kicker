@@ -1,6 +1,10 @@
 import type { Session } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { decryptPlayerToken, verifyToken } from "~/utils/token.server";
+import {
+    decryptPlayerToken,
+    playerHasValidToken,
+    verifyToken,
+} from "~/utils/token.server";
 import type { Params } from "react-router";
 import { Player } from "@prisma/client";
 import { PlayerSession } from "~/models/classes/PlayerSession";
@@ -49,7 +53,7 @@ export async function changePlayer(request: Request, playerToken: PlayerToken) {
     const session = await getSession(request.headers.get("Cookie"));
     const player = await getPlayerById(playerToken.playerId);
     await setSession(session, playerToken, player!);
-    return redirect(`/application/games/${playerToken.gameId}`);
+    return redirect(`/application/dashboard`);
 }
 
 export async function authenticatePlayer(
@@ -57,42 +61,22 @@ export async function authenticatePlayer(
     request: Request
 ): Promise<UserAuthentication> {
     let isAuthenticated = false;
-    const { gameToken } = getCommonSearchParameters(request);
-    const { gameId } = getCommonParameters(params, false);
+    const { token } = getCommonSearchParameters(request);
     const session = await getSession(request.headers.get("Cookie"));
-    console.log(session.id);
-    prepareSession(session);
     let isFirstAuthentication = false;
-    if (!!gameToken && !sessionHasGameToken(session, gameId)) {
-        const { tokenMatches, player, playerToken } = await verifyToken(
-            gameId,
-            decryptPlayerToken(gameToken)
-        );
-        isAuthenticated = tokenMatches;
+
+    if (!!token && !sessionHasPlayer(session)) {
+        console.log("Token found");
         let cookieHeader;
-        if (tokenMatches && playerToken) {
+        const { isAuthenticated, player, playerToken } = await verifyToken(
+            decryptPlayerToken(token)
+        );
+        console.log("Auth", isAuthenticated);
+        if (isAuthenticated && playerToken) {
+            console.log("Player", player);
             cookieHeader = await setSession(session, playerToken, player!);
             isFirstAuthentication = true;
         } else cookieHeader = await commitSession(session);
-
-        return {
-            isAuthenticated,
-            session,
-            cookieHeader,
-            player,
-            isFirstAuthentication,
-        };
-    } else if (sessionHasGameToken(session, gameId)) {
-        if (!!gameToken) {
-            throw redirect(`/application/change?token=${gameToken}`);
-        }
-        const playerToken = findGameTokenFromSession(session, gameId);
-        const { tokenMatches, player } = await verifyToken(
-            gameId,
-            playerToken!
-        );
-        isAuthenticated = tokenMatches;
-        const cookieHeader = await commitSession(session);
         return {
             isAuthenticated,
             session,
@@ -101,15 +85,21 @@ export async function authenticatePlayer(
             isFirstAuthentication,
         };
     } else if (sessionHasPlayer(session)) {
-        const player = await getPlayerById(session.get("player").id);
+        console.log("Player found");
+        const playerId = session.get("player").id;
+        const isAuthenticated = await playerHasValidToken(playerId);
+        const player = await getPlayerById(playerId);
+        const cookieHeader = await commitSession(session);
+
         return {
             isAuthenticated,
             session,
-            cookieHeader: "",
+            cookieHeader,
             player,
             isFirstAuthentication,
         };
-    } else
+    } else {
+        console.log("no player found");
         return {
             isAuthenticated,
             session,
@@ -117,6 +107,7 @@ export async function authenticatePlayer(
             player: null,
             isFirstAuthentication,
         };
+    }
 }
 
 export async function getPlayerFromSession(
@@ -134,18 +125,10 @@ async function setSession(
     playerToken: PlayerToken,
     player: Player
 ) {
-    let token = session.get("token");
-    token[playerToken.gameId] = playerToken;
-    session.set("token", token);
     if (player) {
         session.set("player", player);
     }
     return await commitSession(session);
-}
-
-function sessionHasGameToken(session: Session, gameId: string) {
-    console.log(session.data);
-    return !!session.get("token")[gameId];
 }
 
 function sessionHasPlayer(session: Session) {
@@ -158,10 +141,4 @@ function findGameTokenFromSession(
 ): PlayerToken | null {
     const token = session.get("token");
     return token[gameId];
-}
-
-function prepareSession(session: Session) {
-    if (!session.has("token")) {
-        session.set("token", {});
-    }
 }

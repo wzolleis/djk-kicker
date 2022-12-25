@@ -1,25 +1,25 @@
-import type {LoaderFunction} from "@remix-run/node";
-import {json, redirect} from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
-import {getGameById} from "~/models/games.server";
-import {Outlet, useLoaderData, useNavigate} from "@remix-run/react";
+import { getGameById } from "~/models/games.server";
+import { Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import Players from "~/components/game/Players";
 import PageHeader from "~/components/common/PageHeader";
-import {useDateTime} from "~/utils";
+import { useDateTime } from "~/utils";
 import SmallTag from "~/components/common/tags/SmallTag";
-import type {PlayerWithFeedback} from "~/models/player.server";
-import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
-import {authenticatePlayer} from "~/utils/session.server";
+import type { PlayerWithFeedback } from "~/models/player.server";
+import { getPlayersWithUniqueFeedbackForGame } from "~/models/player.server";
+import { authenticatePlayer } from "~/utils/session.server";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import ConfirmedPlayersCounter from "~/components/game/feedback/ConfirmedPlayersCounter";
 import DeclinedPlayersCounter from "~/components/game/feedback/DeclinedPlayersCounter";
 import UnknownPlayersCounter from "~/components/game/feedback/UnknownPlayersCounter";
 import UndecidedPlayersCounter from "~/components/game/feedback/UndecidedPlayersCounter";
-import {Feedback, Game, Player, Prisma} from "@prisma/client";
+import { Feedback, Game, Player, Prisma } from "@prisma/client";
 import Modal from "~/components/common/modal/Modal";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import PlayerCounter from "~/components/game/feedback/PlayerCounter";
-import {calculateCompleteNumberOfPlayers} from "~/utils/playerCountHelper";
+import { calculateCompleteNumberOfPlayers } from "~/utils/playerCountHelper";
 import routeLinks from "~/helpers/constants/routeLinks";
 
 export type FeedBackWithPlayer = Feedback & {
@@ -48,15 +48,16 @@ type LoaderData = {
     playerId: string;
 };
 
-export const loader: LoaderFunction = async ({params, request}) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
+    console.log("Moinsen");
     invariant(params.gameId, "Help");
     const gameId = params.gameId;
     const playerId = params.playerId;
     const game: GameWithFeedback | null = await getGameById(gameId);
-    const players: PlayerWithFeedback[] = await getPlayersWithUniqueFeedbackForGame(gameId);
-    const {cookieHeader, player, isFirstAuthentication} = await authenticatePlayer(params, request);
-    const isAuthenticated = player?.id === playerId;
-
+    const players: PlayerWithFeedback[] =
+        await getPlayersWithUniqueFeedbackForGame(gameId);
+    const { isAuthenticated, cookieHeader, player, isFirstAuthentication } =
+        await authenticatePlayer(params, request);
 
     if (player && isFirstAuthentication) {
         return redirect("/application/dashboard", {
@@ -67,7 +68,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
     }
 
     return json(
-        {game, players, isAuthenticated, player, playerId},
+        { game, players, isAuthenticated, player, playerId },
         {
             headers: {
                 "Set-Cookie": cookieHeader,
@@ -76,9 +77,9 @@ export const loader: LoaderFunction = async ({params, request}) => {
     );
 };
 
-
 const GameIndex = () => {
-    const {game, players, isAuthenticated} = useLoaderData() as unknown as LoaderData;
+    const { game, players, isAuthenticated } =
+        useLoaderData() as unknown as LoaderData;
     const [showModal, setShowModal] = useState(false);
 
     const navigate = useNavigate();
@@ -103,42 +104,56 @@ const GameIndex = () => {
                 <ContentContainer>
                     <header className={"space-y-2"}>
                         <div className={"flex justify-start gap-5"}>
-                            <PageHeader title={game.name || 'Spiel'} />
+                            <PageHeader title={game.name || "Spiel"} />
                         </div>
                         <div className={"flex gap-2"}>
                             <SmallTag text={useDateTime(game.gameTime)} />
                         </div>
                     </header>
                 </ContentContainer>
-                <div className={" grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5"}>
+                <div
+                    className={
+                        " grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5"
+                    }>
                     <ContentContainer>
-                        <PlayerCounter game={game}
-                                       calculate={calculateCompleteNumberOfPlayers}
-                                       title={'Spieler insgesamt'}
-                                       counterColor={"text-color-black"}
+                        <PlayerCounter
+                            game={game}
+                            calculate={calculateCompleteNumberOfPlayers}
+                            title={"Spieler insgesamt"}
+                            counterColor={"text-color-black"}
                         />
                     </ContentContainer>
                     <ContentContainer>
-                        <ConfirmedPlayersCounter game={game}/>
+                        <ConfirmedPlayersCounter game={game} />
                     </ContentContainer>
                     <ContentContainer>
-                        <DeclinedPlayersCounter game={game}/>
+                        <DeclinedPlayersCounter game={game} />
                     </ContentContainer>
                     <ContentContainer>
-                        <UndecidedPlayersCounter game={game}/>
+                        <UndecidedPlayersCounter game={game} />
                     </ContentContainer>
                     <ContentContainer>
-                        <UnknownPlayersCounter game={game}/>
+                        <UnknownPlayersCounter game={game} />
                     </ContentContainer>
                 </div>
-                <Players onClick={() => openModal()} isAuthenticated={isAuthenticated} players={players}
-                         gameId={game.id}></Players>
+                <Players
+                    onClick={() => openModal()}
+                    isAuthenticated={isAuthenticated}
+                    players={players}
+                    gameId={game.id}></Players>
             </section>
-            <Modal onClose={() => closeModal()} title={"Status bearbeiten"} show={showModal}>
+            <Modal
+                onClose={() => closeModal()}
+                title={"Status bearbeiten"}
+                show={showModal}>
                 <Outlet></Outlet>
                 <div className={"mt-5 flex w-full justify-center"}>
-                    <button onClick={() => closeModal()} hidden={isAuthenticated}
-                            className={"w-full rounded-xl bg-indigo-600 p-3 font-inter-medium text-white "}>
+                    <button
+                        onClick={() => closeModal()}
+                        hidden={isAuthenticated}
+                        className={
+                            "w-full rounded-xl bg-indigo-600 p-3 font-inter-medium text-white "
+                        }>
                         Zurück
                     </button>
                 </div>

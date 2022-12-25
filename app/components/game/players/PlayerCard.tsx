@@ -1,4 +1,4 @@
-import {PlayerWithFeedback} from "~/models/player.server";
+import { PlayerWithFeedback } from "~/models/player.server";
 import PlayerStatusTag from "~/components/common/tags/PlayerStatusTag";
 import DefaultArrowButton from "~/components/common/buttons/DefaultArrowButton";
 
@@ -19,7 +19,7 @@ const PlayerCard = ({ player, onClick }: PlayerCardProps) => {
           <p className={"text-label-medium text-gray-500"}>{player.feedback.note}</p>
         </div>
       </div>
-      <DefaultArrowButton onClick={onClick} url={`player/${player.id}`} />
+      <DefaultArrowButton url={`player/${player.id}`} />
     </main>
   );
 };

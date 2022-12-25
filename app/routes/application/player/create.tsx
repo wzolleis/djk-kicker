@@ -1,12 +1,12 @@
-import {useLoaderData} from "@remix-run/react";
-import {ActionFunction, json, redirect} from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { ActionFunction, json, redirect } from "@remix-run/node";
 import CreatePlayerForm from "~/components/player/CreatePlayerForm";
-import {getQueryParams} from "~/utils";
+import { getQueryParams } from "~/utils";
 import PageHeader from "~/components/common/PageHeader";
 import messages from "~/components/i18n/messages";
 import MainPageContent from "~/components/common/MainPageContent";
-import {createPlayer} from "~/models/player.server";
-import {createFeedback} from "~/models/feedback.server";
+import { createPlayer } from "~/models/player.server";
+import { createFeedback } from "~/models/feedback.server";
 import invariant from "tiny-invariant";
 import routeLinks from "~/helpers/constants/routeLinks";
 
@@ -14,14 +14,18 @@ type LoaderData = {
     gameid: string;
 };
 
-export const loader = async ({request}: { params: any; request: any }) => {
-    const {gameid} = getQueryParams(request, "gameid");
-    return json({gameid});
+export const loader = async ({ request }: { params: any; request: any }) => {
+    const { gameid } = getQueryParams(request, "gameid");
+    return json({ gameid });
 };
 
-export const action: ActionFunction = async ({request}: { request: Request }) => {
+export const action: ActionFunction = async ({
+    request,
+}: {
+    request: Request;
+}) => {
     const formData = await request.formData();
-    const {gameid} = getQueryParams(request, "gameid");
+    const { gameid } = getQueryParams(request, "gameid");
     const playerName = formData.get("name");
     const playerMail = formData.get("mail");
     const playerStatus = formData.get("status");
@@ -40,18 +44,18 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
     }
 
     const player = await createPlayer(playerName.trim(), playerMail.trim());
-    await createFeedback(player.id, gameid, parseInt(playerStatus), note, "adsasd");
+    await createFeedback(player.id, gameid, parseInt(playerStatus), note);
     return redirect(routeLinks.game(gameid));
 };
 
 const CreatePlayer = () => {
-    const {gameid} = useLoaderData<LoaderData>();
+    const { gameid } = useLoaderData<LoaderData>();
     return (
         <>
             <PageHeader title={messages.player.add}></PageHeader>
             <MainPageContent>
                 {" "}
-                <CreatePlayerForm gameId={gameid}/>
+                <CreatePlayerForm gameId={gameid} />
             </MainPageContent>
         </>
     );
