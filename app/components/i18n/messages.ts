@@ -1,6 +1,6 @@
-import { spielortOptions } from "~/helpers/constants/admin.game.constants";
-import { gameLocations } from "~/config/locations";
-import { AdminInvitationStatus } from "~/config/status";
+import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import {gameLocations} from "~/config/locations";
+import {AdminInvitationStatus} from "~/config/status";
 
 const messages = {
   app: {
@@ -65,7 +65,8 @@ const messages = {
   },
   adminGamesForm: {
     name: "Name",
-    new: "Neues Spiel"
+    new: "Neues Spiel",
+    deleteExpired: "Spiele löschen"
   },
   adminUsersForm: {
     invitations: "Einladungen"
@@ -237,6 +238,9 @@ Vielen Dank
   deletePlayerForm: {
     confirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" löschen ?`
   },
+  deleteGameForm: {
+    confirmationQuestion: (gameTime: string) => `Das Spiel am "${gameTime}" löschen ?`
+  },
   adminUserDeleteForm: {
     confirmationQuestion: (adminName: string) => `Den Account "${adminName}" löschen?`
   },
@@ -289,6 +293,9 @@ Vielen Dank
       invalidToken:
         "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
     }
+  },
+  adminDeleteExpiredForm: {
+    confirmationQuestion: (gameCount: number) => `Lösche ${gameCount} ${gameCount > 1 ? "abgelaufene Spiele" : "abgelaufenes Spiel"}? `
   }
 };
 

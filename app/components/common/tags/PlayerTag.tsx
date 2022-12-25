@@ -1,7 +1,7 @@
 import {Player} from "@prisma/client";
 
 
-const PlayerTag = ({player, onClick}: { player: Player, onClick: any }) => {
+const PlayerTag = ({player, onClick}: { player: Player, onClick: () => void }) => {
     return (
         <div
             className={"bg-gray-200 px-3 py-1 rounded-full flex gap-0 transition duration-150 ease-in-out text-black hover:scale-90 hover:bg-gray-100"}>

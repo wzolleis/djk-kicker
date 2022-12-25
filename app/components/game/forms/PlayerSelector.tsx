@@ -36,10 +36,11 @@ const PlayerSelector = ({players}: PlayerSelectorProps) => {
                 <p className={"text-gray-600 font-default-medium border-b border-1 w-full"}>Einladung an:</p>
                 <div className={"flex flex-wrap gap-3"}>
                     {receivingPlayers.map(receivingPlayer => (
-                        <div  className={"flex "} key={receivingPlayer.id}>
+                        <div className={"flex "} key={receivingPlayer.id}>
                             <input type={"hidden"} name={"receiver"} value={receivingPlayer.id}/>
                             <PlayerTag onClick={() => removePlayerFromReceiversList(receivingPlayer)}
-                                       player={receivingPlayer}/>
+                                       player={receivingPlayer}
+                            />
                         </div>
                     ))}
                 </div>
@@ -57,7 +58,7 @@ const PlayerSelector = ({players}: PlayerSelectorProps) => {
                 </div>
             </div>
 
-                    </section>
+        </section>
     )
 
 }

@@ -32,7 +32,7 @@ const NewGame = () => {
 
     const closeModal = () => {
         setShowModal(false);
-        navigate("/application/admin/games");
+        navigate(routeLinks.admin.games);
     };
 
     return (
