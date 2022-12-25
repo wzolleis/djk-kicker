@@ -54,7 +54,7 @@ model Mail {
   id        String     @id @default(cuid())
   action    GameAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
   actionId  String
-  player    Player     @relation(fields: [playerId], references: [id])
+  player    Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId  String
   status    Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
   statusTxt String? // Fehlermeldung
@@ -68,12 +68,12 @@ model Feedback {
   id              String  @id @default(cuid())
   game            Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId          String
-  player          Player  @relation(fields: [playerId], references: [id])
+  player          Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId        String
-  status          Int?    @default(0)
+  status          Int    @default(0)
   playerCount     Int     @default(1)
   note            String?
-  invitationToken String
+  invitationToken String @default("")
 
   @@unique([playerId, gameId])
 }
@@ -90,8 +90,9 @@ model Player {
 model DefaultFeedback {
   id          String @id @default(cuid())
   playerId    String @unique
-  player      Player @relation(fields: [playerId], references: [id])
+  player      Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
   status      Int    @default(0)
+  note String?
   playerCount Int    @default(1)
 }
 
@@ -102,11 +103,18 @@ model Password {
 }
 
 model AdminInvitation {
-  id         String   @id @default(cuid())
-  name       String
-  token      String
-  email      String
-  scope      String
-  expires_at DateTime
-  status     Int?     @default(200)
+  id                    String   @id @default(cuid())
+  name                  String
+  token                 String
+  email                 String
+  scope                 String
+  expires_at            DateTime
+  status                Int?
+  invitationStatus     String?
+}
+
+
+model Session {
+id String @id @default(cuid())
+data String @db.VarChar(5000)
 }

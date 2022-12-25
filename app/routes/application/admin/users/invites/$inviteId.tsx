@@ -1,7 +1,9 @@
-const InviteView = () => {
+import {Outlet} from "@remix-run/react";
+
+const InviteId = () => {
     return (
-        <div>Invite view</div>
+        <Outlet/>
     )
 }
 
-export default InviteView
+export default InviteId

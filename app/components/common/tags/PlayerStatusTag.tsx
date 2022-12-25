@@ -36,7 +36,7 @@ const PlayerStatusTag = ({status}: playerStatusTagProps) => {
 
     return (
         <div
-            className={`rounded-lg py-1 px-3 font-poppins-regular text-label-medium ring ring-1 flex gap-2 ${getStatusColor(
+            className={`rounded-lg py-1 px-3 font-default-regular text-label-medium ring ring-1 flex gap-2 ${getStatusColor(
                 status
             )}`}
         >
