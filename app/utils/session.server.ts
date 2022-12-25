@@ -66,14 +66,12 @@ export async function authenticatePlayer(
     let isFirstAuthentication = false;
 
     if (!!token && !sessionHasPlayer(session)) {
-        console.log("Token found");
         let cookieHeader;
         const { isAuthenticated, player, playerToken } = await verifyToken(
             decryptPlayerToken(token)
         );
         console.log("Auth", isAuthenticated);
         if (isAuthenticated && playerToken) {
-            console.log("Player", player);
             cookieHeader = await setSession(session, playerToken, player!);
             isFirstAuthentication = true;
         } else cookieHeader = await commitSession(session);
@@ -85,7 +83,6 @@ export async function authenticatePlayer(
             isFirstAuthentication,
         };
     } else if (sessionHasPlayer(session)) {
-        console.log("Player found");
         const playerId = session.get("player").id;
         const isAuthenticated = await playerHasValidToken(playerId);
         const player = await getPlayerById(playerId);
@@ -99,7 +96,6 @@ export async function authenticatePlayer(
             isFirstAuthentication,
         };
     } else {
-        console.log("no player found");
         return {
             isAuthenticated,
             session,
