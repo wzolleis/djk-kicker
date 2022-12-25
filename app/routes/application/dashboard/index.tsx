@@ -44,7 +44,6 @@ type ActionData = {
 
 export const action: ActionFunction = async ({ params, request }) => {
     const { player } = await authenticatePlayer(params, request);
-    console.log(player);
     const body = await request.formData();
     const { status, note, playerCount, gameId } = getFeedbackValues(body);
     if (!player) {

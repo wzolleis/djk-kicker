@@ -49,7 +49,6 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ params, request }) => {
-    console.log("Moinsen");
     invariant(params.gameId, "Help");
     const gameId = params.gameId;
     const playerId = params.playerId;
