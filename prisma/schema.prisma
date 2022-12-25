@@ -73,7 +73,6 @@ model Feedback {
   status          Int    @default(0)
   playerCount     Int     @default(1)
   note            String?
-  invitationToken String @default("")
 
   @@unique([playerId, gameId])
 }
@@ -85,6 +84,7 @@ model Player {
   feedback        Feedback[]
   mails           Mail[]
   DefaultFeedback DefaultFeedback[]
+  Token Token[]
 }
 
 model DefaultFeedback {
@@ -112,6 +112,18 @@ model AdminInvitation {
   status                Int?
   invitationStatus     String?
 }
+
+
+model Token {
+id String @id @default(uuid())
+player Player @relation(fields: [playerId], references: [id])
+playerId String @unique
+revoked Boolean @default(false)
+expirationDate DateTime
+
+
+}
+
 
 
 model Session {
