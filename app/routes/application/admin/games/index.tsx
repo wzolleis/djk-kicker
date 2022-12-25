@@ -2,13 +2,12 @@ import {readGames} from "~/models/admin.games.server";
 import type {LoaderArgs} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
-import {Link, Outlet, useLoaderData} from "@remix-run/react";
+import {Link, NavLink, Outlet, useLoaderData} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
-import type {Game} from "@prisma/client";
-import GameCard from "~/components/game/GameCard";
 import PageHeader from "~/components/common/PageHeader";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import GamesList from "~/components/game/admin/GamesList";
+import RedButton from "~/components/common/buttons/RedButton";
 
 type LoaderData = {
     games: Awaited<ReturnType<typeof readGames>>;
@@ -21,9 +20,6 @@ export const loader = async ({request}: LoaderArgs) => {
     return json<LoaderData>({games});
 };
 
-const isOldGame = (game: Game): boolean =>
-    !!game.gameTime && new Date() > new Date(game.gameTime);
-
 const Games = () => {
     const {games} = useLoaderData() as unknown as LoaderData;
 
@@ -32,16 +28,24 @@ const Games = () => {
             <main className={"space-y-4"}>
                 <div className={"flex justify-between items-center"}>
                     <PageHeader title={messages.appmenu.games}/>
-                    <Link to={"new"}>
-                        <DefaultButton>
-                            <img className={"h-6"} src="/img/icons/add.png" alt=""/>
-                            {messages.adminGamesForm.new}
-                        </DefaultButton>
-                    </Link>
+                    <div className={'flex flex-col md:flex-row gap-2 ml-auto'}>
+                        <NavLink to={"deleteExpired"}>
+                            <RedButton>
+                                <p className={'md:h6 fa fa-trash'}/>
+                                {messages.adminGamesForm.deleteExpired}
+                            </RedButton>
+                        </NavLink>
+                        <Link to={"new"}>
+                            <DefaultButton>
+                                <p className={'md:h6 fa fa-plus'}/>
+                                {messages.adminGamesForm.new}
+                            </DefaultButton>
+                        </Link>
+                    </div>
                 </div>
                 <GamesList games={games}></GamesList>
             </main>
-            <Outlet></Outlet>
+            <Outlet/>
         </>
     );
 };

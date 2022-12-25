@@ -1,6 +1,7 @@
 const routeLinks = {
     admin: {
         games: "/application/admin/games",
+        deleteExpiredGames: "/application/admin/games/deleteExpired",
         game: {
             details: (gameId: string) => `/application/admin/games/${gameId}`,
             einladung: (gameId: string) => `/application/admin/games/${gameId}/einladung`,
@@ -8,6 +9,8 @@ const routeLinks = {
             absage: (gameId: string) => `/application/admin/games/${gameId}/absage`,
             actions: (gameId: string) => `/application/admin/games/${gameId}/actions`,
             invitation: (gameId: string) => `/application/admin/games/${gameId}/invitation`,
+            edit:  (gameId: string) => `/application/admin/games/${gameId}/edit`,
+            delete:  (gameId: string) => `/application/admin/games/${gameId}/delete`,
         },
         users: {
             home: '/application/admin/users',

@@ -1,36 +1,26 @@
-import {
-    Form,
-    useFetcher,
-    useLoaderData,
-    useTransition,
-} from "@remix-run/react";
-import { findGameById } from "~/models/admin.games.server";
-import {
-    ActionFunction,
-    json,
-    LoaderFunction,
-    redirect,
-} from "@remix-run/node";
+import {Form, useFetcher, useLoaderData, useTransition,} from "@remix-run/react";
+import {findGameById} from "~/models/admin.games.server";
+import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import dateUtils from "~/dateUtils";
 import messages from "~/components/i18n/messages";
-import { getPlayers } from "~/models/player.server";
+import {getPlayers} from "~/models/player.server";
 import routeLinks from "~/helpers/constants/routeLinks";
-import { BaseSyntheticEvent, useEffect, useRef, useState } from "react";
+import {BaseSyntheticEvent, useEffect, useRef, useState} from "react";
 import mailhelper from "~/models/admin.games.mails.server";
 import PlayerSelector from "~/components/game/forms/PlayerSelector";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import SmallTag from "~/components/common/tags/SmallTag";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import { configuration } from "~/config";
+import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
 import SelectWithLabel from "~/components/common/form/SelectWithLabel";
-import { prisma } from "~/db.server";
+import {prisma} from "~/db.server";
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
-import { mailContent } from "~/components/i18n/mailcontent";
-import { Feedback, Token } from "@prisma/client";
-import { createEncryptedPlayerToken } from "~/utils/token.server";
+import {mailContent} from "~/components/i18n/mailcontent";
+import {Feedback} from "@prisma/client";
+import {createEncryptedPlayerToken} from "~/utils/token.server";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -44,9 +34,9 @@ type RequestPlayerLink = {
 };
 
 export const loader: LoaderFunction = async ({
-    request,
-    params: { gameId },
-}) => {
+                                                 request,
+                                                 params: {gameId},
+                                             }) => {
     invariant(gameId, "Expected params.gameId");
     const url = new URL(request.url);
     const hostName = request.headers.get("host")!;
@@ -63,23 +53,23 @@ export const loader: LoaderFunction = async ({
             },
         });
         const playerToken = await createEncryptedPlayerToken(playerId, gameId);
-        return json<RequestPlayerLink>({ feedback, playerToken });
+        return json<RequestPlayerLink>({feedback, playerToken});
     }
 
-    return json<LoaderData>({ game, players, hostName });
+    return json<LoaderData>({game, players, hostName});
 };
 
 export const action: ActionFunction = async ({
-    params: { gameId },
-    request,
-}) => {
+                                                 params: {gameId},
+                                                 request,
+                                             }) => {
     invariant(gameId, "Expected params.gameId");
     const formData = await request.formData();
     const intent = formData.get("intent");
     if (intent === "invitation") {
         const host = request.headers.get("host")!;
         const playerIds = formData.getAll("receiver") as string[];
-        await mailhelper.sendGameInvitation({ host, gameId, playerIds });
+        await mailhelper.sendGameInvitation({host, gameId, playerIds});
         return redirect(routeLinks.admin.game.details(gameId));
     }
 
@@ -87,7 +77,7 @@ export const action: ActionFunction = async ({
 };
 
 const GameInvitation = () => {
-    const { game, players, hostName } = useLoaderData<LoaderData>();
+    const {game, players, hostName} = useLoaderData<LoaderData>();
     const gameTime = dateUtils.format(new Date(game.gameTime));
     const transition = useTransition();
     const formRef = useRef<HTMLFormElement>(null);
@@ -96,14 +86,7 @@ const GameInvitation = () => {
     useEffect(() => {
         if (playerToken.type === "init") {
             const playerId = players[0].id;
-            playerToken.submit(
-                {
-                    player: playerId,
-                },
-                {
-                    method: "get",
-                }
-            );
+            playerToken.submit({player: playerId,}, {method: "get",});
         }
         if (playerToken.data?.playerToken) {
             setInvitationLink(() =>
@@ -129,13 +112,8 @@ const GameInvitation = () => {
                             {game.name}
                         </p>
                         <div className={"flex gap-2"}>
-                            <SmallTag text={gameTime}></SmallTag>
-                            <SmallTag
-                                text={
-                                    configuration.gameLocations[
-                                        game.spielort as unknown as number
-                                    ]
-                                }></SmallTag>
+                            <SmallTag text={gameTime}/>
+                            <SmallTag text={configuration.gameLocations[game.spielort as unknown as number]}/>
                         </div>
                     </div>
                 </ContentContainer>
@@ -143,7 +121,7 @@ const GameInvitation = () => {
                     <Form ref={formRef} method="post">
                         <fieldset disabled={transition.state === "submitting"}>
                             <div className={"flex flex-col gap-2"}>
-                                <PlayerSelector players={players} />
+                                <PlayerSelector players={players}/>
                                 <playerToken.Form method="get">
                                     <SelectWithLabel
                                         id={"player"}
@@ -151,35 +129,22 @@ const GameInvitation = () => {
                                         onChange={(
                                             event: BaseSyntheticEvent
                                         ) => {
-                                            playerToken.submit(
-                                                event.target.form
-                                            );
+                                            playerToken.submit(event.target.form);
                                         }}
                                         label={"Spieler"}>
                                         {players.map((player) => (
-                                            <option
-                                                key={player.id}
-                                                value={player.id}>
-                                                {player.name}
-                                            </option>
+                                            <option key={player.id} value={player.id}>{player.name}</option>
                                         ))}
                                     </SelectWithLabel>
                                 </playerToken.Form>
                                 <label
-                                    className={
-                                        "font-default-medium text-gray-600"
-                                    }>
-                                    {
-                                        messages.adminGameInvitationForm
-                                            .invitationLink
-                                    }
+                                    className={"font-default-medium text-gray-600"}>
+                                    {messages.adminGameInvitationForm.invitationLink}
                                 </label>
                                 <div className={"flex gap-2"}>
                                     <div
                                         onClick={async () => {
-                                            await navigator.clipboard.writeText(
-                                                invitationLink
-                                            );
+                                            await navigator.clipboard.writeText(invitationLink);
                                         }}>
                                         <DefaultButton>Kopieren</DefaultButton>
                                     </div>
@@ -188,20 +153,12 @@ const GameInvitation = () => {
                                     id={"emailSubject"}
                                     type={"text"}
                                     name={"emailSubject"}
-                                    label={
-                                        messages.adminGameInvitationForm
-                                            .mailSubjectLabel
-                                    }
-                                    defaultValue={mailContent.invitationMail.mailSubject(
-                                        gameTime
-                                    )}
+                                    label={messages.adminGameInvitationForm.mailSubjectLabel}
+                                    defaultValue={mailContent.invitationMail.mailSubject(gameTime)}
                                 />
                             </div>
                         </fieldset>
-                        <div
-                            className={
-                                "mt-5 grid grid-cols-2 justify-end gap-2 md:flex"
-                            }>
+                        <div className={"mt-5 grid grid-cols-2 justify-end gap-2 md:flex"}>
                             <RedButton>
                                 <img
                                     className={"h-6"}
@@ -231,10 +188,7 @@ const GameInvitation = () => {
                                     disabled={
                                         transition.state === "submitting"
                                     }>
-                                    {
-                                        messages.adminGameInvitationForm
-                                            .sendInvitationBtn
-                                    }
+                                    {messages.adminGameInvitationForm.sendInvitationBtn}
                                 </button>
                             </DefaultButton>
                         </div>

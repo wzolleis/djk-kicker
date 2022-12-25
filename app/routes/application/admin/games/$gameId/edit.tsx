@@ -5,7 +5,7 @@ import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import toast from "react-hot-toast";
 import {deleteGame, findGameById, updateGame} from "~/models/admin.games.server";
 import {Game} from "@prisma/client";
-import {useLoaderData} from "@remix-run/react";
+import {useLoaderData, useNavigate} from "@remix-run/react";
 import {GameFromForm, getGameFromFormData} from "~/utils/game.server";
 import {requireUserId} from "~/session.server";
 import invariant from "tiny-invariant";
@@ -60,28 +60,34 @@ export const action: ActionFunction = async ({params, request}) => {
     }
 }
 const EditGame = () => {
+    const navigate = useNavigate()
     const {game} = useLoaderData() as unknown as LoaderData
     return (
         <>
             <h1 className={"font-default-bold text-title-large"}>{messages.adminEditGameForm.title}</h1>
             <EditGameForm game={game}>
-                <div className={"flex items-center justify-end"}>
-                    <div className={"flex gap-2"}>
-                        <RedButton>
-                            <img className={"h-6"} src="/img/icons/delete.png" alt=""/>
-                            <button type={"submit"}
-                                    name={"intent"} value={"delete"}>
-                                {messages.adminEditGameForm.delete}
-                            </button>
-                        </RedButton>
-                        <DefaultButton>
-                            <img className={"h-6"} src="/img/icons/check.png" alt=""/>
-                            <button type={"submit"}
-                                    name={"intent"} value={"update"}>
-                                {messages.adminEditGameForm.update}
-                            </button>
-                        </DefaultButton>
-                    </div>
+                <div className={"flex items-center gap-2"}>
+                    <DefaultButton>
+                        <p className={'fa fa-angle-left'}/>
+                        <button type={"button"}
+                                onClick={() => navigate(-1)}>
+                            {messages.buttons.back}
+                        </button>
+                    </DefaultButton>
+                    <RedButton className={'ml-auto'}>
+                        <img className={"h-6"} src="/img/icons/delete.png" alt=""/>
+                        <button type={"submit"}
+                                name={"intent"} value={"delete"}>
+                            {messages.adminEditGameForm.delete}
+                        </button>
+                    </RedButton>
+                    <DefaultButton>
+                        <img className={"h-6"} src="/img/icons/check.png" alt=""/>
+                        <button type={"submit"}
+                                name={"intent"} value={"update"}>
+                            {messages.adminEditGameForm.update}
+                        </button>
+                    </DefaultButton>
                 </div>
             </EditGameForm>
         </>
