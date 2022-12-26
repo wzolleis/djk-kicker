@@ -2,7 +2,6 @@ import type {Player} from "@prisma/client";
 import {Link} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
 import RedButton from "~/components/common/buttons/RedButton";
 import routeLinks from "~/helpers/constants/routeLinks";
 
@@ -18,11 +17,9 @@ const AdminTableRow = ({player}: AdminTableRowProps) => {
                 <a href={`mailto:${player.email}`}>{player.email}</a>
             </td>
             <td className={"text-right"}>
-                <ButtonContainer>
-                    <DefaultButton className={'ml-auto'}>
-                        <Link to={`edit/?player=${player.id}`}>{messages.buttons.edit}</Link>
-                    </DefaultButton>
-                    <RedButton className={'bg-red-600'}>
+                <ButtonContainer className={"flex justify-end"}>
+                    <RedButton>
+                        <p className={"fa fa-trash mr-2"}/>
                         <Link to={routeLinks.player.delete(player.id)}>{messages.buttons.delete}</Link>
                     </RedButton>
                 </ButtonContainer>

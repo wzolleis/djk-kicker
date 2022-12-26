@@ -2,8 +2,8 @@
 const PageHeader = ({title}) => {
 
     return (
-        <section>
-            <h1 className={"font-default-bold text-display-small tracking-tighter text-black"}>{title}</h1>
+        <section className={"pl-5"}>
+            <h1 className={"md:font-default-bold md:text-display-small md:tracking-tighter text-black"}>{title}</h1>
         </section>
     )
 

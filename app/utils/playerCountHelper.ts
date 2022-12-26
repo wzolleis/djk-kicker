@@ -1,6 +1,6 @@
-import {GameWithFeedback} from "~/routes/application/games/$gameId";
 import {configuration} from "~/config";
 import {statusInConfig} from "~/config/status";
+import {GameWithFeedback} from "~/config/gameTypes";
 
 const add = (playerCount: number): number => {
     return playerCount + 1

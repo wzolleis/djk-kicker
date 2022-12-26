@@ -1,8 +1,8 @@
-import {GameWithFeedback} from "~/routes/application/games/$gameId";
 import Counter from "~/components/common/counter/Counter";
 import messages from "~/components/i18n/messages";
 import {calculateNumberOfPlayerWithStatus} from "~/utils/playerCountHelper";
 import {statusInConfig} from "~/config/status";
+import {GameWithFeedback} from "~/config/gameTypes";
 
 type ConfirmedPlayersCounterProps = {
     game: GameWithFeedback;

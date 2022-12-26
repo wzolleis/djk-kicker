@@ -27,6 +27,7 @@ const AdminTableRow = ({user}: AdminTableRowProps) => {
                         <Link to={`${user.id}`}>{messages.buttons.edit}</Link>
                     </DefaultButton>
                     <RedButton>
+                        <p className={"fa fa-trash mr-2"}/>
                         <Link to={`${routeLinks.admin.users.delete(user.id)}`}>{messages.buttons.delete}</Link>
                     </RedButton>
                 </ButtonContainer>

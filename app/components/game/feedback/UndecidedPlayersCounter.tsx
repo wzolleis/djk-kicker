@@ -1,7 +1,7 @@
-import {GameWithFeedback} from "~/routes/application/games/$gameId";
 import Counter from "~/components/common/counter/Counter";
 import messages from "~/components/i18n/messages";
 import {configuration} from "~/config";
+import {GameWithFeedback} from "~/config/gameTypes";
 
 type UndecidedPlayerProps = {
     game: GameWithFeedback;
