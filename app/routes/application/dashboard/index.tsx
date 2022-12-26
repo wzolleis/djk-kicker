@@ -15,7 +15,6 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import Subheading from "~/components/common/header/Subheading";
 import {getFeedbackValues} from "~/utils/form.session";
 import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedbackComponent";
-import {NextGame} from "~/components/game/NextGame";
 import {motion} from "framer-motion";
 import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
@@ -137,11 +136,11 @@ const Dashboard = () => {
                         <ContentContainer className={"mt-2.5"}>
                             <Subheading title={`Nächstes Spiel: ${useDateTime(new Date(nextGame.gameTime))}`}/>
                             <div>
-                                <ContentContainer className={"bg-blue-200"}>
+                                <ContentContainer className="bg-blue-200">
                                     <PlayerCounter
                                         game={nextGame}
                                         calculate={calculateCompleteNumberOfPlayers}
-                                        title={"Spieler insgesamt"}
+                                        title={"Spieler + Gäste"}
                                         counterColor={"text-color-black"}
                                     />
                                     <GameFeedbackSummary game={nextGame}/>
@@ -155,19 +154,14 @@ const Dashboard = () => {
                         <ContentContainer>
                             <Subheading
                                 title={`Dein Status für das Spiel am ${useDate(new Date(nextGame.gameTime))}`}/>
-                            <NextGame game={nextGame!}/>
-                            {
-                                !!nextGameFeedback && <PlayerFeedback playerFeedback={nextGameFeedback}/>
-                            }
+                                <PlayerFeedback playerFeedback={nextGameFeedback}/>
                         </ContentContainer>
                     }
                 </motion.div>
                 <motion.div variants={animationItems}>
                     <ContentContainer>
                         <Subheading title={"Dein Standard-Status"}/>
-                        <DefaultFeedbackComponent
-                            defaultFeedback={defaultFeedback}
-                        />
+                        <DefaultFeedbackComponent defaultFeedback={defaultFeedback}/>
                     </ContentContainer>
                 </motion.div>
                 <motion.div variants={animationItems}>

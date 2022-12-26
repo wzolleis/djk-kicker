@@ -151,7 +151,7 @@ const messages = {
     feedback: {
       headings: {
         feedback: "Status",
-        playerCount: "Spieler (insgesamt)",
+        playerCount: "Gäste",
         note: "Notiz"
       },
       status: {

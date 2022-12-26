@@ -10,15 +10,16 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import {motion} from "framer-motion";
 import playerCountHelper from "~/utils/playerCountHelper";
 import routeLinks from "~/helpers/constants/routeLinks";
+import {configuration} from "~/config";
 
 type PlayerFeedbackProps = {
-  playerFeedback: Feedback;
+  playerFeedback: Feedback | null;
 };
 
 const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
-  const [feedbackStatus, setFeedbackStatus] = useState(playerFeedback.status);
+  const [feedbackStatus, setFeedbackStatus] = useState(playerFeedback?.status ?? configuration.status.unknown);
   const [note, setNote] = useState(playerFeedback?.note || "");
-  const [playerCount, setPlayerCount] = useState(playerFeedback.playerCount);
+  const [playerCount, setPlayerCount] = useState(playerFeedback?.playerCount ?? 0);
   const fetcher = useFetcher();
   useEffect(() => {
     if (fetcher.data?.defaultFeedback) {
@@ -61,30 +62,33 @@ const PlayerFeedback = ({ playerFeedback }: PlayerFeedbackProps) => {
     setPlayerCount(playerCountHelper.subtract(playerCount))
   }
 
-  function postStatus() {
-    fetcher.submit(
-      {
-        status: feedbackStatus.toString(),
-        note: note,
-        gameId: playerFeedback.gameId,
-        playerCount: playerCount.toString(),
-        origin: "dashboard",
-      },
-      {
-        method: "post",
-        action: routeLinks.player.feedback({gameId: playerFeedback.gameId, playerId: playerFeedback.playerId}),
-      }
-    );
+  const postStatus = () => {
+    console.log('post status mit ', feedbackStatus)
+    if (!!playerFeedback) {
+      fetcher.submit(
+          {
+            status: feedbackStatus.toString(),
+            note: note,
+            gameId: playerFeedback.gameId,
+            playerCount: playerCount.toString(),
+            origin: "dashboard",
+          },
+          {
+            method: "post",
+            action: routeLinks.player.feedback({gameId: playerFeedback.gameId, playerId: playerFeedback.playerId}),
+          }
+      );
+    }
   }
 
 
   return (
     <>
       <motion.div variants={container} initial={"initial"} animate={"animate"} className={"flex flex-col gap-3"}>
-        <p className={"font-default-medium text-gray-600"}>{messages.game.feedback.headings.feedback}</p>
+        <p className={"font-default-medium text-gray-600 mt-2"}>{messages.game.feedback.headings.feedback}</p>
         <motion.div variants={items}>
           <ContentContainer>
-            <PlayerStatus status={feedbackStatus} setStatus={(newStatus: number) => setFeedbackStatus(newStatus)} />
+            <PlayerStatus status={feedbackStatus ?? 0} setStatus={(newStatus: number) => setFeedbackStatus(newStatus)} />
           </ContentContainer>
         </motion.div>
         <motion.div variants={items}>

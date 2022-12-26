@@ -34,6 +34,9 @@ const References = () => {
                 <li>
                     <a href="https://www.clipartmax.com/png/small/297-2978358_back-back-arrow-png-blue.png">Back - Back Arrow Png Blue @clipartmax.com</a>
                 </li>
+                <li>
+                    <a href="https://www.flaticon.com/free-icons/stop" title="stop icons">Stop icons created by itim2101 - Flaticon</a>
+                </li>
             </ul>
         </div>
     );
