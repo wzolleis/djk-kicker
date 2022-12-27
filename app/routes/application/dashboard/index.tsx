@@ -26,6 +26,7 @@ import {GameFeedbackSummary} from "~/components/game/GameSummary";
 import {GameWithFeedback} from "~/config/gameTypes";
 import PlayerCounter from "~/components/game/feedback/PlayerCounter";
 import {calculateCompleteNumberOfPlayers} from "~/utils/playerCountHelper";
+import animationConfig from "~/config/animationConfig";
 
 type LoaderData = {
     isAuthenticated: boolean;
@@ -96,88 +97,92 @@ export const loader: LoaderFunction = async ({params, request}) => {
         defaultFeedback,
     });
 };
+
+const NextGameSummary = ({nextGame}: { nextGame: GameWithFeedback | null }) => {
+    if (!nextGame) return (
+        <Subheading title={messages.errors.noGame}/>
+    )
+
+    return (
+        <ContentContainer className={"mt-2.5"}>
+            <Subheading title={`${messages.dashboard.nextGame}: ${useDateTime(new Date(nextGame.gameTime))}`}/>
+            <div>
+                <ContentContainer className="bg-blue-200">
+                    <PlayerCounter
+                        game={nextGame}
+                        calculate={calculateCompleteNumberOfPlayers}
+                        title={messages.dashboard.playerAndGuests}
+                        counterColor={"text-color-black"}
+                    />
+                    <GameFeedbackSummary game={nextGame}/>
+                </ContentContainer>
+            </div>
+        </ContentContainer>
+    )
+}
+
+const NextGameFeedback = ({
+                              nextGame,
+                              nextGameFeedback
+                          }: { nextGame: GameWithFeedback | null, nextGameFeedback: Feedback | null }) => {
+    if (!nextGame) return (
+        <Subheading title={messages.errors.noGame}/>
+    )
+
+    return (
+        <ContentContainer>
+            <Subheading
+                title={messages.dashboard.playerStatusForGame(useDate(new Date(nextGame.gameTime)))}/>
+            <PlayerFeedback playerFeedback={nextGameFeedback}/>
+        </ContentContainer>
+    )
+}
+
+const PlayerProfile = ({player, defaultFeedback}: { player: Player, defaultFeedback: DefaultFeedback }) => {
+    return (
+        <>
+            <ContentContainer>
+                <Subheading title={messages.dashboard.playerDefaultStatus}/>
+                <DefaultFeedbackComponent defaultFeedback={defaultFeedback}/>
+            </ContentContainer>
+
+            <ContentContainer>
+                <Subheading title={messages.dashboard.playerProfile}/>
+                <Form
+                    action={`${player.id}/profile/edit`}
+                    method={"post"}>
+                    <EditProfile player={player}/>
+                    <ButtonContainer className={"mt-2"}>
+                        <DefaultButton className={"ml-auto"}>
+                            <button type={"submit"}>{messages.buttons.save}</button>
+                        </DefaultButton>
+                    </ButtonContainer>
+                </Form>
+            </ContentContainer>
+        </>
+    )
+}
+
+
 const Dashboard = () => {
     const {player, nextGame, nextGameFeedback, defaultFeedback} = useLoaderData() as unknown as LoaderData;
-    const container = {
-        initial: {
-            opacity: 0,
-        },
-        animate: {
-            opacity: 1,
-            transition: {
-                delayChildren: 0.1,
-                staggerChildren: 0.1,
-            },
-        },
-    };
-    const animationItems = {
-        initial: {
-            y: 1100,
-        },
-        animate: {
-            y: 0,
-            transition: {
-                ease: [0.6, 0.01, -0.05, 0.95],
-                duration: 1,
-            },
-        },
-    };
 
     return (
         <>
             <PageHeader title={getPlayerGreeting(player.name)}/>
             <motion.div
                 className={"flex flex-col gap-4"}
-                variants={container}
+                variants={animationConfig.container}
                 initial={"initial"}
                 animate={"animate"}>
-                <motion.div variants={animationItems}>
-                    {nextGame &&
-                        <ContentContainer className={"mt-2.5"}>
-                            <Subheading title={`Nächstes Spiel: ${useDateTime(new Date(nextGame.gameTime))}`}/>
-                            <div>
-                                <ContentContainer className="bg-blue-200">
-                                    <PlayerCounter
-                                        game={nextGame}
-                                        calculate={calculateCompleteNumberOfPlayers}
-                                        title={"Spieler + Gäste"}
-                                        counterColor={"text-color-black"}
-                                    />
-                                    <GameFeedbackSummary game={nextGame}/>
-                                </ContentContainer>
-                            </div>
-                        </ContentContainer>
-                    }
+                <motion.div variants={animationConfig.animationItems}>
+                    <NextGameSummary nextGame={nextGame}/>
                 </motion.div>
-                <motion.div variants={animationItems}>
-                    {nextGame &&
-                        <ContentContainer>
-                            <Subheading
-                                title={`Dein Status für das Spiel am ${useDate(new Date(nextGame.gameTime))}`}/>
-                                <PlayerFeedback playerFeedback={nextGameFeedback}/>
-                        </ContentContainer>
-                    }
+                <motion.div variants={animationConfig.animationItems}>
+                    <NextGameFeedback nextGame={nextGame} nextGameFeedback={nextGameFeedback}/>
                 </motion.div>
-                <motion.div variants={animationItems}>
-                    <ContentContainer>
-                        <Subheading title={"Dein Standard-Status"}/>
-                        <DefaultFeedbackComponent defaultFeedback={defaultFeedback}/>
-                    </ContentContainer>
-                </motion.div>
-                <motion.div variants={animationItems}>
-                    <ContentContainer>
-                        <Subheading title={"Dein Profil"}/>
-                        <Form
-                            action={`${player.id}/profile/edit`}
-                            method={"post"}>
-                            <EditProfile player={player}/>
-                            <ButtonContainer className={"mt-2"}>
-                                <DefaultButton className={"ml-auto"}>
-                                    <button type={"submit"}>{messages.buttons.save}</button>
-                                </DefaultButton>
-                            </ButtonContainer>
-                        </Form>
-                    </ContentContainer>
+                <motion.div variants={animationConfig.animationItems}>
+                    <PlayerProfile player={player} defaultFeedback={defaultFeedback}/>
                 </motion.div>
             </motion.div>
         </>

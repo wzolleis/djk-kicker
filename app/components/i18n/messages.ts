@@ -45,6 +45,13 @@ const messages = {
       Number.parseInt(spielortOption) === gameLocations.Halle ? messages.adminEditGameForm.optionHalle : messages.adminEditGameForm.optionDraussen,
     gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => (gameDateIsInThePast ? "(Game over)" : "")
   },
+  dashboard: {
+    nextGame: 'Nächstes Spiel',
+    playerAndGuests: 'Spieler und Gäste',
+    playerStatusForGame: (gameDate: string) => `Dein Status für das Spiel am ${gameDate}`,
+    playerDefaultStatus: "Dein Standard-Status",
+    playerProfile: "Dein Profil"
+  },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",
     description: "Viel Spaß beim Bolzen",
@@ -54,9 +61,8 @@ const messages = {
     rememberMe: "Anmeldedaten speichern",
     createAccount: "Neuen Account anlegen"
   },
-  joinForm: {
-    backToLogin: "Zur Anmeldung",
-    createAccount: "Neuen Account anlegen"
+  errors: {
+    noGame: "Kein Spiel vorhanden"
   },
   adminGamesTable: {
     name: "Spielname",
