@@ -1,63 +1,68 @@
 import {Feedback} from "@prisma/client";
 import {PlayerStatus} from "~/components/player/feedback/PlayerStatus";
 import TextAreaWithLabel from "~/components/common/form/TextareaWithLabel";
-import {useEffect, useState} from "react";
-import {useFetcher} from "@remix-run/react";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
+import {useState} from "react";
 import messages from "~/components/i18n/messages";
 import {PlayerCount} from "~/components/common/counter/PlayerCount";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import {motion} from "framer-motion";
 import playerCountHelper from "~/utils/playerCountHelper";
-import routeLinks from "~/helpers/constants/routeLinks";
-import {configuration} from "~/config";
 import animationConfig from "~/config/animationConfig";
 
 type PlayerFeedbackProps = {
-    playerFeedback: Feedback | null;
+    playerFeedback: Feedback;
+
+    onFeedbackChange: (feedBack: Feedback) => void
 };
 
-const PlayerFeedback = ({playerFeedback}: PlayerFeedbackProps) => {
-    const [feedbackStatus, setFeedbackStatus] = useState<number>(playerFeedback?.status ?? configuration.status.unknown);
-    const [note, setNote] = useState<string>(playerFeedback?.note || "");
-    const [playerCount, setPlayerCount] = useState<number>(playerFeedback?.playerCount ?? 0);
-    const fetcher = useFetcher();
-    useEffect(() => {
-        if (fetcher.data?.defaultFeedback) {
-            setFeedbackStatus(parseInt(fetcher.data.defaultFeedback.status));
-            setNote(fetcher.data.defaultFeedback.note || "");
-            setPlayerCount(parseInt(fetcher.data.defaultFeedback.playerCount));
+const PlayerFeedback = ({playerFeedback, onFeedbackChange}: PlayerFeedbackProps) => {
+    const [feedbackStatus, setFeedbackStatus] = useState<number>(playerFeedback.status);
+    const [playerCount, setPlayerCount] = useState<number>(playerFeedback.playerCount);
+    const [playerNote, setPlayerNote] = useState<string>(playerFeedback.note ?? '')
+
+    const getActualFeedback = (): Feedback => {
+        return {
+            ...playerFeedback,
+            playerCount,
+            status: feedbackStatus,
+            note: playerNote
         }
-    });
+
+    }
+
+    const onPlayerNoteChange = (note: string) => {
+        setPlayerNote(note)
+        onFeedbackChange({
+            ...getActualFeedback(),
+            note
+        })
+    }
+
+    const onStatusChange = (status: number) => {
+        setFeedbackStatus(status)
+        onFeedbackChange({
+            ...getActualFeedback(),
+            status,
+        })
+    }
 
     const onAdd = () => {
-        setPlayerCount(playerCountHelper.add(playerCount))
+        const newPlayerCount = playerCountHelper.add(playerCount)
+        setPlayerCount(newPlayerCount)
+        onFeedbackChange({
+            ...getActualFeedback(),
+            playerCount: newPlayerCount,
+        })
     }
+
     const onSubtract = () => {
-        setPlayerCount(playerCountHelper.subtract(playerCount))
+        const newPlayerCount = playerCountHelper.subtract(playerCount)
+        setPlayerCount(newPlayerCount)
+        onFeedbackChange({
+            ...getActualFeedback(),
+            playerCount: newPlayerCount,
+        })
     }
-
-    const postStatus = () => {
-        if (!!playerFeedback) {
-            fetcher.submit(
-                {
-                    status: feedbackStatus.toString(),
-                    note: note,
-                    gameId: playerFeedback.gameId,
-                    playerCount: playerCount.toString(),
-                    origin: "dashboard",
-                },
-                {
-                    method: "post",
-                    action: routeLinks.player.feedback({
-                        gameId: playerFeedback.gameId,
-                        playerId: playerFeedback.playerId
-                    }),
-                }
-            );
-        }
-    }
-
 
     return (
         <>
@@ -70,8 +75,7 @@ const PlayerFeedback = ({playerFeedback}: PlayerFeedbackProps) => {
                 </p>
                 <motion.div variants={animationConfig.animationItems}>
                     <ContentContainer>
-                        <PlayerStatus status={feedbackStatus ?? 0}
-                                      setStatus={(newStatus: number) => setFeedbackStatus(newStatus)}/>
+                        <PlayerStatus status={feedbackStatus} setStatus={onStatusChange}/>
                     </ContentContainer>
                 </motion.div>
                 <motion.div variants={animationConfig.animationItems}>
@@ -81,23 +85,19 @@ const PlayerFeedback = ({playerFeedback}: PlayerFeedbackProps) => {
                     <ContentContainer>
                         <PlayerCount playerCount={playerCount}
                                      onAdd={onAdd}
-                                     onSubtract={onSubtract}/>
+                                     onSubtract={onSubtract}
+                        />
                     </ContentContainer>
                 </motion.div>
                 <motion.div variants={animationConfig.animationItems}>
                     <TextAreaWithLabel
-                        id={"note"}
-                        name={"note"}
+                        id={"player.note"}
+                        name={"player.note"}
                         label={messages.game.feedback.headings.note}
-                        defaultValue={note ?? ''}
-                        onChange={(newNote: string) => setNote(newNote)}/>
+                        defaultValue={playerNote}
+                        onChange={onPlayerNoteChange}
+                    />
                 </motion.div>
-                <div className={"hover:cursor-pointer focus:cursor-pointer"}
-                     onClick={postStatus}>
-                    <DefaultButton>
-                        <motion.button type={"button"}>{messages.buttons.save}</motion.button>
-                    </DefaultButton>
-                </div>
             </motion.div>
         </>
     );

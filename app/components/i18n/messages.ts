@@ -14,7 +14,8 @@ const messages = {
     add: "Hinzufügen",
     cancel: "Abbruch",
     delete: "Löschen",
-    invite: "Einladen"
+    invite: "Einladen",
+    details: "Details"
   },
   actionType: {
     GAME_INVITATION: "Einladung",
@@ -48,7 +49,7 @@ const messages = {
   dashboard: {
     nextGame: 'Nächstes Spiel',
     playerAndGuests: 'Spieler und Gäste',
-    playerStatusForGame: (gameDate: string) => `Dein Status für das Spiel am ${gameDate}`,
+    playerStatusForGame: (gameDate: string) => `Deine Rückmeldung für den  ${gameDate}`,
     playerDefaultStatus: "Dein Standard-Status",
     playerProfile: "Dein Profil"
   },
@@ -156,6 +157,7 @@ const messages = {
     },
     feedback: {
       headings: {
+        defaultFeedback: "Standard Status",
         feedback: "Status",
         playerCount: "Gäste",
         note: "Notiz"

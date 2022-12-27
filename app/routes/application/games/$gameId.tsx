@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
         await authenticatePlayer(params, request);
 
     if (player && isFirstAuthentication) {
-        return redirect("/application/dashboard", {
+        return redirect(routeLinks.dashboard, {
             headers: {
                 "Set-Cookie": cookieHeader,
             },

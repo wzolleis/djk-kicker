@@ -1,4 +1,5 @@
 import React from "react";
+import _ from 'lodash'
 
 type InputProps = {
   id: string;
@@ -7,11 +8,18 @@ type InputProps = {
   label: string;
   required?: boolean | undefined;
   disabled?: boolean | undefined;
-  onChange?: any;
+
+  onChange?: (value: string) => void
 };
 
 const TextAreaWithLabel = (props: InputProps) => {
   const { id, name, label, required, disabled, defaultValue, onChange } = props;
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (onChange) {
+          onChange(event.target.value)
+      }
+  }
+
   return (
     <div className={"flex w-full flex-col gap-2"}>
       <label className={"font-default-medium text-gray-600"} htmlFor={name}>
@@ -22,8 +30,9 @@ const TextAreaWithLabel = (props: InputProps) => {
         defaultValue={defaultValue}
         id={id}
         name={name}
+        required={required}
         disabled={disabled}
-        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => onChange(event.target.value)}
+        onChange={_.debounce(handleChange, 500)}
       />
     </div>
   );

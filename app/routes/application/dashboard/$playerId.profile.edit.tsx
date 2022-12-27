@@ -1,26 +1,28 @@
-import {ActionFunction, redirect} from "@remix-run/node";
-import invariant from "tiny-invariant";
-import {updatePlayer} from "~/models/player.server";
-import routeLinks from "~/helpers/constants/routeLinks";
-import {Params} from "react-router";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import messages from "~/components/i18n/messages";
 import {Player} from "@prisma/client";
 
-export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
-    const playerId = params.playerId;
-    const formData = await request.formData();
-    const playerName = formData.get("name");
-    const playerMail = formData.get("mail");
-
-    invariant(!!playerId, 'playerId missing')
-    invariant(typeof playerName === "string", "playername");
-    invariant(typeof playerMail === "string", "playerMail");
-
-    await updatePlayer(playerId, playerName.trim(), playerMail.trim());
-
-    return redirect(routeLinks.dashboard);
-};
+// export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
+//     const playerId = params.playerId;
+//     const formData = await request.formData();
+//     const playerName = formData.get("name");
+//     const playerMail = formData.get("mail");
+//     const feedbackStatus = formData.get("feedbackStatus")
+//     const note = formData.get("note")
+//     const playerCount = formData.get("playerCount")
+//
+//     invariant(!!playerId, 'playerId missing')
+//     invariant(typeof playerName === "string", "playername");
+//     invariant(typeof playerMail === "string", "playerMail");
+//     invariant(typeof feedbackStatus === "number", "feedbackStatus");
+//     invariant(typeof playerCount === "number", "playerCount");
+//     invariant(typeof note === "string", "note");
+//
+//     await updatePlayer(playerId, playerName.trim(), playerMail.trim());
+//     await updateDefaultFeedback(playerId, feedbackStatus, playerCount, note)
+//
+//     return redirect(routeLinks.dashboard);
+// };
 
 const EditProfile = ({player}: {player: Player}) => {
     return (
