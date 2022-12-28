@@ -8,12 +8,14 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import {motion} from "framer-motion";
 import playerCountHelper from "~/utils/playerCountHelper";
 import animationConfig from "~/config/animationConfig";
+import {statusInConfig} from "~/config/status";
 
 type PlayerFeedbackProps = {
     playerFeedback: Feedback;
 
     onFeedbackChange: (feedBack: Feedback) => void
 };
+
 
 const PlayerFeedback = ({playerFeedback, onFeedbackChange}: PlayerFeedbackProps) => {
     const [feedbackStatus, setFeedbackStatus] = useState<number>(playerFeedback.status);
@@ -65,41 +67,50 @@ const PlayerFeedback = ({playerFeedback, onFeedbackChange}: PlayerFeedbackProps)
     }
 
     return (
-        <>
-            <motion.div variants={animationConfig.container}
-                        initial={"initial"}
-                        animate={"animate"}
-                        className={"flex flex-col gap-3"}>
-                <p className={"font-default-medium text-gray-600 mt-2"}>
-                    {messages.game.feedback.headings.feedback}
-                </p>
-                <motion.div variants={animationConfig.animationItems}>
+        <motion.div variants={animationConfig.container}
+                    initial={"initial"}
+                    animate={"animate"}
+                    className={"flex flex-col gap-3"}>
+            <p className={"font-default-medium text-gray-600 mt-2"}>
+                {messages.game.feedback.headings.feedback}
+            </p>
+            <motion.div variants={animationConfig.animationItems}>
+                <ContentContainer>
+                    <PlayerStatus status={feedbackStatus} setStatus={onStatusChange}/>
+                </ContentContainer>
+            </motion.div>
+            <motion.div key={feedbackStatus} variants={animationConfig.feedbackAnimationItems}>
+                {
+                    feedbackStatus === statusInConfig.confirmed &&
                     <ContentContainer>
-                        <PlayerStatus status={feedbackStatus} setStatus={onStatusChange}/>
-                    </ContentContainer>
-                </motion.div>
-                <motion.div variants={animationConfig.animationItems}>
-                    <p className={"font-default-medium text-gray-600"}>
-                        {messages.game.feedback.headings.playerCount}
-                    </p>
-                    <ContentContainer>
+                        <p className={"font-default-medium text-gray-600"}>
+                            {messages.game.feedback.headings.playerCount}
+                        </p>
                         <PlayerCount playerCount={playerCount}
                                      onAdd={onAdd}
                                      onSubtract={onSubtract}
                         />
                     </ContentContainer>
-                </motion.div>
-                <motion.div variants={animationConfig.animationItems}>
-                    <TextAreaWithLabel
-                        id={"player.note"}
-                        name={"player.note"}
-                        label={messages.game.feedback.headings.note}
-                        defaultValue={playerNote}
-                        onChange={onPlayerNoteChange}
-                    />
-                </motion.div>
+                }
+                {
+                    feedbackStatus !== statusInConfig.confirmed &&
+                    <ContentContainer>
+                        <p className={"font-default-medium text-gray-600"}>
+                            {messages.game.feedback.headings.playerCountNotAvailable}
+                        </p>
+                    </ContentContainer>
+                }
             </motion.div>
-        </>
+            <motion.div variants={animationConfig.feedbackAnimationItems}>
+                <TextAreaWithLabel
+                    id={"player.note"}
+                    name={"player.note"}
+                    label={messages.game.feedback.headings.note}
+                    defaultValue={playerNote}
+                    onChange={onPlayerNoteChange}
+                />
+            </motion.div>
+        </motion.div>
     );
 };
 

@@ -27,17 +27,17 @@ const DefaultFeedbackComponent = ({defaultFeedback, title}: DefaultFeedbackProps
         <>
             <p className={"font-default-medium text-gray-600"}>{title}</p>
             <ContentContainer>
-                <input type={"hidden"} value={feedbackStatus } name={"defaultFeedback.feedbackStatus"}/>
+                <input type={"hidden"} value={feedbackStatus } name={"dashboard.defaultFeedback.status"}/>
                 <PlayerStatus status={feedbackStatus} setStatus={setFeedbackStatus}/>
             </ContentContainer>
             <p className={"font-default-medium text-gray-600"}>{messages.game.feedback.headings.playerCount}</p>
             <ContentContainer>
-                <input type={"hidden"} value={playerCount } name={"defaultFeedback.playerCount"}/>
+                <input type={"hidden"} value={playerCount } name={"dashboard.defaultFeedback.playerCount"}/>
                 <PlayerCount playerCount={playerCount} onAdd={onAdd} onSubtract={onSubtract}></PlayerCount>
             </ContentContainer>
             <TextAreaWithLabel
                 id={"defaultFeedback.note"}
-                name={"defaultFeedback.note"}
+                name={"dashboard.defaultFeedback.note"}
                 label={messages.game.feedback.headings.note}
                 defaultValue={defaultFeedback?.note ?? ''}
             />

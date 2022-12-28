@@ -160,6 +160,7 @@ const messages = {
         defaultFeedback: "Standard Status",
         feedback: "Status",
         playerCount: "Gäste",
+        playerCountNotAvailable: "Gäste können nur mitgebracht werden, wenn man selbst kommt ;-)",
         note: "Notiz"
       },
       status: {

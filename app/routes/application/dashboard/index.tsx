@@ -5,25 +5,16 @@ import {Form, useLoaderData} from "@remix-run/react";
 import {getGameById, getMostRecentGame} from "~/models/games.server";
 import {findFeedbackWithPlayerIdAndGameId, getDefaultFeedback, updateFeedback,} from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
-import {getPlayerGreeting, useDate, useDateTime} from "~/utils";
-import ContentContainer from "~/components/common/container/ContentContainer";
-import Subheading from "~/components/common/header/Subheading";
-import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedbackComponent";
+import {getPlayerGreeting} from "~/utils";
 import {motion} from "framer-motion";
-import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
-import playerFeedback from "~/components/player/feedback/PlayerFeedback";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
-import messages from "~/components/i18n/messages";
-import EditProfile from "~/routes/application/dashboard/$playerId.profile.edit";
 import routeLinks from "~/helpers/constants/routeLinks";
-import {GameFeedbackSummary} from "~/components/game/GameSummary";
 import {GameWithFeedback} from "~/config/gameTypes";
-import PlayerCounter from "~/components/game/feedback/PlayerCounter";
-import {calculateCompleteNumberOfPlayers} from "~/utils/playerCountHelper";
 import animationConfig from "~/config/animationConfig";
-import ButtonContainer from "~/components/common/container/ButtonContainer";
-import {useState} from "react";
 import invariant from "tiny-invariant";
+import PlayerProfile from "~/components/dashbaord/playerProfile";
+import GameFeedback from "~/components/dashbaord/gameFeedback";
+import GameSummary from "~/components/dashbaord/gameSummary";
+import {istStatusInConfig, statusInConfig} from "~/config/status";
 
 type LoaderData = {
     isAuthenticated: boolean;
@@ -38,24 +29,102 @@ type ActionData = {
     gameFeedback?: Feedback;
 };
 
-type FeedbackFormValues = Omit<Feedback, "id">
+type DashboardIntentValues = 'playerFeedback' | 'playerProfile'
 
-const getPlayerFeedBack = (formData: FormData, playerId: string, gameId: string): FeedbackFormValues => {
-    const status = formData.get("dashboard.player.feedbackStatus")
-    const playerCount = formData.get("dashboard.player.playerCount") ?? 0
-    const note = formData.get("dashboard.player.note")
 
-    invariant(typeof playerCount === 'string', "invalid player count value: " + playerCount)
-    invariant(typeof status === 'string', "invalid status value: " + status)
-    invariant(typeof note === 'string', "invalid note value: " + note)
+type DashboardFormInputName =
+    "intent"
+    | "dashboard.feedback.status" | "dashboard.feedback.playerCount" | "dashboard.feedback.note"
+    | "dashboard.defaultFeedback.status" | "dashboard.defaultFeedback.playerCount" | "dashboard.defaultFeedback.note"
+    | "dashboard.profile.player.name" | "dashboard.profile.player.email"
 
+const isDashboardIntent = (value: string): value is DashboardIntentValues => {
+    return value === "playerFeedback" || value === "playerProfile"
+}
+
+type DashboardFormValues = {
+    gameId: string
+    playerId: string
+    intent: DashboardIntentValues
+    feedback: {
+        status: statusInConfig
+        note: string
+        playerCount: number
+    }
+    profile: {
+        name: string
+        email: string
+    }
+    defaultFeedback: {
+        status: statusInConfig
+        note: string
+        playerCount: number
+    }
+}
+
+class DashboardForm {
+    formData: FormData
+    constructor(formData: FormData) {
+        this.formData = formData
+    }
+
+    get(name: DashboardFormInputName): FormDataEntryValue | null {
+        return this.formData.get(name)
+    }
+}
+
+const getDashboardFormValues = (formData: FormData, playerId: string, gameId: string): DashboardFormValues => {
+    const dashboardForm = new DashboardForm(formData)
+
+    const intent = dashboardForm.get("intent")
+    const feedbackStatus = dashboardForm.get("dashboard.feedback.status") ?? `${statusInConfig.unknown}`
+    const feedbackPlayerCount = dashboardForm.get("dashboard.feedback.playerCount") ?? "0"
+    const feedbackNote = dashboardForm.get("dashboard.feedback.note")
+    const playerName = dashboardForm.get("dashboard.profile.player.name")
+    const playerMail = dashboardForm.get("dashboard.profile.player.email")
+    const defaultFeedbackStatus = dashboardForm.get("dashboard.defaultFeedback.status") ?? `${statusInConfig.unknown}`
+    const defaultFeedbackPlayerCount = dashboardForm.get("dashboard.defaultFeedback.playerCount") ?? "0"
+    const defaultFeedbackNote = dashboardForm.get("dashboard.defaultFeedback.note")
+
+    invariant(typeof intent === 'string', "invalid intent type: " + intent)
+    invariant(isDashboardIntent(intent), "invalid intent value: " + intent)
+
+    invariant(typeof feedbackPlayerCount === 'string', "invalid player count type: " + feedbackPlayerCount)
+    invariant(Number.isInteger(Number.parseInt(feedbackPlayerCount)), "invalid player count value " + feedbackPlayerCount)
+    invariant(typeof feedbackStatus === 'string', "invalid status type: " + feedbackStatus)
+    invariant(typeof feedbackNote === 'string', "invalid note type: " + feedbackNote)
+
+    invariant(typeof defaultFeedbackPlayerCount === 'string', "invalid default_player_count type: " + defaultFeedbackPlayerCount)
+    invariant(Number.isInteger(Number.parseInt(defaultFeedbackPlayerCount)), "invalid default_player_ count value" + defaultFeedbackPlayerCount)
+    invariant(typeof defaultFeedbackStatus === 'string', "invalid default_status type: " + defaultFeedbackStatus)
+    invariant(typeof defaultFeedbackNote === 'string', "invalid default_note type: " + defaultFeedbackNote)
+
+    invariant(typeof playerName === 'string', "invalid player name type: " + playerName)
+    invariant(typeof playerMail === 'string', "invalid player mail type: " + playerMail)
+
+    const feedbackStatusNumber = Number.parseInt(feedbackStatus)
+    const defaultFeedbackStatusNumber = Number.parseInt(defaultFeedbackStatus)
+    invariant(istStatusInConfig(feedbackStatusNumber), "invalid feedback_status value: " + feedbackStatusNumber)
+    invariant(istStatusInConfig(defaultFeedbackStatusNumber), "invalid feedback_status value: " + defaultFeedbackStatusNumber)
 
     return {
-        status: Number.parseInt(status),
-        note,
-        playerCount: Number.parseInt(playerCount),
         gameId,
-        playerId
+        playerId,
+        intent,
+        feedback: {
+            status: feedbackStatusNumber,
+            note: feedbackNote,
+            playerCount: Number.parseInt(feedbackPlayerCount),
+        },
+        profile: {
+            name: playerName,
+            email: playerMail
+        },
+        defaultFeedback: {
+            status: defaultFeedbackStatusNumber,
+            note: defaultFeedbackNote,
+            playerCount: Number.parseInt(defaultFeedbackPlayerCount)
+        }
     }
 
 }
@@ -73,9 +142,16 @@ export const action: ActionFunction = async ({params, request}) => {
     }
 
     invariant(typeof gameId === 'string', "invalid gameId")
-    const feedBack: FeedbackFormValues = getPlayerFeedBack(formData, player.id, gameId)
+    const formValues: DashboardFormValues = getDashboardFormValues(formData, player.id, gameId)
+    const {intent, profile, feedback, defaultFeedback} = formValues
 
-    await updateFeedback(player.id, gameId, feedBack.status, feedBack.playerCount, feedBack.note)
+    if (intent === "playerFeedback") {
+        await updateFeedback(player.id, gameId, feedback.status, feedback.playerCount, feedback.note)
+    } else if (intent === "playerProfile") {
+        //     await updatePlayer(playerId, playerName.trim(), playerMail.trim());
+//     await updateDefaultFeedback(playerId, feedbackStatus, playerCount, note)
+    }
+
 
     // const {status, note, playerCount, gameId} = getFeedbackValues(formData);
     // if (!player) {
@@ -126,87 +202,6 @@ export const loader: LoaderFunction = async ({params, request}) => {
     });
 };
 
-const NextGameSummary = ({nextGame}: { nextGame: GameWithFeedback | null }) => {
-    if (!nextGame) return (
-        <Subheading title={messages.errors.noGame}/>
-    )
-
-    return (
-        <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
-            <Subheading title={`${messages.dashboard.nextGame}: ${useDateTime(new Date(nextGame.gameTime))}`}/>
-            <div>
-                <ContentContainer className="bg-blue-200">
-                    <PlayerCounter
-                        game={nextGame}
-                        calculate={calculateCompleteNumberOfPlayers}
-                        title={messages.dashboard.playerAndGuests}
-                        counterColor={"text-color-black"}
-                    />
-                    <GameFeedbackSummary game={nextGame}/>
-                    <div className={"flex justify-end mt-3"}>
-                        <DefaultButton>
-                            <button type={"button"}>{messages.buttons.details}</button>
-                            <p className={"fa fa-arrow-circle-right"}/>
-                        </DefaultButton>
-                    </div>
-                </ContentContainer>
-            </div>
-        </ContentContainer>
-    )
-}
-
-const PlayerProfile = ({player, defaultFeedback}: { player: Player, defaultFeedback: DefaultFeedback }) => {
-    return (
-        <ContentContainer className={"shadow-lg shadow-indigo-500/50"}>
-            <Subheading title={messages.dashboard.playerProfile}/>
-            <EditProfile player={player}/>
-            <hr className="my-8 h-px bg-gray-400 border-0"/>
-            <DefaultFeedbackComponent defaultFeedback={defaultFeedback}
-                                      title={messages.dashboard.playerDefaultStatus}
-            />
-            <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
-                <DefaultButton className={"ml-auto"}>
-                    <button type={"submit"} name={"intent"} value={"playerProfile"}>{messages.buttons.save}</button>
-                </DefaultButton>
-            </ButtonContainer>
-        </ContentContainer>
-    )
-}
-
-const NextGameFeedback = ({
-                              nextGame,
-                              nextGameFeedback,
-                              defaultFeedback
-                          }: { nextGame: GameWithFeedback | null, nextGameFeedback: Feedback | null, defaultFeedback: DefaultFeedback }) => {
-    if (!nextGame) return (
-        <Subheading title={messages.errors.noGame}/>
-    )
-    const playerFeedbackOrDefault: Feedback = nextGameFeedback ?? {gameId: nextGame.id, ...defaultFeedback}
-    const [feedback, setFeedBack] = useState<Feedback>(playerFeedbackOrDefault)
-
-    const handleFeedBackChange = (changedFeedback: Feedback) => {
-        setFeedBack(changedFeedback)
-    }
-
-    return (
-        <ContentContainer className={"shadow-lg shadow-indigo-500/50"}>
-            <Subheading
-                title={messages.dashboard.playerStatusForGame(useDate(new Date(nextGame.gameTime)))}/>
-            <input type={"hidden"} value={feedback.status} name={"dashboard.player.feedbackStatus"}/>
-            <input type={"hidden"} value={feedback.playerCount} name={"dashboard.player.playerCount"}/>
-            <input type={"hidden"} value={feedback.note ?? ''} name={"dashboard.player.note"}/>
-
-            <PlayerFeedback playerFeedback={playerFeedbackOrDefault} onFeedbackChange={handleFeedBackChange}/>
-            <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
-                <DefaultButton>
-                    <button type={"submit"} name={"intent"} value={"playerFeedback"}>{messages.buttons.save}</button>
-                </DefaultButton>
-            </ButtonContainer>
-        </ContentContainer>
-    )
-}
-
-
 const Dashboard = () => {
     const {player, nextGame, nextGameFeedback, defaultFeedback} = useLoaderData() as unknown as LoaderData;
 
@@ -220,11 +215,12 @@ const Dashboard = () => {
                 initial={"initial"}
                 animate={"animate"}>
                 <motion.div variants={animationConfig.animationItems}>
-                    <NextGameSummary nextGame={nextGame}/>
+                    <GameSummary nextGame={nextGame}/>
                 </motion.div>
                 <motion.div variants={animationConfig.animationItems}>
-                    <NextGameFeedback nextGame={nextGame} nextGameFeedback={nextGameFeedback}
-                                      defaultFeedback={defaultFeedback}/>
+                    <GameFeedback nextGame={nextGame}
+                                  nextGameFeedback={nextGameFeedback}
+                                  defaultFeedback={defaultFeedback}/>
                 </motion.div>
                 <motion.div variants={animationConfig.animationItems}>
                     <PlayerProfile player={player} defaultFeedback={defaultFeedback}/>

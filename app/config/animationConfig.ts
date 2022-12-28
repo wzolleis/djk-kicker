@@ -4,26 +4,39 @@ const container = {
     },
     animate: {
         opacity: 1,
-        transition: {
-            delayChildren: 0.1,
-            staggerChildren: 0.1,
-        },
     },
+    exit: {
+        opacity: 0
+    }
 };
 const animationItems = {
     initial: {
-        y: 1100,
+        opacity: 0,
     },
     animate: {
-        y: 0,
+        opacity: 1,
         transition: {
-            ease: [0.6, 0.01, -0.05, 0.95],
             duration: 1,
         },
     },
+
+};
+
+const feedbackAnimationItems = {
+    initial: {
+        opacity: 0,
+    },
+    animate: {
+        opacity: 1,
+        transition: {
+            duration: 1.5,
+        },
+    },
+
 };
 
 export default {
     container,
-    animationItems
+    animationItems,
+    feedbackAnimationItems
 }
