@@ -1,9 +1,9 @@
-import type { Feedback, Game, Player } from "@prisma/client";
-import { DefaultFeedback } from "@prisma/client";
-import { prisma } from "~/db.server";
-import { Nullable } from "vitest";
-import { configuration } from "~/config";
-import { DateTime } from "luxon";
+import type {Feedback, Game, Player} from "@prisma/client";
+import {DefaultFeedback} from "@prisma/client";
+import {prisma} from "~/db.server";
+import {Nullable} from "vitest";
+import {configuration} from "~/config";
+import {DateTime} from "luxon";
 
 export async function getFeedbackForGame(gameId: Feedback["gameId"]) {
     return await prisma.feedback.findMany({ where: { gameId } });
@@ -101,7 +101,7 @@ export async function updateFeedback(
     gameId: Game["id"],
     status: number,
     playerCount: number,
-    note: Nullable<string>
+    note: string | null
 ) {
     return await prisma.feedback.update({
         where: {

@@ -3,7 +3,7 @@ import {DefaultFeedback, Feedback, Player} from "@prisma/client";
 import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
 import {Form, useLoaderData} from "@remix-run/react";
 import {getGameById, getMostRecentGame} from "~/models/games.server";
-import {findFeedbackWithPlayerIdAndGameId, getDefaultFeedback,} from "~/models/feedback.server";
+import {findFeedbackWithPlayerIdAndGameId, getDefaultFeedback, updateFeedback,} from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
 import {getPlayerGreeting, useDate, useDateTime} from "~/utils";
 import ContentContainer from "~/components/common/container/ContentContainer";
@@ -23,6 +23,7 @@ import {calculateCompleteNumberOfPlayers} from "~/utils/playerCountHelper";
 import animationConfig from "~/config/animationConfig";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {useState} from "react";
+import invariant from "tiny-invariant";
 
 type LoaderData = {
     isAuthenticated: boolean;
@@ -37,9 +38,45 @@ type ActionData = {
     gameFeedback?: Feedback;
 };
 
+type FeedbackFormValues = Omit<Feedback, "id">
+
+const getPlayerFeedBack = (formData: FormData, playerId: string, gameId: string): FeedbackFormValues => {
+    const status = formData.get("dashboard.player.feedbackStatus")
+    const playerCount = formData.get("dashboard.player.playerCount") ?? 0
+    const note = formData.get("dashboard.player.note")
+
+    invariant(typeof playerCount === 'string', "invalid player count value: " + playerCount)
+    invariant(typeof status === 'string', "invalid status value: " + status)
+    invariant(typeof note === 'string', "invalid note value: " + note)
+
+
+    return {
+        status: Number.parseInt(status),
+        note,
+        playerCount: Number.parseInt(playerCount),
+        gameId,
+        playerId
+    }
+
+}
+
 export const action: ActionFunction = async ({params, request}) => {
-    // const {player} = await authenticatePlayer(params, request);
-    // const formData = await request.formData();
+    const {player} = await authenticatePlayer(params, request);
+    const formData = await request.formData();
+    const gameId = formData.get("gameId")
+
+    if (!player) {
+        return redirect(routeLinks.games);
+    }
+    if (!gameId) {
+        throw new Error("No GameId provided");
+    }
+
+    invariant(typeof gameId === 'string', "invalid gameId")
+    const feedBack: FeedbackFormValues = getPlayerFeedBack(formData, player.id, gameId)
+
+    await updateFeedback(player.id, gameId, feedBack.status, feedBack.playerCount, feedBack.note)
+
     // const {status, note, playerCount, gameId} = getFeedbackValues(formData);
     // if (!player) {
     //     return redirect(routeLinks.games);
@@ -144,13 +181,8 @@ const NextGameFeedback = ({
     if (!nextGame) return (
         <Subheading title={messages.errors.noGame}/>
     )
-
-    const playerFeedback: Feedback = nextGameFeedback ?? {
-        gameId: nextGame.id,
-        ...defaultFeedback
-    }
-
-    const [feedback, setFeedBack] = useState<Feedback>(playerFeedback)
+    const playerFeedbackOrDefault: Feedback = nextGameFeedback ?? {gameId: nextGame.id, ...defaultFeedback}
+    const [feedback, setFeedBack] = useState<Feedback>(playerFeedbackOrDefault)
 
     const handleFeedBackChange = (changedFeedback: Feedback) => {
         setFeedBack(changedFeedback)
@@ -164,7 +196,7 @@ const NextGameFeedback = ({
             <input type={"hidden"} value={feedback.playerCount} name={"dashboard.player.playerCount"}/>
             <input type={"hidden"} value={feedback.note ?? ''} name={"dashboard.player.note"}/>
 
-            <PlayerFeedback playerFeedback={playerFeedback} onFeedbackChange={handleFeedBackChange}/>
+            <PlayerFeedback playerFeedback={playerFeedbackOrDefault} onFeedbackChange={handleFeedBackChange}/>
             <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
                 <DefaultButton>
                     <button type={"submit"} name={"intent"} value={"playerFeedback"}>{messages.buttons.save}</button>
@@ -180,6 +212,7 @@ const Dashboard = () => {
 
     return (
         <Form method={"post"}>
+            <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
             <PageHeader title={getPlayerGreeting(player.name)}/>
             <motion.div
                 className={"flex flex-col gap-4"}
