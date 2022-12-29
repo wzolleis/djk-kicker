@@ -69,14 +69,10 @@ export async function getPlayerFeedbackForGame(
     gameId: Feedback["gameId"]
 ) {
     return await prisma.player.findUnique({
-        where: {
-            id,
-        },
+        where: {id,},
         include: {
             feedback: {
-                where: {
-                    gameId,
-                },
+                where: {gameId,},
             },
         },
     });
