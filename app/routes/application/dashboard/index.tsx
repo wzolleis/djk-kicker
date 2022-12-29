@@ -11,17 +11,23 @@ import {
 } from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
 import {getPlayerGreeting} from "~/utils";
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {GameWithFeedback} from "~/config/gameTypes";
 import animationConfig from "~/config/animationConfig";
 import invariant from "tiny-invariant";
 import GameFeedback from "~/components/dashbaord/gameFeedback";
 import GameSummary from "~/components/dashbaord/gameSummary";
-import DashboardPlayerProfileForm from "~/components/dashbaord/playerProfileForm";
+import DashboardPlayerProfileForm, {DashboardPlayerProfileDescription} from "~/components/dashbaord/playerProfileForm";
 import {updatePlayer} from "~/models/player.server";
 import {DashboardFormValues, getDashboardFormValues} from "~/components/dashbaord/dashboardHelper";
 import _ from "lodash";
+import {useState} from "react";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import ButtonContainer from "~/components/common/container/ButtonContainer";
+import messages from "~/components/i18n/messages";
+import RedButton from "~/components/common/buttons/RedButton";
+import ContentContainer from "~/components/common/container/ContentContainer";
 
 type LoaderData = {
     isAuthenticated: boolean;
@@ -91,37 +97,85 @@ export const loader: LoaderFunction = async ({params, request}) => {
     });
 };
 
+
 const Dashboard = () => {
     const {player, nextGame, nextGameFeedback, defaultFeedback} = useLoaderData() as unknown as LoaderData;
     const actionData = useActionData<ActionData>()
-
+    const [showEditProfile, setShowEditProfile] = useState<boolean>(false)
     const playerWithUpdate: Player = _.merge(player, actionData?.player)
     const feedbackWithUpdate: Feedback = _.merge(nextGameFeedback, actionData?.gameFeedback)
     const defaultFeedbackWithUpdate: DefaultFeedback = _.merge(defaultFeedback, actionData?.defaultFeedback)
 
+    const profileViewItems = [
+        {
+            id: "editProfile",
+            showEditProfile: true
+        },
+        {
+            id: "showProfileDescription",
+            showEditProfile: false
+        }
+    ]
+
     return (
-        <Form method={"post"}>
-            <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
-            <PageHeader title={getPlayerGreeting(playerWithUpdate.name)}/>
-            <motion.div
-                className={"flex flex-col gap-4"}
-                variants={animationConfig.container}
-                initial={"initial"}
-                animate={"animate"}>
-                <motion.div variants={animationConfig.animationItems}>
-                    <GameSummary nextGame={nextGame}/>
+        <>
+            <Form method={"post"}>
+                <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
+                <PageHeader title={getPlayerGreeting(playerWithUpdate.name)}/>
+                <motion.div
+                    className={"flex flex-col gap-4"}
+                    variants={animationConfig.container}
+                    initial={"initial"}
+                    animate={"animate"}
+                    exit={"exit"}
+                >
+                    <motion.div variants={animationConfig.animationItems}>
+                        <GameSummary nextGame={nextGame}/>
+                    </motion.div>
+                    <motion.div variants={animationConfig.animationItems}>
+                        <GameFeedback nextGame={nextGame}
+                                      nextGameFeedback={feedbackWithUpdate}
+                                      defaultFeedback={defaultFeedbackWithUpdate}/>
+                    </motion.div>
+                    <ContentContainer className={"shadow-lg shadow-indigo-500/50"}>
+                        <AnimatePresence>
+                            <motion.div key={"editProfile"} variants={animationConfig.profileAnimationItems}>
+                                {showEditProfile &&
+                                    <DashboardPlayerProfileForm player={playerWithUpdate}
+                                                                defaultFeedback={defaultFeedbackWithUpdate}
+                                    />
+                                }
+                            </motion.div>
+                            <motion.div key={"showProfileDescription"} variants={animationConfig.profileAnimationItems}>
+                                {!showEditProfile && <DashboardPlayerProfileDescription/>}
+                            </motion.div>
+                        </AnimatePresence>
+                        <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
+                            <DefaultButton className={`ml-auto ${!showEditProfile ? '' : 'hidden'}`}>
+                                <button type={"button"} onClick={() => setShowEditProfile(!showEditProfile)}>
+                                    {messages.dashboard.showProfile}
+                                </button>
+                            </DefaultButton>
+                            <RedButton className={`ml-auto ${showEditProfile ? '' : 'hidden'}`}>
+                                <button type={"button"} onClick={() => setShowEditProfile(!showEditProfile)}>
+                                    {messages.buttons.cancel}
+                                </button>
+                            </RedButton>
+                            <DefaultButton className={`${showEditProfile ? '' : 'hidden'}`}>
+                                <button type={"submit"} name={"intent"}
+                                        value={"playerProfile"}
+                                        onClick={() => setShowEditProfile(!showEditProfile)}
+                                >
+                                    {messages.dashboard.saveProfile}
+                                </button>
+                            </DefaultButton>
+                        </ButtonContainer>
+                    </ContentContainer>
                 </motion.div>
-                <motion.div variants={animationConfig.animationItems}>
-                    <GameFeedback nextGame={nextGame}
-                                  nextGameFeedback={feedbackWithUpdate}
-                                  defaultFeedback={defaultFeedbackWithUpdate}/>
-                </motion.div>
-                <motion.div variants={animationConfig.animationItems}>
-                    <DashboardPlayerProfileForm player={playerWithUpdate} defaultFeedback={defaultFeedbackWithUpdate}/>
-                </motion.div>
-            </motion.div>
-        </Form>
-    );
+            </Form>
+        </>
+    )
+        ;
 };
 
 export default Dashboard;

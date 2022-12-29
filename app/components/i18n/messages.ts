@@ -51,7 +51,11 @@ const messages = {
     playerAndGuests: 'Spieler und Gäste',
     playerStatusForGame: (gameDate: string) => `Deine Rückmeldung für den  ${gameDate}`,
     playerDefaultStatus: "Dein Standard-Status",
-    playerProfile: "Dein Profil"
+    playerProfile: "Dein Profil",
+    playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten und Deinen optionalen Standard-Status.",
+    playerProfileDescription_2: "Dieser Status wird verwendet, wenn Du keine Rückmeldung für das nächste Spiel setzt und gilt solange, bis Du ihn wieder löscht.",
+    saveProfile: "Profil speichern",
+    showProfile: "Profil anzeigen"
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",

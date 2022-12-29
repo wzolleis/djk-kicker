@@ -32,11 +32,35 @@ const feedbackAnimationItems = {
             duration: 1.5,
         },
     },
+    exit: {
+        opacity: 0,
+        transition: {
+            duration: 1.5,
+        },
+    }
+};
 
+const profileAnimationItems = {
+    initial: {
+        opacity: 0,
+    },
+    animate: {
+        opacity: 1,
+        transition: {
+            duration: 1.5,
+        },
+    },
+    exit: {
+        opacity: 0,
+        transition: {
+            duration: 1.5,
+        },
+    }
 };
 
 export default {
     container,
     animationItems,
-    feedbackAnimationItems
+    feedbackAnimationItems,
+    profileAnimationItems
 }
