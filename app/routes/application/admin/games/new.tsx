@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({request}) => {
     invariant(typeof name === "string", "name must be a string");
     invariant(!!userId, "UserId muss gesetzt sein");
     await createGame(gameTime, name, location!.toString());
-    return redirect(routeLinks.games);
+    return redirect(routeLinks.dashboard);
 };
 
 const NewGame = () => {

@@ -49,7 +49,7 @@ export const action: ActionFunction = async ({params, request}) => {
     const gameId = formData.get("gameId")
 
     if (!player) {
-        return redirect(routeLinks.games);
+        return redirect(routeLinks.playerNotAuthenticated);
     }
     if (!gameId) {
         throw new Error("No GameId provided");
@@ -84,7 +84,7 @@ export const action: ActionFunction = async ({params, request}) => {
 export const loader: LoaderFunction = async ({params, request}) => {
     const {isAuthenticated, player} = await authenticatePlayer(params, request);
     if (!player) {
-        return redirect(routeLinks.games);
+        return redirect(routeLinks.playerNotAuthenticated);
     }
     const defaultFeedback = await getDefaultFeedback(player.id);
     const nextGame = await getMostRecentGame();
@@ -104,10 +104,15 @@ export const loader: LoaderFunction = async ({params, request}) => {
 const Dashboard = () => {
     const {player, nextGame, nextGameFeedback, defaultFeedback} = useLoaderData() as unknown as LoaderData;
     const actionData = useActionData<ActionData>()
+
     const [showEditProfile, setShowEditProfile] = useState<boolean>(false)
     const playerWithUpdate: Player = _.merge(player, actionData?.player)
     const feedbackWithUpdate: Feedback = _.merge(nextGameFeedback, actionData?.gameFeedback)
     const defaultFeedbackWithUpdate: DefaultFeedback = _.merge(defaultFeedback, actionData?.defaultFeedback)
+
+
+
+    const toggleShowEditProfile = () => setShowEditProfile(!showEditProfile)
 
     const profileViewItems = [
         {
@@ -156,21 +161,21 @@ const Dashboard = () => {
                             }
                         </AnimatePresence>
                         <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
-                            <DefaultButton className={`mr-auto ${!showEditProfile ? '' : 'hidden'}`}>
-                                <button type={"button"} onClick={() => setShowEditProfile(!showEditProfile)}>
+                            <DefaultButton className={`ml-auto bg-grey-500 ${!showEditProfile ? '' : 'hidden'}`}>
+                                <button type={"button"} onClick={toggleShowEditProfile}>
                                     {messages.dashboard.showProfile}
-                                    <p className={"fa ml-2 fa-arrow-circle-down"}/>
                                 </button>
                             </DefaultButton>
                             <RedButton className={`ml-auto ${showEditProfile ? '' : 'hidden'}`}>
-                                <button type={"button"} onClick={() => setShowEditProfile(!showEditProfile)}>
+                                <button type={"button"} onClick={toggleShowEditProfile}>
                                     {messages.buttons.cancel}
                                 </button>
                             </RedButton>
                             <DefaultButton className={`${showEditProfile ? '' : 'hidden'}`}>
-                                <button type={"submit"} name={"intent"}
+                                <button type={"submit"}
+                                        name={"intent"}
                                         value={"playerProfile"}
-                                        onClick={() => setShowEditProfile(!showEditProfile)}
+                                        onClick={toggleShowEditProfile}
                                 >
                                     {messages.dashboard.saveProfile}
                                 </button>
@@ -181,7 +186,6 @@ const Dashboard = () => {
             </Form>
         </>
     )
-        ;
 };
 
 export default Dashboard;

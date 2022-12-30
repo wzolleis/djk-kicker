@@ -1,27 +1,13 @@
-import {
-    ActionFunction,
-    json,
-    LoaderFunction,
-    redirect,
-} from "@remix-run/node";
-import { AdminInvitation } from "@prisma/client";
-import {
-    Form,
-    useActionData,
-    useCatch,
-    useLoaderData,
-    useNavigate,
-} from "@remix-run/react";
-import { DateTime } from "luxon";
-import {
-    getAdminInvitation,
-    updateAdminInvitation,
-} from "~/models/admin.user.invitation.server";
-import { decryptEncryptedAdminToken } from "~/utils/token.server";
+import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
+import {AdminInvitation} from "@prisma/client";
+import {Form, useActionData, useCatch, useLoaderData, useNavigate,} from "@remix-run/react";
+import {DateTime} from "luxon";
+import {getAdminInvitation, updateAdminInvitation,} from "~/models/admin.user.invitation.server";
+import {decryptEncryptedAdminToken} from "~/utils/token.server";
 import routeLinks from "~/helpers/constants/routeLinks";
-import { Params } from "react-router";
+import {Params} from "react-router";
 import invariant from "tiny-invariant";
-import { createUser, getUserByEmail } from "~/models/user.server";
+import {createUser, getUserByEmail} from "~/models/user.server";
 import PageHeader from "~/components/common/PageHeader";
 import messages from "~/components/i18n/messages";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
@@ -207,8 +193,8 @@ const InviteResponseView = () => {
                     />
                     <ButtonContainer>
                         <RedButton>
-                            <button onClick={() => navigate(routeLinks.games)}>
-                                {messages.appmenu.games}
+                            <button onClick={() => navigate(routeLinks.dashboard)}>
+                                {messages.appmenu.dashboard}
                             </button>
                         </RedButton>
                         <DefaultButton className="ml-auto">

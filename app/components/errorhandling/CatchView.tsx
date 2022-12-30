@@ -25,7 +25,7 @@ const CatchView = ({ status, statusText, description, caught }: CatchViewProps) 
         </pre>
       )}
       <DefaultButton className={"m-5 flex justify-start"}>
-        <button onClick={() => navigate(routeLinks.games)}>{messages.appmenu.games}</button>
+        <button onClick={() => navigate(routeLinks.dashboard)}>{messages.appmenu.dashboard}</button>
       </DefaultButton>
     </div>
   );

@@ -20,7 +20,7 @@ const ErrorView = ({ error }: ErrorViewProps) => {
       <pre>{error.stack}</pre>
       <ButtonContainer>
         <DefaultButton className={"m-5 flex justify-start"}>
-          <button onClick={() => navigate(routeLinks.games)}>{messages.appmenu.games}</button>
+          <button onClick={() => navigate(routeLinks.dashboard)}>{messages.appmenu.games}</button>
         </DefaultButton>
       </ButtonContainer>
     </div>

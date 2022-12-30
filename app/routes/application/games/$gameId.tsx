@@ -2,17 +2,18 @@ import type {LoaderFunction} from "@remix-run/node";
 import {json, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import {getGameById} from "~/models/games.server";
-import {Outlet, useLoaderData, useNavigate} from "@remix-run/react";
+import {useLoaderData} from "@remix-run/react";
 import Players from "~/components/game/Players";
 import type {PlayerWithFeedback} from "~/models/player.server";
 import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
 import {authenticatePlayer} from "~/utils/session.server";
 import {Player} from "@prisma/client";
-import Modal from "~/components/common/modal/Modal";
-import {useEffect, useState} from "react";
 import routeLinks from "~/helpers/constants/routeLinks";
 import GameSummary from "~/components/game/GameSummary";
 import {GameWithFeedback} from "~/config/gameTypes";
+import Subheading from "~/components/common/header/Subheading";
+import messages from "~/components/i18n/messages";
+import {useDateTime} from "~/utils";
 
 type LoaderData = {
     game: GameWithFeedback;
@@ -53,51 +54,19 @@ export const loader: LoaderFunction = async ({params, request}) => {
 const GameIndex = () => {
     const {game, players, isAuthenticated} =
         useLoaderData() as unknown as LoaderData;
-    const [showModal, setShowModal] = useState(false);
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        setShowModal(false);
-    }, [game.id]);
-
-    function closeModal() {
-        setShowModal(false);
-        navigate(routeLinks.game(game.id));
-    }
-
-    function openModal() {
-        setShowModal(true);
-    }
 
     // @ts-ignore
     return (
         <>
             <section className={"mt-5 flex flex-col gap-5"}>
+                <Subheading title={`${messages.game.headings.gameData}: ${useDateTime(new Date(game.gameTime))}`}/>
                 <GameSummary game={game}/>
                 <Players
-                    onClick={() => openModal()}
                     isAuthenticated={isAuthenticated}
                     players={players}
                     gameId={game.id}
                 />
             </section>
-            <Modal
-                onClose={() => closeModal()}
-                title={"Status bearbeiten"}
-                show={showModal}>
-                <Outlet></Outlet>
-                <div className={"mt-5 flex w-full justify-center"}>
-                    <button
-                        onClick={() => closeModal()}
-                        hidden={isAuthenticated}
-                        className={
-                            "w-full rounded-xl bg-indigo-600 p-3 font-inter-medium text-white "
-                        }>
-                        Zurück
-                    </button>
-                </div>
-            </Modal>
         </>
     );
 };
