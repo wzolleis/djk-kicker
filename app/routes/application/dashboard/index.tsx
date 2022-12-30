@@ -1,13 +1,8 @@
-import { authenticatePlayer } from "~/utils/session.server";
-import { DefaultFeedback, Feedback, Game, Player } from "@prisma/client";
-import {
-    ActionFunction,
-    json,
-    LoaderFunction,
-    redirect,
-} from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
-import { getMostRecentGame } from "~/models/games.server";
+import {authenticatePlayer} from "~/utils/session.server";
+import {DefaultFeedback, Feedback, Player} from "@prisma/client";
+import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
+import {Form, useActionData, useLoaderData} from "@remix-run/react";
+import {getGameById, getMostRecentGame} from "~/models/games.server";
 import {
     findFeedbackWithPlayerIdAndGameId,
     getDefaultFeedback,
@@ -15,164 +10,178 @@ import {
     updateFeedback,
 } from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
-import { getPlayerGreeting } from "~/utils";
-import ContentContainer from "~/components/common/container/ContentContainer";
-import Subheading from "~/components/common/header/Subheading";
-import { getFeedbackValues } from "~/utils/form.session";
-import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedbackComponent";
-import { NextGame } from "~/components/game/NextGame";
-import { motion } from "framer-motion";
-import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
-import ButtonContainer from "~/components/common/container/ButtonContainer";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
-import messages from "~/components/i18n/messages";
-import EditProfile from "~/routes/application/dashboard/$playerId.profile.edit";
+import {getPlayerGreeting} from "~/utils";
+import {AnimatePresence, motion} from "framer-motion";
 import routeLinks from "~/helpers/constants/routeLinks";
+import {GameWithFeedback} from "~/config/gameTypes";
+import animationConfig from "~/config/animationConfig";
+import invariant from "tiny-invariant";
+import GameFeedback from "~/components/dashbaord/gameFeedback";
+import GameSummary from "~/components/dashbaord/gameSummary";
+import DashboardPlayerProfileForm, {DashboardPlayerProfileDescription} from "~/components/dashbaord/playerProfileForm";
+import {updatePlayer} from "~/models/player.server";
+import {DashboardFormValues, getDashboardFormValues} from "~/components/dashbaord/dashboardHelper";
+import _ from "lodash";
+import {useState} from "react";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import ButtonContainer from "~/components/common/container/ButtonContainer";
+import messages from "~/components/i18n/messages";
+import RedButton from "~/components/common/buttons/RedButton";
+import ContentContainer from "~/components/common/container/ContentContainer";
 
 type LoaderData = {
     isAuthenticated: boolean;
     player: Player;
-    nextGame: Game | null;
+    nextGame: GameWithFeedback | null;
     nextGameFeedback: Feedback | null;
     defaultFeedback: DefaultFeedback;
 };
 
 type ActionData = {
     defaultFeedback?: DefaultFeedback;
-    gameFeedback?: Feedback;
+    gameFeedback?: Feedback
+    player?: Player
 };
 
-export const action: ActionFunction = async ({ params, request }) => {
-    const { player } = await authenticatePlayer(params, request);
-    const body = await request.formData();
-    const { status, note, playerCount, gameId } = getFeedbackValues(body);
+export const action: ActionFunction = async ({params, request}) => {
+    const {player} = await authenticatePlayer(params, request);
+    const formData = await request.formData();
+    const gameId = formData.get("gameId")
+
     if (!player) {
         return redirect(routeLinks.games);
     }
-    if (body.get("intent") === "defaultFeedback") {
-        const newFeedback = await updateDefaultFeedback(
-            player.id,
-            status,
-            playerCount,
-            note
-        );
+    if (!gameId) {
+        throw new Error("No GameId provided");
+    }
+
+    const playerId = player.id
+
+    invariant(typeof gameId === 'string', "invalid gameId")
+    const formValues: DashboardFormValues = getDashboardFormValues(formData, player.id, gameId)
+    const {intent, profile, feedback, defaultFeedback} = formValues
+
+    if (intent === "playerFeedback") {
+        invariant(!!feedback, "Feedback is undefined")
+        const feedbackUpdate = await updateFeedback(player.id, gameId, feedback.status, feedback.playerCount, feedback.note)
         return json<ActionData>({
-            defaultFeedback: newFeedback,
-        });
-    } else if (body.get("intent") === "feedback") {
-        if (!gameId) {
-            throw new Error("No GameId provided");
-        }
-        const newFeedback = await updateFeedback(
-            player.id,
-            gameId,
-            status,
-            playerCount,
-            note
-        );
-        return json<ActionData>({ gameFeedback: newFeedback });
+            gameFeedback: feedbackUpdate
+        })
+    } else if (intent === "playerProfile") {
+        invariant(!!profile, "Profile is undefined")
+        invariant(!!defaultFeedback, "DefaultFeedback is undefined")
+        const {name, email} = profile
+        const {status, playerCount, note} = defaultFeedback
+        const playerUpdate = await updatePlayer(playerId, name.trim(), email.trim());
+        const defaultFeedbackUpdate = await updateDefaultFeedback(playerId, status, playerCount, note)
+        return json<ActionData>({
+            player: playerUpdate,
+            defaultFeedback: defaultFeedbackUpdate
+        })
     }
 };
 
-export const loader: LoaderFunction = async ({ params, request }) => {
-    const { isAuthenticated, player } = await authenticatePlayer(
-        params,
-        request
-    );
+export const loader: LoaderFunction = async ({params, request}) => {
+    const {isAuthenticated, player} = await authenticatePlayer(params, request);
     if (!player) {
         return redirect(routeLinks.games);
     }
     const defaultFeedback = await getDefaultFeedback(player.id);
     const nextGame = await getMostRecentGame();
-    const nextGameFeedback = await findFeedbackWithPlayerIdAndGameId(
-        player?.id,
-        nextGame!.id
-    );
+    const nextGameWithFeedBack = !!nextGame ? await getGameById(nextGame.id) : null
+    const nextGameFeedback = !!nextGame ? await findFeedbackWithPlayerIdAndGameId(player.id, nextGame.id) : null
 
     return json<LoaderData>({
         isAuthenticated,
         player,
-        nextGame,
+        nextGame: nextGameWithFeedBack,
         nextGameFeedback,
         defaultFeedback,
     });
 };
-const Dashboard = () => {
-    const { player, nextGame, nextGameFeedback, defaultFeedback } =
-        useLoaderData() as unknown as LoaderData;
-    const container = {
-        initial: {
-            opacity: 0,
-        },
-        animate: {
-            opacity: 1,
-            transition: {
-                delayChildren: 0.1,
-                staggerChildren: 0.1,
-            },
-        },
-    };
 
-    const items = {
-        initial: {
-            y: 1100,
+
+const Dashboard = () => {
+    const {player, nextGame, nextGameFeedback, defaultFeedback} = useLoaderData() as unknown as LoaderData;
+    const actionData = useActionData<ActionData>()
+    const [showEditProfile, setShowEditProfile] = useState<boolean>(false)
+    const playerWithUpdate: Player = _.merge(player, actionData?.player)
+    const feedbackWithUpdate: Feedback = _.merge(nextGameFeedback, actionData?.gameFeedback)
+    const defaultFeedbackWithUpdate: DefaultFeedback = _.merge(defaultFeedback, actionData?.defaultFeedback)
+
+    const profileViewItems = [
+        {
+            id: "editProfile",
+            showEditProfile: true,
+            component: <DashboardPlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
         },
-        animate: {
-            y: 0,
-            transition: {
-                ease: [0.6, 0.01, -0.05, 0.95],
-                duration: 1,
-            },
-        },
-    };
+        {
+            id: "showProfileDescription",
+            showEditProfile: false,
+            component:
+                <DashboardPlayerProfileDescription/>
+        }
+    ]
 
     return (
         <>
-            <PageHeader title={getPlayerGreeting(player.name)}></PageHeader>
-            <motion.div
-                className={"flex flex-col gap-4 md:grid-cols-3 lg:grid"}
-                variants={container}
-                initial={"initial"}
-                animate={"animate"}>
-                <motion.div variants={items}>
-                    <ContentContainer>
-                        <Subheading title={"Standard-Status"} />
-                        <DefaultFeedbackComponent
-                            defaultFeedback={defaultFeedback}
-                        />
+            <Form method={"post"}>
+                <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
+                <PageHeader title={getPlayerGreeting(playerWithUpdate.name)}/>
+                <motion.div
+                    className={"flex flex-col gap-4"}
+                    variants={animationConfig.container}
+                    initial={"initial"}
+                    animate={"animate"}
+                    exit={"exit"}
+                >
+                    <motion.div variants={animationConfig.animationItems}>
+                        <GameSummary nextGame={nextGame}/>
+                    </motion.div>
+                    <motion.div variants={animationConfig.animationItems}>
+                        <GameFeedback nextGame={nextGame}
+                                      nextGameFeedback={feedbackWithUpdate}
+                                      defaultFeedback={defaultFeedbackWithUpdate}/>
+                    </motion.div>
+                    <ContentContainer className={"shadow-lg shadow-indigo-500/50"}>
+                        <AnimatePresence>
+                            {
+                                profileViewItems
+                                    .filter((item) => item.showEditProfile === showEditProfile)
+                                    .map(item =>
+                                        <motion.div key={item.id} variants={animationConfig.profileAnimationItems}>
+                                            {item.component}
+                                        </motion.div>
+                                    )
+                            }
+                        </AnimatePresence>
+                        <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
+                            <DefaultButton className={`mr-auto ${!showEditProfile ? '' : 'hidden'}`}>
+                                <button type={"button"} onClick={() => setShowEditProfile(!showEditProfile)}>
+                                    {messages.dashboard.showProfile}
+                                    <p className={"fa ml-2 fa-arrow-circle-down"}/>
+                                </button>
+                            </DefaultButton>
+                            <RedButton className={`ml-auto ${showEditProfile ? '' : 'hidden'}`}>
+                                <button type={"button"} onClick={() => setShowEditProfile(!showEditProfile)}>
+                                    {messages.buttons.cancel}
+                                </button>
+                            </RedButton>
+                            <DefaultButton className={`${showEditProfile ? '' : 'hidden'}`}>
+                                <button type={"submit"} name={"intent"}
+                                        value={"playerProfile"}
+                                        onClick={() => setShowEditProfile(!showEditProfile)}
+                                >
+                                    {messages.dashboard.saveProfile}
+                                </button>
+                            </DefaultButton>
+                        </ButtonContainer>
                     </ContentContainer>
                 </motion.div>
-                <motion.div variants={items}>
-                    <ContentContainer>
-                        <Subheading title={"Nächstes Spiel"} />
-                        <NextGame game={nextGame!}></NextGame>
-                        {nextGameFeedback!! && (
-                            <PlayerFeedback
-                                playerFeedback={
-                                    nextGameFeedback
-                                }></PlayerFeedback>
-                        )}
-                    </ContentContainer>
-                </motion.div>
-                <motion.div variants={items}>
-                    <ContentContainer>
-                        <Form
-                            action={`${player.id}/profile/edit`}
-                            method={"post"}>
-                            <EditProfile player={player} />
-                            <ButtonContainer className={"mt-2"}>
-                                <DefaultButton className={"ml-auto"}>
-                                    <button type={"submit"}>
-                                        {messages.buttons.save}
-                                    </button>
-                                </DefaultButton>
-                            </ButtonContainer>
-                        </Form>
-                    </ContentContainer>
-                </motion.div>
-            </motion.div>
+            </Form>
         </>
-    );
+    )
+        ;
 };
 
 export default Dashboard;

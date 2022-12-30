@@ -71,7 +71,7 @@ model Feedback {
   player          Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId        String
   status          Int    @default(0)
-  playerCount     Int     @default(1)
+  playerCount     Int     @default(0)
   note            String?
 
   @@unique([playerId, gameId])
@@ -93,7 +93,7 @@ model DefaultFeedback {
   player      Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
   status      Int    @default(0)
   note String?
-  playerCount Int    @default(1)
+  playerCount Int    @default(0)
 }
 
 model Password {

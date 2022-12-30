@@ -3,8 +3,8 @@ import {useEffect} from "react";
 
 type PlayerCountProps = {
   playerCount: number;
-  onAdd: any;
-  onSubtract: any;
+  onAdd: () => void;
+  onSubtract: () => void;
 };
 
 export const PlayerCount = ({ playerCount, onAdd, onSubtract }: PlayerCountProps) => {

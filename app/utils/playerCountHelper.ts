@@ -1,6 +1,6 @@
-import {GameWithFeedback} from "~/routes/application/games/$gameId";
 import {configuration} from "~/config";
 import {statusInConfig} from "~/config/status";
+import {GameWithFeedback} from "~/config/gameTypes";
 
 const add = (playerCount: number): number => {
     return playerCount + 1
@@ -8,14 +8,14 @@ const add = (playerCount: number): number => {
 
 const subtract = (playerCount: number): number => {
     const next = playerCount - 1
-    return next >= 1 ? next : 1
+    return next >= 0 ? next : 0
 }
 
 export const calculateCompleteNumberOfPlayers = (game: GameWithFeedback) => {
     let confirmedPlayerCount = 0;
     game.feedback.forEach((feedback) => {
         if (feedback.status === configuration.status.confirmed) {
-            confirmedPlayerCount = confirmedPlayerCount + feedback.playerCount
+            confirmedPlayerCount = confirmedPlayerCount + (feedback.playerCount + 1)
         }
     });
     return confirmedPlayerCount

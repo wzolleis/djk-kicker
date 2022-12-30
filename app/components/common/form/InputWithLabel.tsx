@@ -15,7 +15,7 @@ type InputProps = {
 const InputWithLabel = (props: InputProps) => {
     const {id, name, label, type, required, disabled, defaultValue, error} = props;
     return (
-        <div className={"flex w-full flex-col gap-2"}>
+        <div className={"flex w-full flex-col gap-2 my-5"}>
             <label className={"font-default-medium text-gray-600"} htmlFor={name}>
                 {label}
             </label>

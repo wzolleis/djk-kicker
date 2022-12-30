@@ -1,7 +1,6 @@
 import {AdminInvitation} from "@prisma/client";
 import messages from "~/components/i18n/messages";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Link} from "@remix-run/react";
 import RedButton from "~/components/common/buttons/RedButton";
 import dateUtils from "~/dateUtils";
@@ -27,10 +26,8 @@ const AdminInvitationTableRow = ({invitation}: { invitation: AdminInvitation }) 
             <td>{statusTxt}</td>
             <td className={"text-right"}>
                 <ButtonContainer className={'justify-end'}>
-                    <DefaultButton>
-                        <Link to={`${invitation.id}`}>{messages.buttons.edit}</Link>
-                    </DefaultButton>
                     <RedButton>
+                        <p className={"fa fa-trash mr-2"}/>
                         <Link to={routeLinks.admin.users.invite.delete(invitation.id)}>{messages.buttons.delete}</Link>
                     </RedButton>
                 </ButtonContainer>

@@ -14,7 +14,8 @@ const messages = {
     add: "Hinzufügen",
     cancel: "Abbruch",
     delete: "Löschen",
-    invite: "Einladen"
+    invite: "Einladen",
+    details: "Details"
   },
   actionType: {
     GAME_INVITATION: "Einladung",
@@ -45,6 +46,18 @@ const messages = {
       Number.parseInt(spielortOption) === gameLocations.Halle ? messages.adminEditGameForm.optionHalle : messages.adminEditGameForm.optionDraussen,
     gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => (gameDateIsInThePast ? "(Game over)" : "")
   },
+  dashboard: {
+    nextGame: 'Nächstes Spiel',
+    playerAndGuests: 'Spieler und Gäste',
+    playerStatusForGame: (gameDate: string) => `Deine Rückmeldung für den  ${gameDate}`,
+    playerDefaultStatus: "Dein Standard-Status",
+    playerProfile: "Dein Profil",
+    playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten und Deinen optionalen Standard-Status.",
+    playerProfileDescription_2: "Dieser Status wird verwendet, wenn Du keine Rückmeldung für das nächste Spiel setzt und gilt solange, bis Du ihn wieder löscht.",
+    saveProfile: "Profil speichern",
+    showProfile: "Profil anzeigen",
+    saveFeedback: "speichern"
+  },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",
     description: "Viel Spaß beim Bolzen",
@@ -54,9 +67,8 @@ const messages = {
     rememberMe: "Anmeldedaten speichern",
     createAccount: "Neuen Account anlegen"
   },
-  joinForm: {
-    backToLogin: "Zur Anmeldung",
-    createAccount: "Neuen Account anlegen"
+  errors: {
+    noGame: "Kein Spiel vorhanden"
   },
   adminGamesTable: {
     name: "Spielname",
@@ -150,8 +162,10 @@ const messages = {
     },
     feedback: {
       headings: {
+        defaultFeedback: "Standard Status",
         feedback: "Status",
-        playerCount: "Spieler (insgesamt)",
+        playerCount: "Gäste",
+        playerCountNotAvailable: "Gäste können nur mitgebracht werden, wenn man selbst kommt ;-)",
         note: "Notiz"
       },
       status: {
