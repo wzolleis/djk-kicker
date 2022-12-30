@@ -62,11 +62,14 @@ export const action: ActionFunction = async ({params, request}) => {
     const {intent, profile, feedback, defaultFeedback} = formValues
 
     if (intent === "playerFeedback") {
+        invariant(!!feedback, "Feedback is undefined")
         const feedbackUpdate = await updateFeedback(player.id, gameId, feedback.status, feedback.playerCount, feedback.note)
         return json<ActionData>({
             gameFeedback: feedbackUpdate
         })
     } else if (intent === "playerProfile") {
+        invariant(!!profile, "Profile is undefined")
+        invariant(!!defaultFeedback, "DefaultFeedback is undefined")
         const {name, email} = profile
         const {status, playerCount, note} = defaultFeedback
         const playerUpdate = await updatePlayer(playerId, name.trim(), email.trim());
@@ -109,11 +112,14 @@ const Dashboard = () => {
     const profileViewItems = [
         {
             id: "editProfile",
-            showEditProfile: true
+            showEditProfile: true,
+            component: <DashboardPlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
         },
         {
             id: "showProfileDescription",
-            showEditProfile: false
+            showEditProfile: false,
+            component:
+                <DashboardPlayerProfileDescription/>
         }
     ]
 
@@ -139,21 +145,21 @@ const Dashboard = () => {
                     </motion.div>
                     <ContentContainer className={"shadow-lg shadow-indigo-500/50"}>
                         <AnimatePresence>
-                            <motion.div key={"editProfile"} variants={animationConfig.profileAnimationItems}>
-                                {showEditProfile &&
-                                    <DashboardPlayerProfileForm player={playerWithUpdate}
-                                                                defaultFeedback={defaultFeedbackWithUpdate}
-                                    />
-                                }
-                            </motion.div>
-                            <motion.div key={"showProfileDescription"} variants={animationConfig.profileAnimationItems}>
-                                {!showEditProfile && <DashboardPlayerProfileDescription/>}
-                            </motion.div>
+                            {
+                                profileViewItems
+                                    .filter((item) => item.showEditProfile === showEditProfile)
+                                    .map(item =>
+                                        <motion.div key={item.id} variants={animationConfig.profileAnimationItems}>
+                                            {item.component}
+                                        </motion.div>
+                                    )
+                            }
                         </AnimatePresence>
                         <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
-                            <DefaultButton className={`ml-auto ${!showEditProfile ? '' : 'hidden'}`}>
+                            <DefaultButton className={`mr-auto ${!showEditProfile ? '' : 'hidden'}`}>
                                 <button type={"button"} onClick={() => setShowEditProfile(!showEditProfile)}>
                                     {messages.dashboard.showProfile}
+                                    <p className={"fa ml-2 fa-arrow-circle-down"}/>
                                 </button>
                             </DefaultButton>
                             <RedButton className={`ml-auto ${showEditProfile ? '' : 'hidden'}`}>

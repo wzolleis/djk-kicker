@@ -18,16 +18,16 @@ export type DashboardFormValues = {
     gameId: string
     playerId: string
     intent: DashboardIntentValues
-    feedback: {
+    feedback?: {
         status: statusInConfig
         note: string
         playerCount: number
     }
-    profile: {
+    profile?: {
         name: string
         email: string
     }
-    defaultFeedback: {
+    defaultFeedback?: {
         status: statusInConfig
         note: string
         playerCount: number
@@ -49,54 +49,66 @@ export const getDashboardFormValues = (formData: FormData, playerId: string, gam
     const dashboardForm = new DashboardForm(formData)
 
     const intent = dashboardForm.get("intent")
-    const feedbackStatus = dashboardForm.get("dashboard.feedback.status") ?? `${statusInConfig.unknown}`
-    const feedbackPlayerCount = dashboardForm.get("dashboard.feedback.playerCount") ?? "0"
-    const feedbackNote = dashboardForm.get("dashboard.feedback.note")
-    const playerName = dashboardForm.get("dashboard.profile.player.name")
-    const playerMail = dashboardForm.get("dashboard.profile.player.email")
-    const defaultFeedbackStatus = dashboardForm.get("dashboard.defaultFeedback.status") ?? `${statusInConfig.unknown}`
-    const defaultFeedbackPlayerCount = dashboardForm.get("dashboard.defaultFeedback.playerCount") ?? "0"
-    const defaultFeedbackNote = dashboardForm.get("dashboard.defaultFeedback.note")
-
     invariant(typeof intent === 'string', "invalid intent type: " + intent)
     invariant(isDashboardIntent(intent), "invalid intent value: " + intent)
 
-    invariant(typeof feedbackPlayerCount === 'string', "invalid player count type: " + feedbackPlayerCount)
-    invariant(Number.isInteger(Number.parseInt(feedbackPlayerCount)), "invalid player count value " + feedbackPlayerCount)
-    invariant(typeof feedbackStatus === 'string', "invalid status type: " + feedbackStatus)
-    invariant(typeof feedbackNote === 'string', "invalid note type: " + feedbackNote)
+    if (intent === "playerFeedback") {
+        const feedbackStatus = dashboardForm.get("dashboard.feedback.status") ?? `${statusInConfig.unknown}`
+        const feedbackPlayerCount = dashboardForm.get("dashboard.feedback.playerCount") ?? "0"
+        const feedbackNote = dashboardForm.get("dashboard.feedback.note")
 
-    invariant(typeof defaultFeedbackPlayerCount === 'string', "invalid default_player_count type: " + defaultFeedbackPlayerCount)
-    invariant(Number.isInteger(Number.parseInt(defaultFeedbackPlayerCount)), "invalid default_player_ count value" + defaultFeedbackPlayerCount)
-    invariant(typeof defaultFeedbackStatus === 'string', "invalid default_status type: " + defaultFeedbackStatus)
-    invariant(typeof defaultFeedbackNote === 'string', "invalid default_note type: " + defaultFeedbackNote)
+        invariant(typeof feedbackPlayerCount === 'string', "invalid player count type: " + feedbackPlayerCount)
+        invariant(Number.isInteger(Number.parseInt(feedbackPlayerCount)), "invalid player count value " + feedbackPlayerCount)
+        invariant(typeof feedbackStatus === 'string', "invalid status type: " + feedbackStatus)
+        invariant(typeof feedbackNote === 'string', "invalid note type: " + feedbackNote)
+        const feedbackStatusNumber = Number.parseInt(feedbackStatus)
+        invariant(istStatusInConfig(feedbackStatusNumber), "invalid feedback_status value: " + feedbackStatusNumber)
 
-    invariant(typeof playerName === 'string', "invalid player name type: " + playerName)
-    invariant(typeof playerMail === 'string', "invalid player mail type: " + playerMail)
-
-    const feedbackStatusNumber = Number.parseInt(feedbackStatus)
-    const defaultFeedbackStatusNumber = Number.parseInt(defaultFeedbackStatus)
-    invariant(istStatusInConfig(feedbackStatusNumber), "invalid feedback_status value: " + feedbackStatusNumber)
-    invariant(istStatusInConfig(defaultFeedbackStatusNumber), "invalid feedback_status value: " + defaultFeedbackStatusNumber)
-
-    return {
-        gameId,
-        playerId,
-        intent,
-        feedback: {
-            status: feedbackStatusNumber,
-            note: feedbackNote,
-            playerCount: Number.parseInt(feedbackPlayerCount),
-        },
-        profile: {
-            name: playerName,
-            email: playerMail
-        },
-        defaultFeedback: {
-            status: defaultFeedbackStatusNumber,
-            note: defaultFeedbackNote,
-            playerCount: Number.parseInt(defaultFeedbackPlayerCount)
+        return {
+            gameId,
+            playerId,
+            intent,
+            feedback: {
+                status: feedbackStatusNumber,
+                note: feedbackNote,
+                playerCount: Number.parseInt(feedbackPlayerCount),
+            },
         }
     }
+    else if (intent === "playerProfile") {
+        const playerName = dashboardForm.get("dashboard.profile.player.name")
+        const playerMail = dashboardForm.get("dashboard.profile.player.email")
+        const defaultFeedbackStatus = dashboardForm.get("dashboard.defaultFeedback.status") ?? `${statusInConfig.unknown}`
+        const defaultFeedbackPlayerCount = dashboardForm.get("dashboard.defaultFeedback.playerCount") ?? "0"
+        const defaultFeedbackNote = dashboardForm.get("dashboard.defaultFeedback.note")
 
+        invariant(typeof defaultFeedbackPlayerCount === 'string', "invalid default_player_count type: " + defaultFeedbackPlayerCount)
+        invariant(Number.isInteger(Number.parseInt(defaultFeedbackPlayerCount)), "invalid default_player_ count value" + defaultFeedbackPlayerCount)
+        invariant(typeof defaultFeedbackStatus === 'string', "invalid default_status type: " + defaultFeedbackStatus)
+        invariant(typeof defaultFeedbackNote === 'string', "invalid default_note type: " + defaultFeedbackNote)
+
+        invariant(typeof playerName === 'string', "invalid player name type: " + playerName)
+        invariant(typeof playerMail === 'string', "invalid player mail type: " + playerMail)
+
+        const defaultFeedbackStatusNumber = Number.parseInt(defaultFeedbackStatus)
+        invariant(istStatusInConfig(defaultFeedbackStatusNumber), "invalid feedback_status value: " + defaultFeedbackStatusNumber)
+        return {
+            gameId,
+            playerId,
+            intent,
+            profile: {
+                name: playerName,
+                email: playerMail
+            },
+            defaultFeedback: {
+                status: defaultFeedbackStatusNumber,
+                note: defaultFeedbackNote,
+                playerCount: Number.parseInt(defaultFeedbackPlayerCount)
+            }
+        }
+
+    }
+    else {
+        throw Error("invalid intent " + intent)
+    }
 }

@@ -35,7 +35,7 @@ const GameFeedback = ({
             <PlayerFeedback playerFeedback={playerFeedbackOrDefault} onFeedbackChange={handleFeedBackChange}/>
             <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
                 <DefaultButton>
-                    <button type={"submit"} name={"intent"} value={"playerFeedback"}>{messages.buttons.save}</button>
+                    <button type={"submit"} name={"intent"} value={"playerFeedback"}>{messages.dashboard.saveFeedback}</button>
                 </DefaultButton>
             </ButtonContainer>
         </ContentContainer>
