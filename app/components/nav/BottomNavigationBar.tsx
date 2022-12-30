@@ -60,9 +60,9 @@ const BottomNavigationBar = ({admin}: { admin: User | undefined }) => {
     const isAuthenticated = fetcher.data?.isAuthenticated
     if (!isAuthenticated) {
         return (
-            <div className="w-full">
+            <div className="w-full h-screen">
                 <section id="bottom-navigation"
-                         className="block fixed inset-x-0 bottom-0 z-10 scroll:z-0 bg-black shadow">
+                         className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
                     <div id="tabs" className="flex justify-start">
                         <NavButton to={routeLinks.dashboard} label={"Registrieren"}
                                    className={"fa-solid fa-user-plus"}/>
@@ -72,9 +72,8 @@ const BottomNavigationBar = ({admin}: { admin: User | undefined }) => {
         )
     }
 
-    const gameId =  fetcher.data?.nextGame?.id
+    const gameId = fetcher.data?.nextGame?.id
     const playerId = fetcher.data?.player?.id
-
     return (
         <div className="w-full h-screen">
             <section id="bottom-navigation" className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
