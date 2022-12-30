@@ -1,5 +1,6 @@
 const routeLinks = {
     admin: {
+        adminLandingPage: "/application/admin/",
         games: "/application/admin/games",
         deleteExpiredGames: "/application/admin/games/deleteExpired",
         game: {
@@ -32,11 +33,13 @@ const routeLinks = {
     dashboard: '/application/dashboard',
     player: {
         delete: (playerId: string) => `/application/player/${playerId}/delete`,
+        profile: `/application/player/profile`,
         feedback: ({
                        gameId,
                        playerId
                    }: { gameId: string, playerId: string }): string => `/application/games/${gameId}/player/${playerId}?index`
-    }
+    },
+    playerNotAuthenticated: '/application/notAuthenticated'
 }
 
 export default routeLinks

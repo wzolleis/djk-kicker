@@ -5,7 +5,8 @@ import {AdminInvitationStatus} from "~/config/status";
 const messages = {
   app: {
     welcome: "Willkommen bei den DJK Kickern",
-    title: "DJK Kicker"
+    title: "DJK Kicker",
+    loading: "Lade Daten..."
   },
   buttons: {
     edit: "Bearbeiten",
@@ -28,7 +29,7 @@ const messages = {
     useradministration: "Benutzerverwaltung",
     games: "Alle Spiele",
     dashboard: "Dashboard",
-    login: "Anmelden",
+    login: "Als Administrator anmelden",
     logout: "Abmelden"
   },
   commonForm: {
@@ -55,8 +56,6 @@ const messages = {
     playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten und Deinen optionalen Standard-Status.",
     playerProfileDescription_2: "Dieser Status wird verwendet, wenn Du keine Rückmeldung für das nächste Spiel setzt und gilt solange, bis Du ihn wieder löscht.",
     saveProfile: "Profil speichern",
-    showProfile: "Profil anzeigen",
-    saveFeedback: "speichern"
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",
@@ -147,6 +146,7 @@ const messages = {
   },
   game: {
     headings: {
+      nextGame: "Nächstes Spiel",
       gameData: "Spieldaten",
       feedback: "Status"
     },
@@ -210,7 +210,8 @@ const messages = {
   },
   warnings: {
     noToken:
-      "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
+      "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator.",
+    notAuthenticated: "Du hast keine Berechtigung für diese Anwendung. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
   },
   adminGameZusageForm: {
     titleGame: "Zusage für das Spiel am: ",

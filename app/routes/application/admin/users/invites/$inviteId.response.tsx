@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({params, request}: { params: Params
     const intent = formData.get('intent')
     if (intent === 'reject') {
         await updateAdminInvitation(inviteId, {invitationStatus: 'rejected', name: invitation.name})
-        return redirect(routeLinks.games)
+        return redirect(routeLinks.dashboard)
     }
     return redirect(routeLinks.admin.users.invite.accept({inviteId, token}))
 }
@@ -125,7 +125,7 @@ export const CatchBoundary = () => {
                     {`Die Einladung kann nicht bearbeitet werden: ${caught.statusText}`}
                 </h4>
                 <DefaultButton className={"flex justify-center"}>
-                    <button onClick={() => navigate(routeLinks.games)}>{messages.appmenu.games}</button>
+                    <button onClick={() => navigate(routeLinks.games)}>{messages.appmenu.dashboard}</button>
                 </DefaultButton>
             </div>
         );

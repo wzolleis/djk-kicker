@@ -37,9 +37,12 @@ const GameSummary = ({game}: { game: GameWithFeedback }) => {
                 <header className={"space-y-2"}>
                     <div className={"grid grid-cols-2 gap-5"}>
                         <div className={"bg-blue-200"}>
-                            <Subheading title={`${useDateTime(game.gameTime)} - ${messages.commonForm.spielort(game.spielort)}`}
-                                        className={"m-5"}
-                            />
+                            <div className={"m-5"}>
+                                <Subheading title={`${useDateTime(game.gameTime)}`}/>
+                                <p className={"text-label-medium md:text-label-large text-gray-500 font-default-medium"}>
+                                    {`${messages.commonForm.spielort(game.spielort)}`}
+                                </p>
+                            </div>
                         </div>
                         <ContentContainer className={"bg-blue-200"}>
                             <PlayerCounter

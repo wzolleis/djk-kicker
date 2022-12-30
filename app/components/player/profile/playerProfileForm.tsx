@@ -22,27 +22,26 @@ const DashboardPlayerProfileForm = ({
                                     }: { player: Player, defaultFeedback: DefaultFeedback }) => {
     return (
         <>
-        <Subheading title={messages.dashboard.playerProfile}/>
-        <div>
-            <InputWithLabel
-                id={'name'}
-                type={'text'}
-                name={'dashboard.profile.player.name'}
-                defaultValue={player.name}
-                label={messages.playerProfileForm.name}
+            <div>
+                <InputWithLabel
+                    id={'name'}
+                    type={'text'}
+                    name={'dashboard.profile.player.name'}
+                    defaultValue={player.name}
+                    label={messages.playerProfileForm.name}
+                />
+                <InputWithLabel
+                    id={'mail'}
+                    type={'email'}
+                    name={'dashboard.profile.player.email'}
+                    defaultValue={player.email}
+                    label={messages.playerProfileForm.email}
+                />
+            </div>
+            <hr className="my-8 h-px bg-gray-400 border-0"/>
+            <DefaultFeedbackComponent defaultFeedback={defaultFeedback}
+                                      title={messages.dashboard.playerDefaultStatus}
             />
-            <InputWithLabel
-                id={'mail'}
-                type={'email'}
-                name={'dashboard.profile.player.email'}
-                defaultValue={player.email}
-                label={messages.playerProfileForm.email}
-            />
-        </div>
-        <hr className="my-8 h-px bg-gray-400 border-0"/>
-        <DefaultFeedbackComponent defaultFeedback={defaultFeedback}
-                                  title={messages.dashboard.playerDefaultStatus}
-        />
         </>
     )
 }

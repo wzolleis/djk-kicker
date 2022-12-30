@@ -10,10 +10,10 @@ import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 
 const GameFeedback = ({
-                              nextGame,
-                              nextGameFeedback,
-                              defaultFeedback
-                          }: { nextGame: GameWithFeedback | null, nextGameFeedback: Feedback | null, defaultFeedback: DefaultFeedback }) => {
+                          nextGame,
+                          nextGameFeedback,
+                          defaultFeedback
+                      }: { nextGame: GameWithFeedback | null, nextGameFeedback: Feedback | null, defaultFeedback: DefaultFeedback }) => {
     if (!nextGame) return (
         <Subheading title={messages.errors.noGame}/>
     )
@@ -25,19 +25,22 @@ const GameFeedback = ({
     }
 
     return (
-        <ContentContainer className={"shadow-lg shadow-indigo-500/50"}>
-            <Subheading
+        <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
+        <Subheading
                 title={messages.dashboard.playerStatusForGame(useDate(new Date(nextGame.gameTime)))}/>
-            <input type={"hidden"} value={feedback.status} name={"dashboard.feedback.status"}/>
-            <input type={"hidden"} value={feedback.playerCount} name={"dashboard.feedback.playerCount"}/>
-            <input type={"hidden"} value={feedback.note ?? ''} name={"dashboard.feedback.note"}/>
+            <ContentContainer className="bg-blue-200">
+                <input type={"hidden"} value={feedback.status} name={"dashboard.feedback.status"}/>
+                <input type={"hidden"} value={feedback.playerCount} name={"dashboard.feedback.playerCount"}/>
+                <input type={"hidden"} value={feedback.note ?? ''} name={"dashboard.feedback.note"}/>
 
-            <PlayerFeedback playerFeedback={playerFeedbackOrDefault} onFeedbackChange={handleFeedBackChange}/>
-            <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
-                <DefaultButton>
-                    <button type={"submit"} name={"intent"} value={"playerFeedback"}>{messages.dashboard.saveFeedback}</button>
-                </DefaultButton>
-            </ButtonContainer>
+                <PlayerFeedback playerFeedback={playerFeedbackOrDefault} onFeedbackChange={handleFeedBackChange}/>
+                <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
+                    <DefaultButton>
+                        <button type={"submit"} name={"intent"}
+                                value={"playerFeedback"}>{messages.buttons.save}</button>
+                    </DefaultButton>
+                </ButtonContainer>
+            </ContentContainer>
         </ContentContainer>
     )
 }
