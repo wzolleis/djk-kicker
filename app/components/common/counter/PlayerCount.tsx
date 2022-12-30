@@ -27,7 +27,7 @@ export const PlayerCount = ({ playerCount, onAdd, onSubtract }: PlayerCountProps
       <div className={"flex items-center justify-center gap-3"}>
         <button
             type={"button"}
-            className={"flex fa fa-minus h-12 w-12 items-center text-white   justify-center rounded-full bg-indigo-600 p-3 font-default-semibold transition ease-in-out hover:scale-90"}
+            className={"flex fa fa-minus h-12 w-12 items-center text-white justify-center rounded-full bg-indigo-600 p-3 font-default-semibold transition ease-in-out hover:scale-90"}
             onClick={onSubtract}>
         </button>
         <motion.div className={"font-inter-bold text-headline-small text-indigo-600"} animate={animationControls}>
@@ -35,7 +35,7 @@ export const PlayerCount = ({ playerCount, onAdd, onSubtract }: PlayerCountProps
         </motion.div>
         <button
             type={"button"}
-            className={"flex fa fa-plus h-12 w-12 items-center text-white   justify-center rounded-full bg-indigo-600 p-3 font-default-semibold transition ease-in-out hover:scale-90"}
+            className={"flex fa fa-plus h-12 w-12 items-center text-white justify-center rounded-full bg-indigo-600 p-3 font-default-semibold transition ease-in-out hover:scale-90"}
             onClick={onAdd}>
         </button>
       </div>

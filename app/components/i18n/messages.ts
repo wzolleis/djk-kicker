@@ -28,7 +28,7 @@ const messages = {
     useradministration: "Benutzerverwaltung",
     games: "Alle Spiele",
     dashboard: "Dashboard",
-    login: "Anmelden",
+    login: "Als Administrator anmelden",
     logout: "Abmelden"
   },
   commonForm: {

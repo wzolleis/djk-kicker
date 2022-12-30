@@ -29,7 +29,7 @@ import messages from "~/components/i18n/messages";
 import RedButton from "~/components/common/buttons/RedButton";
 import ContentContainer from "~/components/common/container/ContentContainer";
 
-type LoaderData = {
+export type LoaderData = {
     isAuthenticated: boolean;
     player: Player;
     nextGame: GameWithFeedback | null;
@@ -109,8 +109,6 @@ const Dashboard = () => {
     const playerWithUpdate: Player = _.merge(player, actionData?.player)
     const feedbackWithUpdate: Feedback = _.merge(nextGameFeedback, actionData?.gameFeedback)
     const defaultFeedbackWithUpdate: DefaultFeedback = _.merge(defaultFeedback, actionData?.defaultFeedback)
-
-
 
     const toggleShowEditProfile = () => setShowEditProfile(!showEditProfile)
 

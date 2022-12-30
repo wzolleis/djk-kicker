@@ -1,5 +1,6 @@
 const routeLinks = {
     admin: {
+        adminLandingPage: "/application/admin/",
         games: "/application/admin/games",
         deleteExpiredGames: "/application/admin/games/deleteExpired",
         game: {

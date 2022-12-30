@@ -11,11 +11,11 @@ interface AppNavBarProps {
     user: User | undefined;
 }
 
-const AppNavBar = ({appMenu}: AppNavBarProps) => {
+const TopNavBar = ({appMenu}: AppNavBarProps) => {
     const [isOpen, setIsOpen] = useState(false);
+    const isLoggedIn: boolean = !!useOptionalUser();
     const menuItemClassName = isOpen ? "block" : "hidden";
     const hamburgerOrCloseIcon = isOpen ? hamburgerIcon : closeIcon;
-    const isLoggedIn: boolean = !!useOptionalUser();
 
     return (
         <header className="bg-black text-white sm:flex sm:items-center sm:justify-between sm:px-4 sm:py-3">
@@ -62,4 +62,4 @@ const AppNavBar = ({appMenu}: AppNavBarProps) => {
     );
 };
 
-export default AppNavBar;
+export default TopNavBar;
