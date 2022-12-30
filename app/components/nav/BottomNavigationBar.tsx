@@ -1,4 +1,4 @@
-import {NavLink, useFetcher, useNavigate} from "@remix-run/react";
+import {NavLink, useFetcher} from "@remix-run/react";
 import routeLinks from "~/helpers/constants/routeLinks";
 import classNames from "classnames";
 import {useEffect} from "react";
@@ -34,20 +34,30 @@ const NavButton = ({to, label, className}: { to: string, label: string, classNam
 }
 
 
+const GameButton = ({gameId}: { gameId: string | undefined }) => {
+    if (!gameId) return null
+
+    return (
+        <NavButton to={routeLinks.game(gameId)} label={"Spiel"} className={"fa-solid fa-futbol"}
+        />
+    )
+}
+const ProfileButton = ({playerId}: { playerId: string | undefined }) => {
+    if (!playerId) return null
+
+    return (
+        <NavButton to={routeLinks.player.profile} label={"Profil"} className={"fa-solid fa-user-large"}/>
+    )
+}
+
 const BottomNavigationBar = ({admin}: { admin: User | undefined }) => {
     const fetcher = useFetcher<NavbarLoaderData>();
-    const navigate = useNavigate()
 
     useEffect(() => {
         fetcher.load('/application/navbar');
-        if (fetcher.type === "init") {
-            fetcher.load('/application/navbar');
-        }
     }, []);
 
     const isAuthenticated = fetcher.data?.isAuthenticated
-    const nextGame = fetcher.data?.nextGame
-
     if (!isAuthenticated) {
         return (
             <div className="w-full">
@@ -62,17 +72,16 @@ const BottomNavigationBar = ({admin}: { admin: User | undefined }) => {
         )
     }
 
-    const gameId = nextGame?.id
+    const gameId =  fetcher.data?.nextGame?.id
+    const playerId = fetcher.data?.player?.id
 
     return (
         <div className="w-full h-screen">
             <section id="bottom-navigation" className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
                 <div id="tabs" className="flex justify-start">
                     <NavButton to={routeLinks.dashboard} label={"Home"} className={"fa-solid fa-home"}/>
-                    {gameId && <NavButton to={routeLinks.game(gameId)} label={"Spiel"}
-                                          className={"fa-solid fa-futbol"}/>
-                    }
-                    <NavButton to={routeLinks.dashboard} label={"Profil"} className={"fa-solid fa-user-large"}/>
+                    <GameButton gameId={gameId}/>
+                    <ProfileButton playerId={playerId}/>
                     <AdminNavButton to={routeLinks.admin.adminLandingPage} label={"Verwaltung"}
                                     className={"fa-solid fa-gears"} optionalUser={admin}/>
                 </div>

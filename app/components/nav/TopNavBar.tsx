@@ -36,15 +36,6 @@ const TopNavBar = ({appMenu}: AppNavBarProps) => {
                 </div>
             </div>
             <nav className={`${menuItemClassName} px-2 pt-2 pb-4 sm:flex sm:p-0`}>
-                {appMenu.map((menu) => (
-                    <Link
-                        key={menu.id}
-                        className=" rounded px-2 py-1 font-semibold hover:bg-gray-800 hover:text-yellow-300"
-                        to={menu.appLink.path}
-                        hidden={menu.appLink.requiresAdmin && !isLoggedIn}>
-                        {menu.appLink.label}
-                    </Link>
-                ))}
                 <Form action="/logout" method="post" hidden={!isLoggedIn}>
                     <button type="submit"
                             className="block rounded px-2 py-1 font-semibold hover:bg-gray-800 hover:text-yellow-300">

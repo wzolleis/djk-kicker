@@ -5,7 +5,8 @@ import {AdminInvitationStatus} from "~/config/status";
 const messages = {
   app: {
     welcome: "Willkommen bei den DJK Kickern",
-    title: "DJK Kicker"
+    title: "DJK Kicker",
+    loading: "Lade Daten..."
   },
   buttons: {
     edit: "Bearbeiten",
@@ -55,7 +56,6 @@ const messages = {
     playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten und Deinen optionalen Standard-Status.",
     playerProfileDescription_2: "Dieser Status wird verwendet, wenn Du keine Rückmeldung für das nächste Spiel setzt und gilt solange, bis Du ihn wieder löscht.",
     saveProfile: "Profil speichern",
-    showProfile: "Profil anzeigen",
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",
@@ -146,6 +146,7 @@ const messages = {
   },
   game: {
     headings: {
+      nextGame: "Nächstes Spiel",
       gameData: "Spieldaten",
       feedback: "Status"
     },

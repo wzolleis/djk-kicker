@@ -13,7 +13,6 @@ import GameSummary from "~/components/game/GameSummary";
 import {GameWithFeedback} from "~/config/gameTypes";
 import Subheading from "~/components/common/header/Subheading";
 import messages from "~/components/i18n/messages";
-import {useDateTime} from "~/utils";
 
 type LoaderData = {
     game: GameWithFeedback;
@@ -59,7 +58,7 @@ const GameIndex = () => {
     return (
         <>
             <section className={"mt-5 flex flex-col gap-5"}>
-                <Subheading title={`${messages.game.headings.gameData}: ${useDateTime(new Date(game.gameTime))}`}/>
+                <Subheading title={`${messages.game.headings.nextGame}`}/>
                 <GameSummary game={game}/>
                 <Players
                     isAuthenticated={isAuthenticated}

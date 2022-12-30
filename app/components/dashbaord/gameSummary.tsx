@@ -6,9 +6,6 @@ import {useDateTime} from "~/utils";
 import PlayerCounter from "~/components/game/feedback/PlayerCounter";
 import {calculateCompleteNumberOfPlayers} from "~/utils/playerCountHelper";
 import {GameFeedbackSummary} from "~/components/game/GameSummary";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
-import {NavLink} from "@remix-run/react";
-import routeLinks from "~/helpers/constants/routeLinks";
 
 const GameSummary = ({nextGame}: { nextGame: GameWithFeedback | null }) => {
     if (!nextGame) return (
@@ -18,23 +15,15 @@ const GameSummary = ({nextGame}: { nextGame: GameWithFeedback | null }) => {
     return (
         <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
             <Subheading title={`${messages.dashboard.nextGame}: ${useDateTime(new Date(nextGame.gameTime))}`}/>
-            <div>
-                <ContentContainer className="bg-blue-200">
-                    <PlayerCounter
-                        game={nextGame}
-                        calculate={calculateCompleteNumberOfPlayers}
-                        title={messages.dashboard.playerAndGuests}
-                        counterColor={"text-color-black"}
-                    />
-                    <GameFeedbackSummary game={nextGame}/>
-                    <div className={"flex justify-end mt-3"}>
-                        <DefaultButton>
-                            <NavLink to={routeLinks.game(nextGame.id)}>{messages.buttons.details}</NavLink>
-                            <p className={"fa fa-arrow-circle-right"}/>
-                        </DefaultButton>
-                    </div>
-                </ContentContainer>
-            </div>
+            <ContentContainer className="bg-blue-200">
+                <PlayerCounter
+                    game={nextGame}
+                    calculate={calculateCompleteNumberOfPlayers}
+                    title={messages.dashboard.playerAndGuests}
+                    counterColor={"text-color-black"}
+                />
+                <GameFeedbackSummary game={nextGame}/>
+            </ContentContainer>
         </ContentContainer>
     )
 }

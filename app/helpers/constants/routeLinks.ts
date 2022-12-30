@@ -33,6 +33,7 @@ const routeLinks = {
     dashboard: '/application/dashboard',
     player: {
         delete: (playerId: string) => `/application/player/${playerId}/delete`,
+        profile: `/application/player/profile`,
         feedback: ({
                        gameId,
                        playerId

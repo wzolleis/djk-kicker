@@ -37,7 +37,7 @@ export const CatchBoundary = () => {
         <div>
             <PageHeader title={`Es ist ein Fehler aufgetreten: ${caught.statusText}`}/>
             <DefaultButton className={"m-5 flex justify-start"}>
-                <button onClick={() => navigate(routeLinks.dashboard)}>{messages.appmenu.games}</button>
+                <button onClick={() => navigate(routeLinks.dashboard)}>{messages.appmenu.dashboard}</button>
             </DefaultButton>
         </div>
     );
