@@ -1,4 +1,5 @@
 import messages from "~/components/i18n/messages";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export type AppLink = {
     path: string
@@ -21,6 +22,13 @@ export const appLinks = {
             requiresAdmin: false,
             path: "games",
             label: messages.appmenu.games
+        },
+        users: {
+            create: {
+                requiresAdmin: false,
+                path: routeLinks.player.create,
+                label: messages.appmenu.createPlayer
+            }
         },
         admin: {
             requiresAdmin: true,

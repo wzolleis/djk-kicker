@@ -1,4 +1,4 @@
-import {NavLink, useFetcher} from "@remix-run/react";
+import {NavLink, useFetcher, useLocation} from "@remix-run/react";
 import routeLinks from "~/helpers/constants/routeLinks";
 import classNames from "classnames";
 import {useEffect} from "react";
@@ -25,12 +25,18 @@ const AdminNavButton = ({
     )
 
 }
-const NavButton = ({to, label, className}: { to: string, label: string, className: string }) => {
+const NavButton = ({
+                       to,
+                       label,
+                       className,
+                       active
+                   }: { to: string, label: string, className: string, active: boolean }) => {
     return (
         <NavLink to={to}
                  className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
-            <p className={classNames(className, "flex h-10 w-10 items-center text-black justify-center rounded-full bg-white p-3 font-default-semibold transition ease-in-out hover:scale-90")}/>
-            <span className="tab tab-account block text-white text-xs md:text-body-medium">{label}</span>
+            <p className={classNames(className, `${active ? "bg-yellow-400" : "bg-white"}`, "flex h-10 w-10 items-center text-black justify-center rounded-full p-3 font-default-semibold transition ease-in-out hover:scale-90")}/>
+            <span
+                className={classNames(`${active ? "text-yellow-400" : "text-white"}`, `tab tab-account block text-xs md:text-body-medium`)}>{label}</span>
         </NavLink>
     )
 }
@@ -39,35 +45,50 @@ const PlayerRegistrationButton = ({
                                       isAuthenticated,
                                       gameId
                                   }: { isAuthenticated: boolean, gameId: string | undefined }) => {
-    if (isAuthenticated) return null
-
     const link = gameId ? routeLinks.player.createForGame(gameId) : routeLinks.player.create
+    const location = useLocation()
+    const active = location.pathname.includes(routeLinks.player.create)
 
     return <NavButton to={link}
                       label={messages.bottomNavBar.registerPlayer}
-                      className={"fa-solid fa-user-plus"}/>
+                      className={"fa-solid fa-user-plus"}
+                      active={active}
+    />
 }
 
 const GameButton = ({gameId}: { gameId: string | undefined }) => {
     if (!gameId) return null
+    const location = useLocation()
+    const active = location.pathname === routeLinks.game(gameId)
     return (
-        <NavButton to={routeLinks.game(gameId)} label={messages.bottomNavBar.game} className={"fa-solid fa-futbol"}/>
+        <NavButton to={routeLinks.game(gameId)}
+                   label={messages.bottomNavBar.game}
+                   className={"fa-solid fa-futbol"}
+                   active={active}/>
     )
 }
 const ProfileButton = ({playerId}: { playerId: string | undefined }) => {
     if (!playerId) return null
+    const location = useLocation()
+    const active = location.pathname === routeLinks.player.profile
 
     return (
         <NavButton to={routeLinks.player.profile} label={messages.bottomNavBar.profile}
-                   className={"fa-solid fa-user-large"}/>
+                   className={"fa-solid fa-user-large"}
+                   active={active}
+        />
     )
 }
 
 const HomeButton = ({playerId}: { playerId: string | undefined }) => {
     if (!playerId) return null
 
+    const location = useLocation()
+    const active = location.pathname === routeLinks.dashboard
+
     return (
-        <NavButton to={routeLinks.dashboard} label={messages.bottomNavBar.home} className={"fa-solid fa-home"}/>
+        <NavButton to={routeLinks.dashboard} label={messages.bottomNavBar.home} className={`fa-solid fa-home`}
+                   active={active}/>
     )
 }
 
