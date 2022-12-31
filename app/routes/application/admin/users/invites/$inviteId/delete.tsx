@@ -10,8 +10,11 @@ import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Params} from "react-router";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {deleteAdminInvitation, getAdminInvitation} from "~/models/admin.user.invitation.server";
+import {requireUserId} from "~/session.server";
 
-export const loader: LoaderFunction = async ({params}) => {
+export const loader: LoaderFunction = async ({params, request}) => {
+    await requireUserId(request)
+
     const inviteId = params.inviteId;
     invariant(!!inviteId, "Keine Spieler ID in der URL")
     const invitation = await getAdminInvitation(inviteId)
@@ -20,6 +23,7 @@ export const loader: LoaderFunction = async ({params}) => {
 }
 
 export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
+    await requireUserId(request)
     const inviteId = params.inviteId
     const formData = await request.formData();
     const intent = formData.get('intent')
@@ -48,7 +52,8 @@ const DeleteAdminInvitation = () => {
             <div className="flex flex-col bg-red-100 rounded-lg p-4 mb-4 text-sm text-red-700" role="alert">
                 <div>
                     <ExclamationTriangleIcon className="w-10 h-10 inline mr-3" fill="currentColor"/>
-                    <span className="text-lg">{messages.adminInvitationDeleteForm.confirmationQuestion(invitation.name)}</span>
+                    <span
+                        className="text-lg">{messages.adminInvitationDeleteForm.confirmationQuestion(invitation.name)}</span>
                 </div>
                 <ButtonContainer className={'pt-5'}>
                     <DefaultButton className={'mr-5'}>

@@ -9,13 +9,15 @@ import {Player} from "@prisma/client";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {useRef} from "react";
 import mailhelper from '~/models/admin.games.mails.server'
+import {requireUserId} from "~/session.server";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
     players: Awaited<ReturnType<typeof getPlayersWithUniqueFeedbackForGame>>;
 };
 
-export const loader: LoaderFunction = async ({params: {gameId}}) => {
+export const loader: LoaderFunction = async ({params: {gameId}, request}) => {
+    await requireUserId(request);
     invariant(gameId, "Expected params.gameId");
     const [game, players] = await Promise.all([findGameById(gameId), getPlayersWithUniqueFeedbackForGame(gameId)])
     return json<LoaderData>({game, players});
@@ -23,6 +25,8 @@ export const loader: LoaderFunction = async ({params: {gameId}}) => {
 
 
 export const action: ActionFunction = async ({params: {gameId}, request}) => {
+    await requireUserId(request);
+
     invariant(gameId, "Expected params.gameId");
     const formData = await request.formData();
     const intent = formData.get("intent")

@@ -1,22 +1,13 @@
-import type { Session } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import {
-    decryptPlayerToken,
-    playerHasValidToken,
-    verifyToken,
-} from "~/utils/token.server";
-import type { Params } from "react-router";
-import { Player } from "@prisma/client";
-import { PlayerSession } from "~/models/classes/PlayerSession";
-import { getPlayerById } from "~/models/player.server";
-import { createDatabaseSessionStorage } from "~/session.server";
-import {
-    getCommonParameters,
-    getCommonSearchParameters,
-} from "~/utils/parameters.server";
-import { PlayerToken } from "~/models/classes/PlayerToken";
-import { Simulate } from "react-dom/test-utils";
-import play = Simulate.play;
+import type {Session} from "@remix-run/node";
+import {redirect} from "@remix-run/node";
+import {decryptPlayerToken, playerHasValidToken, verifyToken,} from "~/utils/token.server";
+import type {Params} from "react-router";
+import {Player} from "@prisma/client";
+import {PlayerSession} from "~/models/classes/PlayerSession";
+import {getPlayerById} from "~/models/player.server";
+import {createDatabaseSessionStorage} from "~/session.server";
+import {getCommonSearchParameters,} from "~/utils/parameters.server";
+import {PlayerToken} from "~/models/classes/PlayerToken";
 
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
@@ -70,7 +61,6 @@ export async function authenticatePlayer(
         const { isAuthenticated, player, playerToken } = await verifyToken(
             decryptPlayerToken(token)
         );
-        console.log("Auth", isAuthenticated);
         if (isAuthenticated && playerToken) {
             cookieHeader = await setSession(session, playerToken, player!);
             isFirstAuthentication = true;

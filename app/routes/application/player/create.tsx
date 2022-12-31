@@ -1,21 +1,30 @@
-import { useLoaderData } from "@remix-run/react";
-import { ActionFunction, json, redirect } from "@remix-run/node";
+import {useLoaderData} from "@remix-run/react";
+import {ActionFunction, json, redirect} from "@remix-run/node";
 import CreatePlayerForm from "~/components/player/CreatePlayerForm";
-import { getQueryParams } from "~/utils";
+import {getQueryParams} from "~/utils";
 import PageHeader from "~/components/common/PageHeader";
 import messages from "~/components/i18n/messages";
 import MainPageContent from "~/components/common/MainPageContent";
-import { createPlayer } from "~/models/player.server";
-import { createFeedback } from "~/models/feedback.server";
+import {createPlayer} from "~/models/player.server";
+import {createFeedback} from "~/models/feedback.server";
 import invariant from "tiny-invariant";
 import routeLinks from "~/helpers/constants/routeLinks";
+import {getGameById} from "~/models/games.server";
+import {GameWithFeedback} from "~/config/gameTypes";
 
 type LoaderData = {
     gameid: string;
+    game?: GameWithFeedback
 };
 
 export const loader = async ({ request }: { params: any; request: any }) => {
     const { gameid } = getQueryParams(request, "gameid");
+    if (!!gameid) {
+        const game: GameWithFeedback | null = await getGameById(gameid)
+        const gameWithFeedback = game ?? undefined
+        return json({ gameid, game: gameWithFeedback});
+    }
+
     return json({ gameid });
 };
 
@@ -32,30 +41,33 @@ export const action: ActionFunction = async ({
     const intent = formData.get("intent");
     const note = formData.get("note");
 
-    invariant(typeof intent === "string");
-    invariant(typeof playerName === "string");
-    invariant(typeof playerMail === "string");
-    invariant(typeof playerStatus === "string");
-    invariant(typeof note === "string");
-    invariant(!!gameid, "GameId must be defined");
+    invariant(typeof intent === "string", "intent");
+    invariant(typeof playerName === "string", "name");
+    invariant(typeof playerMail === "string", "mail");
 
     if (intent === "cancel") {
+        return gameid ? redirect(routeLinks.game(gameid)) : redirect(routeLinks.dashboard)
+    }
+    const player = await createPlayer(playerName.trim(), playerMail.trim());
+    if (!!gameid) {
+        invariant(typeof playerStatus === "string", "playerStatus");
+        invariant(typeof note === "string", "note");
+        await createFeedback(player.id, gameid, parseInt(playerStatus), note);
         return redirect(routeLinks.game(gameid));
     }
 
-    const player = await createPlayer(playerName.trim(), playerMail.trim());
-    await createFeedback(player.id, gameid, parseInt(playerStatus), note);
-    return redirect(routeLinks.game(gameid));
+    redirect(routeLinks.dashboard)
 };
 
 const CreatePlayer = () => {
-    const { gameid } = useLoaderData<LoaderData>();
+    const { gameid, game } = useLoaderData<LoaderData>();
+
     return (
         <>
             <PageHeader title={messages.player.add}></PageHeader>
             <MainPageContent>
-                {" "}
-                <CreatePlayerForm gameId={gameid} />
+                { /* @ts-ignore */}
+                <CreatePlayerForm gameId={gameid} game={game}/>
             </MainPageContent>
         </>
     );

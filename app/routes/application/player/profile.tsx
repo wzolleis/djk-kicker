@@ -84,10 +84,10 @@ const PlayerProfile = () => {
     }
 
     return (
-        <ContentContainer>
+        <ContentContainer className={"md:w-1/2"}>
             <DashboardPlayerProfileDescription/>
             <Form method={"post"}>
-                <ContentContainer className={"bg-blue-200 md:w-1/2"}>
+                <ContentContainer className={"bg-blue-200"}>
                     <motion.div
                         className={"flex flex-col gap-4"}
                         variants={animationConfig.container}
@@ -101,11 +101,6 @@ const PlayerProfile = () => {
                             <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
                                 <DefaultButton>
                                     <button type={"submit"} name={"intent"} value={"saveProfile"}>
-                                        {messages.dashboard.saveProfile}
-                                    </button>
-                                </DefaultButton>
-                                <DefaultButton>
-                                    <button type={"submit"} name={"intent"} value={"deleteStatus"}>
                                         {messages.dashboard.saveProfile}
                                     </button>
                                 </DefaultButton>

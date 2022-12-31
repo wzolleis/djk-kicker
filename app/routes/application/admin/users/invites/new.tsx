@@ -28,6 +28,7 @@ export const loader: LoaderFunction = async ({request}: { request: Request }) =>
 }
 
 export const action: ActionFunction = async ({request}: { request: Request }) => {
+    await requireUserId(request)
     const formData = await request.formData();
     const intent = formData.get('intent')
 

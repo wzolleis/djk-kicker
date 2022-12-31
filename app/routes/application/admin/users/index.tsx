@@ -1,7 +1,8 @@
 import {LoaderFunction, redirect} from "@remix-run/node";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export const loader: LoaderFunction = async () => {
-    return redirect("/application/admin/users/users")
+    return redirect(routeLinks.admin.users.useradministration)
 }
 
 const AppIndex = () => {

@@ -10,6 +10,7 @@ import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Params} from "react-router";
 import routeLinks from "~/helpers/constants/routeLinks";
+import {deleteFeedbackForPlayer} from "~/models/feedback.server";
 
 export const loader: LoaderFunction = async ({params}) => {
     const playerId = params.playerId;
@@ -31,6 +32,9 @@ export const action: ActionFunction = async ({params, request}: { params: Params
     } else if (intent === 'delete') {
         const player = await getPlayerById(playerId)
         invariant(!!player, "Spieler nicht gefunden")
+
+
+        await deleteFeedbackForPlayer(playerId)
         await deletePlayer(playerId)
     }
     return redirect(routeLinks.admin.users.home)

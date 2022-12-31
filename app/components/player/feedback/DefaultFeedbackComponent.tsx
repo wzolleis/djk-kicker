@@ -6,15 +6,16 @@ import messages from "~/components/i18n/messages";
 import {PlayerCount} from "~/components/common/counter/PlayerCount";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import playerCountHelper from "~/utils/playerCountHelper";
+import {statusInConfig} from "~/config/status";
 
 type DefaultFeedbackProps = {
-    defaultFeedback: DefaultFeedback;
+    defaultFeedback: DefaultFeedback | undefined;
     title: string
 };
 
 const DefaultFeedbackComponent = ({defaultFeedback, title}: DefaultFeedbackProps) => {
-    const [feedbackStatus, setFeedbackStatus] = useState<number>(defaultFeedback.status);
-    const [playerCount, setPlayerCount] = useState(defaultFeedback.playerCount);
+    const [feedbackStatus, setFeedbackStatus] = useState<number>(defaultFeedback?.status ?? statusInConfig.unknown);
+    const [playerCount, setPlayerCount] = useState(defaultFeedback?.playerCount ?? 0);
 
     const onAdd = () => {
         setPlayerCount(playerCountHelper.add(playerCount))

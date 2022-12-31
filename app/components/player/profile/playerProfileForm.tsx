@@ -19,7 +19,7 @@ export const DashboardPlayerProfileDescription = () => {
 const DashboardPlayerProfileForm = ({
                                         player,
                                         defaultFeedback,
-                                    }: { player: Player, defaultFeedback: DefaultFeedback }) => {
+                                    }: { player: Player, defaultFeedback: DefaultFeedback | undefined}) => {
     return (
         <>
             <div>

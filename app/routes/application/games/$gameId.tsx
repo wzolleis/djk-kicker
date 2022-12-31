@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
     invariant(params.gameId, "Help");
     const gameId = params.gameId;
     const playerId = params.playerId;
-    const game: GameWithFeedback | null = await getGameById(gameId);
+    const game: GameWithFeedback | null = gameId ? await getGameById(gameId) : null
     const players: PlayerWithFeedback[] =
         await getPlayersWithUniqueFeedbackForGame(gameId);
     const {isAuthenticated, cookieHeader, player, isFirstAuthentication} =
