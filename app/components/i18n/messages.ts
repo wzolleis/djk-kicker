@@ -28,6 +28,7 @@ const messages = {
     gameadministration: "Spieleverwaltung",
     useradministration: "Benutzerverwaltung",
     games: "Alle Spiele",
+    createPlayer: "Neuer Spieler",
     dashboard: "Dashboard",
     login: "Als Administrator anmelden",
     logout: "Abmelden"
