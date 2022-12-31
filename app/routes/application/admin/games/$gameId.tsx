@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import type { LoaderFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { Outlet, useNavigate } from "@remix-run/react";
+import {useEffect, useState} from "react";
+import type {LoaderFunction} from "@remix-run/node";
+import {json, redirect} from "@remix-run/node";
+import {Outlet} from "@remix-run/react";
 
 import TabContainer from "~/components/common/tabs/TabContainer";
 import Tab from "~/components/common/tabs/Tab";
-import { configuration } from "~/config";
+import {configuration} from "~/config";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 export const loader: LoaderFunction = async ({ request }) => {
   if (!Object.keys(configuration.url.editGameForm.values).includes(request.url.split("/").pop()!)) {
-    return redirect("/application/admin/games");
+    return redirect(routeLinks.admin.games);
   }
   return json({ hello: "hello" });
 };

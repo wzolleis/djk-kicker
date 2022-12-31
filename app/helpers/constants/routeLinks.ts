@@ -14,6 +14,7 @@ const routeLinks = {
             delete:  (gameId: string) => `/application/admin/games/${gameId}/delete`,
         },
         users: {
+            useradministration: '/application/admin/users/users',
             home: '/application/admin/users',
             create: '/application/admin/users/new',
             delete: (userId: string) => `/application/admin/users/${userId}/delete`,
@@ -32,6 +33,8 @@ const routeLinks = {
     game: (gameId: string) => `/application/games/${gameId}`,
     dashboard: '/application/dashboard',
     player: {
+        create: `/application/player/create`,
+        createForGame: (gameId: string) => `/application/player/create?gameid=${gameId}`,
         delete: (playerId: string) => `/application/player/${playerId}/delete`,
         profile: `/application/player/profile`,
         feedback: ({

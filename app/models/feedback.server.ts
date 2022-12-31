@@ -6,7 +6,7 @@ import {configuration} from "~/config";
 import {DateTime} from "luxon";
 
 export async function getFeedbackForGame(gameId: Feedback["gameId"]) {
-    return await prisma.feedback.findMany({ where: { gameId } });
+    return await prisma.feedback.findMany({where: {gameId}});
 }
 
 export async function getUniqueFeedbackForGameAndPlayer(
@@ -114,6 +114,31 @@ export async function updateFeedback(
     });
 }
 
+export const deleteFeedbackForPlayer = async (playerId: string) => {
+    const allFeedback = await getFeedbackByPlayerId(playerId)
+    const allOps: Array<Promise<Feedback>> = []
+    allFeedback.forEach((feedback) => {
+         allOps.push(deleteFeedback(feedback.id))
+    })
+    return Promise.all(allOps)
+}
+
+export const getFeedbackByPlayerId = async (playerId: string) => {
+    return await prisma.feedback.findMany({
+        where: {
+            playerId: playerId
+        }
+    })
+}
+
+export const deleteFeedback = async (feedbackId: string) => {
+    return await prisma.feedback.delete({
+        where: {
+            id: feedbackId
+        }
+    })
+}
+
 export async function createFeedback(
     playerId: Player["id"],
     gameId: Game["id"],
@@ -159,7 +184,7 @@ export async function createDefaultFeedback(
     });
 }
 
-export async function createNewDefaultFeedback(playerId: Player["id"]) {
+export async function createNewDefaultFeedback(playerId: string) {
     return await prisma.defaultFeedback.create({
         data: {
             playerId,
@@ -167,7 +192,7 @@ export async function createNewDefaultFeedback(playerId: Player["id"]) {
     });
 }
 
-export async function getDefaultFeedback(playerId: Player["id"]) {
+export async function getDefaultFeedback(playerId: string) {
     let defaultFeedback = await prisma.defaultFeedback.findUnique({
         where: {
             playerId,

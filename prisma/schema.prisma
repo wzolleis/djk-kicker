@@ -66,9 +66,9 @@ model Mail {
 // Feedback der Spieler für ein Spiel
 model Feedback {
   id              String  @id @default(cuid())
-  game            Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  game            Game    @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   gameId          String
-  player          Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  player          Player  @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   playerId        String
   status          Int    @default(0)
   playerCount     Int     @default(0)
@@ -116,7 +116,7 @@ model AdminInvitation {
 
 model Token {
 id String @id @default(uuid())
-player Player @relation(fields: [playerId], references: [id])
+player Player @relation(fields: [playerId], references: [id],  onDelete: Cascade)
 playerId String @unique
 revoked Boolean @default(false)
 expirationDate DateTime

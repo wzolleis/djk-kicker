@@ -10,8 +10,10 @@ import {Params} from "react-router";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {User} from "@prisma/client";
 import {deleteUserById, getUserById} from "~/models/user.server";
+import {requireUserId} from "~/session.server";
 
-export const loader: LoaderFunction = async ({params}) => {
+export const loader: LoaderFunction = async ({params, request}) => {
+    await requireUserId(request)
     const userId = params.userId;
     invariant(!!userId, "Keine Spieler ID in der URL")
     const user = await getUserById(userId)
@@ -20,6 +22,7 @@ export const loader: LoaderFunction = async ({params}) => {
 }
 
 export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
+    await requireUserId(request)
     const userId = params.userId;
     const formData = await request.formData();
     const intent = formData.get('intent')

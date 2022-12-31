@@ -10,6 +10,7 @@ import InputWithLabel from "~/components/common/form/InputWithLabel";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
+import routeLinks from "~/helpers/constants/routeLinks";
 
 
 export const loader: LoaderFunction = async ({request}: { request: Request }) => {
@@ -18,6 +19,7 @@ export const loader: LoaderFunction = async ({request}: { request: Request }) =>
 }
 
 export const action: ActionFunction = async ({request}: { request: Request }) => {
+    await requireUserId(request)
     const formData = await request.formData();
     const userName = formData.get("name")
     const userMail = formData.get("email")
@@ -33,11 +35,11 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
     invariant(password === passwordRepeat)
 
     if (intent === 'cancel') {
-        return redirect('application/admin/users')
+        return redirect(routeLinks.admin.users.home)
     }
 
     await createUser(userMail, password)
-    return redirect('application/admin/users')
+    return redirect(routeLinks.admin.users.home)
 }
 
 export const NewAdmin = () => {

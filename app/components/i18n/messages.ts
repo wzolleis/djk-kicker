@@ -56,6 +56,14 @@ const messages = {
     playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten und Deinen optionalen Standard-Status.",
     playerProfileDescription_2: "Dieser Status wird verwendet, wenn Du keine Rückmeldung für das nächste Spiel setzt und gilt solange, bis Du ihn wieder löscht.",
     saveProfile: "Profil speichern",
+    deleteDefaultFeedback: "Standard-Status zurücksetzen"
+  },
+  bottomNavBar: {
+    home: "Home",
+    game: "Spiel",
+    profile: "Profil",
+    administration: "Verwaltung",
+    registerPlayer: "Neuer Spieler"
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",

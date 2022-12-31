@@ -5,6 +5,8 @@ import {useEffect} from "react";
 import {User} from "@prisma/client";
 import is from "@sindresorhus/is";
 import {NavbarLoaderData} from "~/routes/application/navbar";
+import messages from "~/components/i18n/messages";
+import fetchLinks from "~/helpers/constants/fetchLinks";
 import undefined = is.undefined;
 
 const AdminNavButton = ({
@@ -33,20 +35,39 @@ const NavButton = ({to, label, className}: { to: string, label: string, classNam
     )
 }
 
+const PlayerRegistrationButton = ({
+                                      isAuthenticated,
+                                      gameId
+                                  }: { isAuthenticated: boolean, gameId: string | undefined }) => {
+    if (isAuthenticated) return null
+
+    const link = gameId ? routeLinks.player.createForGame(gameId) : routeLinks.player.create
+
+    return <NavButton to={link}
+                      label={messages.bottomNavBar.registerPlayer}
+                      className={"fa-solid fa-user-plus"}/>
+}
 
 const GameButton = ({gameId}: { gameId: string | undefined }) => {
     if (!gameId) return null
-
     return (
-        <NavButton to={routeLinks.game(gameId)} label={"Spiel"} className={"fa-solid fa-futbol"}
-        />
+        <NavButton to={routeLinks.game(gameId)} label={messages.bottomNavBar.game} className={"fa-solid fa-futbol"}/>
     )
 }
 const ProfileButton = ({playerId}: { playerId: string | undefined }) => {
     if (!playerId) return null
 
     return (
-        <NavButton to={routeLinks.player.profile} label={"Profil"} className={"fa-solid fa-user-large"}/>
+        <NavButton to={routeLinks.player.profile} label={messages.bottomNavBar.profile}
+                   className={"fa-solid fa-user-large"}/>
+    )
+}
+
+const HomeButton = ({playerId}: { playerId: string | undefined }) => {
+    if (!playerId) return null
+
+    return (
+        <NavButton to={routeLinks.dashboard} label={messages.bottomNavBar.home} className={"fa-solid fa-home"}/>
     )
 }
 
@@ -54,35 +75,25 @@ const BottomNavigationBar = ({admin}: { admin: User | undefined }) => {
     const fetcher = useFetcher<NavbarLoaderData>();
 
     useEffect(() => {
-        fetcher.load('/application/navbar');
+        fetcher.load(fetchLinks.navbar);
     }, []);
 
-    const isAuthenticated = fetcher.data?.isAuthenticated
-    if (!isAuthenticated) {
-        return (
-            <div className="w-full h-screen">
-                <section id="bottom-navigation"
-                         className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
-                    <div id="tabs" className="flex justify-start">
-                        <NavButton to={routeLinks.dashboard} label={"Registrieren"}
-                                   className={"fa-solid fa-user-plus"}/>
-                    </div>
-                </section>
-            </div>
-        )
-    }
-
+    const isAuthenticated = !!fetcher.data?.isAuthenticated
     const gameId = fetcher.data?.nextGame?.id
     const playerId = fetcher.data?.player?.id
     return (
         <div className="w-full h-screen">
             <section id="bottom-navigation" className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
                 <div id="tabs" className="flex justify-start">
-                    <NavButton to={routeLinks.dashboard} label={"Home"} className={"fa-solid fa-home"}/>
+                    <HomeButton playerId={playerId}/>
                     <GameButton gameId={gameId}/>
                     <ProfileButton playerId={playerId}/>
-                    <AdminNavButton to={routeLinks.admin.adminLandingPage} label={"Verwaltung"}
-                                    className={"fa-solid fa-gears"} optionalUser={admin}/>
+                    <AdminNavButton to={routeLinks.admin.adminLandingPage}
+                                    label={messages.bottomNavBar.administration}
+                                    className={"fa-solid fa-gears"}
+                                    optionalUser={admin}
+                    />
+                    <PlayerRegistrationButton isAuthenticated={isAuthenticated} gameId={gameId}/>
                 </div>
             </section>
         </div>

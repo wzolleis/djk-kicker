@@ -12,18 +12,17 @@ import dateUtils from "~/dateUtils";
 import routeLinks from "~/helpers/constants/routeLinks";
 
 export const action: ActionFunction = async ({request}) => {
+    const userId = await requireUserId(request);
     const formData = await request.formData();
     const name = formData.get("name");
     const location = formData.get("location");
     const gameTimeTxt = formData.get("gameTime")?.toString() || "";
     const gameTime = dateUtils.dateTimeFromFormat({text: gameTimeTxt});
 
-    const userId = await requireUserId(request);
     invariant(typeof userId === "string", "UserId must be a string");
     invariant(typeof name === "string", "name must be a string");
-    invariant(!!userId, "UserId muss gesetzt sein");
     await createGame(gameTime, name, location!.toString());
-    return redirect(routeLinks.dashboard);
+    return redirect(routeLinks.admin.adminLandingPage);
 };
 
 const NewGame = () => {

@@ -7,13 +7,17 @@ import {configuration} from "~/config";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
+import GameSummary from "~/components/game/GameSummary";
+import {GameWithFeedback} from "~/config/gameTypes";
+import Subheading from "~/components/common/header/Subheading";
 
 
 type PlayerFormProps = {
-    gameId?: string;
+    gameId: string | undefined
+    game: GameWithFeedback | undefined
 };
 
-const CreatePlayerForm = ({gameId}: PlayerFormProps) => {
+const CreatePlayerForm = ({gameId, game}: PlayerFormProps) => {
 
     const [status, setStatus] = useState<statusInConfig>(statusInConfig.unknown);
 
@@ -23,10 +27,18 @@ const CreatePlayerForm = ({gameId}: PlayerFormProps) => {
                 <main className={"flex flex-col gap-4"}>
                     <InputWithLabel id={'name'} type={'text'} name={'name'} label={messages.createPlayerForm.name}/>
                     <InputWithLabel id={'mail'} type={'email'} name={'mail'} label={messages.createPlayerForm.email}/>
-                    {gameId != null &&
+                    {!!game &&
+                        <>
+                            <Subheading title={"Dein Status für das nächste Spiel"}/>
+                            <GameSummary game={game}/>
+                        </>
+                    }
+
+
+                    {!!gameId &&
                         <>
                             <div className={"flex flex-col font-default-medium text-slate-600"}>
-                                <label htmlFor="name">Status</label>
+                                <label htmlFor="name">{messages.createPlayerForm.status}</label>
                                 <div>
                                     <input
                                         name={"status"}
