@@ -103,7 +103,7 @@ const BottomNavigationBar = ({admin}: { admin: User | undefined }) => {
     const gameId = fetcher.data?.nextGame?.id
     const playerId = fetcher.data?.player?.id
     return (
-        <div className="w-full h-screen">
+        <div className="w-full">
             <section id="bottom-navigation" className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
                 <div id="tabs" className="flex justify-start">
                     <HomeButton playerId={playerId}/>
