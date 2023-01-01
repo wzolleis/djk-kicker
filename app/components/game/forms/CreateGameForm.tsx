@@ -8,6 +8,7 @@ import {getNextGameDay} from "~/utils";
 import {gameLocations} from "~/config/locations";
 import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
+import SubmitButton from "~/components/common/buttons/submitButton";
 
 const CreateGameForm = () => {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ const CreateGameForm = () => {
                 </RedButton>
                 <DefaultButton>
                     <img className={"h-6"} src="/img/icons/check.png" alt=""/>
-                    <button type={"submit"}>{messages.buttons.save}</button>
+                    <SubmitButton idleLabel={messages.buttons.save} loadingLabel={messages.buttons.save}/>
                 </DefaultButton>
             </div>
         </Form>

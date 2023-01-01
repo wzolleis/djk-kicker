@@ -16,8 +16,9 @@ import invariant from "tiny-invariant";
 import {updatePlayer} from "~/models/player.server";
 import {istStatusInConfig, statusInConfig} from "~/config/status";
 import {FormWrapper} from "~/utils/formWrapper.server";
-import animationConfig from "~/config/animationConfig";
-import {motion} from "framer-motion";
+import fetchLinks from "~/helpers/constants/fetchLinks";
+import LoadingSkeleton from "~/components/common/container/loadingSkeleton";
+import SubmitButton from "~/components/common/buttons/submitButton";
 
 
 type ProfileFormInputName =
@@ -66,47 +67,45 @@ export const action: ActionFunction = async ({params, request}) => {
 
 const PlayerProfile = () => {
     const fetcher = useFetcher<NavbarLoaderData>();
-
     useEffect(() => {
-        fetcher.load('/application/navbar');
+        fetcher.load(fetchLinks.navbar);
     }, []);
 
 
-    if (fetcher.type !== "done") {
-        return <div>{messages.app.loading}</div>
-    }
     const player = fetcher.data?.player
     const defaultFeedback = fetcher.data?.defaultFeedback
     const nextGame = fetcher.data?.nextGame
 
+    if (fetcher.type !== "done") {
+        return (
+            <LoadingSkeleton/>
+        )
+    }
+
     if (!player) {
-        return <div>Kein Spieler</div>
+        return (
+            <div className={"bg-red-100 rounded-xl p-3 ring ring-1 ring-red-200"}>
+                <p className={"font-default-regular text-label-medium text-red-800"}>{messages.warnings.noPlayer}</p>
+            </div>
+        )
     }
 
     return (
-        <ContentContainer className={"md:w-1/2"}>
+        <ContentContainer>
             <DashboardPlayerProfileDescription/>
             <Form method={"post"}>
                 <ContentContainer className={"bg-blue-200"}>
-                    <motion.div
-                        className={"flex flex-col gap-4"}
-                        variants={animationConfig.container}
-                        initial={"initial"}
-                        animate={"animate"}
-                        exit={"exit"}
-                    >
-                        <motion.div variants={animationConfig.profileAnimationItems}>
-                            <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
-                            <DashboardPlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
-                            <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
-                                <DefaultButton>
-                                    <button type={"submit"} name={"intent"} value={"saveProfile"}>
-                                        {messages.dashboard.saveProfile}
-                                    </button>
-                                </DefaultButton>
-                            </ButtonContainer>
-                        </motion.div>
-                    </motion.div>
+                    <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
+                    <DashboardPlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
+                    <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
+                        <DefaultButton>
+                            <SubmitButton idleLabel={messages.dashboard.saveProfile}
+                                          loadingLabel={messages.dashboard.saveProfile}
+                                          name="intent"
+                                          value="saveProfile"
+                            />
+                        </DefaultButton>
+                    </ButtonContainer>
                 </ContentContainer>
             </Form>
         </ContentContainer>

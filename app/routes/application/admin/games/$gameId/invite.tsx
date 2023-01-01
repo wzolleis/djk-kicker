@@ -21,6 +21,7 @@ import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {mailContent} from "~/components/i18n/mailcontent";
 import {Feedback} from "@prisma/client";
 import {createEncryptedPlayerToken} from "~/utils/token.server";
+import SubmitButton from "~/components/common/buttons/submitButton";
 
 type LoaderData = {
     game: Awaited<ReturnType<typeof findGameById>>;
@@ -181,15 +182,11 @@ const GameInvitation = () => {
                                     src="/img/icons/mail-check-white.png"
                                     alt=""
                                 />
-                                <button
-                                    type="submit"
-                                    name="intent"
-                                    value="invitation"
-                                    disabled={
-                                        transition.state === "submitting"
-                                    }>
-                                    {messages.adminGameInvitationForm.sendInvitationBtn}
-                                </button>
+                                <SubmitButton idleLabel={messages.adminGameInvitationForm.sendInvitationBtn}
+                                              loadingLabel={messages.adminGameInvitationForm.sendInvitationBtn}
+                                              name={"intent"}
+                                              value={"invitation"}
+                                />
                             </DefaultButton>
                         </div>
                     </Form>

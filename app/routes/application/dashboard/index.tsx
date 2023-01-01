@@ -11,10 +11,10 @@ import routeLinks from "~/helpers/constants/routeLinks";
 import {GameWithFeedback} from "~/config/gameTypes";
 import animationConfig from "~/config/animationConfig";
 import invariant from "tiny-invariant";
-import GameFeedback from "~/components/dashbaord/gameFeedback";
-import GameSummary from "~/components/dashbaord/gameSummary";
-import {DashboardFormValues, getDashboardFormValues} from "~/components/dashbaord/dashboardHelper";
 import _ from "lodash";
+import {DashboardFormValues, getDashboardFormValues} from "~/components/dashboard/dashboardHelper";
+import GameSummary from "~/components/dashboard/gameSummary";
+import GameFeedback from "~/components/dashboard/gameFeedback";
 
 export type LoaderData = {
     isAuthenticated: boolean;
@@ -84,28 +84,26 @@ const Dashboard = () => {
     const defaultFeedbackWithUpdate: DefaultFeedback = _.merge(defaultFeedback, actionData?.defaultFeedback)
 
     return (
-        <>
-            <Form method={"post"}>
-                <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
-                <PageHeader title={getPlayerGreeting(playerWithUpdate.name)}/>
-                <motion.div
-                    className={"flex flex-col gap-4"}
-                    variants={animationConfig.container}
-                    initial={"initial"}
-                    animate={"animate"}
-                    exit={"exit"}
-                >
-                    <motion.div variants={animationConfig.animationItems}>
-                        <GameSummary nextGame={nextGame}/>
-                    </motion.div>
-                    <motion.div variants={animationConfig.animationItems}>
-                        <GameFeedback nextGame={nextGame}
-                                      nextGameFeedback={feedbackWithUpdate}
-                                      defaultFeedback={defaultFeedbackWithUpdate}/>
-                    </motion.div>
+        <Form method={"post"}>
+            <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
+            <PageHeader title={getPlayerGreeting(playerWithUpdate.name)}/>
+            <motion.div
+                className={"flex flex-col gap-4"}
+                variants={animationConfig.container}
+                initial={"initial"}
+                animate={"animate"}
+                exit={"exit"}
+            >
+                <motion.div variants={animationConfig.animationItems}>
+                    <GameSummary nextGame={nextGame}/>
                 </motion.div>
-            </Form>
-        </>
+                <motion.div variants={animationConfig.animationItems}>
+                    <GameFeedback nextGame={nextGame}
+                                  nextGameFeedback={feedbackWithUpdate}
+                                  defaultFeedback={defaultFeedbackWithUpdate}/>
+                </motion.div>
+            </motion.div>
+        </Form>
     )
 };
 

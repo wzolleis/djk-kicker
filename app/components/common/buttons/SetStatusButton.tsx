@@ -40,7 +40,7 @@ const SetStatusButton = ({image, icon, onClick, isActive, activeColor}: SetStatu
             animate={isActive ? "active" : "initial"}
             className={`flex items-center justify-center rounded-full p-5 transition duration-100 ease-in-out ${buttonActive}`}
             onClick={onClick}>
-            {image && <img src={image} className={"max-w-10 max-h-10"} alt=""/>}
+            {image && <img src={image} className={"max-w-10 max-h-10 hover:scale-110"} alt=""/>}
             {icon && <p className={classNames(icon, "max-w-10 max-h-10")}/>}
         </motion.div>
     );

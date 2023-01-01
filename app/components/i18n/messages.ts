@@ -6,7 +6,8 @@ const messages = {
   app: {
     welcome: "Willkommen bei den DJK Kickern",
     title: "DJK Kicker",
-    loading: "Lade Daten..."
+    loading: "Lade Daten...",
+    saving: "Speichere Daten..."
   },
   buttons: {
     edit: "Bearbeiten",
@@ -220,7 +221,8 @@ const messages = {
   warnings: {
     noToken:
       "Du bist nicht berechtigt einen Status abzusenden oder einen neuen Spieler anzulegen, da du diese Seite ohne einen gültigen Einladungslink besucht hast. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator.",
-    notAuthenticated: "Du hast keine Berechtigung für diese Anwendung. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator."
+    notAuthenticated: "Du hast keine Berechtigung für diese Anwendung. Rufe die Seite entweder über einen gültigen Einladungslink auf oder wende dich an einen Administrator.",
+    noPlayer: "Kein Spieler"
   },
   adminGameZusageForm: {
     titleGame: "Zusage für das Spiel am: ",

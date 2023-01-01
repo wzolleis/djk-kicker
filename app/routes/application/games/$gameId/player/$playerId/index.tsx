@@ -25,7 +25,7 @@ type LoaderData = {
     isAuthenticated: boolean;
 };
 
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader: LoaderFunction = async ({params, request}) => {
     const gameId = params.gameId;
     const playerId = params.playerId;
     invariant(gameId, "Help");
@@ -33,21 +33,21 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
     const playerWithFeedback: PlayerFeedbackForGame | null =
         await getPlayerFeedbackForGame(playerId, gameId);
-    const { player } = await authenticatePlayer(params, request);
+    const {player} = await authenticatePlayer(params, request);
     const isAuthenticated = player?.id === playerId;
-    return json({ player: playerWithFeedback, isAuthenticated });
+    return json({player: playerWithFeedback, isAuthenticated});
 };
 
-export const action: ActionFunction = async ({ params, request }) => {
+export const action: ActionFunction = async ({params, request}) => {
     const playerId = params.playerId;
     const gameId = params.gameId!;
-    const { player } = await authenticatePlayer(params, request);
+    const {player} = await authenticatePlayer(params, request);
     const isAuthenticated = player!.id === playerId;
     if (!isAuthenticated) {
         throw json("no permission", 403);
     }
     const formData = await request.formData();
-    const { status, note, playerCount } = getFeedbackValues(formData);
+    const {status, note, playerCount} = getFeedbackValues(formData);
 
     if (!gameId) {
         throw new Error(errors.game.updateFeedback.noGameId);
@@ -57,22 +57,22 @@ export const action: ActionFunction = async ({ params, request }) => {
         gameId,
         status,
         playerCount,
-        note
+        note ?? null
     );
 
     if (formData.get("origin") === "dashboard") {
-        return json({ newFeedback });
+        return json({newFeedback});
     }
     return redirect(routeLinks.game(gameId));
 };
 
 const EditPlayerFeedback = () => {
-    const { player, isAuthenticated } = useLoaderData() as LoaderData;
+    const {player, isAuthenticated} = useLoaderData() as LoaderData;
 
     // @ts-ignore
     return (
         <>
-            <NoTokenWarning hidden={isAuthenticated} />
+            <NoTokenWarning hidden={isAuthenticated}/>
             <EditPlayerStatusForm
                 player={player}
                 isAuthenticated={isAuthenticated}></EditPlayerStatusForm>

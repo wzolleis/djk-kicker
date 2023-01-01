@@ -9,22 +9,7 @@ import messages from "~/components/i18n/messages";
 import fetchLinks from "~/helpers/constants/fetchLinks";
 import undefined = is.undefined;
 
-const AdminNavButton = ({
-                            to,
-                            label,
-                            className,
-                            optionalUser
-                        }: { to: string, label: string, className: string, optionalUser: User | undefined }) => {
-    if (!optionalUser) return null
-    return (
-        <NavLink to={to}
-                 className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
-            <p className={classNames(className, "flex h-10 w-10 items-center text-black justify-center rounded-full bg-white p-3 font-default-semibold transition ease-in-out hover:scale-90")}/>
-            <span className="tab tab-account block text-white text-xs md:text-body-medium">{label}</span>
-        </NavLink>
-    )
 
-}
 const NavButton = ({
                        to,
                        label,
@@ -41,8 +26,25 @@ const NavButton = ({
     )
 }
 
+const AdminNavButton = ({
+                            to,
+                            label,
+                            className,
+                            optionalUser
+                        }: { to: string, label: string, className: string, optionalUser: User | undefined }) => {
+    if (!optionalUser) return null
+
+    const location = useLocation()
+    const active = location.pathname.includes("admin")
+
+    return <NavButton to={to}
+                      label={label}
+                      className={className}
+                      active={active}
+    />
+}
+
 const PlayerRegistrationButton = ({
-                                      isAuthenticated,
                                       gameId
                                   }: { isAuthenticated: boolean, gameId: string | undefined }) => {
     const link = gameId ? routeLinks.player.createForGame(gameId) : routeLinks.player.create
