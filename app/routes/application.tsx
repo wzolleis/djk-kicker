@@ -13,7 +13,6 @@ import BottomNavigationBar from "~/components/nav/BottomNavigationBar";
 
 const Application = () => {
     const user = useOptionalUser();
-
     return (
         <div className="flex h-full min-h-screen flex-col">
             <TopNavBar appMenu={appMenu.app} user={user}/>
@@ -21,7 +20,9 @@ const Application = () => {
                 <main className="flex h-full">
                     <div className="flex-1 p-4 px-4 lg:px-10">
                         <Toaster/>
-                        <Outlet/>
+                        <div className={"mb-20 md:mb-5"}>
+                            <Outlet/>
+                        </div>
                         <BottomNavigationBar admin={user}/>
                     </div>
                 </main>

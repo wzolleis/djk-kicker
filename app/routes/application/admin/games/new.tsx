@@ -1,15 +1,21 @@
-import {useNavigate} from "@remix-run/react";
+import {Form, useNavigate} from "@remix-run/react";
 import {createGame} from "~/models/admin.games.server";
 import messages from "~/components/i18n/messages";
 import type {ActionFunction} from "@remix-run/node";
 import {redirect} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
 import invariant from "tiny-invariant";
-import Modal from "~/components/common/modal/Modal";
-import {useState} from "react";
-import CreateGameForm from "~/components/game/forms/CreateGameForm";
 import dateUtils from "~/dateUtils";
 import routeLinks from "~/helpers/constants/routeLinks";
+import InputWithLabel from "~/components/common/form/InputWithLabel";
+import DateTimeInput from "~/components/common/datetime/datetime";
+import {getNextGameDay} from "~/utils";
+import SelectWithLabel from "~/components/common/form/SelectWithLabel";
+import {gameLocations} from "~/config/locations";
+import {configuration} from "~/config";
+import RedButton from "~/components/common/buttons/RedButton";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import SubmitButton from "~/components/common/buttons/submitButton";
 
 export const action: ActionFunction = async ({request}) => {
     const userId = await requireUserId(request);
@@ -26,20 +32,30 @@ export const action: ActionFunction = async ({request}) => {
 };
 
 const NewGame = () => {
-    const [showModal, setShowModal] = useState(true);
-    const navigate = useNavigate();
-
-    const closeModal = () => {
-        setShowModal(false);
-        navigate(routeLinks.admin.games);
-    };
+    const navigate = useNavigate()
 
     return (
-        <>
-            <Modal title={messages.adminCreateGameForm.newGame} show={showModal} onClose={closeModal}>
-                <CreateGameForm></CreateGameForm>
-            </Modal>
-        </>
+        <Form method={"post"} className={"flex flex-col gap-3"}>
+            <InputWithLabel type={"text"} id={"name"} name={"name"} label={"Spielname"}/>
+            <DateTimeInput name={"gameTime"} defaultValue={getNextGameDay()}/>
+            <SelectWithLabel id={"location"} name={"location"} defaultValue={gameLocations.Draussen.toString()}
+                             label={messages.adminEditGameForm.spielort}>
+                {Object.keys(configuration.gameLocations).map((gameLocation) => (
+                    <option value={configuration.gameLocations[gameLocation as unknown as number]} hidden={!isNaN(Number(gameLocation))}
+                            key={gameLocation}>{gameLocation}</option>
+                ))}
+            </SelectWithLabel>
+            <div className={"flex gap-3 items-center w-full justify-end"}>
+                <RedButton className={'mr-auto'}>
+                    <img className={"h-6"} src={"/img/icons/close-white.png"} alt={""} />
+                    <button type={"button"} onClick={() => navigate(-1)}>{messages.buttons.cancel}</button>
+                </RedButton>
+                <DefaultButton>
+                    <img className={"h-6"} src="/img/icons/check.png" alt=""/>
+                    <SubmitButton idleLabel={messages.buttons.save} loadingLabel={messages.buttons.save}/>
+                </DefaultButton>
+            </div>
+        </Form>
     );
 };
 export default NewGame;

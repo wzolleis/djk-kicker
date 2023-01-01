@@ -20,6 +20,7 @@ import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {useState} from "react";
 import routeLinks from "~/helpers/constants/routeLinks";
+import SubmitButton from "~/components/common/buttons/submitButton";
 
 
 export const loader: LoaderFunction = async ({request}: { request: Request }) => {
@@ -123,10 +124,19 @@ export const NewAdmin = () => {
 
                     <ButtonContainer>
                         <RedButton>
-                            <button name='intent' value={'cancel'} type={'submit'}>{messages.buttons.cancel}</button>
+                            <SubmitButton idleLabel={messages.buttons.cancel}
+                                          loadingLabel={messages.buttons.cancel}
+                                          savingLabel={messages.buttons.cancel}
+                                          name={"intent"}
+                                          value={"cancel"}
+                            />
                         </RedButton>
                         <DefaultButton className='ml-auto'>
-                            <button type={'submit'} name={'intent'} value='save'>{messages.buttons.save}</button>
+                            <SubmitButton idleLabel={messages.buttons.save}
+                                          loadingLabel={messages.buttons.save}
+                                          name={"intent"}
+                                          value={"save"}
+                            />
                         </DefaultButton>
                     </ButtonContainer>
 

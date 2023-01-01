@@ -14,6 +14,7 @@ import dateUtils from "~/dateUtils";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
 import SuccessButton from "~/components/common/buttons/SuccessButton";
+import SubmitButton from "~/components/common/buttons/submitButton";
 
 type LoaderData = {
     adminInvitation: AdminInvitation,
@@ -93,12 +94,18 @@ const InviteChoiceView = () => {
                     />
                     <ButtonContainer>
                         <RedButton>
-                            <button name='intent' value={'reject'}
-                                    type={'submit'}>{messages.adminInviteUserChoiceForm.rejectInvitation}</button>
+                            <SubmitButton idleLabel={messages.adminInviteUserChoiceForm.rejectInvitation}
+                                          loadingLabel={messages.adminInviteUserChoiceForm.rejectInvitation}
+                                          name={"intent"}
+                                          value={"reject"}
+                            />
                         </RedButton>
                         <SuccessButton className='ml-auto'>
-                            <button type={'submit'} name={'intent'}
-                                    value='accept'>{messages.adminInviteUserChoiceForm.acceptInvitation}</button>
+                            <SubmitButton idleLabel={messages.adminInviteUserChoiceForm.acceptInvitation}
+                                          loadingLabel={messages.adminInviteUserChoiceForm.acceptInvitation}
+                                          name={"intent"}
+                                          value={"accept"}
+                            />
                         </SuccessButton>
                     </ButtonContainer>
                 </main>

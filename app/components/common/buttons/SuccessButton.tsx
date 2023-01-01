@@ -6,7 +6,7 @@ const SuccessButton = ({ children, className }: PropsWithChildren<{className?: s
     <>
       <div
         className={
-          classNames("flex items-center justify-center gap-2 rounded bg-green-600 py-2 px-3 font-default-medium text-white hover:bg-green-400", className)
+          classNames("flex items-center justify-center gap-2 rounded bg-green-600 py-2 px-3 font-default-medium text-white hover:scale-90", className)
         }
       >
         {children}

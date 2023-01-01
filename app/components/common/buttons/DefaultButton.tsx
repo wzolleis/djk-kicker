@@ -18,7 +18,7 @@ const DefaultButton = ({
     return (
         <div
             className={classNames(
-                "flex items-center justify-center gap-2 rounded px-3 py-2 font-default-medium transition duration-150 ease-in-out hover:scale-90 hover:bg-indigo-400 active:bg-indigo-800",
+                "flex items-center justify-center gap-2 rounded px-3 py-2 font-default-medium transition duration-150 ease-in-out hover:scale-90 active:bg-indigo-800",
                 buttonFill,
                 className
             )}>
