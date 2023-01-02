@@ -16,6 +16,7 @@ const messages = {
     add: "Hinzufügen",
     cancel: "Abbruch",
     delete: "Löschen",
+    reset: "Zurücksetzen",
     invite: "Einladen",
     details: "Details"
   },

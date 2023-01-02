@@ -1,12 +1,12 @@
 import {DefaultFeedback} from "@prisma/client";
-import {PlayerStatus} from "~/components/player/feedback/PlayerStatus";
 import TextAreaWithLabel from "~/components/common/form/TextareaWithLabel";
-import {useState} from "react";
+import React, {useState} from "react";
 import messages from "~/components/i18n/messages";
 import {PlayerCount} from "~/components/common/counter/PlayerCount";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import playerCountHelper from "~/utils/playerCountHelper";
 import {statusInConfig} from "~/config/status";
+import {DefaultPlayerStatus} from "~/components/player/feedback/DefaultPlayerStatus";
 
 type DefaultFeedbackProps = {
     defaultFeedback: DefaultFeedback | undefined;
@@ -28,12 +28,12 @@ const DefaultFeedbackComponent = ({defaultFeedback, title}: DefaultFeedbackProps
         <>
             <p className={"font-default-medium text-gray-600"}>{title}</p>
             <ContentContainer>
-                <input type={"hidden"} value={feedbackStatus } name={"dashboard.defaultFeedback.status"}/>
-                <PlayerStatus status={feedbackStatus} setStatus={setFeedbackStatus}/>
+                <input type={"hidden"} value={feedbackStatus} name={"dashboard.defaultFeedback.status"}/>
+                <DefaultPlayerStatus status={feedbackStatus} setStatus={setFeedbackStatus}/>
             </ContentContainer>
             <p className={"font-default-medium text-gray-600"}>{messages.game.feedback.headings.playerCount}</p>
             <ContentContainer>
-                <input type={"hidden"} value={playerCount } name={"dashboard.defaultFeedback.playerCount"}/>
+                <input type={"hidden"} value={playerCount} name={"dashboard.defaultFeedback.playerCount"}/>
                 <PlayerCount playerCount={playerCount} onAdd={onAdd} onSubtract={onSubtract}></PlayerCount>
             </ContentContainer>
             <TextAreaWithLabel
