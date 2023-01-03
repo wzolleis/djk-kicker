@@ -1,23 +1,40 @@
 import PlayerProfileForm, {PlayerProfileDescription} from "~/components/player/profile/playerProfileForm";
-import {ActionFunction, json, redirect} from "@remix-run/node";
+import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {authenticatePlayer} from "~/utils/session.server";
 import routeLinks from "~/helpers/constants/routeLinks";
-import {updateDefaultFeedback} from "~/models/feedback.server";
-import {Form, useFetcher} from "@remix-run/react";
-import {NavbarLoaderData} from "~/routes/application/navbar";
-import {useEffect} from "react";
+import {getDefaultFeedback, updateDefaultFeedback} from "~/models/feedback.server";
+import {Form, useLoaderData} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import invariant from "tiny-invariant";
-import {updatePlayer} from "~/models/player.server";
+import {getPlayerById, updatePlayer} from "~/models/player.server";
 import {istStatusInConfig, statusInConfig} from "~/config/status";
 import {FormWrapper} from "~/utils/formWrapper.server";
-import fetchLinks from "~/helpers/constants/fetchLinks";
 import SubmitButton from "~/components/common/buttons/submitButton";
 import RedButton from "~/components/common/buttons/RedButton";
+import {DefaultFeedback, Game, Player} from "@prisma/client";
+import {getGameById, getMostRecentGame} from "~/models/games.server";
 
+type LoaderData = {
+    player: Player
+    game: Game
+    defaultFeedback: DefaultFeedback
+};
+
+export const loader: LoaderFunction = async ({params}) => {
+    const playerid = params.playerId
+    invariant(!!playerid, "invalid playerid")
+    const player = await getPlayerById(playerid)
+    invariant(!!player, `player nicht gefunden, id = ${playerid}`)
+    const nextGame = await getMostRecentGame();
+    invariant(!!nextGame, "Kein Spiel")
+
+    const nextGameWithFeedBack = await getGameById(nextGame.id)
+    const defaultFeedback =  await getDefaultFeedback(player.id)
+    return json({player, game: nextGameWithFeedBack, defaultFeedback});
+};
 
 type ProfileFormInputName =
     | "dashboard.defaultFeedback.status" | "dashboard.defaultFeedback.playerCount" | "dashboard.defaultFeedback.note"
@@ -87,14 +104,7 @@ export const action: ActionFunction = async ({params, request}) => {
 }
 
 const PlayerProfile = () => {
-    const fetcher = useFetcher<NavbarLoaderData>();
-    useEffect(() => {
-        fetcher.load(fetchLinks.navbar);
-    }, []);
-
-    const player = fetcher.data?.player
-    const defaultFeedback = fetcher.data?.defaultFeedback
-    const nextGame = fetcher.data?.nextGame
+    const {player, defaultFeedback, game: nextGame} = useLoaderData<LoaderData>()
 
     if (!player) {
         return (

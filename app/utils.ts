@@ -66,6 +66,7 @@ export function validateEmail(email: unknown): email is string {
 export type QueryParamTypes = {
   player: string | null;
   gameid: string | null;
+  playerid: string | null;
   filter: string | null;
   token: string | null;
 };
