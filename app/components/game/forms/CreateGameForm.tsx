@@ -30,7 +30,7 @@ const CreateGameForm = () => {
                 </RedButton>
                 <DefaultButton>
                     <img className={"h-6"} src="/img/icons/check.png" alt=""/>
-                    <SubmitButton idleLabel={messages.buttons.save} loadingLabel={messages.buttons.save}/>
+                    <SubmitButton label={messages.buttons.save} loadingLabel={messages.buttons.save}/>
                 </DefaultButton>
             </div>
         </Form>

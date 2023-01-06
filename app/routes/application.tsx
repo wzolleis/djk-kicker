@@ -1,4 +1,4 @@
-import {Outlet, useCatch, useNavigate} from "@remix-run/react";
+import {Form, Outlet, useCatch, useLoaderData, useNavigate} from "@remix-run/react";
 import TopNavBar from "~/components/nav/TopNavBar";
 import {appMenu} from "~/components/nav/appMenu";
 import {useOptionalUser} from "~/utils";
@@ -10,9 +10,75 @@ import React from "react";
 import PageHeader from "~/components/common/PageHeader";
 import ErrorComponent from "~/components/common/error/ErrorComponent";
 import BottomNavigationBar from "~/components/nav/BottomNavigationBar";
+import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
+import {authenticatePlayer} from "~/utils/session.server";
+import {getGameById, getMostRecentGame} from "~/models/games.server";
+import {getDefaultFeedback} from "~/models/feedback.server";
+import {getNavigationFormValues, isNavigationIntent} from "~/config/bottomNavigation";
+import invariant from "tiny-invariant";
+
+
+export const action: ActionFunction = async ({params, request}) => {
+    const {player} = await authenticatePlayer(params, request);
+    const nextGame = await getMostRecentGame();
+    const formData = await request.formData();
+    const formValues = getNavigationFormValues(formData)
+    const intent = formValues.get("intent")
+    invariant(typeof intent === "string", "invalid intent type")
+    invariant(isNavigationIntent(intent), "invalid intent")
+
+    const gameId = nextGame?.id
+    const playerId = player?.id
+
+    switch (intent) {
+        case "profile":
+            if (!!playerId) {
+                return redirect(routeLinks.player.profile(playerId))
+            }
+            break
+        case "home":
+            return redirect(routeLinks.dashboard)
+        case "game":
+            if (!!gameId) {
+                return redirect(routeLinks.game(gameId))
+            }
+            break
+        case "administration":
+            return redirect(routeLinks.admin.adminLandingPage)
+        case "registration":
+            const createPlayerLink = gameId ? routeLinks.player.createForGame(gameId) : routeLinks.player.create
+            return redirect(createPlayerLink)
+        default:
+            return redirect(routeLinks.dashboard)
+    }
+    return redirect(routeLinks.dashboard)
+}
+
+export type ApplicationLoaderData = {
+    userAuthentication: Awaited<ReturnType<typeof authenticatePlayer>>
+    nextGame?: Awaited<ReturnType<typeof getMostRecentGame>>
+    defaultFeedback?: Awaited<ReturnType<typeof getDefaultFeedback>>
+}
+
+export const loader: LoaderFunction = async ({params, request}) => {
+    const userAuthentication = await authenticatePlayer(params, request);
+    const {player} = userAuthentication
+    const nextGame = await getMostRecentGame();
+    const nextGameWithFeedBack = !!nextGame ? await getGameById(nextGame.id) : undefined
+    const defaultFeedback = player?.id ? await getDefaultFeedback(player?.id) : undefined
+
+    return json<ApplicationLoaderData>({
+        userAuthentication,
+        defaultFeedback,
+        nextGame: nextGameWithFeedBack ?? undefined
+    });
+};
+
 
 const Application = () => {
     const user = useOptionalUser();
+
+    const data = useLoaderData<ApplicationLoaderData>() as ApplicationLoaderData;
     return (
         <div className="flex h-full min-h-screen flex-col">
             <TopNavBar appMenu={appMenu.app} user={user}/>
@@ -23,7 +89,10 @@ const Application = () => {
                         <div className={"mb-20 md:mb-5"}>
                             <Outlet/>
                         </div>
-                        <BottomNavigationBar admin={user}/>
+                        <Form method={"post"}>
+                            <BottomNavigationBar admin={user} game={data.nextGame}
+                                                 player={data.userAuthentication.player}/>
+                        </Form>
                     </div>
                 </main>
             </div>

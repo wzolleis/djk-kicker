@@ -7,7 +7,8 @@ const messages = {
     welcome: "Willkommen bei den DJK Kickern",
     title: "DJK Kicker",
     loading: "Lade Daten...",
-    saving: "Speichere Daten..."
+    saving: "Speichere Daten...",
+    process: "Verarbeite Daten..."
   },
   buttons: {
     edit: "Bearbeiten",
@@ -16,6 +17,7 @@ const messages = {
     add: "Hinzufügen",
     cancel: "Abbruch",
     delete: "Löschen",
+    reset: "Zurücksetzen",
     invite: "Einladen",
     details: "Details"
   },

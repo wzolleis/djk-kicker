@@ -182,7 +182,7 @@ const GameInvitation = () => {
                                     src="/img/icons/mail-check-white.png"
                                     alt=""
                                 />
-                                <SubmitButton idleLabel={messages.adminGameInvitationForm.sendInvitationBtn}
+                                <SubmitButton label={messages.adminGameInvitationForm.sendInvitationBtn}
                                               loadingLabel={messages.adminGameInvitationForm.sendInvitationBtn}
                                               name={"intent"}
                                               value={"invitation"}

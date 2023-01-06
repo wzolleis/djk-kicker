@@ -5,7 +5,7 @@ import Subheading from "~/components/common/header/Subheading";
 import DefaultFeedbackComponent from "~/components/player/feedback/DefaultFeedbackComponent";
 import BodyText from "~/components/common/header/BodyText";
 
-export const DashboardPlayerProfileDescription = () => {
+export const PlayerProfileDescription = () => {
     return (
         <>
             <Subheading title={messages.dashboard.playerProfile}/>
@@ -16,7 +16,7 @@ export const DashboardPlayerProfileDescription = () => {
 }
 
 
-const DashboardPlayerProfileForm = ({
+const PlayerProfileForm = ({
                                         player,
                                         defaultFeedback,
                                     }: { player: Player, defaultFeedback: DefaultFeedback | undefined}) => {
@@ -46,4 +46,4 @@ const DashboardPlayerProfileForm = ({
     )
 }
 
-export default DashboardPlayerProfileForm
+export default PlayerProfileForm

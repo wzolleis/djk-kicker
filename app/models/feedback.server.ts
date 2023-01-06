@@ -118,7 +118,7 @@ export const deleteFeedbackForPlayer = async (playerId: string) => {
     const allFeedback = await getFeedbackByPlayerId(playerId)
     const allOps: Array<Promise<Feedback>> = []
     allFeedback.forEach((feedback) => {
-         allOps.push(deleteFeedback(feedback.id))
+        allOps.push(deleteFeedback(feedback.id))
     })
     return Promise.all(allOps)
 }
@@ -204,11 +204,13 @@ export async function getDefaultFeedback(playerId: string) {
     return defaultFeedback;
 }
 
-export async function updateDefaultFeedback(
-    playerId: Player["id"],
-    status: number,
-    playerCount: number,
-    note?: string
+export async function updateDefaultFeedback({playerId, status, playerCount, note}:
+                                                {
+                                                    playerId: string,
+                                                    status: number,
+                                                    playerCount: number,
+                                                    note: string | undefined
+                                                }
 ): Promise<DefaultFeedback> {
     return await prisma.defaultFeedback.update({
         where: {
@@ -216,7 +218,7 @@ export async function updateDefaultFeedback(
         },
         data: {
             status,
-            note,
+            note: note ? note : null,
             playerCount,
         },
     });
