@@ -11,6 +11,7 @@ import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {useTransition} from "@remix-run/react";
 import classNames from "classnames";
 import SubmitButton from "~/components/common/buttons/submitButton";
+import TransitionHeader from "~/components/common/header/transitionHeader";
 
 const GameFeedback = ({
                           nextGame,
@@ -31,23 +32,12 @@ const GameFeedback = ({
     const submitting = transition.state === "submitting"
     const loading = transition.state === "loading"
 
-    let title = ''
-    switch (transition.state) {
-        default:
-        case "idle":
-            title = messages.dashboard.playerStatusForGame(useDate(new Date(nextGame.gameTime)))
-            break
-        case "loading":
-            title = messages.app.loading
-            break
-        case "submitting":
-            title = messages.app.saving
-            break
-    }
+
+    let title = messages.dashboard.playerStatusForGame(useDate(new Date(nextGame.gameTime)))
 
     return (
         <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
-            <Subheading title={title}/>
+            <TransitionHeader idleLabel={title}/>
             <ContentContainer
                 className={classNames(loading || submitting ? "opacity-25" : "opacity-100", "bg-blue-200")}>
                 <input type={"hidden"} value={feedback.status} name={"dashboard.feedback.status"}/>
@@ -57,7 +47,7 @@ const GameFeedback = ({
                 <PlayerFeedback playerFeedback={playerFeedbackOrDefault} onFeedbackChange={handleFeedBackChange}/>
                 <ButtonContainer className={"flex justify-end my-2 md:my-5"}>
                     <DefaultButton>
-                        <SubmitButton idleLabel={messages.buttons.save}
+                        <SubmitButton label={messages.buttons.save}
                                       name="intent"
                                       value="playerFeedback"
                         />

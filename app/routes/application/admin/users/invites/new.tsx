@@ -124,7 +124,7 @@ export const NewAdmin = () => {
 
                     <ButtonContainer>
                         <RedButton>
-                            <SubmitButton idleLabel={messages.buttons.cancel}
+                            <SubmitButton label={messages.buttons.cancel}
                                           loadingLabel={messages.buttons.cancel}
                                           savingLabel={messages.buttons.cancel}
                                           name={"intent"}
@@ -132,7 +132,7 @@ export const NewAdmin = () => {
                             />
                         </RedButton>
                         <DefaultButton className='ml-auto'>
-                            <SubmitButton idleLabel={messages.buttons.save}
+                            <SubmitButton label={messages.buttons.save}
                                           loadingLabel={messages.buttons.save}
                                           name={"intent"}
                                           value={"save"}

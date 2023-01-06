@@ -3,7 +3,7 @@ import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {authenticatePlayer} from "~/utils/session.server";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {getDefaultFeedback, updateDefaultFeedback} from "~/models/feedback.server";
-import {Form, useLoaderData} from "@remix-run/react";
+import {Form, useLoaderData, useTransition} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
@@ -16,6 +16,7 @@ import SubmitButton from "~/components/common/buttons/submitButton";
 import RedButton from "~/components/common/buttons/RedButton";
 import {DefaultFeedback, Game, Player} from "@prisma/client";
 import {getGameById, getMostRecentGame} from "~/models/games.server";
+import Subheading from "~/components/common/header/Subheading";
 
 type LoaderData = {
     player: Player
@@ -32,13 +33,14 @@ export const loader: LoaderFunction = async ({params}) => {
     invariant(!!nextGame, "Kein Spiel")
 
     const nextGameWithFeedBack = await getGameById(nextGame.id)
-    const defaultFeedback =  await getDefaultFeedback(player.id)
+    const defaultFeedback = await getDefaultFeedback(player.id)
     return json({player, game: nextGameWithFeedBack, defaultFeedback});
 };
 
-type ProfileFormInputName =
-    | "dashboard.defaultFeedback.status" | "dashboard.defaultFeedback.playerCount" | "dashboard.defaultFeedback.note"
-    | "dashboard.profile.player.name" | "dashboard.profile.player.email"
+const ProfileFormInputNameValues = [
+    "dashboard.defaultFeedback.status", "dashboard.defaultFeedback.playerCount",
+    "dashboard.defaultFeedback.note", "dashboard.profile.player.name", "dashboard.profile.player.email"] as const
+export type ProfileFormInputName = typeof ProfileFormInputNameValues[number]
 
 export const action: ActionFunction = async ({params, request}) => {
     const {player} = await authenticatePlayer(params, request);
@@ -103,9 +105,19 @@ export const action: ActionFunction = async ({params, request}) => {
     }
 }
 
+const ProcessingPlaceholder = ({hidden}: {hidden: boolean}) => {
+    if (hidden) return null
+    return (
+        <div className={"flex flex-col items-center"}>
+            <Subheading title={messages.app.process}/>
+        </div>
+    )
+}
+
 const PlayerProfile = () => {
     const {player, defaultFeedback, game: nextGame} = useLoaderData<LoaderData>()
-
+    const transition = useTransition()
+    let activeTransition = transition.state !== "idle"
     if (!player) {
         return (
             <div className={"bg-red-100 rounded-xl p-3 ring ring-1 ring-red-200"}>
@@ -118,26 +130,30 @@ const PlayerProfile = () => {
         <ContentContainer>
             <PlayerProfileDescription/>
             <Form method={"post"}>
-                <ContentContainer className={"bg-blue-200"}>
-                    <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
-                    <PlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
-                    <ButtonContainer className={"flex justify-start my-2 md:my-5"}>
-                        <RedButton>
-                            <SubmitButton idleLabel={messages.buttons.reset}
-                                          loadingLabel={messages.buttons.reset}
-                                          name="intent"
-                                          value="resetProfile"
-                            />
-                        </RedButton>
-                        <DefaultButton className={"ml-auto"}>
-                            <SubmitButton idleLabel={messages.dashboard.saveProfile}
-                                          loadingLabel={messages.dashboard.saveProfile}
-                                          name="intent"
-                                          value="saveProfile"
-                            />
-                        </DefaultButton>
-                    </ButtonContainer>
-                </ContentContainer>
+                <fieldset disabled={activeTransition}>
+                    <ContentContainer className={"bg-blue-200"}>
+                        <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
+                        <PlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
+                        <ProcessingPlaceholder hidden={!activeTransition}/>
+                        {!activeTransition && <ButtonContainer className={"flex justify-start my-2 md:my-5"}>
+                            <RedButton>
+                                <SubmitButton label={messages.buttons.reset}
+                                              name="intent"
+                                              value="resetProfile"
+                                              showTransitionSpinner={true}
+                                />
+                            </RedButton>
+                            <DefaultButton className={"ml-auto"}>
+                                <SubmitButton label={messages.dashboard.saveProfile}
+                                              name="intent"
+                                              value="saveProfile"
+                                              showTransitionSpinner={true}
+                                />
+                            </DefaultButton>
+                        </ButtonContainer>
+                        }
+                    </ContentContainer>
+                </fieldset>
             </Form>
         </ContentContainer>
     )

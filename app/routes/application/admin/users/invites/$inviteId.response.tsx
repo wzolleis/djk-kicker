@@ -94,14 +94,14 @@ const InviteChoiceView = () => {
                     />
                     <ButtonContainer>
                         <RedButton>
-                            <SubmitButton idleLabel={messages.adminInviteUserChoiceForm.rejectInvitation}
+                            <SubmitButton label={messages.adminInviteUserChoiceForm.rejectInvitation}
                                           loadingLabel={messages.adminInviteUserChoiceForm.rejectInvitation}
                                           name={"intent"}
                                           value={"reject"}
                             />
                         </RedButton>
                         <SuccessButton className='ml-auto'>
-                            <SubmitButton idleLabel={messages.adminInviteUserChoiceForm.acceptInvitation}
+                            <SubmitButton label={messages.adminInviteUserChoiceForm.acceptInvitation}
                                           loadingLabel={messages.adminInviteUserChoiceForm.acceptInvitation}
                                           name={"intent"}
                                           value={"accept"}

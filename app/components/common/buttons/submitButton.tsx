@@ -1,4 +1,3 @@
-import messages from "~/components/i18n/messages";
 import {useTransition} from "@remix-run/react";
 
 export type SubmitButtonProps = {
@@ -8,25 +7,28 @@ export type SubmitButtonProps = {
     name?: string
     value?: string
 
-    idleLabel: string
     loadingLabel?: string
     savingLabel?: string
+
+    label: string
+
+    showTransitionSpinner?: boolean
 }
 
 const SubmitButton = (props: SubmitButtonProps) => {
     const transition = useTransition()
-
+    let activeTransition = transition.state !== "idle"
     let label = ''
     switch (transition.state) {
         default:
         case "idle":
-            label = props.idleLabel
+            label = props.label
             break
         case "loading":
-            label = props.loadingLabel ?? messages.app.loading
+            label = props.loadingLabel ?? props.label
             break
         case "submitting":
-            label = props.savingLabel ?? messages.app.saving
+            label = props.savingLabel ?? props.label
             break
     }
 
@@ -35,9 +37,13 @@ const SubmitButton = (props: SubmitButtonProps) => {
             type={props.type ?? "submit"}
             name={props.name}
             value={props.value}
-            disabled={transition.state !== 'idle'}
+            disabled={activeTransition}
             className={props.className}
         >
+            {
+                !!props.showTransitionSpinner && activeTransition &&
+                <p className={"fa fa-spinner animate-spin mr-1"}/>
+            }
             {label}
         </button>
     )

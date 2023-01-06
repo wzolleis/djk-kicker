@@ -1,12 +1,9 @@
-import {useFetcher, useLocation} from "@remix-run/react";
+import {useLocation} from "@remix-run/react";
 import routeLinks from "~/helpers/constants/routeLinks";
 import classNames from "classnames";
-import {useEffect} from "react";
-import {User} from "@prisma/client";
+import {Game, Player, User} from "@prisma/client";
 import is from "@sindresorhus/is";
-import {NavbarLoaderData} from "~/routes/application/navbar";
 import messages from "~/components/i18n/messages";
-import fetchLinks from "~/helpers/constants/fetchLinks";
 import {NavigationIntent} from "~/config/bottomNavigation";
 import undefined = is.undefined;
 
@@ -97,15 +94,17 @@ const HomeButton = ({playerId}: { playerId: string | undefined }) => {
     )
 }
 
-const BottomNavigationBar = ({admin}: { admin: User | undefined }) => {
-    const fetcher = useFetcher<NavbarLoaderData>();
+export type BottomNavigationBarProps = {
+    game: Game | undefined | null
 
-    useEffect(() => {
-        fetcher.load(fetchLinks.navbar);
-    }, []);
+    player: Player | undefined | null
+    admin: User | undefined
+}
 
-    const gameId = fetcher.data?.nextGame?.id
-    const playerId = fetcher.data?.player?.id
+const BottomNavigationBar = ({admin, player, game}: BottomNavigationBarProps) => {
+    const playerId = player?.id
+    const gameId = game?.id
+
     return (
         <div className="w-full">
             <section id="bottom-navigation" className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
