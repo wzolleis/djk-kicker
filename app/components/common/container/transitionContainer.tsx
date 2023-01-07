@@ -8,7 +8,10 @@ type TransitionContainerProps = {}
 const Placeholder = () => {
     return (
         <div className="grid place-items-center h-screen text-2xl">
-            {messages.app.wait}
+            <div>
+                <i className="fa fa-refresh fa-spin fa-fw"></i>
+                <span className={"text-2xl"}>{messages.app.wait}</span>
+            </div>
         </div>
     )
 }
