@@ -8,7 +8,8 @@ const messages = {
     title: "DJK Kicker",
     loading: "Lade Daten...",
     saving: "Speichere Daten...",
-    process: "Verarbeite Daten..."
+    process: "Verarbeite Daten...",
+    wait: "Bitte warten..."
   },
   buttons: {
     edit: "Bearbeiten",

@@ -6,10 +6,8 @@ import {getGameById, getMostRecentGame} from "~/models/games.server";
 import {findFeedbackWithPlayerIdAndGameId, getDefaultFeedback, updateFeedback,} from "~/models/feedback.server";
 import PageHeader from "~/components/common/PageHeader";
 import {getPlayerGreeting} from "~/utils";
-import {motion} from "framer-motion";
 import routeLinks from "~/helpers/constants/routeLinks";
 import {GameWithFeedback} from "~/config/gameTypes";
-import animationConfig from "~/config/animationConfig";
 import invariant from "tiny-invariant";
 import _ from "lodash";
 import {DashboardFormValues, getDashboardFormValues} from "~/components/dashboard/dashboardHelper";
@@ -89,22 +87,10 @@ const Dashboard = () => {
             <Form method={"post"} key={"dashboard"}>
                 <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
                 <PageHeader title={getPlayerGreeting(playerWithUpdate.name)}/>
-                <motion.div
-                    className={"flex flex-col gap-4"}
-                    variants={animationConfig.container}
-                    initial={"initial"}
-                    animate={"animate"}
-                    exit={"exit"}
-                >
-                    <motion.div variants={animationConfig.animationItems}>
-                        <GameSummary nextGame={nextGame}/>
-                    </motion.div>
-                    <motion.div variants={animationConfig.animationItems}>
-                        <GameFeedback nextGame={nextGame}
-                                      nextGameFeedback={feedbackWithUpdate}
-                                      defaultFeedback={defaultFeedbackWithUpdate}/>
-                    </motion.div>
-                </motion.div>
+                <GameSummary nextGame={nextGame}/>
+                <GameFeedback nextGame={nextGame}
+                              nextGameFeedback={feedbackWithUpdate}
+                              defaultFeedback={defaultFeedbackWithUpdate}/>
             </Form>
         </TransitionContainer>
     )

@@ -11,7 +11,6 @@ import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {useTransition} from "@remix-run/react";
 import classNames from "classnames";
 import SubmitButton from "~/components/common/buttons/submitButton";
-import TransitionHeader from "~/components/common/header/transitionHeader";
 
 const GameFeedback = ({
                           nextGame,
@@ -37,7 +36,7 @@ const GameFeedback = ({
 
     return (
         <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
-            <TransitionHeader idleLabel={title}/>
+            <Subheading title={title}/>
             <ContentContainer
                 className={classNames(loading || submitting ? "opacity-25" : "opacity-100", "bg-blue-200")}>
                 <input type={"hidden"} value={feedback.status} name={"dashboard.feedback.status"}/>
