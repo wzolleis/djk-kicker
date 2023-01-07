@@ -12,10 +12,6 @@ export const appMenu: { app: MenuEntry[] } = {
             id: "5fda6c32-e771-4598-b96b-d24d60209eef",
             appLink: appLinks.application.admin
         },
-        {
-            id: "E3DA2362-E6DA-48B1-ADA5-67D15FBFC879",
-            appLink: appLinks.application.users.create
-        }
     ]
 }
 

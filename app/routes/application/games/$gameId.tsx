@@ -13,6 +13,7 @@ import GameSummary from "~/components/game/GameSummary";
 import {GameWithFeedback} from "~/config/gameTypes";
 import Subheading from "~/components/common/header/Subheading";
 import messages from "~/components/i18n/messages";
+import TransitionContainer from "~/components/common/container/transitionContainer";
 
 type LoaderData = {
     game: GameWithFeedback;
@@ -56,8 +57,8 @@ const GameIndex = () => {
 
     // @ts-ignore
     return (
-        <>
-            <section className={"mt-5 flex flex-col gap-5"}>
+        <TransitionContainer>
+            <section className={"mt-5 flex flex-col gap-5"} key={"game"}>
                 <Subheading title={`${messages.game.headings.nextGame}`}/>
                 <GameSummary game={game}/>
                 <Players
@@ -66,7 +67,7 @@ const GameIndex = () => {
                     gameId={game.id}
                 />
             </section>
-        </>
+        </TransitionContainer>
     );
 };
 

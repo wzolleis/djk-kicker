@@ -1,5 +1,3 @@
-import nodemailer, {SentMessageInfo} from 'nodemailer'
-
 // Falls komische Fehler beim Versenden auftreten, mal hier nachlesen, viel Glück :D
 // https://stackoverflow.com/questions/66317125/node-js-nodemailer-error-wrong-version-number-invalid-greeting
 export const handler = async (event: any, context: any, callback: any) => {

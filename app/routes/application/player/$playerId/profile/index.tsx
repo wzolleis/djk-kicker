@@ -17,6 +17,7 @@ import RedButton from "~/components/common/buttons/RedButton";
 import {DefaultFeedback, Game, Player} from "@prisma/client";
 import {getGameById, getMostRecentGame} from "~/models/games.server";
 import Subheading from "~/components/common/header/Subheading";
+import TransitionContainer from "~/components/common/container/transitionContainer";
 
 type LoaderData = {
     player: Player
@@ -105,7 +106,7 @@ export const action: ActionFunction = async ({params, request}) => {
     }
 }
 
-const ProcessingPlaceholder = ({hidden}: {hidden: boolean}) => {
+const ProcessingPlaceholder = ({hidden}: { hidden: boolean }) => {
     if (hidden) return null
     return (
         <div className={"flex flex-col items-center"}>
@@ -127,35 +128,37 @@ const PlayerProfile = () => {
     }
 
     return (
-        <ContentContainer>
-            <PlayerProfileDescription/>
-            <Form method={"post"}>
-                <fieldset disabled={activeTransition}>
-                    <ContentContainer className={"bg-blue-200"}>
-                        <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
-                        <PlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
-                        <ProcessingPlaceholder hidden={!activeTransition}/>
-                        {!activeTransition && <ButtonContainer className={"flex justify-start my-2 md:my-5"}>
-                            <RedButton>
-                                <SubmitButton label={messages.buttons.reset}
-                                              name="intent"
-                                              value="resetProfile"
-                                              showTransitionSpinner={true}
-                                />
-                            </RedButton>
-                            <DefaultButton className={"ml-auto"}>
-                                <SubmitButton label={messages.dashboard.saveProfile}
-                                              name="intent"
-                                              value="saveProfile"
-                                              showTransitionSpinner={true}
-                                />
-                            </DefaultButton>
-                        </ButtonContainer>
-                        }
-                    </ContentContainer>
-                </fieldset>
-            </Form>
-        </ContentContainer>
+        <TransitionContainer>
+            <ContentContainer key="profile">
+                <PlayerProfileDescription/>
+                <Form method={"post"}>
+                    <fieldset disabled={activeTransition}>
+                        <ContentContainer className={"bg-blue-200"}>
+                            <input type={"hidden"} name={"gameId"} value={nextGame?.id}/>
+                            <PlayerProfileForm player={player} defaultFeedback={defaultFeedback}/>
+                            <ProcessingPlaceholder hidden={!activeTransition}/>
+                            {!activeTransition && <ButtonContainer className={"flex justify-start my-2 md:my-5"}>
+                                <RedButton>
+                                    <SubmitButton label={messages.buttons.reset}
+                                                  name="intent"
+                                                  value="resetProfile"
+                                                  showTransitionSpinner={true}
+                                    />
+                                </RedButton>
+                                <DefaultButton className={"ml-auto"}>
+                                    <SubmitButton label={messages.dashboard.saveProfile}
+                                                  name="intent"
+                                                  value="saveProfile"
+                                                  showTransitionSpinner={true}
+                                    />
+                                </DefaultButton>
+                            </ButtonContainer>
+                            }
+                        </ContentContainer>
+                    </fieldset>
+                </Form>
+            </ContentContainer>
+        </TransitionContainer>
     )
 }
 
