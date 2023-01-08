@@ -28,16 +28,12 @@ export const loader: LoaderFunction = async ({params, request}) => {
     const {isAuthenticated, cookieHeader, player, isFirstAuthentication} = await authenticatePlayer(request);
 
     if (player && isFirstAuthentication) {
-        console.log(">>>>>>>>>>> first authentication, redirect to dashboard")
-
         return redirect(routeLinks.dashboard, {
             headers: {
                 "Set-Cookie": cookieHeader,
             },
         });
     }
-
-    console.log(">>>>>>>>> loaded all data for the game")
 
     return json(
         {players, isAuthenticated, player},

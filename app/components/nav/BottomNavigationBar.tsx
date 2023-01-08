@@ -53,13 +53,13 @@ const PlayerRegistrationButton = () => {
     />
 }
 
-const GameButton = ({gameId}: { gameId: string | undefined }) => {
+const SummaryButton = ({gameId}: { gameId: string | undefined }) => {
     if (!gameId) return null
     const location = useLocation()
     const active = location.pathname === routeLinks.game(gameId)
     return (
-        <NavButton label={messages.bottomNavBar.game}
-                   className={"fa-solid fa-futbol"}
+        <NavButton label={messages.bottomNavBar.summary}
+                   className={"fa-solid fa-info"}
                    active={active}
                    value={"game"}
         />
@@ -86,8 +86,8 @@ const HomeButton = ({playerId}: { playerId: string | undefined }) => {
     const active = location.pathname === routeLinks.dashboard
 
     return (
-        <NavButton label={messages.bottomNavBar.home}
-                   className={`fa-solid fa-home`}
+        <NavButton label={messages.bottomNavBar.game}
+                   className={`fa-solid fa-futbol`}
                    active={active}
                    value={"home"}
         />
@@ -109,7 +109,7 @@ const BottomNavigationBar = ({admin, player, game}: BottomNavigationBarProps) =>
             <section id="bottom-navigation" className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
                 <div id="tabs" className="flex justify-start">
                     <HomeButton playerId={playerId}/>
-                    <GameButton gameId={gameId}/>
+                    <SummaryButton gameId={gameId}/>
                     <ProfileButton playerId={playerId}/>
                     <AdminNavButton label={messages.bottomNavBar.administration}
                                     className={"fa-solid fa-gears"}

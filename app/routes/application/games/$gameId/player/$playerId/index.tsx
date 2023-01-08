@@ -75,7 +75,8 @@ const EditPlayerFeedback = () => {
             <NoTokenWarning hidden={isAuthenticated}/>
             <EditPlayerStatusForm
                 player={player}
-                isAuthenticated={isAuthenticated}></EditPlayerStatusForm>
+                isAuthenticated={isAuthenticated}
+            />
         </>
     );
 };

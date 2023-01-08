@@ -64,11 +64,11 @@ const messages = {
     deleteDefaultFeedback: "Standard-Status zurücksetzen"
   },
   bottomNavBar: {
-    home: "Home",
     game: "Spiel",
     profile: "Profil",
     administration: "Verwaltung",
-    registerPlayer: "Neuer Spieler"
+    registerPlayer: "Neuer Spieler",
+    summary: "Übersicht"
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",
