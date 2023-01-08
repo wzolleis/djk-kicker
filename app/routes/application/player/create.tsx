@@ -8,9 +8,9 @@ import MainPageContent from "~/components/common/MainPageContent";
 import {createPlayer} from "~/models/player.server";
 import {createFeedback} from "~/models/feedback.server";
 import invariant from "tiny-invariant";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {getGameById} from "~/models/games.server";
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 
 type LoaderData = {

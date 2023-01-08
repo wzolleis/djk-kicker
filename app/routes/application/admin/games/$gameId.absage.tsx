@@ -6,7 +6,7 @@ import dateUtils from "~/dateUtils";
 import messages from "~/components/i18n/messages";
 import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
 import {Player} from "@prisma/client";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {useRef} from "react";
 import mailhelper from '~/models/admin.games.mails.server'
 import {requireUserId} from "~/session.server";

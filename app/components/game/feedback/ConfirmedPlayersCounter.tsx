@@ -2,7 +2,7 @@ import Counter from "~/components/common/counter/Counter";
 import messages from "~/components/i18n/messages";
 import {calculateNumberOfPlayerWithStatus} from "~/utils/playerCountHelper";
 import {statusInConfig} from "~/config/status";
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 
 type ConfirmedPlayersCounterProps = {
     game: GameWithFeedback;

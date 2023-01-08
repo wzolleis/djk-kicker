@@ -1,5 +1,5 @@
 import {ActionFunction, LoaderFunction, redirect} from "@remix-run/node";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 export const action: ActionFunction = async () => {
     return redirect(routeLinks.dashboard)

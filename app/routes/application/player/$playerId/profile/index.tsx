@@ -1,7 +1,7 @@
 import PlayerProfileForm, {PlayerProfileDescription} from "~/components/player/profile/playerProfileForm";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {authenticatePlayer} from "~/utils/session.server";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {getDefaultFeedback, updateDefaultFeedback} from "~/models/feedback.server";
 import {Form, useLoaderData, useTransition} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
@@ -43,8 +43,8 @@ const ProfileFormInputNameValues = [
     "dashboard.defaultFeedback.note", "dashboard.profile.player.name", "dashboard.profile.player.email"] as const
 export type ProfileFormInputName = typeof ProfileFormInputNameValues[number]
 
-export const action: ActionFunction = async ({params, request}) => {
-    const {player} = await authenticatePlayer(params, request);
+export const action: ActionFunction = async ({ request}) => {
+    const {player} = await authenticatePlayer(request);
     const formData = await request.formData();
     const gameId = formData.get("gameId")
     const intent = formData.get("intent")

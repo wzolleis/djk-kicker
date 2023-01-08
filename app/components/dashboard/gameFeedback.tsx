@@ -1,4 +1,4 @@
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 import {DefaultFeedback, Feedback} from "@prisma/client";
 import Subheading from "~/components/common/header/Subheading";
 import messages from "~/components/i18n/messages";

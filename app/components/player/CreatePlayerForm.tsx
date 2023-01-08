@@ -8,7 +8,7 @@ import InputWithLabel from "~/components/common/form/InputWithLabel";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import GameSummary from "~/components/game/GameSummary";
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 import Subheading from "~/components/common/header/Subheading";
 
 

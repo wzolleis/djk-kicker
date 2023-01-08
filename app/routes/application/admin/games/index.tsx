@@ -1,4 +1,4 @@
-import {readGames} from "~/models/admin.games.server";
+import {findAllGames} from "~/models/admin.games.server";
 import type {LoaderArgs} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
@@ -10,13 +10,13 @@ import GamesList from "~/components/game/admin/GamesList";
 import RedButton from "~/components/common/buttons/RedButton";
 
 type LoaderData = {
-    games: Awaited<ReturnType<typeof readGames>>;
+    games: Awaited<ReturnType<typeof findAllGames>>;
 };
 
 export const loader = async ({request}: LoaderArgs) => {
     await requireUserId(request);
 
-    const games = await readGames();
+    const games = await findAllGames();
     return json<LoaderData>({games});
 };
 

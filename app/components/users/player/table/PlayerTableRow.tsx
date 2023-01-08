@@ -3,7 +3,7 @@ import {Link} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 export type AdminTableRowProps = {
     player: Player;

@@ -7,7 +7,7 @@ import RedButton from "~/components/common/buttons/RedButton";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import {Params} from "react-router";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {User} from "@prisma/client";
 import {deleteUserById, getUserById} from "~/models/user.server";
 import {requireUserId} from "~/session.server";

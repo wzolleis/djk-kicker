@@ -1,4 +1,4 @@
-import {spielortOptions} from "~/helpers/constants/admin.game.constants";
+import {spielortOptions} from "~/config/admin.game.constants";
 import {gameLocations} from "~/config/locations";
 import {AdminInvitationStatus} from "~/config/status";
 

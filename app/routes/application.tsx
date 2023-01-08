@@ -1,10 +1,10 @@
-import {Form, Outlet, useCatch, useLoaderData, useNavigate} from "@remix-run/react";
+import {Form, Outlet, useCatch, useNavigate} from "@remix-run/react";
 import TopNavBar from "~/components/nav/TopNavBar";
 import {appMenu} from "~/components/nav/appMenu";
 import {useOptionalUser} from "~/utils";
 import {Toaster} from "react-hot-toast";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import messages from "~/components/i18n/messages";
 import React from "react";
 import PageHeader from "~/components/common/PageHeader";
@@ -12,23 +12,23 @@ import ErrorComponent from "~/components/common/error/ErrorComponent";
 import BottomNavigationBar from "~/components/nav/BottomNavigationBar";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {authenticatePlayer} from "~/utils/session.server";
-import {getGameById, getMostRecentGame} from "~/models/games.server";
 import {getDefaultFeedback} from "~/models/feedback.server";
 import {getNavigationFormValues, isNavigationIntent} from "~/config/bottomNavigation";
 import invariant from "tiny-invariant";
+import {useNextGame} from "~/utils/gameUtils";
+import {useUserAuthentication} from "~/utils/playerUtils";
 
 
-export const action: ActionFunction = async ({params, request}) => {
-    const {player} = await authenticatePlayer(params, request);
-    const nextGame = await getMostRecentGame();
+export const action: ActionFunction = async ({ request}) => {
     const formData = await request.formData();
     const formValues = getNavigationFormValues(formData)
     const intent = formValues.get("intent")
+    const gameId = formValues.get("nextGameId")
+    const playerId = formValues.get("playerId")
     invariant(typeof intent === "string", "invalid intent type")
+    invariant(typeof gameId === "string", "invalid gameId type")
+    invariant(typeof playerId === "string", "invalid playerId type")
     invariant(isNavigationIntent(intent), "invalid intent")
-
-    const gameId = nextGame?.id
-    const playerId = player?.id
 
     switch (intent) {
         case "profile":
@@ -55,30 +55,25 @@ export const action: ActionFunction = async ({params, request}) => {
 }
 
 export type ApplicationLoaderData = {
-    userAuthentication: Awaited<ReturnType<typeof authenticatePlayer>>
-    nextGame?: Awaited<ReturnType<typeof getMostRecentGame>>
     defaultFeedback?: Awaited<ReturnType<typeof getDefaultFeedback>>
 }
 
-export const loader: LoaderFunction = async ({params, request}) => {
-    const userAuthentication = await authenticatePlayer(params, request);
+export const loader: LoaderFunction = async ({ request}) => {
+    const userAuthentication = await authenticatePlayer(request);
     const {player} = userAuthentication
-    const nextGame = await getMostRecentGame();
-    const nextGameWithFeedBack = !!nextGame ? await getGameById(nextGame.id) : undefined
     const defaultFeedback = player?.id ? await getDefaultFeedback(player?.id) : undefined
 
     return json<ApplicationLoaderData>({
-        userAuthentication,
         defaultFeedback,
-        nextGame: nextGameWithFeedBack ?? undefined
     });
 };
 
 
 const Application = () => {
     const user = useOptionalUser();
+    const nextGame = useNextGame()
+    const {player} = useUserAuthentication()
 
-    const data = useLoaderData<ApplicationLoaderData>() as ApplicationLoaderData;
     return (
         <div className="flex h-full min-h-screen flex-col">
             <TopNavBar appMenu={appMenu.app} user={user}/>
@@ -90,8 +85,10 @@ const Application = () => {
                             <Outlet/>
                         </div>
                         <Form method={"post"}>
-                            <BottomNavigationBar admin={user} game={data.nextGame}
-                                                 player={data.userAuthentication.player}/>
+                            <input type={"hidden"} name="nextGameId" value={nextGame?.id}/>
+                            <input type={"hidden"} name="playerId" value={player?.id}/>
+                            <BottomNavigationBar admin={user} game={nextGame}
+                                                 player={player}/>
                         </Form>
                     </div>
                 </main>

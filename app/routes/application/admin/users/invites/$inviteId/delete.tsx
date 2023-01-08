@@ -8,7 +8,7 @@ import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Params} from "react-router";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {deleteAdminInvitation, getAdminInvitation} from "~/models/admin.user.invitation.server";
 import {requireUserId} from "~/session.server";
 

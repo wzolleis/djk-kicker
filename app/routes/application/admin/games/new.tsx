@@ -6,7 +6,7 @@ import {redirect} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
 import invariant from "tiny-invariant";
 import dateUtils from "~/dateUtils";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {getNextGameDay} from "~/utils";

@@ -6,7 +6,7 @@ import ConfirmedPlayersCounter from "~/components/game/feedback/ConfirmedPlayers
 import DeclinedPlayersCounter from "~/components/game/feedback/DeclinedPlayersCounter";
 import UndecidedPlayersCounter from "~/components/game/feedback/UndecidedPlayersCounter";
 import UnknownPlayersCounter from "~/components/game/feedback/UnknownPlayersCounter";
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 import messages from "~/components/i18n/messages";
 import Subheading from "~/components/common/header/Subheading";
 

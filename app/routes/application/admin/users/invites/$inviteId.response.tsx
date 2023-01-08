@@ -3,7 +3,7 @@ import {AdminInvitation} from "@prisma/client";
 import {Form, useCatch, useLoaderData, useNavigate, useParams} from "@remix-run/react";
 import {DateTime} from "luxon";
 import {getAdminInvitation, updateAdminInvitation} from "~/models/admin.user.invitation.server";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {Params} from "react-router";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";

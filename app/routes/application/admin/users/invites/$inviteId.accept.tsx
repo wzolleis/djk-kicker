@@ -4,7 +4,7 @@ import {Form, useActionData, useCatch, useLoaderData, useNavigate,} from "@remix
 import {DateTime} from "luxon";
 import {getAdminInvitation, updateAdminInvitation,} from "~/models/admin.user.invitation.server";
 import {decryptEncryptedAdminToken} from "~/utils/token.server";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {Params} from "react-router";
 import invariant from "tiny-invariant";
 import {createUser, getUserByEmail} from "~/models/user.server";

@@ -10,7 +10,7 @@ import InputWithLabel from "~/components/common/form/InputWithLabel";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 
 export const loader: LoaderFunction = async ({request}: { request: Request }) => {

@@ -42,10 +42,6 @@ netlify init
   ```
 * Im Root Verzeichnis eine .env-Datei anlegen
 * Ein Muster für die env-Datei gibt es auf Anfrage
-```
-DATABASE_URL="file:./data.db"
-SESSION_SECRET="irgendwas kompliziertes hier eintragen, zb. mit einem Passwort-Generator"
-```
 * DB-Schema erzeugen
 ```
 npx prisma db push

@@ -1,5 +1,5 @@
 import messages from "~/components/i18n/messages";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 export type AppLink = {
     path: string

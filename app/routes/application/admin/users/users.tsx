@@ -10,7 +10,7 @@ import MainPageContent from "~/components/common/MainPageContent";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {getPlayers} from "~/models/player.server";
 import PlayerTable from "~/components/users/player/table/PlayerTable";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {getAdminInvitations} from "~/models/admin.user.invitation.server";
 import AdminInvitationTable from "~/components/users/admin/AdminInvitationTable";

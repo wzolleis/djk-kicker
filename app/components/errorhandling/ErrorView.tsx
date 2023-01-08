@@ -1,7 +1,7 @@
 import * as React from "react";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import messages from "~/components/i18n/messages";
 import {useNavigate} from "@remix-run/react";
 

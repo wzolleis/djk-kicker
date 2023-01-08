@@ -1,39 +1,35 @@
 import type {LoaderFunction} from "@remix-run/node";
 import {json, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
-import {getGameById} from "~/models/games.server";
 import {useLoaderData} from "@remix-run/react";
 import Players from "~/components/game/Players";
 import type {PlayerWithFeedback} from "~/models/player.server";
 import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
 import {authenticatePlayer} from "~/utils/session.server";
 import {Player} from "@prisma/client";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import GameSummary from "~/components/game/GameSummary";
-import {GameWithFeedback} from "~/config/gameTypes";
 import Subheading from "~/components/common/header/Subheading";
 import messages from "~/components/i18n/messages";
 import TransitionContainer from "~/components/common/container/transitionContainer";
+import {useNextGame} from "~/utils/gameUtils";
 
 type LoaderData = {
-    game: GameWithFeedback;
     players: PlayerWithFeedback[];
     isAuthenticated: boolean;
     player: Player;
-    playerId: string;
 };
 
 export const loader: LoaderFunction = async ({params, request}) => {
-    invariant(params.gameId, "Help");
+    invariant(params.gameId, "expected gameId in url parameters");
     const gameId = params.gameId;
-    const playerId = params.playerId;
-    const game: GameWithFeedback | null = gameId ? await getGameById(gameId) : null
     const players: PlayerWithFeedback[] =
         await getPlayersWithUniqueFeedbackForGame(gameId);
-    const {isAuthenticated, cookieHeader, player, isFirstAuthentication} =
-        await authenticatePlayer(params, request);
+    const {isAuthenticated, cookieHeader, player, isFirstAuthentication} = await authenticatePlayer(request);
 
     if (player && isFirstAuthentication) {
+        console.log(">>>>>>>>>>> first authentication, redirect to dashboard")
+
         return redirect(routeLinks.dashboard, {
             headers: {
                 "Set-Cookie": cookieHeader,
@@ -41,8 +37,10 @@ export const loader: LoaderFunction = async ({params, request}) => {
         });
     }
 
+    console.log(">>>>>>>>> loaded all data for the game")
+
     return json(
-        {game, players, isAuthenticated, player, playerId},
+        {players, isAuthenticated, player},
         {
             headers: {
                 "Set-Cookie": cookieHeader,
@@ -52,7 +50,8 @@ export const loader: LoaderFunction = async ({params, request}) => {
 };
 
 const GameIndex = () => {
-    const {game, players, isAuthenticated} =
+    const gameWithFeedBack = useNextGame()
+    const {players, isAuthenticated} =
         useLoaderData() as unknown as LoaderData;
 
     // @ts-ignore
@@ -60,11 +59,11 @@ const GameIndex = () => {
         <TransitionContainer>
             <section className={"mt-5 flex flex-col gap-5"} key={"game"}>
                 <Subheading title={`${messages.game.headings.nextGame}`}/>
-                <GameSummary game={game}/>
+                <GameSummary game={gameWithFeedBack}/>
                 <Players
                     isAuthenticated={isAuthenticated}
                     players={players}
-                    gameId={game.id}
+                    gameId={gameWithFeedBack.id}
                 />
             </section>
         </TransitionContainer>
