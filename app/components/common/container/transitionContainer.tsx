@@ -16,7 +16,7 @@ const Placeholder = ({show}: { show: boolean }) => {
             className="grid place-items-center h-screen text-2xl"
         >
             <div>
-                <i className="fa fa-refresh fa-spin fa-fw"></i>
+                <i className="fa fa-futbol fa-spin fa-fw mr-2"></i>
                 <span className={"text-2xl"}>{messages.app.wait}</span>
             </div>
         </motion.div>
