@@ -13,6 +13,7 @@ import Subheading from "~/components/common/header/Subheading";
 import messages from "~/components/i18n/messages";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import {useNextGame} from "~/utils/gameUtils";
+import ContentContainer from "~/components/common/container/ContentContainer";
 
 type LoaderData = {
     players: PlayerWithFeedback[];
@@ -28,16 +29,12 @@ export const loader: LoaderFunction = async ({params, request}) => {
     const {isAuthenticated, cookieHeader, player, isFirstAuthentication} = await authenticatePlayer(request);
 
     if (player && isFirstAuthentication) {
-        console.log(">>>>>>>>>>> first authentication, redirect to dashboard")
-
         return redirect(routeLinks.dashboard, {
             headers: {
                 "Set-Cookie": cookieHeader,
             },
         });
     }
-
-    console.log(">>>>>>>>> loaded all data for the game")
 
     return json(
         {players, isAuthenticated, player},
@@ -57,6 +54,7 @@ const GameIndex = () => {
     // @ts-ignore
     return (
         <TransitionContainer>
+            <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
             <section className={"mt-5 flex flex-col gap-5"} key={"game"}>
                 <Subheading title={`${messages.game.headings.nextGame}`}/>
                 <GameSummary game={gameWithFeedBack}/>
@@ -66,6 +64,7 @@ const GameIndex = () => {
                     gameId={gameWithFeedBack.id}
                 />
             </section>
+            </ContentContainer>
         </TransitionContainer>
     );
 };

@@ -4,7 +4,6 @@ import CreatePlayerForm from "~/components/player/CreatePlayerForm";
 import {getQueryParams} from "~/utils";
 import PageHeader from "~/components/common/PageHeader";
 import messages from "~/components/i18n/messages";
-import MainPageContent from "~/components/common/MainPageContent";
 import {createPlayer} from "~/models/player.server";
 import {createFeedback} from "~/models/feedback.server";
 import invariant from "tiny-invariant";
@@ -12,6 +11,7 @@ import routeLinks from "~/config/routeLinks";
 import {getGameById} from "~/models/games.server";
 import {GameWithFeedback} from "~/config/applicationTypes";
 import TransitionContainer from "~/components/common/container/transitionContainer";
+import ContentContainer from "~/components/common/container/ContentContainer";
 
 type LoaderData = {
     gameid: string;
@@ -65,11 +65,11 @@ const CreatePlayer = () => {
 
     return (
         <TransitionContainer>
+            <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
             <PageHeader title={messages.player.add}></PageHeader>
-            <MainPageContent>
                 { /* @ts-ignore */}
                 <CreatePlayerForm gameId={gameid} game={game}/>
-            </MainPageContent>
+            </ContentContainer>
         </TransitionContainer>
     );
 };

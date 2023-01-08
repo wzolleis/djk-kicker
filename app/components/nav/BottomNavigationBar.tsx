@@ -5,6 +5,7 @@ import {Game, Player, User} from "@prisma/client";
 import is from "@sindresorhus/is";
 import messages from "~/components/i18n/messages";
 import {NavigationIntent} from "~/config/bottomNavigation";
+import ShakingContainer from "~/components/common/buttons/ShakingContainer";
 import undefined = is.undefined;
 
 
@@ -15,12 +16,14 @@ const NavButton = ({
                        value
                    }: { label: string, className: string, active: boolean, value: NavigationIntent }) => {
     return (
-        <button name={"intent"} value={value} type={"submit"}
-                className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
-            <p className={classNames(className, `${active ? "bg-yellow-400" : "bg-white"}`, "flex h-10 w-10 items-center text-black justify-center rounded-full p-3 font-default-semibold transition ease-in-out hover:scale-90")}/>
-            <span
-                className={classNames(`${active ? "text-yellow-400" : "text-white"}`, `tab tab-account block text-xs md:text-body-medium`)}>{label}</span>
-        </button>
+        <ShakingContainer className={"flex items-center"}>
+            <button name={"intent"} value={value} type={"submit"}
+                    className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+                <p className={classNames(className, `${active ? "bg-yellow-400" : "bg-white"}`, "flex h-10 w-10 items-center text-black justify-center rounded-full p-3 font-default-semibold transition ease-in-out hover:scale-90")}/>
+                <span
+                    className={classNames(`${active ? "text-yellow-400" : "text-white"}`, `tab tab-account block text-xs md:text-body-medium`)}>{label}</span>
+            </button>
+        </ShakingContainer>
     )
 }
 
@@ -53,13 +56,13 @@ const PlayerRegistrationButton = () => {
     />
 }
 
-const GameButton = ({gameId}: { gameId: string | undefined }) => {
+const SummaryButton = ({gameId}: { gameId: string | undefined }) => {
     if (!gameId) return null
     const location = useLocation()
     const active = location.pathname === routeLinks.game(gameId)
     return (
-        <NavButton label={messages.bottomNavBar.game}
-                   className={"fa-solid fa-futbol"}
+        <NavButton label={messages.bottomNavBar.summary}
+                   className={"fa-solid fa-info"}
                    active={active}
                    value={"game"}
         />
@@ -86,8 +89,9 @@ const HomeButton = ({playerId}: { playerId: string | undefined }) => {
     const active = location.pathname === routeLinks.dashboard
 
     return (
-        <NavButton label={messages.bottomNavBar.home}
-                   className={`fa-solid fa-home`}
+
+        <NavButton label={messages.bottomNavBar.game}
+                   className={`fa-solid fa-futbol`}
                    active={active}
                    value={"home"}
         />
@@ -106,10 +110,10 @@ const BottomNavigationBar = ({admin, player, game}: BottomNavigationBarProps) =>
 
     return (
         <div className="w-full">
-            <section id="bottom-navigation" className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
-                <div id="tabs" className="flex justify-start">
+            <section className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
+                <div className="flex justify-around">
                     <HomeButton playerId={playerId}/>
-                    <GameButton gameId={gameId}/>
+                    <SummaryButton gameId={gameId}/>
                     <ProfileButton playerId={playerId}/>
                     <AdminNavButton label={messages.bottomNavBar.administration}
                                     className={"fa-solid fa-gears"}

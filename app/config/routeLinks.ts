@@ -42,7 +42,8 @@ const routeLinks = {
                        playerId
                    }: { gameId: string, playerId: string }): string => `/application/games/${gameId}/player/${playerId}?index`
     },
-    playerNotAuthenticated: '/application/notAuthenticated'
+    playerNotAuthenticated: '/application/notAuthenticated',
+    application: '/application'
 }
 
 export default routeLinks
