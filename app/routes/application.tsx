@@ -1,22 +1,15 @@
-import {Form, Outlet, useCatch, useNavigate} from "@remix-run/react";
-import TopNavBar from "~/components/nav/TopNavBar";
-import {appMenu} from "~/components/nav/appMenu";
-import {useOptionalUser} from "~/utils";
-import {Toaster} from "react-hot-toast";
+import {Outlet, useCatch, useNavigate} from "@remix-run/react";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import routeLinks from "~/config/routeLinks";
 import messages from "~/components/i18n/messages";
 import React from "react";
 import PageHeader from "~/components/common/PageHeader";
 import ErrorComponent from "~/components/common/error/ErrorComponent";
-import BottomNavigationBar from "~/components/nav/BottomNavigationBar";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {authenticatePlayer} from "~/utils/session.server";
 import {getDefaultFeedback} from "~/models/feedback.server";
 import {getNavigationFormValues, isNavigationIntent} from "~/config/bottomNavigation";
 import invariant from "tiny-invariant";
-import {useNextGame} from "~/utils/gameUtils";
-import {useUserAuthentication} from "~/utils/playerUtils";
 
 
 export const action: ActionFunction = async ({ request}) => {
@@ -70,30 +63,8 @@ export const loader: LoaderFunction = async ({ request}) => {
 
 
 const Application = () => {
-    const user = useOptionalUser();
-    const nextGame = useNextGame()
-    const {player} = useUserAuthentication()
-
     return (
-        <div className="flex h-full min-h-screen flex-col">
-            <TopNavBar appMenu={appMenu.app} user={user}/>
-            <div>
-                <main className="flex h-full">
-                    <div className="flex-1 p-4 px-4 lg:px-10">
-                        <Toaster/>
-                        <div className={"mb-20 md:mb-5"}>
-                            <Outlet/>
-                        </div>
-                        <Form method={"post"}>
-                            <input type={"hidden"} name="nextGameId" value={nextGame?.id}/>
-                            <input type={"hidden"} name="playerId" value={player?.id}/>
-                            <BottomNavigationBar admin={user} game={nextGame}
-                                                 player={player}/>
-                        </Form>
-                    </div>
-                </main>
-            </div>
-        </div>
+        <Outlet/>
     );
 };
 
