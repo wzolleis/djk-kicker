@@ -26,7 +26,6 @@ import routeLinks from "~/config/routeLinks";
 import TopNavBar from "~/components/nav/TopNavBar";
 import {appMenu} from "~/components/nav/appMenu";
 import {Toaster} from "react-hot-toast";
-import PageHeader from "~/components/common/PageHeader";
 import Subheading from "~/components/common/header/Subheading";
 
 export const links: LinksFunction = () => {
@@ -134,14 +133,12 @@ const RootScreen = ({show, nextGame, player}: RootScreenProps) => {
     return (
         <div
             className="w-full p-4 text-center bg-blue-200 border shadow-md sm:p-8 mt-5">
-            <PageHeader title={"Willkommen bei den DJK Kicker"}/>
-            <div>
-                <i className={"fa fa-futbol fa-bounce"}/>
+            <div className={"flex justify-center gap-2"}>
                 <Subheading
-                    title={"Wenn Du noch nicht dabei bist, dann registriere Dich gleich als Spieler..."}/>
+                    title={"Hier kannst dich registrieren, deine Einstellungen verwalten oder einfach nur nachschauen, wer alles kommt..."}/>
             </div>
             <div className="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4 mt-5">
-                <DashboardButton/>
+                {player && <DashboardButton/>}
                 {nextGame && <SummaryButton nextGame={nextGame}/>}
                 {player && <ProfileButton player={player}/>}
                 <CreatePlayerButton nextGame={nextGame}/>
