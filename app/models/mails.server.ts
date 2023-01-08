@@ -1,5 +1,5 @@
 import {prisma} from "~/db.server";
-import {MailType} from "~/helpers/constants/gameTypes";
+import {MailType} from "~/config/applicationTypes";
 
 export const createMail = async ({
                                      actionId,

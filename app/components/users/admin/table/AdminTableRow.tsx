@@ -5,7 +5,7 @@ import messages from "~/components/i18n/messages";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 export type AdminTableRowProps = {
     user: User;

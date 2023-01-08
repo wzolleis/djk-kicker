@@ -9,7 +9,7 @@ import {useLoaderData, useNavigate} from "@remix-run/react";
 import {GameFromForm, getGameFromFormData} from "~/utils/game.server";
 import {requireUserId} from "~/session.server";
 import invariant from "tiny-invariant";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import dateUtils from "~/dateUtils";
 import RedButton from "~/components/common/buttons/RedButton";
 

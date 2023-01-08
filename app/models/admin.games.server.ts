@@ -4,7 +4,7 @@ import toast from "react-hot-toast/headless";
 import {DateTime} from "luxon";
 import {initializePlayers} from "~/models/feedback.server";
 
-export const readGames = async (): Promise<Game[]> => {
+export const findAllGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
         orderBy: {
             gameTime: "desc",
@@ -12,7 +12,7 @@ export const readGames = async (): Promise<Game[]> => {
     });
 };
 
-export const readExpiredGames = async (): Promise<Game[]> => {
+export const findExpiredGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
         orderBy: {
             gameTime: "desc",

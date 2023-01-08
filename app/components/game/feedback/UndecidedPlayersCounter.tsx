@@ -1,7 +1,7 @@
 import Counter from "~/components/common/counter/Counter";
 import messages from "~/components/i18n/messages";
 import {configuration} from "~/config";
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 
 type UndecidedPlayerProps = {
     game: GameWithFeedback;

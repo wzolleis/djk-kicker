@@ -1,7 +1,7 @@
 import {LoaderFunction, redirect} from "@remix-run/node";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
-export const loader: LoaderFunction = async ({request}) => {
+export const loader: LoaderFunction = async () => {
     return redirect(routeLinks.dashboard)
 }
 

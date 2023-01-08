@@ -1,20 +1,20 @@
 import type {Session} from "@remix-run/node";
 import {redirect} from "@remix-run/node";
 import {decryptPlayerToken, playerHasValidToken, verifyToken,} from "~/utils/token.server";
-import type {Params} from "react-router";
 import {Player} from "@prisma/client";
 import {PlayerSession} from "~/models/classes/PlayerSession";
 import {getPlayerById} from "~/models/player.server";
 import {createDatabaseSessionStorage} from "~/session.server";
 import {getCommonSearchParameters,} from "~/utils/parameters.server";
 import {PlayerToken} from "~/models/classes/PlayerToken";
+import {UserAuthentication} from "~/config/applicationTypes";
 
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
     throw new Error("SESSION_SECRET must be set");
 }
 
-const { getSession, commitSession, destroySession } =
+const {getSession, commitSession, destroySession} =
     createDatabaseSessionStorage({
         cookie: {
             name: "PlayerSession",
@@ -26,14 +26,6 @@ const { getSession, commitSession, destroySession } =
             httpOnly: true,
         },
     });
-
-export type UserAuthentication = {
-    isAuthenticated: boolean;
-    session?: Session;
-    cookieHeader: string;
-    player?: Player | null;
-    isFirstAuthentication: boolean;
-};
 
 export async function getPlayerFromDatabaseSession(request: Request) {
     const session = await getSession(request.headers.get("Cookie"));
@@ -47,18 +39,15 @@ export async function changePlayer(request: Request, playerToken: PlayerToken) {
     return redirect(`/application/dashboard`);
 }
 
-export async function authenticatePlayer(
-    params: Params,
-    request: Request
-): Promise<UserAuthentication> {
+export async function authenticatePlayer(request: Request): Promise<UserAuthentication> {
     let isAuthenticated = false;
-    const { token } = getCommonSearchParameters(request);
+    const {token} = getCommonSearchParameters(request);
     const session = await getSession(request.headers.get("Cookie"));
     let isFirstAuthentication = false;
 
     if (!!token && !sessionHasPlayer(session)) {
         let cookieHeader;
-        const { isAuthenticated, player, playerToken } = await verifyToken(
+        const {isAuthenticated, player, playerToken} = await verifyToken(
             decryptPlayerToken(token)
         );
         if (isAuthenticated && playerToken) {
@@ -121,10 +110,10 @@ function sessionHasPlayer(session: Session) {
     return !!session.get("player");
 }
 
-function findGameTokenFromSession(
-    session: Session,
-    gameId: string
-): PlayerToken | null {
-    const token = session.get("token");
-    return token[gameId];
-}
+// function findGameTokenFromSession(
+//     session: Session,
+//     gameId: string
+// ): PlayerToken | null {
+//     const token = session.get("token");
+//     return token[gameId];
+// }

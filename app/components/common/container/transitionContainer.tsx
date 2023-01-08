@@ -22,9 +22,9 @@ const TransitionContainer = ({children}: PropsWithChildren<TransitionContainerPr
     return (
         <AnimatePresence>
             {activeTransition && <motion.div
-                initial={{x: "-100%"}}
-                animate={{x: 0, transition: {duration: 1.5}}}
-                exit={{opacity: 0, x: "100%", transition: {duration: 1.5}}}
+                initial={{opacity: 0}}
+                animate={{opacity: 1, transition: {duration: 1}}}
+                exit={{opacity: 0, transition: {duration: 1}}}
                 key={"transition"}
             >
                 <Placeholder/>

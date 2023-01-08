@@ -5,7 +5,7 @@ import {setInterval} from "timers";
 import {motion, useAnimation} from "framer-motion";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import messages from "~/components/i18n/messages";
 
 type ErrorComponentProps = {

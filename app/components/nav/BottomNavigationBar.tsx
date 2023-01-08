@@ -1,5 +1,5 @@
 import {useLocation} from "@remix-run/react";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import classNames from "classnames";
 import {Game, Player, User} from "@prisma/client";
 import is from "@sindresorhus/is";
@@ -96,7 +96,6 @@ const HomeButton = ({playerId}: { playerId: string | undefined }) => {
 
 export type BottomNavigationBarProps = {
     game: Game | undefined | null
-
     player: Player | undefined | null
     admin: User | undefined
 }

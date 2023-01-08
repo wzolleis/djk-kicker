@@ -2,7 +2,7 @@ import type {ThrownResponse} from "@remix-run/react/dist/errors";
 import DefaultButton from "../common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
 import React from "react";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {useNavigate} from "@remix-run/react";
 
 export type CatchViewProps = {

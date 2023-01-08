@@ -1,10 +1,10 @@
 import type {LoaderFunction} from "@remix-run/node";
 import {redirect} from "@remix-run/node";
 import {authenticatePlayer} from "~/utils/session.server";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
-export const loader: LoaderFunction = async ({ params, request }) => {
-  const {isAuthenticated} = await authenticatePlayer(params, request);
+export const loader: LoaderFunction = async ({ request }) => {
+  const {isAuthenticated} = await authenticatePlayer(request);
   if (!isAuthenticated) {
     return redirect(routeLinks.playerNotAuthenticated);
   }

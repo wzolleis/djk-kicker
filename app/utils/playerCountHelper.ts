@@ -1,6 +1,6 @@
 import {configuration} from "~/config";
 import {statusInConfig} from "~/config/status";
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 
 const add = (playerCount: number): number => {
     return playerCount + 1

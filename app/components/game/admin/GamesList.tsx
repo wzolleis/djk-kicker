@@ -3,7 +3,7 @@ import GameCard from "~/components/game/GameCard";
 import {Link} from "@remix-run/react";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 type GamesListProps = {
     games: Game[];

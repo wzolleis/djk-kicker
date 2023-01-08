@@ -9,7 +9,7 @@ import {authenticatePlayer} from "~/utils/session.server";
 import {NoTokenWarning} from "~/components/warnings/NoTokenWarning";
 import {getFeedbackValues} from "~/utils/form.session";
 import {errors} from "~/components/i18n/errors";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 export type PlayerFeedbackForGame = Prisma.PlayerGetPayload<{
     include: {
@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
 
     const playerWithFeedback: PlayerFeedbackForGame | null =
         await getPlayerFeedbackForGame(playerId, gameId);
-    const {player} = await authenticatePlayer(params, request);
+    const {player} = await authenticatePlayer(request);
     const isAuthenticated = player?.id === playerId;
     return json({player: playerWithFeedback, isAuthenticated});
 };
@@ -41,7 +41,7 @@ export const loader: LoaderFunction = async ({params, request}) => {
 export const action: ActionFunction = async ({params, request}) => {
     const playerId = params.playerId;
     const gameId = params.gameId!;
-    const {player} = await authenticatePlayer(params, request);
+    const {player} = await authenticatePlayer(request);
     const isAuthenticated = player!.id === playerId;
     if (!isAuthenticated) {
         throw json("no permission", 403);

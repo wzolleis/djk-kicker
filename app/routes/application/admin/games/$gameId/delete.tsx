@@ -8,7 +8,7 @@ import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Params} from "react-router";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {deleteGame, findGameById} from "~/models/admin.games.server";
 import {useDateTime} from "~/utils";
 import {getGameById} from "~/models/games.server";

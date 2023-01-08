@@ -6,7 +6,7 @@ import RedButton from "~/components/common/buttons/RedButton";
 import dateUtils from "~/dateUtils";
 import {DateTime} from "luxon";
 import {isAdminInvitationStatus} from "~/config/status";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 const AdminInvitationTableRow = ({invitation}: { invitation: AdminInvitation }) => {
     let statusTxt = ''

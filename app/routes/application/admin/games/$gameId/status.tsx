@@ -5,7 +5,7 @@ import invariant from "tiny-invariant";
 import dateUtils from "~/dateUtils";
 import messages from "~/components/i18n/messages";
 import {getPlayers} from "~/models/player.server";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {useRef} from "react";
 import mailhelper from '~/models/admin.games.mails.server'
 import PlayerSelector from "~/components/game/forms/PlayerSelector";

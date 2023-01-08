@@ -1,5 +1,5 @@
 import Counter from "~/components/common/counter/Counter";
-import {GameWithFeedback} from "~/config/gameTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 import classNames from "classnames";
 
 type PlayerCounterProps = {

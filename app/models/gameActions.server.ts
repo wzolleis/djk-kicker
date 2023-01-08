@@ -1,6 +1,6 @@
 import {GameAction} from "@prisma/client";
 import {prisma} from "~/db.server";
-import {ActionType} from "~/helpers/constants/gameTypes";
+import {ActionType} from "~/config/applicationTypes";
 
 export const createGameAction = async ({gameId, actionType}: {gameId: string, actionType: ActionType}) => {
     return await prisma.gameAction.create({

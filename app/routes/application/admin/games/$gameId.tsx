@@ -6,7 +6,7 @@ import {Outlet} from "@remix-run/react";
 import TabContainer from "~/components/common/tabs/TabContainer";
 import Tab from "~/components/common/tabs/Tab";
 import {configuration} from "~/config";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 
 export const loader: LoaderFunction = async ({ request }) => {
   if (!Object.keys(configuration.url.editGameForm.values).includes(request.url.split("/").pop()!)) {

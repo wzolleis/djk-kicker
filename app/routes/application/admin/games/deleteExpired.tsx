@@ -1,11 +1,11 @@
 import {Form, useFetcher, useNavigate} from "@remix-run/react";
-import {deleteExpiredGames, readExpiredGames, readGames} from "~/models/admin.games.server";
+import {deleteExpiredGames, findAllGames, findExpiredGames} from "~/models/admin.games.server";
 import {ActionFunction, json, LoaderArgs, redirect} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
 import {useDateTime} from "~/utils";
 import messages from "~/components/i18n/messages";
 import {useEffect} from "react";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import {ExclamationTriangleIcon} from "@heroicons/react/24/solid";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
@@ -14,16 +14,16 @@ import {Params} from "react-router";
 import invariant from "tiny-invariant";
 
 type LoaderData = {
-    games: Awaited<ReturnType<typeof readGames>>;
+    games: Awaited<ReturnType<typeof findAllGames>>;
 };
 
 export const loader = async ({request}: LoaderArgs) => {
     await requireUserId(request);
-    const games = await readExpiredGames();
+    const games = await findExpiredGames();
     return json<LoaderData>({games});
 };
 
-export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
+export const action: ActionFunction = async ({request}: { params: Params, request: Request }) => {
     const formData = await request.formData();
     const intent = formData.get('intent')
     invariant(!!intent, "Kein Intent gesetzt")

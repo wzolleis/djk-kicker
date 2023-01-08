@@ -19,7 +19,7 @@ import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {useState} from "react";
-import routeLinks from "~/helpers/constants/routeLinks";
+import routeLinks from "~/config/routeLinks";
 import SubmitButton from "~/components/common/buttons/submitButton";
 
 

@@ -1,9 +1,14 @@
-import type {LinksFunction, LoaderArgs, MetaFunction} from "@remix-run/node";
+import type {LinksFunction, LoaderArgs, LoaderFunction, MetaFunction} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration} from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import {getUser} from "./session.server";
+import {getGameById, getMostRecentGame} from "~/models/games.server";
+import {authenticatePlayer} from "~/utils/session.server";
+import {GameWithFeedback, UserAuthentication} from "~/config/applicationTypes";
+import {DefaultFeedback, User} from "@prisma/client";
+import {getDefaultFeedback} from "~/models/feedback.server";
 
 export const links: LinksFunction = () => {
   return [
@@ -18,9 +23,28 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export async function loader({request}: LoaderArgs) {
-  return json({
-    user: await getUser(request),
+type LoaderData = {
+  user: User | null
+
+  userAuthentication: UserAuthentication | null
+  nextGame: GameWithFeedback | null
+
+  defaultFeedback: DefaultFeedback | null
+}
+
+export const loader: LoaderFunction = async ({request}: LoaderArgs) =>  {
+  const [user, mostRecentGame, userAuthentication] = await Promise.all([getUser(request), getMostRecentGame(), authenticatePlayer(request)])
+  const nextGame = mostRecentGame ? await getGameById(mostRecentGame.id) : null
+  let defaultFeedback: DefaultFeedback | null = null
+  if (userAuthentication.player) {
+      defaultFeedback = await getDefaultFeedback(userAuthentication.player.id)
+  }
+
+  return json<LoaderData>({
+    user,
+    nextGame,
+    userAuthentication,
+    defaultFeedback
   });
 }
 
