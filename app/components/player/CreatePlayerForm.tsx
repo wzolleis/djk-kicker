@@ -25,8 +25,8 @@ const CreatePlayerForm = ({gameId, game}: PlayerFormProps) => {
         <>
             <Form method={"post"}>
                 <main className={"flex flex-col gap-4"}>
-                    <InputWithLabel id={'name'} type={'text'} name={'name'} label={messages.createPlayerForm.name}/>
-                    <InputWithLabel id={'mail'} type={'email'} name={'mail'} label={messages.createPlayerForm.email}/>
+                    <InputWithLabel id={'name'} type={'text'} name={'name'} label={messages.createPlayerForm.name} required={true}/>
+                    <InputWithLabel id={'mail'} type={'email'} name={'mail'} label={messages.createPlayerForm.email} required={true}/>
                     {!!game &&
                         <>
                             <Subheading title={"Dein Status für das nächste Spiel"}/>
