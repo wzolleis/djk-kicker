@@ -12,6 +12,8 @@ import {getGameById} from "~/models/games.server";
 import {GameWithFeedback} from "~/config/applicationTypes";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import ContentContainer from "~/components/common/container/ContentContainer";
+import mailhelper from "~/models/admin.games.mails.server";
+import {createEncryptedPlayerToken} from "~/utils/token.server";
 
 type LoaderData = {
     gameid: string;
@@ -28,6 +30,16 @@ export const loader = async ({request}: { params: any; request: any }) => {
 
     return json({gameid});
 };
+
+const sendGameInvitation = async ({
+                                      request,
+                                      gameId,
+                                      playerId
+                                  }: { request: Request, gameId: string, playerId: string }) => {
+    const host = request.headers.get("host")!;
+    await createEncryptedPlayerToken(playerId, gameId);
+    await mailhelper.sendGameInvitation({host, gameId, playerIds: [playerId]});
+}
 
 export const action: ActionFunction = async ({
                                                  request,
@@ -46,18 +58,21 @@ export const action: ActionFunction = async ({
     invariant(typeof playerName === "string", "name");
     invariant(typeof playerMail === "string", "mail");
 
-    if (intent === "cancel") {
-        return gameid ? redirect(routeLinks.game(gameid)) : redirect(routeLinks.dashboard)
-    }
-    const player = await createPlayer(playerName.trim(), playerMail.trim());
-    if (!!gameid) {
-        invariant(typeof playerStatus === "string", "playerStatus");
-        invariant(typeof note === "string", "note");
-        await createFeedback(player.id, gameid, parseInt(playerStatus), note);
-        return redirect(routeLinks.game(gameid));
-    }
+    let redirectTarget = routeLinks.dashboard
 
-    redirect(routeLinks.dashboard)
+    if (intent === "cancel") {
+        redirectTarget = gameid ? routeLinks.game(gameid) : routeLinks.dashboard
+    } else {
+        const player = await createPlayer(playerName.trim(), playerMail.trim());
+        if (!!gameid) {
+            invariant(typeof playerStatus === "string", "playerStatus");
+            invariant(typeof note === "string", "note");
+            await createFeedback(player.id, gameid, parseInt(playerStatus), note);
+            await sendGameInvitation({request, gameId: gameid, playerId: player.id})
+            redirectTarget = routeLinks.game(gameid);
+        }
+    }
+    return redirect(redirectTarget)
 };
 
 const CreatePlayer = () => {
@@ -66,7 +81,7 @@ const CreatePlayer = () => {
     return (
         <TransitionContainer>
             <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
-            <PageHeader title={messages.player.add}></PageHeader>
+                <PageHeader title={messages.player.add}></PageHeader>
                 { /* @ts-ignore */}
                 <CreatePlayerForm gameId={gameid} game={game}/>
             </ContentContainer>
