@@ -148,7 +148,9 @@ const RootScreen = ({show, nextGame, player}: RootScreenProps) => {
     )
 }
 
-const Greeting = ({player}: { player?: Player | null | undefined }) => {
+const Greeting = ({showGreeting, player}: { showGreeting: boolean, player?: Player | null | undefined }) => {
+    if (!showGreeting) return null
+
     const greeting = `${!!player && getPlayerGreeting(player.name) || ''}`
     return (
         <Subheading title={greeting}/>
@@ -162,6 +164,8 @@ export default function App() {
 
     const location = useLocation()
     const rootScreen = location.pathname === "/"
+
+    const showGreeting = !user
 
 
     return (
@@ -179,7 +183,7 @@ export default function App() {
                         <Toaster/>
                         <div className={"mb-20 md:mb-5"}>
                             <TopNavBar appMenu={appMenu.app} user={user ?? undefined}/>
-                            <Greeting player={player}/>
+                            <Greeting player={player} showGreeting={showGreeting}/>
                             <RootScreen show={rootScreen} nextGame={nextGame} player={player}/>
                             <Outlet/>
                             <Form method={"post"} action={routeLinks.application}>

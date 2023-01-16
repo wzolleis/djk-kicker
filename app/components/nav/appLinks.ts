@@ -32,7 +32,7 @@ export const appLinks = {
         },
         admin: {
             requiresAdmin: true,
-            path: "admin",
+            path: "application/admin",
             label: messages.appmenu.administration,
             games: {
                 requiresAdmin: true,
