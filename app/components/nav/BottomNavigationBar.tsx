@@ -61,8 +61,8 @@ const SummaryButton = ({gameId}: { gameId: string | undefined }) => {
     const location = useLocation()
     const active = location.pathname === routeLinks.game(gameId)
     return (
-        <NavButton label={messages.bottomNavBar.summary}
-                   className={"fa-solid fa-info"}
+        <NavButton label={messages.bottomNavBar.game}
+                   className={"fa-solid fa-futbol"}
                    active={active}
                    value={"game"}
         />
@@ -90,8 +90,8 @@ const HomeButton = ({playerId}: { playerId: string | undefined }) => {
 
     return (
 
-        <NavButton label={messages.bottomNavBar.game}
-                   className={`fa-solid fa-futbol`}
+        <NavButton label={messages.bottomNavBar.feedback}
+                   className={`fa-solid fa-envelope`}
                    active={active}
                    value={"home"}
         />

@@ -33,27 +33,25 @@ export const GameFeedbackSummary = ({game}: { game: GameWithFeedback }) => {
 const GameSummary = ({game}: { game: GameWithFeedback }) => {
     return (
         <>
-            <ContentContainer>
-                <header className={"space-y-2"}>
-                    <div className={"grid grid-cols-2 gap-5"}>
-                        <div className={"bg-blue-200"}>
-                            <div className={"m-5"}>
-                                <Subheading title={`${useDateTime(game.gameTime)}`}/>
-                                <p className={"text-label-medium md:text-label-large text-gray-500 font-default-medium"}>
-                                    {`${messages.commonForm.spielort(game.spielort)}`}
-                                </p>
-                            </div>
+            <ContentContainer className={"bg-blue-200"}>
+                <div className={"grid grid-cols-2 gap-5"}>
+                    <ContentContainer>
+                        <div className={"m-5"}>
+                            <Subheading title={`${useDateTime(game.gameTime)}`}/>
+                            <p className={"text-label-medium md:text-label-large text-gray-500 font-default-medium"}>
+                                {`${messages.commonForm.spielort(game.spielort)}`}
+                            </p>
                         </div>
-                        <ContentContainer className={"bg-blue-200"}>
-                            <PlayerCounter
-                                game={game}
-                                calculate={calculateCompleteNumberOfPlayers}
-                                title={"Spieler insgesamt"}
-                                counterColor={"text-color-black"}
-                            />
-                        </ContentContainer>
-                    </div>
-                </header>
+                    </ContentContainer>
+                    <ContentContainer>
+                        <PlayerCounter
+                            game={game}
+                            calculate={calculateCompleteNumberOfPlayers}
+                            title={"Spieler insgesamt"}
+                            counterColor={"text-color-black"}
+                        />
+                    </ContentContainer>
+                </div>
             </ContentContainer>
             <GameFeedbackSummary game={game}/>
         </>

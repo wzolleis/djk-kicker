@@ -26,10 +26,7 @@ export const loader: LoaderFunction = async ({params}) => {
         return redirect("/application/admin/games")
     }
     const game = await findGameById(gameId);
-    return json<LoaderData>({
-        game
-    })
-
+    return json<LoaderData>({game})
 }
 
 export const action: ActionFunction = async ({params, request}) => {

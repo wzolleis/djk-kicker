@@ -27,6 +27,7 @@ import TopNavBar from "~/components/nav/TopNavBar";
 import {appMenu} from "~/components/nav/appMenu";
 import {Toaster} from "react-hot-toast";
 import Subheading from "~/components/common/header/Subheading";
+import {getPlayerGreeting} from "~/utils";
 
 export const links: LinksFunction = () => {
     return [
@@ -145,7 +146,13 @@ const RootScreen = ({show, nextGame, player}: RootScreenProps) => {
             </div>
         </div>
     )
+}
 
+const Greeting = ({player}: { player?: Player | null | undefined }) => {
+    const greeting = `${!!player && getPlayerGreeting(player.name) || ''}`
+    return (
+        <Subheading title={greeting}/>
+    )
 }
 
 export default function App() {
@@ -172,6 +179,7 @@ export default function App() {
                         <Toaster/>
                         <div className={"mb-20 md:mb-5"}>
                             <TopNavBar appMenu={appMenu.app} user={user ?? undefined}/>
+                            <Greeting player={player}/>
                             <RootScreen show={rootScreen} nextGame={nextGame} player={player}/>
                             <Outlet/>
                             <Form method={"post"} action={routeLinks.application}>

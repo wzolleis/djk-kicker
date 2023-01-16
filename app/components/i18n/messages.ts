@@ -55,7 +55,7 @@ const messages = {
   dashboard: {
     nextGame: 'Nächstes Spiel',
     playerAndGuests: 'Spieler und Gäste',
-    playerStatusForGame: (gameDate: string) => `Deine Rückmeldung für den  ${gameDate}`,
+    playerStatusForGame: (gameDate: string) => `Deine Antwort für den  ${gameDate}`,
     playerDefaultStatus: "Dein Standard-Status",
     playerProfile: "Dein Profil",
     playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten und Deinen optionalen Standard-Status.",
@@ -65,10 +65,10 @@ const messages = {
   },
   bottomNavBar: {
     game: "Spiel",
+    feedback: "Antwort",
     profile: "Profil",
     administration: "Verwaltung",
     registerPlayer: "Neuer Spieler",
-    summary: "Übersicht"
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",

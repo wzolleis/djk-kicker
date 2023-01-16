@@ -9,8 +9,6 @@ import {authenticatePlayer} from "~/utils/session.server";
 import {Player} from "@prisma/client";
 import routeLinks from "~/config/routeLinks";
 import GameSummary from "~/components/game/GameSummary";
-import Subheading from "~/components/common/header/Subheading";
-import messages from "~/components/i18n/messages";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import {useNextGame} from "~/utils/gameUtils";
 import ContentContainer from "~/components/common/container/ContentContainer";
@@ -54,9 +52,8 @@ const GameIndex = () => {
     // @ts-ignore
     return (
         <TransitionContainer>
-            <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
+            <ContentContainer className={"mt-2.5 bg-blue-200 shadow-lg shadow-blue-400/50"}>
             <section className={"mt-5 flex flex-col gap-5"} key={"game"}>
-                <Subheading title={`${messages.game.headings.nextGame}`}/>
                 <GameSummary game={gameWithFeedBack}/>
                 <Players
                     isAuthenticated={isAuthenticated}

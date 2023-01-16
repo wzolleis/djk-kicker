@@ -1,5 +1,5 @@
 import {GameWithFeedback} from "~/config/applicationTypes";
-import {DefaultFeedback, Feedback} from "@prisma/client";
+import {DefaultFeedback, Feedback, Player} from "@prisma/client";
 import Subheading from "~/components/common/header/Subheading";
 import messages from "~/components/i18n/messages";
 import {useState} from "react";
@@ -12,11 +12,18 @@ import {useTransition} from "@remix-run/react";
 import classNames from "classnames";
 import SubmitButton from "~/components/common/buttons/submitButton";
 
+export type GameFeedbackProps = {
+    nextGame: GameWithFeedback | null,
+    nextGameFeedback: Feedback | null,
+    defaultFeedback: DefaultFeedback
+    player: Player
+}
+
 const GameFeedback = ({
                           nextGame,
                           nextGameFeedback,
-                          defaultFeedback
-                      }: { nextGame: GameWithFeedback | null, nextGameFeedback: Feedback | null, defaultFeedback: DefaultFeedback }) => {
+                          defaultFeedback,
+                      }: GameFeedbackProps) => {
     const transition = useTransition()
 
     if (!nextGame) return (
@@ -30,7 +37,6 @@ const GameFeedback = ({
     }
     const submitting = transition.state === "submitting"
     const loading = transition.state === "loading"
-
 
     let title = messages.dashboard.playerStatusForGame(useDate(new Date(nextGame.gameTime)))
 
