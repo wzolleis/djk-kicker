@@ -53,14 +53,14 @@ const GameIndex = () => {
     return (
         <TransitionContainer>
             <ContentContainer className={"mt-2.5 bg-blue-200 shadow-lg shadow-blue-400/50"}>
-            <section className={"mt-5 flex flex-col gap-5"} key={"game"}>
-                <GameSummary game={gameWithFeedBack}/>
-                <Players
-                    isAuthenticated={isAuthenticated}
-                    players={players}
-                    gameId={gameWithFeedBack.id}
-                />
-            </section>
+                <section className={"mt-5 flex flex-col gap-5"} key={"game"}>
+                    <GameSummary game={gameWithFeedBack}/>
+                    <Players
+                        isAuthenticated={isAuthenticated}
+                        players={players}
+                        gameId={gameWithFeedBack.id}
+                    />
+                </section>
             </ContentContainer>
         </TransitionContainer>
     );

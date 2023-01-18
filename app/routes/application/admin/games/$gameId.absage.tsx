@@ -31,7 +31,7 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
     const formData = await request.formData();
     const intent = formData.get("intent")
 
-    if (intent === 'zusage') {
+    if (intent === 'absage') {
         const playerIds = formData.getAll("receiver") as string[]
         await mailhelper.sendGameAbsage({gameId, playerIds})
     }

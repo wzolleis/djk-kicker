@@ -42,13 +42,11 @@ const mailSender = async ({
                 return new Error(`keine Mail gesendet, Feature ist nicht aktiv`)
             }
 
-            console.log("Sending mail....")
+            console.log(`Sending mail to "${mailTo}"...` )
             const mailSender = `"${mailFrom}" <${mailFrom}>`
-            const recipients = `${mailTo}`
-
             const info = await transport.sendMail({
                 from: mailSender, // sender address
-                to: recipients, // list of receivers
+                to: mailTo, // list of receivers (nur einer)
                 subject,
                 text: body,
                 html: `<p>${body}</p>`, // html body
@@ -63,16 +61,21 @@ const mailSender = async ({
     }
 }
 
-const sendTestMail = async () => {
+const sendTestMail = async ({numberOfMails} : {numberOfMails: number} = {numberOfMails: 1}) => {
     const mailFrom = process.env.MAIL_FROM
     const mailTo = process.env.TEST_MAIL_TO
-    const body = "DJK-Kicker Testmail"
-    const subject = ""
+    let subject = ""
+    let body = ""
 
     invariant(!!mailFrom)
     invariant(!!mailTo)
 
-    await mailSender({mailTo, mailFrom,  subject, body})
+    for (let i = 0; i < numberOfMails; i++) {
+        subject = `Testmail - ${i+1}`
+        body = `DJK-Kicker Testmail - ${i+1}`
+        await mailSender({mailTo, mailFrom,  subject, body})
+    }
+
     invariant(!!mailTo)
 }
 

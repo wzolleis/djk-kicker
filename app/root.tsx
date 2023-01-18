@@ -28,6 +28,7 @@ import {appMenu} from "~/components/nav/appMenu";
 import {Toaster} from "react-hot-toast";
 import Subheading from "~/components/common/header/Subheading";
 import {getPlayerGreeting} from "~/utils";
+import {GameBanner} from "~/components/common/header/pageBanner";
 
 export const links: LinksFunction = () => {
     return [
@@ -166,8 +167,6 @@ export default function App() {
     const rootScreen = location.pathname === "/"
 
     const showGreeting = !user
-
-
     return (
         <html lang="en" className="bg-neutral-100">
         <head>
@@ -183,6 +182,7 @@ export default function App() {
                         <Toaster/>
                         <div className={"mb-20 md:mb-5"}>
                             <TopNavBar appMenu={appMenu.app} user={user ?? undefined}/>
+                            <GameBanner game={nextGame}/>
                             <Greeting player={player} showGreeting={showGreeting}/>
                             <RootScreen show={rootScreen} nextGame={nextGame} player={player}/>
                             <Outlet/>

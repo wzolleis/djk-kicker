@@ -1,8 +1,9 @@
 import {prisma} from "~/db.server";
 import type {Game} from "@prisma/client";
-import toast from "react-hot-toast/headless";
 import {DateTime} from "luxon";
 import {initializePlayers} from "~/models/feedback.server";
+import {GameStatus} from "~/config/admin.game.constants";
+import {deleteGameActionsByIds, deleteMailsForGame, findActionsForGame} from "~/models/admin.mails.server";
 
 export const findAllGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
@@ -44,15 +45,29 @@ export const updateGame = async (game: Game) => {
     await prisma.game.update({data: game, where: {id: game.id}});
 };
 
+export const updateGameStatus = async (gameId: string, status: GameStatus) => {
+    await prisma.game.update({data: {status: status}, where: {id: gameId}});
+}
+
 export const deleteGame = async (gameId: string) => {
-    await prisma.game
-        .delete({where: {id: gameId}})
-        .then(() => toast.success("Game successfully deleted"));
+    const gameActions = await findActionsForGame(gameId)
+    const gameActionIds = gameActions.map(action => action.id)
+    await Promise.all(
+        [
+            deleteMailsForGame(gameActionIds),
+            deleteGameActionsByIds(gameActionIds),
+            prisma.game.delete({where: {id: gameId}})
+        ]
+    )
 };
 
 export const deleteExpiredGames = async () => {
-    return await prisma.game
-        .deleteMany({where: {gameTime: {lt: new Date()}}})
+    const games = await findExpiredGames()
+    const results = []
+    for (let i = 0; i < games.length; i++) {
+        results.push(deleteGame(games[i].id))
+    }
+    await Promise.all(results)
 };
 
 

@@ -1,5 +1,5 @@
 import {Form, useLoaderData, useTransition} from "@remix-run/react";
-import {findGameById} from "~/models/admin.games.server";
+import {findGameById, updateGameStatus} from "~/models/admin.games.server";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import dateUtils from "~/dateUtils";
@@ -35,19 +35,26 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
     const formData = await request.formData();
     const intent = formData.get("intent")
     const playerIds = formData.getAll("receiver") as string[]
+    let redirectTarget = configuration.url.links.admin.gamesOverView
+
     if (intent === 'confirmation') {
-        await mailhelper.sendGameZusage({gameId, playerIds})
-        return redirect(routeLinks.admin.game.details(gameId));
+        await Promise.all(
+            [
+                updateGameStatus(gameId, "Zusage"),
+                mailhelper.sendGameZusage({gameId, playerIds})
+            ]
+        )
+        redirectTarget = routeLinks.admin.game.details(gameId)
     }
     if (intent === "cancellation") {
-        await mailhelper.sendGameAbsage({gameId, playerIds})
-        return redirect(routeLinks.admin.game.details(gameId));
+        await Promise.all([
+            updateGameStatus(gameId, "Absage"),
+            mailhelper.sendGameAbsage({gameId, playerIds})
+        ])
+        redirectTarget = routeLinks.admin.game.details(gameId)
     }
-    if (intent === "cancel") {
-        return redirect(configuration.url.links.admin.gamesOverView)
-    }
-    return redirect(configuration.url.links.admin.gamesOverView)
 
+    return redirect(redirectTarget)
 }
 
 
