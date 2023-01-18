@@ -82,6 +82,10 @@ const messages = {
   errors: {
     noGame: "Kein Spiel vorhanden"
   },
+  gameStatus: {
+    zusage: (gameDate: string) => `Das Spiel am ${gameDate} findet statt`,
+    absage: (gameDate: string) => `Das Spiel am ${gameDate} wurde abgesagt`
+  },
   adminGamesTable: {
     name: "Spielname",
     gametime: "Zeit",
@@ -252,6 +256,7 @@ const messages = {
     mailBodyLabel: "Nachricht",
     mailReceiver: "An:",
     sendInvitationBtn: "Senden",
+    sendTestMailBtn: "Test-Mail",
     spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? "in der Halle" : "draußen"}`,
     mailSubjectLabel: "Betreff",
     mailBody: (datum: string) => `Hallo Spieler

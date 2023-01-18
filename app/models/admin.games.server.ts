@@ -3,6 +3,7 @@ import type {Game} from "@prisma/client";
 import toast from "react-hot-toast/headless";
 import {DateTime} from "luxon";
 import {initializePlayers} from "~/models/feedback.server";
+import {GameStatus} from "~/config/admin.game.constants";
 
 export const findAllGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
@@ -43,6 +44,10 @@ export const createGame = async (
 export const updateGame = async (game: Game) => {
     await prisma.game.update({data: game, where: {id: game.id}});
 };
+
+export const updateGameStatus = async (gameId: string, status: GameStatus) => {
+    await prisma.game.update({data: {status: status}, where: {id: gameId}});
+}
 
 export const deleteGame = async (gameId: string) => {
     await prisma.game
