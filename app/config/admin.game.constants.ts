@@ -9,7 +9,7 @@ export const spielortOptions = {
     }
 }
 
-const GameStatusValues = ["Absage", "Zusage"] as const
+const GameStatusValues = ["Absage", "Zusage", "Einladung"] as const
 export type GameStatus = typeof GameStatusValues[number]
 
 export const isGameStatus = (value: string): value is GameStatus => {

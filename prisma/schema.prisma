@@ -35,6 +35,7 @@ model Game {
   feedback Feedback[]
   token    String       @unique @default(cuid())
   action   GameAction[]
+  mail     Mail[]
   status   String? // findet statt oder abgesagt
 }
 
@@ -56,6 +57,9 @@ model Mail {
   actionId  String
   player    Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
   playerId  String
+  playerName String?
+  game      Game?      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    String?
   status    Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
   statusTxt String? // Fehlermeldung
   createdAt DateTime   @default(now())

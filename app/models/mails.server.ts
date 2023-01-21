@@ -1,20 +1,27 @@
 import {prisma} from "~/db.server";
 import {MailType} from "~/config/applicationTypes";
 
-export const createMail = async ({
-                                     actionId,
-                                     playerId,
-                                     status,
-                                     statusTxt,
-                                     mailType
-                                 }: { actionId: string, playerId: string, status: number, statusTxt: string | undefined, mailType: MailType }) => {
-    return await prisma.mail.create({
+export type MailData = {
+    gameId: string
+    actionId: string
+    playerId: string
+    playerName: string
+    status: number
+    statusTxt: string | undefined
+    mailType: MailType
+}
+export const createMail = async (mailData: MailData) => {
+    return await prisma.mail.create({data: mailData})
+}
+
+export const updateMailStatus = async (mailId: string, status: number, statusTxt: string) => {
+    return await prisma.mail.update({
         data: {
-            actionId,
-            playerId,
             status,
-            statusTxt,
-            mailType
+            statusTxt
+        },
+        where: {
+            id: mailId
         }
     })
 }

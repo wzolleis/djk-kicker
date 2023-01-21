@@ -1,5 +1,5 @@
 import {Form, useFetcher, useLoaderData, useTransition,} from "@remix-run/react";
-import {findGameById} from "~/models/admin.games.server";
+import {findGameById, updateGameStatus} from "~/models/admin.games.server";
 import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
 import invariant from "tiny-invariant";
 import dateUtils from "~/dateUtils";
@@ -70,11 +70,10 @@ export const action: ActionFunction = async ({
     if (intent === "invitation") {
         const host = request.headers.get("host")!;
         const playerIds = formData.getAll("receiver") as string[];
-        await mailhelper.sendGameInvitation({host, gameId, playerIds});
-        return redirect(routeLinks.admin.game.details(gameId));
+        mailhelper.sendGameInvitation({host, gameId, playerIds})
+            .then(() => updateGameStatus(gameId, "Einladung"))
     }
-
-    return redirect(configuration.url.links.admin.gamesOverView);
+    return redirect(routeLinks.admin.game.details(gameId));
 };
 
 const GameInvitation = () => {

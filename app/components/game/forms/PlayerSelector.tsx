@@ -1,6 +1,8 @@
 import {Player} from "@prisma/client";
 import {useState} from "react";
 import PlayerTag from "~/components/common/tags/PlayerTag";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import ButtonContainer from "~/components/common/container/ButtonContainer";
 
 
 type PlayerSelectorProps = {
@@ -30,6 +32,16 @@ const PlayerSelector = ({players}: PlayerSelectorProps) => {
         setReceivingPlayers([...receivingPlayers, player])
     }
 
+    const addAllToReceiver = () => {
+        setReceivingPlayers([...players])
+        setExcludedPlayers([])
+    }
+
+    const removeAllFromReceiver = () => {
+        setReceivingPlayers([])
+        setExcludedPlayers([...players])
+    }
+
     return (
         <section className={"flex flex-col gap-2"}>
             <div className={"w-full flex flex-col gap-2"}>
@@ -57,6 +69,15 @@ const PlayerSelector = ({players}: PlayerSelectorProps) => {
                     ))}
                 </div>
             </div>
+
+            <ButtonContainer>
+                <DefaultButton className={"ml-auto"}>
+                    <button type={"button"} onClick={removeAllFromReceiver}>Alle entfernen</button>
+                </DefaultButton>
+                <DefaultButton>
+                    <button type="button" onClick={addAllToReceiver}>Alle hinzufügen</button>
+                </DefaultButton>
+            </ButtonContainer>
 
         </section>
     )

@@ -13,7 +13,6 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import SmallTag from "~/components/common/tags/SmallTag";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import SuccessButton from "~/components/common/buttons/SuccessButton";
-import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
 
 type LoaderData = {
@@ -35,26 +34,15 @@ export const action: ActionFunction = async ({params: {gameId}, request}) => {
     const formData = await request.formData();
     const intent = formData.get("intent")
     const playerIds = formData.getAll("receiver") as string[]
-    let redirectTarget = configuration.url.links.admin.gamesOverView
-
     if (intent === 'confirmation') {
-        await Promise.all(
-            [
-                updateGameStatus(gameId, "Zusage"),
-                mailhelper.sendGameZusage({gameId, playerIds})
-            ]
-        )
-        redirectTarget = routeLinks.admin.game.details(gameId)
+        updateGameStatus(gameId, "Zusage")
+            .then(() => mailhelper.sendGameZusage({gameId, playerIds}))
     }
     if (intent === "cancellation") {
-        await Promise.all([
-            updateGameStatus(gameId, "Absage"),
-            mailhelper.sendGameAbsage({gameId, playerIds})
-        ])
-        redirectTarget = routeLinks.admin.game.details(gameId)
+        updateGameStatus(gameId, "Absage")
+            .then(() => mailhelper.sendGameAbsage({gameId, playerIds}))
     }
-
-    return redirect(redirectTarget)
+    return redirect(routeLinks.admin.game.details(gameId))
 }
 
 

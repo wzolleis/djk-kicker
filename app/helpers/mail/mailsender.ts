@@ -1,5 +1,6 @@
-import nodemailer, {SentMessageInfo} from 'nodemailer'
+import nodemailer from 'nodemailer'
 import invariant from "tiny-invariant";
+import {SendMailResponse} from "~/config/mailTypes";
 
 // Falls komische Fehler beim Versenden auftreten, mal hier nachlesen, viel Glück :D
 // https://stackoverflow.com/questions/66317125/node-js-nodemailer-error-wrong-version-number-invalid-greeting
@@ -25,7 +26,7 @@ const mailSender = async ({
                               mailFrom,
                               subject,
                               body
-                          }: { mailTo: string, mailFrom: string, subject: string, body: string }): Promise<SentMessageInfo> => {
+                          }: { mailTo: string, mailFrom: string, subject: string, body: string }): Promise<SendMailResponse> => {
     if (!mailConfig.host) console.error('mail host not set')
     if (!mailConfig.auth.user) console.error('mail user not set')
     if (!mailConfig.auth.pass) console.error('mail pass not set')
@@ -38,11 +39,11 @@ const mailSender = async ({
     } else {
         try {
             if (process.env.FEATURE_SEND_MAIL_ACTIVE !== 'true') {
-                console.log("keine Mail gesendet, Feature ist nicht aktiv")
-                return new Error(`keine Mail gesendet, Feature ist nicht aktiv`)
+                console.warn("WARN:keine Mail gesendet, Feature ist nicht aktiv")
+                return {status: 400, statusTxt: "WARN:keine Mail gesendet, Feature ist nicht aktiv"}
             }
 
-            console.log(`Sending mail to "${mailTo}"...` )
+            console.log(`Sending mail to "${mailTo}"...`)
             const mailSender = `"${mailFrom}" <${mailFrom}>`
             const info = await transport.sendMail({
                 from: mailSender, // sender address
@@ -53,15 +54,15 @@ const mailSender = async ({
             });
 
             console.log("result sending mail: ", info)
-            return info
+            return {status: 200, statusTxt: "OK"}
         } catch (error) {
-            console.log("ERROR SENDING MAIL", error)
-            throw new Error(`Fehler beim Senden der Mail an ${mailTo}`)
+            console.error(`ERROR: Fehler beim Senden der Mail an ${mailTo}`)
+            return {status: 500, statusTxt: `ERROR: Fehler beim Senden der Mail an ${mailTo}`}
         }
     }
 }
 
-const sendTestMail = async ({numberOfMails} : {numberOfMails: number} = {numberOfMails: 1}) => {
+const sendTestMail = async ({numberOfMails}: { numberOfMails: number } = {numberOfMails: 1}) => {
     const mailFrom = process.env.MAIL_FROM
     const mailTo = process.env.TEST_MAIL_TO
     let subject = ""
@@ -71,18 +72,22 @@ const sendTestMail = async ({numberOfMails} : {numberOfMails: number} = {numberO
     invariant(!!mailTo)
 
     for (let i = 0; i < numberOfMails; i++) {
-        subject = `Testmail - ${i+1}`
-        body = `DJK-Kicker Testmail - ${i+1}`
-        await mailSender({mailTo, mailFrom,  subject, body})
+        subject = `Testmail - ${i + 1}`
+        body = `DJK-Kicker Testmail - ${i + 1}`
+        await mailSender({mailTo, mailFrom, subject, body})
     }
 
     invariant(!!mailTo)
 }
 
-const sendMail = async ({mailTo, subject, body}: { mailTo: string, subject: string, body: string }): Promise<SentMessageInfo> => {
+const sendMail = async ({
+                            mailTo,
+                            subject,
+                            body
+                        }: { mailTo: string, subject: string, body: string }): Promise<SendMailResponse> => {
     const mailFrom = process.env.MAIL_FROM
     invariant(!!mailFrom)
-    return await mailSender({mailTo, mailFrom, subject, body})
+    return mailSender({mailTo, mailFrom, subject, body})
 }
 
 export default {
