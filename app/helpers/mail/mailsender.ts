@@ -56,7 +56,7 @@ const mailSender = async ({
             console.log("result sending mail: ", info)
             return {status: 200, statusTxt: "OK"}
         } catch (error) {
-            console.error(`ERROR: Fehler beim Senden der Mail an ${mailTo}`)
+            console.error(`ERROR: Fehler beim Senden der Mail an ${mailTo}: ${JSON.stringify(error)}`)
             return {status: 500, statusTxt: `ERROR: Fehler beim Senden der Mail an ${mailTo}`}
         }
     }

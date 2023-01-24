@@ -1,17 +1,22 @@
-import EditGameForm from "~/components/game/admin/EditGameForm";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import toast from "react-hot-toast";
 import {deleteGame, findGameById, updateGame} from "~/models/admin.games.server";
 import {Game} from "@prisma/client";
-import {useLoaderData, useNavigate} from "@remix-run/react";
+import {Form, useLoaderData, useNavigate} from "@remix-run/react";
 import {GameFromForm, getGameFromFormData} from "~/utils/game.server";
 import {requireUserId} from "~/session.server";
 import invariant from "tiny-invariant";
 import routeLinks from "~/config/routeLinks";
 import dateUtils from "~/dateUtils";
 import RedButton from "~/components/common/buttons/RedButton";
+import ContentContainer from "~/components/common/container/ContentContainer";
+import InputWithLabel from "~/components/common/form/InputWithLabel";
+import DateTimeInput from "~/components/common/datetime/datetime";
+import {DateTime} from "luxon";
+import SelectWithLabel from "~/components/common/form/SelectWithLabel";
+import {configuration} from "~/config";
 
 
 type LoaderData = {
@@ -59,10 +64,23 @@ export const action: ActionFunction = async ({params, request}) => {
 const EditGame = () => {
     const navigate = useNavigate()
     const {game} = useLoaderData() as unknown as LoaderData
+
     return (
-        <>
+        <ContentContainer className={'bg-blue-200 mt-5'}>
             <h1 className={"font-default-bold text-title-large"}>{messages.adminEditGameForm.title}</h1>
-            <EditGameForm game={game}>
+            <Form method={"post"} className={"flex flex-col gap-2"}>
+                <InputWithLabel id={"name"} type={"text"} name={"name"} label={messages.adminEditGameForm.name}
+                                defaultValue={game.name}/>
+                <DateTimeInput name="gameTime" defaultValue={DateTime.fromJSDate(new Date(game.gameTime))}/>
+                <SelectWithLabel id={"location"} name={"location"}
+                                 defaultValue={configuration.gameLocations[Number.parseInt(game.spielort)]}
+                                 label={messages.adminEditGameForm.spielort}>
+                    <option value={configuration.gameLocations.Halle}>
+                        {messages.adminEditGameForm.optionHalle}
+                    </option>
+                    <option value={configuration.gameLocations.Draussen}>
+                        {messages.adminEditGameForm.optionDraussen}</option>
+                </SelectWithLabel>
                 <div className={"flex items-center gap-2"}>
                     <DefaultButton>
                         <p className={'fa fa-angle-left'}/>
@@ -86,8 +104,8 @@ const EditGame = () => {
                         </button>
                     </DefaultButton>
                 </div>
-            </EditGameForm>
-        </>
+            </Form>
+        </ContentContainer>
     )
 }
 

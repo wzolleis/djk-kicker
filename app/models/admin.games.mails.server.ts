@@ -11,7 +11,6 @@ import {DateTime} from "luxon";
 import {mailContent} from "~/components/i18n/mailcontent";
 import {createEncryptedPlayerToken} from "~/utils/token.server";
 import {GameAction} from "@prisma/client";
-import {SendMailResponse} from "~/config/mailTypes";
 
 type GameInvitationData = {
     gameId: string;
@@ -60,7 +59,7 @@ const sendGameInvitation = async ({
             mailType: "GAME_INVITATION",
         }
 
-        doSendMail(mailTo, subject, body, mailData, action)
+        await doSendMail(mailTo, subject, body, mailData, action)
     }
 };
 
@@ -71,17 +70,19 @@ async function doSendMail(mailTo: string, subject: string, body: string, mailDat
     })
 
     try {
-        mailSender.sendMail({mailTo, subject, body})
-            .then((value: SendMailResponse) => updateMailStatus(mail.id, value.status, value.statusTxt))
-            .then(() => updateGameAction({...action, status: 200,}))
+        const value = await mailSender.sendMail({mailTo, subject, body})
+        await Promise.all([
+            updateMailStatus(mail.id, value.status, value.statusTxt),
+            updateGameAction({...action, status: value.status})]
+        )
+        return value
     } catch (error) {
-        updateMailStatus(mail.id, 500, `ERROR: ${subject}, ${mailTo}, ${JSON.stringify(error)}`)
-            .then(() => updateGameAction({
-                    ...action,
-                    status: 500,
-                    statusTxt: `ERROR: ${JSON.stringify(error)}`,
-                })
-            )
+        const msg = `ERROR: ${JSON.stringify(error)}`
+        await Promise.all([
+            updateMailStatus(mail.id, 500, `ERROR: ${subject}, ${mailTo}, ${JSON.stringify(error)}`),
+            updateGameAction({...action, status: 500, statusTxt: msg})
+        ])
+        return Promise.reject({status: 500, statusTxt: msg})
     }
 }
 

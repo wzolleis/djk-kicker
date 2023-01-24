@@ -16,6 +16,7 @@ import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import SubmitButton from "~/components/common/buttons/submitButton";
+import ContentContainer from "~/components/common/container/ContentContainer";
 
 export const action: ActionFunction = async ({request}) => {
     const userId = await requireUserId(request);
@@ -35,27 +36,30 @@ const NewGame = () => {
     const navigate = useNavigate()
 
     return (
-        <Form method={"post"} className={"flex flex-col gap-3"}>
-            <InputWithLabel type={"text"} id={"name"} name={"name"} label={"Spielname"}/>
-            <DateTimeInput name={"gameTime"} defaultValue={getNextGameDay()}/>
-            <SelectWithLabel id={"location"} name={"location"} defaultValue={gameLocations.Draussen.toString()}
-                             label={messages.adminEditGameForm.spielort}>
-                {Object.keys(configuration.gameLocations).map((gameLocation) => (
-                    <option value={configuration.gameLocations[gameLocation as unknown as number]} hidden={!isNaN(Number(gameLocation))}
-                            key={gameLocation}>{gameLocation}</option>
-                ))}
-            </SelectWithLabel>
-            <div className={"flex gap-3 items-center w-full justify-end"}>
-                <RedButton className={'mr-auto'}>
-                    <img className={"h-6"} src={"/img/icons/close-white.png"} alt={""} />
-                    <button type={"button"} onClick={() => navigate(-1)}>{messages.buttons.cancel}</button>
-                </RedButton>
-                <DefaultButton>
-                    <img className={"h-6"} src="/img/icons/check.png" alt=""/>
-                    <SubmitButton label={messages.buttons.save} showTransitionSpinner={true}/>
-                </DefaultButton>
-            </div>
-        </Form>
+        <ContentContainer className={"bg-blue-200 mt-5"}>
+            <Form method={"post"} className={"flex flex-col gap-3"}>
+                <InputWithLabel type={"text"} id={"name"} name={"name"} label={"Spielname"}/>
+                <DateTimeInput name={"gameTime"} defaultValue={getNextGameDay()}/>
+                <SelectWithLabel id={"location"} name={"location"} defaultValue={gameLocations.Draussen.toString()}
+                                 label={messages.adminEditGameForm.spielort}>
+                    {Object.keys(configuration.gameLocations).map((gameLocation) => (
+                        <option value={configuration.gameLocations[gameLocation as unknown as number]}
+                                hidden={!isNaN(Number(gameLocation))}
+                                key={gameLocation}>{gameLocation}</option>
+                    ))}
+                </SelectWithLabel>
+                <div className={"flex gap-3 items-center w-full justify-end"}>
+                    <RedButton className={'mr-auto'}>
+                        <img className={"h-6"} src={"/img/icons/close-white.png"} alt={""}/>
+                        <button type={"button"} onClick={() => navigate(-1)}>{messages.buttons.cancel}</button>
+                    </RedButton>
+                    <DefaultButton>
+                        <img className={"h-6"} src="/img/icons/check.png" alt=""/>
+                        <SubmitButton label={messages.buttons.save} showTransitionSpinner={true}/>
+                    </DefaultButton>
+                </div>
+            </Form>
+        </ContentContainer>
     );
 };
 export default NewGame;

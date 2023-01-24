@@ -2,6 +2,12 @@ import {spielortOptions} from "~/config/admin.game.constants";
 import {gameLocations} from "~/config/locations";
 import {AdminInvitationStatus} from "~/config/status";
 
+const spielortLabel = {
+  "1": "Draussen",
+  "0": "Halle"
+}
+
+// @ts-ignore
 const messages = {
   app: {
     welcome: "Willkommen bei den DJK Kickern",
@@ -20,6 +26,8 @@ const messages = {
     delete: "Löschen",
     reset: "Zurücksetzen",
     invite: "Einladen",
+    absage: 'Absagen',
+    zusage: 'Zusagen',
     details: "Details"
   },
   actionType: {
@@ -87,14 +95,19 @@ const messages = {
     absage: (gameDate: string) => `Das Spiel am ${gameDate} wurde abgesagt`
   },
   adminGamesTable: {
+    id: '#',
     name: "Spielname",
     gametime: "Zeit",
-    location: "Spielort"
+    location: "Spielort",
+    status: "Status",
+    actions: 'Aktionen',
+    //@ts-ignore
+    spielortTxt: (spielOrtOption: string): string => spielortLabel[spielOrtOption]
   },
   adminGamesForm: {
     name: "Name",
     new: "Neues Spiel",
-    deleteExpired: "Spiele löschen"
+    deleteExpired: "Vergangene Spiele löschen"
   },
   adminUsersForm: {
     invitations: "Einladungen"

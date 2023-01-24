@@ -2,12 +2,13 @@ import {findAllGames} from "~/models/admin.games.server";
 import type {LoaderArgs} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
-import {Link, NavLink, Outlet, useLoaderData} from "@remix-run/react";
+import {Link, NavLink, useLoaderData} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import PageHeader from "~/components/common/PageHeader";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import GamesList from "~/components/game/admin/GamesList";
 import RedButton from "~/components/common/buttons/RedButton";
+import ContentContainer from "~/components/common/container/ContentContainer";
 
 type LoaderData = {
     games: Awaited<ReturnType<typeof findAllGames>>;
@@ -24,7 +25,7 @@ const Games = () => {
     const {games} = useLoaderData() as unknown as LoaderData;
 
     return (
-        <>
+        <ContentContainer className={"mt-5"}>
             <main className={"space-y-4"}>
                 <div className={"flex justify-between items-center"}>
                     <PageHeader title={messages.appmenu.games}/>
@@ -45,8 +46,7 @@ const Games = () => {
                 </div>
                 <GamesList games={games}></GamesList>
             </main>
-            <Outlet/>
-        </>
+        </ContentContainer>
     );
 };
 

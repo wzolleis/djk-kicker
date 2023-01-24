@@ -70,7 +70,7 @@ export const action: ActionFunction = async ({
     if (intent === "invitation") {
         const host = request.headers.get("host")!;
         const playerIds = formData.getAll("receiver") as string[];
-        mailhelper.sendGameInvitation({host, gameId, playerIds})
+        const result = await mailhelper.sendGameInvitation({host, gameId, playerIds})
             .then(() => updateGameStatus(gameId, "Einladung"))
     }
     return redirect(routeLinks.admin.game.details(gameId));
@@ -122,21 +122,24 @@ const GameInvitation = () => {
                         <fieldset disabled={transition.state === "submitting"}>
                             <div className={"flex flex-col gap-2"}>
                                 <PlayerSelector players={players}/>
-                                <playerToken.Form method="get">
-                                    <SelectWithLabel
-                                        id={"player"}
-                                        name={"player"}
-                                        onChange={(
-                                            event: BaseSyntheticEvent
-                                        ) => {
-                                            playerToken.submit(event.target.form);
-                                        }}
-                                        label={"Spieler"}>
-                                        {players.map((player) => (
-                                            <option key={player.id} value={player.id}>{player.name}</option>
-                                        ))}
-                                    </SelectWithLabel>
-                                </playerToken.Form>
+
+                                <div className={'bg-gray-500'}>
+                                    <playerToken.Form method="get">
+                                        <SelectWithLabel
+                                            id={"player"}
+                                            name={"player"}
+                                            onChange={(
+                                                event: BaseSyntheticEvent
+                                            ) => {
+                                                playerToken.submit(event.target.form);
+                                            }}
+                                            label={"Spieler"}>
+                                            {players.map((player) => (
+                                                <option key={player.id} value={player.id}>{player.name}</option>
+                                            ))}
+                                        </SelectWithLabel>
+                                    </playerToken.Form>
+                                </div>
                                 <label
                                     className={"font-default-medium text-gray-600"}>
                                     {messages.adminGameInvitationForm.invitationLink}
@@ -192,7 +195,8 @@ const GameInvitation = () => {
                 </ContentContainer>
             </div>
         </>
-    );
+    )
+        ;
 };
 
 export default GameInvitation;
