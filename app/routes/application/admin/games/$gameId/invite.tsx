@@ -100,103 +100,100 @@ const GameInvitation = () => {
     }, [playerToken.data?.playerToken]);
 
     return (
-        <>
-            <div className="flex w-full flex-col gap-2">
-                <h1 className={"font-default-bold text-title-large"}>
-                    {messages.adminSendInvitationForm.title}
-                </h1>
+        <div className="flex w-full flex-col gap-2">
+            <h1 className={"font-default-bold text-title-large"}>
+                {messages.adminSendInvitationForm.title}
+            </h1>
 
-                <ContentContainer>
-                    <div className={"flex flex-col items-start justify-center"}>
-                        <p className={"font-default-bold text-title-large"}>
-                            {game.name}
-                        </p>
-                        <div className={"flex gap-2"}>
-                            <SmallTag text={gameTime}/>
-                            <SmallTag text={configuration.gameLocations[game.spielort as unknown as number]}/>
-                        </div>
+            <ContentContainer>
+                <div className={"flex flex-col items-start justify-center"}>
+                    <p className={"font-default-bold text-title-large"}>
+                        {game.name}
+                    </p>
+                    <div className={"flex gap-2"}>
+                        <SmallTag text={gameTime}/>
+                        <SmallTag text={configuration.gameLocations[game.spielort as unknown as number]}/>
                     </div>
-                </ContentContainer>
-                <ContentContainer>
-                    <Form ref={formRef} method="post">
-                        <fieldset disabled={transition.state === "submitting"}>
-                            <div className={"flex flex-col gap-2"}>
-                                <PlayerSelector players={players}/>
+                </div>
+            </ContentContainer>
+            <ContentContainer>
+                <Form ref={formRef} method="post">
+                    <fieldset disabled={transition.state === "submitting"}>
+                        <div className={"flex flex-col gap-2"}>
+                            <PlayerSelector players={players}/>
 
-                                <div className={'bg-gray-500'}>
-                                    <playerToken.Form method="get">
-                                        <SelectWithLabel
-                                            id={"player"}
-                                            name={"player"}
-                                            onChange={(
-                                                event: BaseSyntheticEvent
-                                            ) => {
-                                                playerToken.submit(event.target.form);
-                                            }}
-                                            label={"Spieler"}>
-                                            {players.map((player) => (
-                                                <option key={player.id} value={player.id}>{player.name}</option>
-                                            ))}
-                                        </SelectWithLabel>
-                                    </playerToken.Form>
-                                </div>
-                                <label
-                                    className={"font-default-medium text-gray-600"}>
-                                    {messages.adminGameInvitationForm.invitationLink}
-                                </label>
-                                <div className={"flex gap-2"}>
-                                    <div
-                                        onClick={async () => {
-                                            await navigator.clipboard.writeText(invitationLink);
-                                        }}>
-                                        <DefaultButton>Kopieren</DefaultButton>
-                                    </div>
-                                </div>
-                                <InputWithLabel
-                                    id={"emailSubject"}
-                                    type={"text"}
-                                    name={"emailSubject"}
-                                    label={messages.adminGameInvitationForm.mailSubjectLabel}
-                                    defaultValue={mailContent.invitationMail.mailSubject(gameTime)}
-                                />
+                            <div className={'bg-gray-500'}>
+                                <playerToken.Form method="get">
+                                    <SelectWithLabel
+                                        id={"player"}
+                                        name={"player"}
+                                        onChange={(
+                                            event: BaseSyntheticEvent
+                                        ) => {
+                                            playerToken.submit(event.target.form);
+                                        }}
+                                        label={"Spieler"}>
+                                        {players.map((player) => (
+                                            <option key={player.id} value={player.id}>{player.name}</option>
+                                        ))}
+                                    </SelectWithLabel>
+                                </playerToken.Form>
                             </div>
-                        </fieldset>
-                        <div className={"mt-5 grid grid-cols-2 justify-end gap-2 md:flex"}>
-                            <RedButton>
-                                <img
-                                    className={"h-6"}
-                                    src="/img/icons/close-white.png"
-                                    alt=""
-                                />
-                                <button
-                                    type="submit"
-                                    name="intent"
-                                    value="cancel"
-                                    disabled={
-                                        transition.state === "submitting"
-                                    }>
-                                    {messages.commonForm.cancel}
-                                </button>
-                            </RedButton>
-                            <DefaultButton>
-                                <img
-                                    className={"h-6"}
-                                    src="/img/icons/mail-check-white.png"
-                                    alt=""
-                                />
-                                <SubmitButton label={messages.adminGameInvitationForm.sendInvitationBtn}
-                                              loadingLabel={messages.adminGameInvitationForm.sendInvitationBtn}
-                                              name={"intent"}
-                                              value={"invitation"}
-                                />
-                            </DefaultButton>
+                            <label
+                                className={"font-default-medium text-gray-600"}>
+                                {messages.adminGameInvitationForm.invitationLink}
+                            </label>
+                            <div className={"flex gap-2"}>
+                                <div
+                                    onClick={async () => {
+                                        await navigator.clipboard.writeText(invitationLink);
+                                    }}>
+                                    <DefaultButton>Kopieren</DefaultButton>
+                                </div>
+                            </div>
+                            <InputWithLabel
+                                id={"emailSubject"}
+                                type={"text"}
+                                name={"emailSubject"}
+                                label={messages.adminGameInvitationForm.mailSubjectLabel}
+                                defaultValue={mailContent.invitationMail.mailSubject(gameTime)}
+                            />
                         </div>
-                    </Form>
-                </ContentContainer>
-            </div>
-        </>
+                    </fieldset>
+                    <div className={"mt-5 grid grid-cols-2 justify-end gap-2 md:flex"}>
+                        <RedButton>
+                            <img
+                                className={"h-6"}
+                                src="/img/icons/close-white.png"
+                                alt=""
+                            />
+                            <button
+                                type="submit"
+                                name="intent"
+                                value="cancel"
+                                disabled={
+                                    transition.state === "submitting"
+                                }>
+                                {messages.commonForm.cancel}
+                            </button>
+                        </RedButton>
+                        <DefaultButton>
+                            <img
+                                className={"h-6"}
+                                src="/img/icons/mail-check-white.png"
+                                alt=""
+                            />
+                            <SubmitButton label={messages.adminGameInvitationForm.sendInvitationBtn}
+                                          loadingLabel={messages.adminGameInvitationForm.sendInvitationBtn}
+                                          name={"intent"}
+                                          value={"invitation"}
+                            />
+                        </DefaultButton>
+                    </div>
+                </Form>
+            </ContentContainer>
+        </div>
     )
-        ;
 };
 
 export default GameInvitation;

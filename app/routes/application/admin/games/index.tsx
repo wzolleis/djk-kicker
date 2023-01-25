@@ -2,12 +2,10 @@ import {findAllGames} from "~/models/admin.games.server";
 import type {LoaderArgs} from "@remix-run/node";
 import {json} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
-import {Link, NavLink, useLoaderData} from "@remix-run/react";
+import {NavLink, Outlet, useLoaderData} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import PageHeader from "~/components/common/PageHeader";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
 import GamesList from "~/components/game/admin/GamesList";
-import RedButton from "~/components/common/buttons/RedButton";
 import ContentContainer from "~/components/common/container/ContentContainer";
 
 type LoaderData = {
@@ -27,25 +25,29 @@ const Games = () => {
     return (
         <ContentContainer className={"mt-5"}>
             <main className={"space-y-4"}>
-                <div className={"flex justify-between items-center"}>
+                <div className={"flex justify-between items-center bg-blue-400"}>
                     <PageHeader title={messages.appmenu.games}/>
-                    <div className={'flex flex-col md:flex-row gap-2 ml-auto'}>
+                    <div className="md:px-3 text-lg text-gray-600 flex">
                         <NavLink to={"deleteExpired"}>
-                            <RedButton>
-                                <p className={'md:h6 fa fa-trash'}/>
-                                {messages.adminGamesForm.deleteExpired}
-                            </RedButton>
+                            <button
+                                className="ml-auto p-3 text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                                <i className={"fa fa-trash"}/>
+                                <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.deleteExpired}</span>
+                            </button>
                         </NavLink>
-                        <Link to={"new"}>
-                            <DefaultButton>
-                                <p className={'md:h6 fa fa-plus'}/>
-                                {messages.adminGamesForm.new}
-                            </DefaultButton>
-                        </Link>
+
+                        <NavLink to={"new"}>
+                            <button
+                                className="ml-auto p-3 text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                                <i className={"fa fa-plus"}/>
+                                <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.new}</span>
+                            </button>
+                        </NavLink>
                     </div>
                 </div>
                 <GamesList games={games}></GamesList>
             </main>
+            <Outlet/>
         </ContentContainer>
     );
 };

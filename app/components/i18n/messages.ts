@@ -15,7 +15,8 @@ const messages = {
     loading: "Lade Daten...",
     saving: "Speichere Daten...",
     process: "Verarbeite Daten...",
-    wait: "Bitte warten..."
+    wait: "Bitte warten...",
+    alert: "Achtung"
   },
   buttons: {
     edit: "Bearbeiten",

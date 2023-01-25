@@ -8,7 +8,7 @@ export const AlertBanner = ({text}: { text: string }) => {
     return (
         <div role="alert">
             <div className="bg-red-500 text-white font-bold px-4 py-2">
-                Achtung
+                {messages.app.alert}
             </div>
             <div className="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
                 <p>{text}</p>
@@ -20,9 +20,6 @@ export const AlertBanner = ({text}: { text: string }) => {
 export const InfoBanner = ({text}: { text: string }) => {
     return (
         <div role="info">
-            <div className="bg-blue-600 text-white font-bold px-4 py-2">
-                Information
-            </div>
             <div className="border border-t-0 border-yellow-400 rounded-b bg-yellow-100 px-4 py-3 black">
                 <p>{text}</p>
             </div>
