@@ -11,7 +11,7 @@ type GamesListProps = {
 
 const GamesList = ({games}: GamesListProps) => {
     return (
-        <>
+        <div className={"w-full space-y-3"}>
             {
                 games.map((game) => {
                     const gameStatusClasses = {
@@ -20,8 +20,8 @@ const GamesList = ({games}: GamesListProps) => {
                     }
 
                     return (
-                        <div className="container w-full " key={game.id}>
-                            <div className="h-50 rounded-lg bg-blue-200">
+                        <div  className="bg-blue-200" key={game.id}>
+                            <div className="h-50 rounded-lg">
                                 <div className="flex items-center justify-between border-b" data-testid={"game-card-testid"}>
                                     <div
                                         className="p-3 text-gray-700 text-lg font-bold">{`${game.name || 'Spiel'} am ${useDateTime(game.gameTime)}`}</div>
@@ -43,7 +43,7 @@ const GamesList = ({games}: GamesListProps) => {
                                 <div className={classNames("p-3 text-lg", gameStatusClasses)}>
                                     {game.status ?? "Noch kein Status"}
                                 </div>
-                                <div className="p-3 border-t text-lg text-gray-600 bg-blue-500">
+                                <div className="p-3 border-t text-lg">
                                     <div className="flex">
                                         <NavLink className={"ml-auto "} to={`${game.id}/invite`}>
                                             <button
@@ -73,7 +73,7 @@ const GamesList = ({games}: GamesListProps) => {
                     )
                 })
             }
-        </>
+        </div>
     )
 }
 
