@@ -1,17 +1,6 @@
 import type {LinksFunction, LoaderArgs, LoaderFunction, MetaFunction} from "@remix-run/node";
 import {json} from "@remix-run/node";
-import {
-    Form,
-    Links,
-    LiveReload,
-    Meta,
-    NavLink,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-    useLoaderData,
-    useLocation
-} from "@remix-run/react";
+import {Form, Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation} from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import {getUser} from "./session.server";
@@ -29,6 +18,7 @@ import {Toaster} from "react-hot-toast";
 import Subheading from "~/components/common/header/Subheading";
 import {getPlayerGreeting} from "~/utils";
 import {GameBanner} from "~/components/common/header/pageBanner";
+import {getPlayers} from "~/models/player.server";
 
 export const links: LinksFunction = () => {
     return [
@@ -49,6 +39,8 @@ type LoaderData = {
     userAuthentication: UserAuthentication | null
     nextGame: GameWithFeedback | null
 
+    players: Player[]
+
     defaultFeedback: DefaultFeedback | null
 }
 
@@ -60,11 +52,14 @@ export const loader: LoaderFunction = async ({request}: LoaderArgs) => {
         defaultFeedback = await getDefaultFeedback(userAuthentication.player.id)
     }
 
+    const players = await getPlayers()
+
     return json<LoaderData>({
         user,
         nextGame,
         userAuthentication,
-        defaultFeedback
+        defaultFeedback,
+        players
     });
 }
 

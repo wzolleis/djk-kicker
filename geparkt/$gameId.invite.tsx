@@ -70,8 +70,8 @@ export const action: ActionFunction = async ({
     if (intent === "invitation") {
         const host = request.headers.get("host")!;
         const playerIds = formData.getAll("receiver") as string[];
-        const result = await mailhelper.sendGameInvitation({host, gameId, playerIds})
-            .then(() => updateGameStatus(gameId, "Einladung"))
+        await mailhelper.sendGameInvitation({host, gameId, playerIds})
+        await updateGameStatus(gameId, "Einladung")
     }
     return redirect(routeLinks.admin.game.details(gameId));
 };
