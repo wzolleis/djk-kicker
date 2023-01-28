@@ -1,7 +1,7 @@
 import {prisma} from "~/db.server";
 import type {Game} from "@prisma/client";
 import {DateTime} from "luxon";
-import {initializePlayers} from "~/models/feedback.server";
+import {deleteFeedbackForGame, initializePlayers} from "~/models/feedback.server";
 import {GameStatus} from "~/config/admin.game.constants";
 import {deleteGameActionsByIds, deleteMailsForGame, findActionsForGame} from "~/models/admin.mails.server";
 
@@ -56,6 +56,7 @@ export const deleteGame = async (gameId: string) => {
         [
             deleteMailsForGame(gameActionIds),
             deleteGameActionsByIds(gameActionIds),
+            deleteFeedbackForGame(gameId),
             prisma.game.delete({where: {id: gameId}})
         ]
     )

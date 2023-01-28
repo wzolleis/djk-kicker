@@ -15,3 +15,10 @@ export const isActionType = (value: string): value is actionTypes => {
 export const actionTypeLabel = (action: actionTypes) => {
     return messages.actionType[action] || action
 }
+
+export type ButtonIntent = keyof typeof messages.buttons
+
+export const isButtonIntent = (intent: string): intent is ButtonIntent => {
+    const keys = Object.keys(messages.buttons)
+    return keys.includes(intent)
+}

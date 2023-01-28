@@ -71,6 +71,8 @@ const Application = () => {
 export const CatchBoundary = () => {
     const navigate = useNavigate();
     const caught = useCatch();
+    console.error(JSON.stringify(caught.data, null, 2))
+
     return (
         <div>
             <PageHeader title={`Es ist ein Fehler aufgetreten: ${caught.statusText}`}/>
@@ -81,7 +83,8 @@ export const CatchBoundary = () => {
     );
 };
 
-export const ErrorBoundary = () => {
+export const ErrorBoundary = ({ error }: { error: Error }) => {
+    console.error(error)
     return <ErrorComponent/>;
 };
 

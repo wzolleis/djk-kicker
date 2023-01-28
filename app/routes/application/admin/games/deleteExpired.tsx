@@ -1,5 +1,5 @@
 import {Form, useFetcher, useNavigate} from "@remix-run/react";
-import {deleteExpiredGames, findAllGames, findExpiredGames} from "~/models/admin.games.server";
+import {deleteExpiredGames, findExpiredGames} from "~/models/admin.games.server";
 import {ActionFunction, json, LoaderArgs, redirect} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
 import {useDateTime} from "~/utils";
@@ -14,7 +14,7 @@ import {Params} from "react-router";
 import invariant from "tiny-invariant";
 
 type LoaderData = {
-    games: Awaited<ReturnType<typeof findAllGames>>;
+    games: Awaited<ReturnType<typeof findExpiredGames>>;
 };
 
 export const loader = async ({request}: LoaderArgs) => {

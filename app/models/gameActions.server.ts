@@ -29,3 +29,7 @@ export const findActionsByGameId = async ({gameId}: {gameId: string}) => {
         }
     })
 }
+
+export const findAllGameActions = async () => {
+    return await prisma.gameAction.findMany()
+}

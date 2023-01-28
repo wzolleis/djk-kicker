@@ -45,22 +45,34 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({request}: LoaderArgs) => {
-    const [user, mostRecentGame, userAuthentication] = await Promise.all([getUser(request), getMostRecentGame(), authenticatePlayer(request)])
-    const nextGame = mostRecentGame ? await getGameById(mostRecentGame.id) : null
-    let defaultFeedback: DefaultFeedback | null = null
-    if (userAuthentication.player) {
-        defaultFeedback = await getDefaultFeedback(userAuthentication.player.id)
+    try {
+        const [user, mostRecentGame, userAuthentication] = await Promise.all([getUser(request), getMostRecentGame(), authenticatePlayer(request)])
+        const nextGame = mostRecentGame ? await getGameById(mostRecentGame.id) : null
+        let defaultFeedback: DefaultFeedback | null = null
+        if (userAuthentication.player) {
+            defaultFeedback = await getDefaultFeedback(userAuthentication.player.id)
+        }
+
+        const players = await getPlayers()
+
+        return json<LoaderData>({
+            user,
+            nextGame,
+            userAuthentication,
+            defaultFeedback,
+            players
+        });
+    } catch (error) {
+        console.error(">>>>>>>>>> error in root loader", error)
+        return json<LoaderData>({
+                user: null,
+                nextGame: null,
+                userAuthentication: null,
+                defaultFeedback: null,
+                players: []
+            }
+        )
     }
-
-    const players = await getPlayers()
-
-    return json<LoaderData>({
-        user,
-        nextGame,
-        userAuthentication,
-        defaultFeedback,
-        players
-    });
 }
 
 type RootScreenProps = {
@@ -152,6 +164,18 @@ const Greeting = ({showGreeting, player}: { showGreeting: boolean, player?: Play
         <Subheading title={greeting}/>
     )
 }
+
+export function ErrorBoundary({error}: { error: any }) {
+    return (
+        <div>
+            <h1>Error</h1>
+            <p>{error.message}</p>
+            <p>The stack trace is:</p>
+            <pre>{error.stack}</pre>
+        </div>
+    );
+}
+
 
 export default function App() {
     const data = useLoaderData<LoaderData>() as LoaderData

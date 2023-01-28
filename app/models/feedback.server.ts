@@ -123,6 +123,10 @@ export const deleteFeedbackForPlayer = async (playerId: string) => {
     return Promise.all(allOps)
 }
 
+export const deleteFeedbackForGame = async (gameId: string) => {
+    return await prisma.feedback.deleteMany({where: {gameId}})
+}
+
 export const getFeedbackByPlayerId = async (playerId: string) => {
     return await prisma.feedback.findMany({
         where: {
