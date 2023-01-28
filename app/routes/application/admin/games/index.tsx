@@ -27,7 +27,7 @@ const GamesList = ({games, actions }: GamesListProps) => {
                         'text-green-500': !!game.status && game.status === 'Zusage',
                     }
 
-                    const gameActions = actions.filter(action => action.gameId === game.id).map(action => action.actionType).join()
+                    const gameActions = actions.filter(action => action.gameId === game.id).map(action => action.actionType).join(", ")
 
                     return (
                         <div className="bg-blue-200" key={game.id}>
@@ -53,8 +53,8 @@ const GamesList = ({games, actions }: GamesListProps) => {
                                 <div className={classNames("p-3 text-lg", gameStatusClasses)}>
                                     {game.status ?? "Noch kein Status"}
                                 </div>
-                                <div className={classNames("p-3 text-lg", gameStatusClasses)}>
-                                    {gameActions ?? "Noch kein Status"}
+                                <div className={classNames("p-3 text-lg inline-block w-96 md:w-fit", gameStatusClasses)}>
+                                    <span className={"truncate text-ellipsis overflow-hidden block"}>{gameActions ?? "Noch kein Status"}</span>
                                 </div>
                                 <div className="p-3 border-t text-lg">
                                     <div className="flex">
