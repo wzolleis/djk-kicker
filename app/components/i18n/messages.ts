@@ -27,6 +27,7 @@ const messages = {
     delete: "Löschen",
     reset: "Zurücksetzen",
     invite: "Einladen",
+    inviteAll: "Alle Einladen",
     absage: 'Absagen',
     zusage: 'Zusagen',
     details: "Details"

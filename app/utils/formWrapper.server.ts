@@ -7,4 +7,8 @@ export class FormWrapper<T extends string> {
     get(name: T): FormDataEntryValue | null {
         return this.formData.get(name)
     }
+
+    getAll(name: T): FormDataEntryValue[] {
+        return this.formData.getAll(name)
+    }
 }

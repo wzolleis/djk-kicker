@@ -6,8 +6,31 @@ import {deleteMailsForPlayer} from "~/models/admin.mails.server";
 
 export type {Player} from "@prisma/client";
 
+export type PlayerMailData = {
+    name: string,
+    id: string,
+    email: string
+}
+
 export async function getPlayers() {
     return prisma.player.findMany();
+}
+
+export const
+    getPlayerDataForMail = async (playerIds: string[]): Promise<PlayerMailData[]> => {
+    return await prisma.player.findMany({
+            select: {
+                name: true,
+                id: true,
+                email: true,
+            },
+            where: {
+                id: {
+                    in: playerIds
+                }
+            }
+        }
+    )
 }
 
 export async function getPlayerById(id: Player["id"]) {
