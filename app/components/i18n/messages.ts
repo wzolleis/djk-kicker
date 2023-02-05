@@ -109,7 +109,7 @@ const messages = {
   adminGamesForm: {
     name: "Name",
     new: "Neues Spiel",
-    deleteExpired: "Vergangene Spiele löschen"
+    deleteExpired: "Spiele löschen"
   },
   adminUsersForm: {
     invitations: "Einladungen"

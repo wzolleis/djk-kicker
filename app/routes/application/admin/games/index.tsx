@@ -14,10 +14,85 @@ type GamesListProps = {
     actions: GameAction[]
 }
 
+type ButtonProps = {
+    gameId: string
+    intent: ButtonIntent
+}
+
+const InviteButton = ({gameId, intent}: ButtonProps) => {
+    return (
+        <NavLink className={"ml-auto"} to={`${gameId}/${intent}`}>
+            <button
+                className="p-3 text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center rounded-l-lg">
+                <i className={"fa fa-envelope"}/>
+                <span className={"hidden lg:inline px-1"}>{messages.buttons[intent]}</span>
+            </button>
+        </NavLink>
+    )
+}
+
+const ZusageButton = ({gameId, intent}: ButtonProps) => {
+    return (
+        <NavLink to={`${gameId}/${intent}`}>
+            <button
+                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200  font-small md:font-mediumpx-4 py-2 inline-flex space-x-1 items-center">
+                <i className={"fa-solid fa-thumbs-up mx-1 text-green-500 px-1 md:px-2"}/>
+                <span className={"hidden lg:inline text-green-500 px-2"}>{messages.buttons[intent]}</span>
+            </button>
+        </NavLink>
+    )
+}
+
+const AbsageButton = ({gameId, intent}: ButtonProps) => {
+    return (
+        <NavLink to={`${gameId}/${intent}`}>
+            <button
+                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                <i className={"fa-solid fa-thumbs-down mx-1 text-red-500"}/>
+                <span className={"hidden lg:inline text-red-500"}>{messages.buttons[intent]}</span>
+            </button>
+        </NavLink>
+    )
+}
+
+const InviteAllButton = ({gameId, intent}: ButtonProps) => {
+    return (
+        <NavLink to={`${gameId}/${intent}`}>
+            <button
+                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center rounded-r-lg">
+
+                <i className={"fa-solid fa-envelopes-bulk mx-1 text-blue-500"}/>
+                <span className={"hidden lg:inline text-blue-500"}>{messages.buttons[intent]}</span>
+            </button>
+        </NavLink>
+    )
+}
+
+const EditGameButton = ({gameId, intent}: ButtonProps) => {
+    return (
+        <NavLink to={`${routeLinks.admin.game.edit(gameId)}`}>
+            <button
+                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-l-lg font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                <i className={"fa fa-trash mx-1"}/>
+                <span className={"hidden lg:inline"}>{messages.buttons[intent]}</span>
+            </button>
+        </NavLink>
+    )
+}
+
+const DeleteGameButton = ({gameId, intent}: ButtonProps) => {
+    return (
+        <NavLink to={`${routeLinks.admin.game.delete(gameId)}`}>
+            <button
+                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-r-lg font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                <i className={"fa fa-trash mx-1"}/>
+                <span className={"hidden lg:inline"}>{messages.buttons[intent]}</span>
+            </button>
+        </NavLink>
+    )
+}
+
 const GamesList = ({games, actions }: GamesListProps) => {
-    const buttonIntents: ButtonIntent[] = ["invite", "zusage", "absage", "inviteAll"]
-
-
     return (
         <div className={"w-full space-y-3"}>
             {
@@ -36,18 +111,8 @@ const GamesList = ({games, actions }: GamesListProps) => {
                                     <div
                                         className="p-3 text-gray-700 text-lg font-bold">{`${game.name || 'Spiel'} am ${useDateTime(game.gameTime)}`}</div>
                                     <div className="p-3 flex">
-                                        <button
-                                            className="text-slate-800 hover:scale-110 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-l-lg font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
-                                            <i className={"fa fa-edit mx-1"}/>
-                                            <span className={"hidden lg:inline px-1"}>{messages.buttons.edit}</span>
-                                        </button>
-                                        <NavLink to={`${routeLinks.admin.game.delete(game.id)}`}>
-                                            <button
-                                                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 rounded-r-lg font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
-                                                <i className={"fa fa-trash mx-1"}/>
-                                                <span className={"hidden lg:inline"}>{messages.buttons.delete}</span>
-                                            </button>
-                                        </NavLink>
+                                        <EditGameButton gameId={game.id} intent={"edit"}/>
+                                        <DeleteGameButton gameId={game.id} intent={"edit"}/>
                                     </div>
                                 </div>
                                 <div className={classNames("p-3 text-lg", gameStatusClasses)}>
@@ -58,35 +123,10 @@ const GamesList = ({games, actions }: GamesListProps) => {
                                 </div>
                                 <div className="p-3 border-t text-lg">
                                     <div className="flex">
-                                        <NavLink className={"ml-auto "} to={`${game.id}/${buttonIntents[0]}`}>
-                                            <button
-                                                className="p-3 text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center rounded-l-lg">
-                                                <i className={"fa fa-envelope"}/>
-                                                <span className={"hidden lg:inline px-1"}>{messages.buttons[buttonIntents[0]]}</span>
-                                            </button>
-                                        </NavLink>
-                                        <NavLink to={`${game.id}/${buttonIntents[1]}`}>
-                                            <button
-                                                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200  font-small md:font-mediumpx-4 py-2 inline-flex space-x-1 items-center">
-                                                <i className={"fa-solid fa-thumbs-up mx-1 text-green-500 px-1 md:px-2"}/>
-                                                <span className={"hidden lg:inline text-green-500 px-2"}>{messages.buttons[buttonIntents[1]]}</span>
-                                            </button>
-                                        </NavLink>
-                                        <NavLink to={`${game.id}/${buttonIntents[2]}`}>
-                                            <button
-                                                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
-                                                <i className={"fa-solid fa-thumbs-down mx-1 text-red-500"}/>
-                                                <span className={"hidden lg:inline text-red-500"}>{messages.buttons[buttonIntents[2]]}</span>
-                                            </button>
-                                        </NavLink>
-                                        <NavLink to={`${game.id}/${buttonIntents[3]}`}>
-                                            <button
-                                                className="text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center rounded-r-lg">
-
-                                                <i className={"fa-solid fa-envelopes-bulk mx-1 text-blue-500"}/>
-                                                <span className={"hidden lg:inline text-blue-500"}>{messages.buttons[buttonIntents[3]]}</span>
-                                            </button>
-                                        </NavLink>
+                                        <InviteButton gameId={game.id} intent={"invite"}/>
+                                        <ZusageButton gameId={game.id} intent={"zusage"}/>
+                                        <AbsageButton gameId={game.id} intent={"absage"}/>
+                                        <InviteAllButton gameId={game.id} intent={"inviteAll"}/>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +149,7 @@ const Games = () => {
                     <div className="md:px-3 text-lg text-gray-600 flex">
                         <NavLink to={"deleteExpired"}>
                             <button
-                                className="ml-auto p-3 text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                                className="ml-auto p-3 text-slate-800 rounded-l-lg hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
                                 <i className={"fa fa-trash"}/>
                                 <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.deleteExpired}</span>
                             </button>
@@ -117,7 +157,7 @@ const Games = () => {
 
                         <NavLink to={"new"}>
                             <button
-                                className="ml-auto p-3 text-slate-800 hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                                className="ml-auto p-3 text-slate-800 hover:text-blue-600 rounded-r-lg text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
                                 <i className={"fa fa-plus"}/>
                                 <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.new}</span>
                             </button>
