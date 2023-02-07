@@ -8,6 +8,7 @@ import {createDatabaseSessionStorage} from "~/session.server";
 import {getCommonSearchParameters,} from "~/utils/parameters.server";
 import {PlayerToken} from "~/models/classes/PlayerToken";
 import {UserAuthentication} from "~/config/applicationTypes";
+import routeLinks from "~/config/routeLinks";
 
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
@@ -36,7 +37,7 @@ export async function changePlayer(request: Request, playerToken: PlayerToken) {
     const session = await getSession(request.headers.get("Cookie"));
     const player = await getPlayerById(playerToken.playerId);
     await setSession(session, playerToken, player!);
-    return redirect(`/application/dashboard`);
+    return redirect(routeLinks.dashboard);
 }
 
 export async function authenticatePlayer(request: Request): Promise<UserAuthentication> {

@@ -1,8 +1,6 @@
-import { prisma } from "~/db.server";
-import { DateTime } from "luxon";
-import { Simulate } from "react-dom/test-utils";
-import play = Simulate.play;
-import { Token } from "@prisma/client";
+import {prisma} from "~/db.server";
+import {DateTime} from "luxon";
+import {Token} from "@prisma/client";
 
 export async function getPlayerToken(
     playerId: string,
@@ -20,7 +18,7 @@ export async function getPlayerToken(
             throw new Error("No Player Token found");
         }
 
-        let expirationDate = DateTime.now().plus({ days: 7 }).toJSDate();
+        let expirationDate = DateTime.now().plus({ years: 1 }).toJSDate();
         if (gameId) {
             const game = await prisma.game.findUnique({
                 where: {
@@ -28,7 +26,7 @@ export async function getPlayerToken(
                 },
             });
             expirationDate = DateTime.fromJSDate(new Date(game!.gameTime))
-                .plus({ days: 7 })
+                .plus({ years: 1 })
                 .toJSDate();
         }
         playerToken = await prisma.token.create({

@@ -1,13 +1,22 @@
-export type MailTemplateName = 'Invitation'
+import {MailTemplateType} from "~/config/mailTypes";
+import messages from "~/components/i18n/messages";
 
-type GameInvitationData = {
-    mailAddress: string
-
-    invitationLink: string
-    playerName: string
+type GameMail = {
+    mail: {
+        template: MailTemplateType
+    },
+    variables: {
+        event: {
+            date: string
+            location: string
+            name: string
+            subject: string
+        }
+    },
+    recipients: MailRecipient[]
 }
 
-export type InvitationMailRecipient = {
+export type MailRecipient = {
     mailAddress: string
     variables: {
         name: string
@@ -15,60 +24,62 @@ export type InvitationMailRecipient = {
     }
 }
 
-export type GameInvitationMail = {
-    mail: {
-        template: MailTemplateName
-    },
-    globalVariables: {
-        game: {
-            date: string
-            location: string
-        }
-    }
-    recipients: InvitationMailRecipient[]
+export type EventData = {
+    location: string
+    date: string
+    name: string
 }
 
 export class MailBuilder {
-    invitations: GameInvitationData[]
-    gameLocation: string
-    gameDate: string
+    event: EventData
+
+    recipients: MailRecipient[]
+
+    templateName: MailTemplateType
 
     constructor(param: {
-        templateName: MailTemplateName
-        gameLocation: string
-        gameDate: string
+        templateName: MailTemplateType
+        event: EventData
     }) {
-        this.gameLocation = param.gameLocation
-        this.gameDate = param.gameDate
-        this.invitations = []
+        this.event = param.event
+        this.templateName = param.templateName
+        this.recipients = []
     }
 
-    addInvitation(invitation: GameInvitationData) {
-        this.invitations.push(invitation)
+    addRecipient(recipient: MailRecipient) {
+        this.recipients.push(recipient)
     }
 
-    buildInvitationMail(): GameInvitationMail {
-        const recipients: InvitationMailRecipient[] = this.invitations.map(invitation => {
-            return {
-                mailAddress: invitation.mailAddress,
-                variables: {
-                    name: invitation.playerName,
-                    invitationLink: invitation.invitationLink
-                }
-            }
-        })
+    buildMail(): GameMail {
+        let subject = "unknown subject"
+        switch(this.templateName) {
+            case "testMail":
+                subject = "TestMail - bitte löschen"
+                break
+            case "gameInvitation":
+                subject = messages.gameStatus.invitation(this.event.date)
+                break
+            case "gameZusage":
+                subject = messages.gameStatus.zusage(this.event.date)
+                break
+            case "gameAbsage":
+                subject = messages.gameStatus.absage(this.event.date)
+                break
+        }
 
         return {
             mail: {
-                template: "Invitation"
+                template: this.templateName
             },
-            globalVariables: {
-                game: {
-                    date: this.gameDate,
-                    location: this.gameLocation
+            variables: {
+                event: {
+                    location: this.event.location,
+                    date: this.event.date,
+                    name: this.event.name,
+                    subject
                 }
             },
-            recipients
+            recipients: this.recipients
         }
     }
 }

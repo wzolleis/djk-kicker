@@ -1,7 +1,7 @@
 export const spielortOptions = {
     halle: {
         value: 0,
-        label: "Halle" //messages.adminEditGameForm.optionHalle
+        label: "Halle"
     },
     draussen: {
         value: 1,

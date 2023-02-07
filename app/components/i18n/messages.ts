@@ -23,11 +23,12 @@ const messages = {
     save: "Speichern",
     back: "Zurück",
     add: "Hinzufügen",
+    remove: "Entfernen",
     cancel: "Abbruch",
     delete: "Löschen",
     reset: "Zurücksetzen",
     invite: "Einladen",
-    inviteAll: "Alle Einladen",
+    sendMail: "Mail schicken",
     absage: 'Absagen',
     zusage: 'Zusagen',
     details: "Details"
@@ -93,6 +94,7 @@ const messages = {
     noGame: "Kein Spiel vorhanden"
   },
   gameStatus: {
+    invitation: (gameDate: string) => `Einladung für das Spiel am ${gameDate}`,
     zusage: (gameDate: string) => `Das Spiel am ${gameDate} findet statt`,
     absage: (gameDate: string) => `Das Spiel am ${gameDate} wurde abgesagt`
   },
@@ -110,6 +112,16 @@ const messages = {
     name: "Name",
     new: "Neues Spiel",
     deleteExpired: "Spiele löschen"
+  },
+  adminSendMailForm: {
+    selectRecipient: 'Empfänger auswählen',
+    selectTemplate: "Mail Template auswählen",
+    addAllRecipients: 'Alle hinzufügen',
+    removeAllRecipients: 'Alle entfernen',
+    sendMails: "Mails verschicken",
+    invitation: "Einladung",
+    confirmation: "Zusage",
+    cancellation: "Absage"
   },
   adminUsersForm: {
     invitations: "Einladungen"
