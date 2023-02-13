@@ -4,7 +4,7 @@ import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Player} from "@prisma/client";
 import {Form} from "@remix-run/react";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
-import {ActionFunction, json} from "@remix-run/node";
+import {ActionFunction, redirect} from "@remix-run/node";
 import {FormWrapper} from "~/utils/formWrapper.server";
 import invariant from "tiny-invariant";
 import {getPlayerDataForMail} from "~/models/player.server";
@@ -14,8 +14,9 @@ import MainPageContent from "~/components/common/MainPageContent";
 import classNames from "classnames";
 import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
-import {upsertMailServiceStatus} from "~/models/mailservice.server";
-import {createMailData, getGameMailStatus, sendGameMail} from "~/helpers/mail/mailServiceHelper";
+import {createMailData, sendGameMail} from "~/helpers/mail/mailServiceHelper";
+import {createMailServiceRequest} from "~/models/mailservice.server";
+import routeLinks from "~/config/routeLinks";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -50,13 +51,11 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     })
 
     const response = await sendGameMail({mail})
-    const statusResponse = await getGameMailStatus(response.request_id)
-    await upsertMailServiceStatus({
-        response: statusResponse,
-        requestId: response.request_id
-    })
+    // const statusResponse = await getGameMailStatus(response.request_id)
 
-    return json(response)
+    await createMailServiceRequest(response.request_id)
+
+    return redirect(routeLinks.admin.game.sendMail(gameId))
 }
 
 type MailTemplateViewProps = {
@@ -170,7 +169,7 @@ const SendGameMail = () => {
 
     return (
         <div className={"h-screen"}>
-            <Form method={"post"} replace={true}>
+            <Form method={"post"}>
                 <input type={"hidden"} value={includedPlayers.map(p => p.id)} name={"includedPlayers"}/>
                 <input type={"hidden"} value={mailTemplate} name="mailTemplate"/>
                 <MainPageContent>

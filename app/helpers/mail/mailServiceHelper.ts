@@ -82,10 +82,18 @@ export type GameMailJob = {
 
 export type GameMailStatusResponse = {
     "jobs": GameMailJob[]
+    status: number
+    statusText?: string | undefined
+    error?: string | undefined
 }
 
 export const getGameMailStatus = async (requestId: string): Promise<GameMailStatusResponse> => {
     const response: AxiosResponse<GameMailStatusResponse> = await axiosInstance.get(`status/${requestId}`)
-    console.log("game mail status = ", response.data)
-    return response.data
+    console.log("send game mail status = ", `${requestId} - ${response.status} - ${response.statusText}` )
+    return {
+        jobs: response.data.jobs,
+        status: response.status,
+        statusText: response.statusText,
+        error: response.data.error
+    }
 }
