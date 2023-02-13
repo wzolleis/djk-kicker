@@ -40,6 +40,10 @@ export async function getPlayerById(id: Player["id"]) {
     return await prisma.player.findUnique({where: {id}});
 }
 
+export async function getPlayerByMail(email: string) {
+    return await prisma.player.findFirst({where: {email}})
+}
+
 export interface PlayerWithFeedback extends Player {
     feedback: Feedback;
 }

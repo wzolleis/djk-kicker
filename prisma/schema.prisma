@@ -3,6 +3,7 @@
 
 generator client {
   provider      = "prisma-client-js"
+  previewFeatures = ["extendedWhereUnique"]
   binaryTargets = ["native", "windows", "rhel-openssl-1.0.x"]
 }
 
@@ -124,13 +125,20 @@ player Player @relation(fields: [playerId], references: [id],  onDelete: Cascade
 playerId String @unique
 revoked Boolean @default(false)
 expirationDate DateTime
-
-
 }
-
-
 
 model Session {
 id String @id @default(cuid())
 data String @db.VarChar(5000)
+}
+
+model MailServiceStatus {
+    jobId           Int     // ein Job beeinhaltet mehrere Job-Items, die Kombination jobid/playerId ist eindeutig
+    requestId       String  // Die ID des Requests, damit kann man den Status erneut abfragen
+    mailAddress     String   // Die Mailadresse des Empfaengers
+    playerId        String   // Die Spieler-Id wird anhand der Mailadresse zugeordnet
+    jobStatus       String  // Der Job-Status, bsp. "waiting"
+    createdAt       DateTime   @default(now())
+    updatedAt       DateTime   @updatedAt
+    @@unique([jobId, playerId])
 }

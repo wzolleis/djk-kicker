@@ -1,7 +1,7 @@
 import {MailTemplateType} from "~/config/mailTypes";
 import messages from "~/components/i18n/messages";
 
-type GameMail = {
+export type GameMail = {
     mail: {
         template: MailTemplateType
     },
@@ -52,7 +52,7 @@ export class MailBuilder {
 
     buildMail(): GameMail {
         let subject = "unknown subject"
-        switch(this.templateName) {
+        switch (this.templateName) {
             case "testMail":
                 subject = "TestMail - bitte löschen"
                 break

@@ -1,4 +1,4 @@
-import {useDateTime, usePlayers} from "~/utils";
+import {usePlayers} from "~/utils";
 import React, {useState} from "react";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Player} from "@prisma/client";
@@ -6,18 +6,16 @@ import {Form} from "@remix-run/react";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {ActionFunction, json} from "@remix-run/node";
 import {FormWrapper} from "~/utils/formWrapper.server";
-import {MailBuilder} from "~/helpers/mail/mailApiClient";
 import invariant from "tiny-invariant";
 import {getPlayerDataForMail} from "~/models/player.server";
-import {createEncryptedPlayerToken} from "~/utils/token.server";
-import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {findGameById} from "~/models/games.server";
 import messages from "~/components/i18n/messages";
-import axios from "axios";
 import MainPageContent from "~/components/common/MainPageContent";
 import classNames from "classnames";
 import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
+import {upsertMailServiceStatus} from "~/models/mailservice.server";
+import {createMailData, getGameMailStatus, sendGameMail} from "~/helpers/mail/mailServiceHelper";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -44,42 +42,21 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     const playerMailData = await getPlayerDataForMail(includedPlayerIds)
     const host = request.headers.get("host")!;
 
-    const mailApiClient = new MailBuilder({
-        event: {
-            date: useDateTime(game.gameTime),
-            name: game.name,
-            location: messages.commonForm.spielort(game.spielort)
-        },
-        templateName: mailTemplate
+    const mail = await createMailData({
+        game,
+        mailTemplate,
+        playerMailData,
+        host
     })
 
-    for (let i = 0; i < playerMailData.length; i++) {
-        const data = playerMailData[i]
-        const token = await createEncryptedPlayerToken(data.id, gameId);
-        const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId, token})
+    const response = await sendGameMail({mail})
+    const statusResponse = await getGameMailStatus(response.request_id)
+    await upsertMailServiceStatus({
+        response: statusResponse,
+        requestId: response.request_id
+    })
 
-        mailApiClient.addRecipient({
-            mailAddress: data.email,
-            variables: {
-                invitationLink,
-                name: data.name,
-            }
-        })
-    }
-
-    const instance = axios.create({
-        baseURL: process.env.MAILSERVICE_ENDPOINT,
-        timeout: 60000,
-        headers: {
-            'X-API-KEY': process.env.MAILSERVICE_API_KEY,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    const mail = mailApiClient.buildMail()
-    const response = await instance.post('/send', mail)
-    console.log('mail sending response', response.data)
-    return json({})
+    return json(response)
 }
 
 type MailTemplateViewProps = {
@@ -192,65 +169,67 @@ const SendGameMail = () => {
     }
 
     return (
-        <Form method={"post"} replace={true}>
-            <input type={"hidden"} value={includedPlayers.map(p => p.id)} name={"includedPlayers"}/>
-            <input type={"hidden"} value={mailTemplate} name="mailTemplate"/>
-            <MainPageContent>
-                <header className={"flex items-center justify-between"}>
-                    <p className={"font-default-medium text-headline-small text-darkblue"}>{"Mail verschicken"}</p>
-                </header>
-
-                <ContentContainer>
-                    <MailTemplateSelect selected={mailTemplate} onSelect={(mailTemplate: MailTemplateType) => setMailTemplate(mailTemplate)}/>
-                </ContentContainer>
-
-                <ContentContainer className={"mt-3 bg-blue-200"}>
+        <div className={"h-screen"}>
+            <Form method={"post"} replace={true}>
+                <input type={"hidden"} value={includedPlayers.map(p => p.id)} name={"includedPlayers"}/>
+                <input type={"hidden"} value={mailTemplate} name="mailTemplate"/>
+                <MainPageContent>
                     <header className={"flex items-center justify-between"}>
-                        <p className={"font-default-medium text-headline-small text-darkblue"}>{messages.adminSendMailForm.selectRecipient}</p>
+                        <p className={"font-default-medium text-headline-small text-darkblue"}>{"Mail verschicken"}</p>
                     </header>
 
-                    <ButtonContainer>
-                        <DefaultButton className={"bg-green-400"}>
-                            <button type='button' onClick={addAllToIncluded}>{messages.adminSendMailForm.addAllRecipients}</button>
-                        </DefaultButton>
-                        <DefaultButton className={"bg-red-400"}>
-                            <button type='button' onClick={removeAllFromIncluded}>{messages.adminSendMailForm.removeAllRecipients}</button>
-                        </DefaultButton>
-                    </ButtonContainer>
+                    <ContentContainer>
+                        <MailTemplateSelect selected={mailTemplate} onSelect={(mailTemplate: MailTemplateType) => setMailTemplate(mailTemplate)}/>
+                    </ContentContainer>
 
-                    <main className={"mt-5 flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 h-96 overflow-auto"}>
-                        {
-                            allPlayers.map((player: Player) => {
-                                    const selected = isPlayerInIncludedList(player)
-                                    return (
-                                        <div key={player.id} onClick={() => handlePlayerSelection(player)}>
-                                            <div className={classNames({
-                                                "bg-green-200": selected,
-                                                "bg-red-400": !selected,
-                                                "text-white": !selected,
-                                                "text-gray-600": selected,
-                                            }, "flex items-center justify-between border-b")}>
-                                                <div className="p-3 text-lg font-bold">
-                                                    {player.name}
+                    <ContentContainer className={"mt-3 bg-blue-200"}>
+                        <header className={"flex items-center justify-between"}>
+                            <p className={"font-default-medium text-headline-small text-darkblue"}>{messages.adminSendMailForm.selectRecipient}</p>
+                        </header>
+
+                        <ButtonContainer>
+                            <DefaultButton className={"bg-green-400"}>
+                                <button type='button' onClick={addAllToIncluded}>{messages.adminSendMailForm.addAllRecipients}</button>
+                            </DefaultButton>
+                            <DefaultButton className={"bg-red-400"}>
+                                <button type='button' onClick={removeAllFromIncluded}>{messages.adminSendMailForm.removeAllRecipients}</button>
+                            </DefaultButton>
+                        </ButtonContainer>
+
+                        <main className={"mt-5 flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"}>
+                            {
+                                allPlayers.map((player: Player) => {
+                                        const selected = isPlayerInIncludedList(player)
+                                        return (
+                                            <div key={player.id} onClick={() => handlePlayerSelection(player)}>
+                                                <div className={classNames({
+                                                    "bg-green-200": selected,
+                                                    "bg-red-400": !selected,
+                                                    "text-white": !selected,
+                                                    "text-gray-600": selected,
+                                                }, "flex items-center justify-between border-b")}>
+                                                    <div className="p-3 text-lg font-bold">
+                                                        {player.name}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                }
-                            )
-                        }
-                    </main>
-                </ContentContainer>
-            </MainPageContent>
-            <ButtonContainer>
-                <DefaultButton className={"ml-auto"}>
-                    <button type={"submit"}>
-                        <i className={"fa-solid fa-envelopes-bulk mr-2"}/>
-                        {messages.adminSendMailForm.sendMails}
-                    </button>
-                </DefaultButton>
-            </ButtonContainer>
-        </Form>
+                                        )
+                                    }
+                                )
+                            }
+                        </main>
+                    </ContentContainer>
+                </MainPageContent>
+                <ButtonContainer>
+                    <DefaultButton className={"ml-auto"}>
+                        <button type={"submit"}>
+                            <i className={"fa-solid fa-envelopes-bulk mr-2"}/>
+                            {messages.adminSendMailForm.sendMails}
+                        </button>
+                    </DefaultButton>
+                </ButtonContainer>
+            </Form>
+        </div>
     )
 }
 
