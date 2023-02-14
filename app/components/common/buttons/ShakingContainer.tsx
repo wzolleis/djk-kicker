@@ -1,5 +1,5 @@
 import React, {PropsWithChildren, useRef} from "react";
-import {AnimatePresence, motion} from "framer-motion";
+import {motion} from "framer-motion";
 
 type ShakingButtonProps = {
     onClick?: React.MouseEventHandler<HTMLDivElement>,
@@ -13,22 +13,22 @@ const ShakingContainer = ({
                           }: PropsWithChildren<ShakingButtonProps>) => {
     const ref = useRef(0);
     return (
-        <AnimatePresence exitBeforeEnter initial={false}>
-            <motion.div
-                key={ref.current}
-                initial={{y: -30}}
-                animate={{y: 0}}
-                exit={{y: -30}}
-                transition={{duration: .2}}
-                onClick={(e) => {
-                    onClick && onClick(e);
-                    ref.current++;
-                }}
-                className={className}
-            >
-                {children}
-            </motion.div>
-        </AnimatePresence>
+        <motion.div
+            key={ref.current}
+            animate={ref.current === 0 ? {} : {
+                y: [0, 10, -10, 0]
+            }}
+            transition={{
+                type: "spring",
+            }}
+            onClick={(e) => {
+                onClick && onClick(e);
+                ref.current++;
+            }}
+            className={className}
+        >
+            {children}
+        </motion.div>
     );
 }
 
