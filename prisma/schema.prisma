@@ -3,7 +3,6 @@
 
 generator client {
   provider      = "prisma-client-js"
-  previewFeatures = ["extendedWhereUnique"]
   binaryTargets = ["native", "windows", "rhel-openssl-1.0.x"]
 }
 
@@ -137,4 +136,4 @@ model MailServiceRequest {
     requestId       String  // Die ID des Requests, damit kann man den Status erneut abfragen
     createdAt       DateTime   @default(now())
     updatedAt       DateTime   @updatedAt
- }
+}
