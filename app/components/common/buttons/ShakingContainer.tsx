@@ -7,16 +7,16 @@ type ShakingButtonProps = {
 }
 
 const ShakingContainer = ({
-                           children,
-                           className,
-                           onClick,
-                       }: PropsWithChildren<ShakingButtonProps>) => {
+                              children,
+                              className,
+                              onClick,
+                          }: PropsWithChildren<ShakingButtonProps>) => {
     const ref = useRef(0);
     return (
         <motion.div
             key={ref.current}
             animate={ref.current === 0 ? {} : {
-                x: [0, 10, -10, 0]
+                y: [0, 10, -10, 0]
             }}
             transition={{
                 type: "spring",
