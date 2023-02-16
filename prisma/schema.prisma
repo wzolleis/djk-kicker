@@ -134,6 +134,8 @@ data String @db.VarChar(5000)
 model MailServiceRequest {
     id              String   @id @default(cuid())
     requestId       String  // Die ID des Requests, damit kann man den Status erneut abfragen
+    gameId          String?   // Die ID des Spieles fuer das der Request gesendet wurde
     createdAt       DateTime   @default(now())
     updatedAt       DateTime   @updatedAt
 }
+

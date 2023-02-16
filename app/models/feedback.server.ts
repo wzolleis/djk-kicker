@@ -34,20 +34,18 @@ export async function initializePlayers(gameId: string) {
         },
     });
     const players = await prisma.player.findMany();
-    const expirationDate = DateTime.fromJSDate(
-        new Date(game!.gameTime)
-    ).toJSDate();
+    const expirationDate = DateTime.fromJSDate(new Date(game!.gameTime))
+        .plus({years: 1})
+        .toJSDate();
+
     for (const player of players) {
         const token = await prisma.token.findUnique({
-            where: {
-                playerId: player.id,
-            },
+            where: {playerId: player.id,},
         });
         if (!token) {
             await prisma.token.create({
                 data: {
-                    playerId: player.id,
-                    expirationDate: expirationDate,
+                    playerId: player.id, expirationDate: expirationDate,
                 },
             });
         } else {

@@ -3,6 +3,8 @@ import {Feedback, Game} from "@prisma/client";
 import {prisma} from "~/db.server";
 import {getUniqueFeedbackForGameAndPlayer} from "~/models/feedback.server";
 import {deleteMailsForPlayer} from "~/models/admin.mails.server";
+import {deleteTokenForPlayer} from "~/models/token.server";
+import {deleteSessionForPlayer} from "~/models/session.server";
 
 export type {Player} from "@prisma/client";
 
@@ -86,6 +88,8 @@ export async function updatePlayer(id: Player["id"], name: string, email: string
 export async function deletePlayer(id: Player["id"]) {
     return await Promise.all([
         deleteMailsForPlayer(id),
+        deleteTokenForPlayer(id),
+        deleteSessionForPlayer(id),
         prisma.player.delete({where: {id}})
     ]);
 }

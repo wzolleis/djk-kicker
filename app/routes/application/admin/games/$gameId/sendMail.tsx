@@ -2,9 +2,9 @@ import {usePlayers} from "~/utils";
 import React, {useState} from "react";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Player} from "@prisma/client";
-import {Form} from "@remix-run/react";
+import {Form, useActionData} from "@remix-run/react";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
-import {ActionFunction, redirect} from "@remix-run/node";
+import {ActionFunction, json} from "@remix-run/node";
 import {FormWrapper} from "~/utils/formWrapper.server";
 import invariant from "tiny-invariant";
 import {getPlayerDataForMail} from "~/models/player.server";
@@ -14,9 +14,8 @@ import MainPageContent from "~/components/common/MainPageContent";
 import classNames from "classnames";
 import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
-import {createMailData, sendGameMail} from "~/helpers/mail/mailServiceHelper";
+import {createMailData, GameMailStatusResponse, getGameMailStatus, sendGameMail} from "~/helpers/mail/mailServiceHelper";
 import {createMailServiceRequest} from "~/models/mailservice.server";
-import routeLinks from "~/config/routeLinks";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -50,12 +49,12 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
         host
     })
 
-    const response = await sendGameMail({mail})
-    // const statusResponse = await getGameMailStatus(response.request_id)
+    const requestId = await sendGameMail({mail})
+    await createMailServiceRequest({requestId, gameId})
 
-    await createMailServiceRequest(response.request_id)
-
-    return redirect(routeLinks.admin.game.sendMail(gameId))
+    const statusResponse = await getGameMailStatus(requestId)
+    // return redirect(routeLinks.admin.game.sendMail(gameId))
+    return json<GameMailStatusResponse>(statusResponse)
 }
 
 type MailTemplateViewProps = {
@@ -130,6 +129,12 @@ const MailTemplateSelect = ({selected, onSelect}: SelectMailTemplateProps) => {
 }
 
 const SendGameMail = () => {
+    const data = useActionData<GameMailStatusResponse>();
+
+    if (!!data) {
+        console.log('mail response status = ', data)
+    }
+
     const allPlayers = usePlayers()
     const sorted = [...allPlayers].sort()
     const [includedPlayers, setIncludedPlayers] = useState(sorted)
@@ -168,7 +173,7 @@ const SendGameMail = () => {
     }
 
     return (
-        <div className={"h-screen"}>
+        <div className={"min-h-screen"}>
             <Form method={"post"}>
                 <input type={"hidden"} value={includedPlayers.map(p => p.id)} name={"includedPlayers"}/>
                 <input type={"hidden"} value={mailTemplate} name="mailTemplate"/>

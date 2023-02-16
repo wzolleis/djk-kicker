@@ -109,7 +109,7 @@ const BottomNavigationBar = ({admin, player, game}: BottomNavigationBarProps) =>
     const gameId = game?.id
 
     return (
-        <div className="w-full">
+        <div className="w-full pt-10">
             <section className="block fixed inset-x-0 bottom-0 z-10 bg-black shadow">
                 <div className="flex justify-around">
                     <HomeButton playerId={playerId}/>

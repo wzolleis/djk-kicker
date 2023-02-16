@@ -30,6 +30,10 @@ export type MailServiceStatusParam = {
     requestId: string
 }
 
-export const createMailServiceRequest = async (requestId: string) => {
-    await prisma.mailServiceRequest.create({data: {requestId}})
+export const createMailServiceRequest = async ({requestId, gameId} : {requestId: string, gameId: string}) => {
+    return prisma.mailServiceRequest.create({data: {requestId, gameId}})
+}
+
+export const deleteMailServiceRequests = async (gameId: string) => {
+    return prisma.mailServiceRequest.deleteMany({where: {gameId}})
 }
