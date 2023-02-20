@@ -29,6 +29,7 @@ const messages = {
     reset: "Zurücksetzen",
     invite: "Einladen",
     sendMail: "Mail schicken",
+    actionHistory: 'Historie',
     absage: 'Absagen',
     zusage: 'Zusagen',
     details: "Details"
