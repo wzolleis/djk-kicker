@@ -1,8 +1,8 @@
 import {prisma} from "~/db.server";
 import {MailServiceRequest} from "@prisma/client";
 
-export const createMailServiceRequest = async ({requestId, gameId}: { requestId: string, gameId: string }): Promise<MailServiceRequest> => {
-    return prisma.mailServiceRequest.create({data: {requestId, gameId}})
+export const createMailServiceRequest = async ({requestId, gameId, requestType}: { requestId: string, gameId: string, requestType: string }): Promise<MailServiceRequest> => {
+    return prisma.mailServiceRequest.create({data: {requestId, gameId, requestType}})
 }
 
 export const deleteMailServiceRequests = async (gameId: string) => {

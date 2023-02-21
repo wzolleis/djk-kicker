@@ -2,7 +2,7 @@ import {usePlayers} from "~/utils";
 import React, {useState} from "react";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Player} from "@prisma/client";
-import {Form, useActionData} from "@remix-run/react";
+import {Form} from "@remix-run/react";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {ActionFunction, json} from "@remix-run/node";
 import {FormWrapper} from "~/utils/formWrapper.server";
@@ -16,6 +16,7 @@ import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import {createMailData, GameMailStatusResponse, getGameMailStatus, sendGameMail} from "~/helpers/mail/mailServiceHelper";
 import {createMailServiceRequest} from "~/models/mailservice.server";
+import TransitionContainer from "~/components/common/container/transitionContainer";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -50,10 +51,8 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     })
 
     const requestId = await sendGameMail({mail})
-    await createMailServiceRequest({requestId, gameId})
-
+    await createMailServiceRequest({requestId, gameId, requestType: mail.mail.template})
     const statusResponse = await getGameMailStatus(requestId)
-    // return redirect(routeLinks.admin.game.sendMail(gameId))
     return json<GameMailStatusResponse>(statusResponse)
 }
 
@@ -129,12 +128,6 @@ const MailTemplateSelect = ({selected, onSelect}: SelectMailTemplateProps) => {
 }
 
 const SendGameMail = () => {
-    const data = useActionData<GameMailStatusResponse>();
-
-    if (!!data) {
-        console.log('mail response status = ', data)
-    }
-
     const allPlayers = usePlayers()
     const sorted = [...allPlayers].sort()
     const [includedPlayers, setIncludedPlayers] = useState(sorted)
@@ -174,65 +167,67 @@ const SendGameMail = () => {
 
     return (
         <div className={"min-h-screen"}>
-            <Form method={"post"}>
-                <input type={"hidden"} value={includedPlayers.map(p => p.id)} name={"includedPlayers"}/>
-                <input type={"hidden"} value={mailTemplate} name="mailTemplate"/>
-                <MainPageContent>
-                    <header className={"flex items-center justify-between"}>
-                        <p className={"font-default-medium text-headline-small text-darkblue"}>{"Mail verschicken"}</p>
-                    </header>
-
-                    <ContentContainer>
-                        <MailTemplateSelect selected={mailTemplate} onSelect={(mailTemplate: MailTemplateType) => setMailTemplate(mailTemplate)}/>
-                    </ContentContainer>
-
-                    <ContentContainer className={"mt-3 bg-blue-200"}>
+            <TransitionContainer>
+                <Form method={"post"}>
+                    <input type={"hidden"} value={includedPlayers.map(p => p.id)} name={"includedPlayers"}/>
+                    <input type={"hidden"} value={mailTemplate} name="mailTemplate"/>
+                    <MainPageContent>
                         <header className={"flex items-center justify-between"}>
-                            <p className={"font-default-medium text-headline-small text-darkblue"}>{messages.adminSendMailForm.selectRecipient}</p>
+                            <p className={"font-default-medium text-headline-small text-darkblue"}>{"Mail verschicken"}</p>
                         </header>
 
-                        <ButtonContainer>
-                            <DefaultButton className={"bg-green-400"}>
-                                <button type='button' onClick={addAllToIncluded}>{messages.adminSendMailForm.addAllRecipients}</button>
-                            </DefaultButton>
-                            <DefaultButton className={"bg-red-400"}>
-                                <button type='button' onClick={removeAllFromIncluded}>{messages.adminSendMailForm.removeAllRecipients}</button>
-                            </DefaultButton>
-                        </ButtonContainer>
+                        <ContentContainer>
+                            <MailTemplateSelect selected={mailTemplate} onSelect={(mailTemplate: MailTemplateType) => setMailTemplate(mailTemplate)}/>
+                        </ContentContainer>
 
-                        <main className={"mt-5 flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"}>
-                            {
-                                allPlayers.map((player: Player) => {
-                                        const selected = isPlayerInIncludedList(player)
-                                        return (
-                                            <div key={player.id} onClick={() => handlePlayerSelection(player)}>
-                                                <div className={classNames({
-                                                    "bg-green-200": selected,
-                                                    "bg-red-400": !selected,
-                                                    "text-white": !selected,
-                                                    "text-gray-600": selected,
-                                                }, "flex items-center justify-between border-b")}>
-                                                    <div className="p-3 text-lg font-bold">
-                                                        {player.name}
+                        <ContentContainer className={"mt-3 bg-blue-200"}>
+                            <header className={"flex items-center justify-between"}>
+                                <p className={"font-default-medium text-headline-small text-darkblue"}>{messages.adminSendMailForm.selectRecipient}</p>
+                            </header>
+
+                            <ButtonContainer>
+                                <DefaultButton className={"bg-green-400"}>
+                                    <button type='button' onClick={addAllToIncluded}>{messages.adminSendMailForm.addAllRecipients}</button>
+                                </DefaultButton>
+                                <DefaultButton className={"bg-red-400"}>
+                                    <button type='button' onClick={removeAllFromIncluded}>{messages.adminSendMailForm.removeAllRecipients}</button>
+                                </DefaultButton>
+                            </ButtonContainer>
+
+                            <main className={"mt-5 flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"}>
+                                {
+                                    allPlayers.map((player: Player) => {
+                                            const selected = isPlayerInIncludedList(player)
+                                            return (
+                                                <div key={player.id} onClick={() => handlePlayerSelection(player)}>
+                                                    <div className={classNames({
+                                                        "bg-green-200": selected,
+                                                        "bg-red-400": !selected,
+                                                        "text-white": !selected,
+                                                        "text-gray-600": selected,
+                                                    }, "flex items-center justify-between border-b")}>
+                                                        <div className="p-3 text-lg font-bold">
+                                                            {player.name}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )
-                                    }
-                                )
-                            }
-                        </main>
-                    </ContentContainer>
-                </MainPageContent>
-                <ButtonContainer>
-                    <DefaultButton className={"ml-auto"}>
-                        <button type={"submit"}>
-                            <i className={"fa-solid fa-envelopes-bulk mr-2"}/>
-                            {messages.adminSendMailForm.sendMails}
-                        </button>
-                    </DefaultButton>
-                </ButtonContainer>
-            </Form>
+                                            )
+                                        }
+                                    )
+                                }
+                            </main>
+                        </ContentContainer>
+                    </MainPageContent>
+                    <ButtonContainer>
+                        <DefaultButton className={"ml-auto"}>
+                            <button type={"submit"}>
+                                <i className={"fa-solid fa-envelopes-bulk mr-2"}/>
+                                {messages.adminSendMailForm.sendMails}
+                            </button>
+                        </DefaultButton>
+                    </ButtonContainer>
+                </Form>
+            </TransitionContainer>
         </div>
     )
 }

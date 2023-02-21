@@ -60,10 +60,11 @@ export type SendMailResponse = {
 
 export const sendGameMail = async ({mail: gameMail}: SendMailParam) => {
     const mail = new Mail(gameMail.mail.template)
-    mail.addVariable(gameMail.variables.event)
+    mail.addVariable(gameMail.variables)
     gameMail.recipients.forEach((recipient) => {
         mail.addRecipient(new Recipient(recipient.mailAddress, recipient.variables))
     })
+
     return await client.send(mail)
 }
 
@@ -79,11 +80,11 @@ export type GameMailStatusResponse = {
 
 export const getGameMailStatus = async (requestId: string): Promise<GameMailStatusResponse> => {
     const response: DriftmailGetStatusRequestResponse = await client.getStatus(requestId)
-    const jobs: GameMailJob[] = response.map(one => {
+    const jobs: GameMailJob[] = response.map(job => {
         return {
-            mailAddress: one.mail_address,
-            status: one.status,
-            requestId: one.request_id
+            mailAddress: job.mail_address,
+            status: job.status,
+            requestId: job.request_id
         }
     })
 

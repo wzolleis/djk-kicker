@@ -4,6 +4,9 @@ import {SendMailResponse} from "~/config/mailTypes";
 
 // Falls komische Fehler beim Versenden auftreten, mal hier nachlesen, viel Glück :D
 // https://stackoverflow.com/questions/66317125/node-js-nodemailer-error-wrong-version-number-invalid-greeting
+/**
+ * @deprecated wird nicht mehr verwendet, verwende jetzt mailServiceHelper
+ */
 const mailConfig = {
     host: process.env.MAIL_HOST,
     port: Number.parseInt(process.env.MAIL_PORT || '25'),
@@ -17,10 +20,16 @@ const mailConfig = {
     }
 }
 
+/**
+ * @deprecated wird nicht mehr verwendet, verwende jetzt mailServiceHelper
+ */
 const transport = nodemailer.createTransport({
     ...mailConfig
 })
 
+/**
+ * @deprecated wird nicht mehr verwendet, verwende jetzt mailServiceHelper
+ */
 const mailSender = async ({
                               mailTo,
                               mailFrom,
@@ -62,6 +71,9 @@ const mailSender = async ({
     }
 }
 
+/**
+ * @deprecated wird nicht mehr verwendet, verwende jetzt mailServiceHelper
+ */
 const sendTestMail = async ({numberOfMails}: { numberOfMails: number } = {numberOfMails: 1}) => {
     const mailFrom = process.env.MAIL_FROM
     const mailTo = process.env.TEST_MAIL_TO
@@ -80,6 +92,9 @@ const sendTestMail = async ({numberOfMails}: { numberOfMails: number } = {number
     invariant(!!mailTo)
 }
 
+/**
+ * @deprecated wird nicht mehr verwendet, verwende jetzt mailServiceHelper
+ */
 const sendMail = async ({
                             mailTo,
                             subject,

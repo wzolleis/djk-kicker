@@ -135,6 +135,7 @@ model MailServiceRequest {
     id              String   @id @default(cuid())
     requestId       String  // Die ID des Requests, damit kann man den Status erneut abfragen
     gameId          String?   // Die ID des Spieles fuer das der Request gesendet wurde
+    requestType     String?   // Der Typ des Requests
     createdAt       DateTime   @default(now())
     updatedAt       DateTime   @updatedAt
 }

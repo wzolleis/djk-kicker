@@ -10,12 +10,13 @@ import {DeleteGameButton} from "~/components/game/admin/functionButtons/deleteGa
 import {SendMailButton} from "~/components/game/admin/games/SendMailButton";
 import {EditGameButton} from "~/components/game/admin/functionButtons/editGame";
 import {GameActionHistoryButton} from "~/components/game/admin/games/GameActionHistoryButton";
+import TransitionContainer from "~/components/common/container/transitionContainer";
 
 type GamesListProps = {
     games: Game[];
 }
 
-const GameView = ({game}: { game: Game}) => {
+const GameView = ({game}: { game: Game }) => {
     const gameStatusClass = {
         "text-green-500": game.status === 'Zusage',
         "text-red-500": game.status === "Absage"
@@ -62,31 +63,33 @@ const Games = () => {
     const {games} = useAdminGameData()
 
     return (
-        <ContentContainer className={"mt-5"}>
-            <main className={"space-y-4"}>
-                <div className={"flex justify-between items-center bg-blue-400"}>
-                    <PageHeader title={messages.appmenu.games}/>
-                    <div className="md:px-3 text-lg text-gray-600 flex">
-                        <NavLink to={"deleteExpired"}>
-                            <button
-                                className="ml-auto p-3 text-slate-800 rounded-l-lg hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
-                                <i className={"fa fa-trash"}/>
-                                <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.deleteExpired}</span>
-                            </button>
-                        </NavLink>
+        <TransitionContainer>
+            <ContentContainer className={"mt-5"}>
+                <main className={"space-y-4"}>
+                    <div className={"flex justify-between items-center bg-blue-400"}>
+                        <PageHeader title={messages.appmenu.games}/>
+                        <div className="md:px-3 text-lg text-gray-600 flex">
+                            <NavLink to={"deleteExpired"}>
+                                <button
+                                    className="ml-auto p-3 text-slate-800 rounded-l-lg hover:text-blue-600 text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                                    <i className={"fa fa-trash"}/>
+                                    <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.deleteExpired}</span>
+                                </button>
+                            </NavLink>
 
-                        <NavLink to={"new"}>
-                            <button
-                                className="ml-auto p-3 text-slate-800 hover:text-blue-600 rounded-r-lg text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
-                                <i className={"fa fa-plus"}/>
-                                <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.new}</span>
-                            </button>
-                        </NavLink>
+                            <NavLink to={"new"}>
+                                <button
+                                    className="ml-auto p-3 text-slate-800 hover:text-blue-600 rounded-r-lg text-sm bg-white hover:bg-slate-100 border border-slate-200 font-small md:font-medium px-4 py-2 inline-flex space-x-1 items-center">
+                                    <i className={"fa fa-plus"}/>
+                                    <span className={"hidden lg:inline px-1"}>{messages.adminGamesForm.new}</span>
+                                </button>
+                            </NavLink>
+                        </div>
                     </div>
-                </div>
-                <GamesList games={games ?? []}/>
-            </main>
-        </ContentContainer>
+                    <GamesList games={games ?? []}/>
+                </main>
+            </ContentContainer>
+        </TransitionContainer>
     );
 };
 

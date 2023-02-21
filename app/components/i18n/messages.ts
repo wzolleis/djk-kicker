@@ -62,7 +62,18 @@ const messages = {
     minute: "Minuten",
     spielort: (spielortOption: string) =>
       Number.parseInt(spielortOption) === gameLocations.Halle ? messages.adminEditGameForm.optionHalle : messages.adminEditGameForm.optionDraussen,
-    gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => (gameDateIsInThePast ? "(Game over)" : "")
+    gameOverCommentOrNothing: (gameDateIsInThePast: boolean) => (gameDateIsInThePast ? "(Game over)" : ""),
+    requestType: {
+      gameInvitation: 'Einladung',
+      gameZusage: 'Zusage',
+      gameAbsage: 'Absage',
+      testMail: 'Test Mail',
+      unknownRequest: 'Request'
+    },
+    mailStatus: {
+      sent: 'Gesendet',
+      waiting: 'Wartet'
+    }
   },
   dashboard: {
     nextGame: 'Nächstes Spiel',
@@ -284,18 +295,8 @@ const messages = {
     mailBodyLabel: "Nachricht",
     mailReceiver: "An:",
     sendInvitationBtn: "Senden",
-    sendTestMailBtn: "Test-Mail",
     spielort: (optionValue: string) => `${Number.parseInt(optionValue) === spielortOptions.halle.value ? "in der Halle" : "draußen"}`,
     mailSubjectLabel: "Betreff",
-    mailBody: (datum: string) => `Hallo Spieler
-Einladung für das Spiel am ${datum}.
-Spielort: Halle/Draußen 
-
-Bitte klicke auf die Einladung und teile uns mit, ob Du kommen kannst.
-Verwende den Link bitte auch, wenn Du Deine Entscheidung nochmal ändern möchtest.
-
-Vielen Dank 
-`
   },
   deletePlayerForm: {
     confirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" löschen ?`
