@@ -4,6 +4,7 @@ import {DateTime} from "luxon";
 import {deleteFeedbackForGame, initializePlayers} from "~/models/feedback.server";
 import {GameStatus} from "~/config/admin.game.constants";
 import {deleteGameActionsByIds, deleteMailsForGame, findActionsForGame} from "~/models/admin.mails.server";
+import {deleteMailServiceRequests} from "~/models/mailservice.server";
 
 export const findAllGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
@@ -38,7 +39,7 @@ export const createGame = async (
             spielort: location,
         },
     });
-    initializePlayers(id);
+    await initializePlayers(id);
 };
 
 export const updateGame = async (game: Game) => {
@@ -57,6 +58,7 @@ export const deleteGame = async (gameId: string) => {
             deleteMailsForGame(gameActionIds),
             deleteGameActionsByIds(gameActionIds),
             deleteFeedbackForGame(gameId),
+            deleteMailServiceRequests(gameId),
             prisma.game.delete({where: {id: gameId}})
         ]
     )

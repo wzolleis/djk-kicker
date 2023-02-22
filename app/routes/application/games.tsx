@@ -4,7 +4,7 @@ const Games = () => {
 
 
     return (
-        <div className="h-full min-h-screen">
+        <div className="min-h-screen">
             <Outlet></Outlet>
         </div>
     )

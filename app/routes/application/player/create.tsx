@@ -4,7 +4,7 @@ import CreatePlayerForm from "~/components/player/CreatePlayerForm";
 import {getQueryParams} from "~/utils";
 import PageHeader from "~/components/common/PageHeader";
 import messages from "~/components/i18n/messages";
-import {createPlayer} from "~/models/player.server";
+import {createPlayer, getPlayerByMail} from "~/models/player.server";
 import {createFeedback} from "~/models/feedback.server";
 import invariant from "tiny-invariant";
 import routeLinks from "~/config/routeLinks";
@@ -63,11 +63,13 @@ export const action: ActionFunction = async ({
     if (intent === "cancel") {
         redirectTarget = gameid ? routeLinks.game(gameid) : routeLinks.dashboard
     } else {
+        const playerByMail = await getPlayerByMail(playerMail)
+        invariant(playerByMail == null, '"Es gibt schon einen Spieler mit der Mailadresse')
         const player = await createPlayer(playerName.trim(), playerMail.trim());
         if (!!gameid) {
             invariant(typeof playerStatus === "string", "playerStatus");
             invariant(typeof note === "string", "note");
-            await createFeedback(player.id, gameid, parseInt(playerStatus), note);
+            await createFeedback({playerId: player.id, gameId: gameid, status: parseInt(playerStatus), note});
             await sendGameInvitation({request, gameId: gameid, playerId: player.id})
             redirectTarget = routeLinks.game(gameid);
         }

@@ -182,6 +182,7 @@ export default function App() {
     const {nextGame, user, userAuthentication} = data
     const player = userAuthentication?.player
 
+
     const location = useLocation()
     const rootScreen = location.pathname === "/"
 
@@ -194,27 +195,25 @@ export default function App() {
             <Links/>
         </head>
         <body className="h-full">
-        <div className="flex h-full min-h-screen flex-col">
-            <div>
-                <main className="flex h-full">
-                    <div className="flex-1 p-4 px-4 lg:px-10">
-                        <Toaster/>
-                        <div className={"mb-20 md:mb-5"}>
-                            <TopNavBar appMenu={appMenu.app} user={user ?? undefined}/>
-                            <GameBanner game={nextGame}/>
-                            <Greeting player={player} showGreeting={showGreeting}/>
-                            <RootScreen show={rootScreen} nextGame={nextGame} player={player}/>
-                            <Outlet/>
-                            <Form method={"post"} action={routeLinks.application}>
-                                <input type={"hidden"} name="nextGameId" value={nextGame?.id}/>
-                                <input type={"hidden"} name="playerId" value={player?.id}/>
-                                <BottomNavigationBar admin={user ?? undefined} game={nextGame}
-                                                     player={player}/>
-                            </Form>
-                        </div>
+        <div className="flex flex-col">
+            <main className="flex">
+                <div className="flex-1 p-4 px-4 lg:px-10">
+                    <Toaster/>
+                    <div className={"mb-20 md:mb-5"}>
+                        <TopNavBar appMenu={appMenu.app} user={user ?? undefined}/>
+                        <GameBanner game={nextGame}/>
+                        <Greeting player={player} showGreeting={showGreeting}/>
+                        <RootScreen show={rootScreen} nextGame={nextGame} player={player}/>
+                        <Outlet/>
+                        <Form method={"post"} action={routeLinks.application}>
+                            <input type={"hidden"} name="nextGameId" value={nextGame?.id}/>
+                            <input type={"hidden"} name="playerId" value={player?.id}/>
+                            <BottomNavigationBar admin={user ?? undefined} game={nextGame}
+                                                 player={player}/>
+                        </Form>
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
         </div>
         <ScrollRestoration/>
         <Scripts/>
