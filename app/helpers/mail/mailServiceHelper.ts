@@ -6,8 +6,7 @@ import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {Game} from "@prisma/client";
 import {MailTemplateType} from "~/config/mailTypes";
 import {PlayerMailData} from "~/models/player.server";
-import {DriftmailClient, Mail, Recipient} from "driftmail";
-import {DriftmailGetStatusRequestResponse} from "driftmail/build/GetStatusRequestResponse";
+import {DriftmailClient, DriftMailStatusResponse, Mail, Recipient} from "driftmail";
 
 type CreateMailParams = {
     game: Game,
@@ -79,8 +78,9 @@ export type GameMailStatusResponse = {
 }
 
 export const getGameMailStatus = async (requestId: string): Promise<GameMailStatusResponse> => {
-    const response: DriftmailGetStatusRequestResponse = await client.getStatus(requestId)
-    const jobs: GameMailJob[] = response.map(job => {
+    const response: DriftMailStatusResponse = await client.getStatus(requestId)
+    // todo: jetzt kann man hier schon nach failed/success gruppieren
+    const jobs: GameMailJob[] = response.getAll().map(job => {
         return {
             mailAddress: job.mail_address,
             status: job.status,

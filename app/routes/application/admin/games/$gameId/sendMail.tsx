@@ -51,7 +51,7 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     })
 
     const requestId = await sendGameMail({mail})
-    await createMailServiceRequest({requestId, gameId, requestType: mail.mail.template})
+    await createMailServiceRequest({requestId, gameId, requestType: mail.mail.template, requestPayload: JSON.stringify(mail)})
     const statusResponse = await getGameMailStatus(requestId)
     return json<GameMailStatusResponse>(statusResponse)
 }

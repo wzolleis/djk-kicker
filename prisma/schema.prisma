@@ -84,11 +84,11 @@ model Feedback {
 model Player {
   id              String            @id @default(cuid())
   name            String
-  email           String
+  email           String             @unique
   feedback        Feedback[]
   mails           Mail[]
   DefaultFeedback DefaultFeedback[]
-  Token Token[]
+  Token           Token[]
 }
 
 model DefaultFeedback {
@@ -135,7 +135,8 @@ model MailServiceRequest {
     id              String   @id @default(cuid())
     requestId       String  // Die ID des Requests, damit kann man den Status erneut abfragen
     gameId          String?   // Die ID des Spieles fuer das der Request gesendet wurde
-    requestType     String?   // Der Typ des Requests
+    requestType     String?   // Der Typ des Requests (z.B. Einladung, zusage, absage,testmail)
+    requestPayload  String?   @db.VarChar(50000) // die Daten fuer den Request, nützlich falls Fehler auftreten
     createdAt       DateTime   @default(now())
     updatedAt       DateTime   @updatedAt
 }

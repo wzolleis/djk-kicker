@@ -1,7 +1,7 @@
 import type {Player} from "@prisma/client";
-import {Feedback, Game} from "@prisma/client";
+import {Feedback} from "@prisma/client";
 import {prisma} from "~/db.server";
-import {getUniqueFeedbackForGameAndPlayer} from "~/models/feedback.server";
+import {deleteFeedbackForPlayer, getUniqueFeedbackForGameAndPlayer} from "~/models/feedback.server";
 import {deleteMailsForPlayer} from "~/models/admin.mails.server";
 import {deleteTokenForPlayer} from "~/models/token.server";
 import {deleteSessionForPlayer} from "~/models/session.server";
@@ -43,6 +43,7 @@ export async function getPlayerById(id: Player["id"]) {
 }
 
 export async function getPlayerByMail(email: string) {
+    // es gibt nur einen Player, da die mail unique sein muss
     return await prisma.player.findFirst({where: {email}})
 }
 
@@ -50,7 +51,7 @@ export interface PlayerWithFeedback extends Player {
     feedback: Feedback;
 }
 
-export async function getPlayersWithUniqueFeedbackForGame(gameId: Game["id"]): Promise<PlayerWithFeedback[]> {
+export async function getPlayersWithUniqueFeedbackForGame(gameId: string): Promise<PlayerWithFeedback[]> {
     const playersWithFeedback: PlayerWithFeedback[] = [];
     const players = await prisma.player.findMany();
     for (const player of players) {
@@ -64,7 +65,7 @@ export async function getPlayersWithUniqueFeedbackForGame(gameId: Game["id"]): P
     return playersWithFeedback;
 }
 
-export async function createPlayer(name: string, email: string) {
+export async function createPlayer(name: string, email: string): Promise<Player> {
     return await prisma.player.create({
         data: {
             name,
@@ -73,7 +74,7 @@ export async function createPlayer(name: string, email: string) {
     });
 }
 
-export async function updatePlayer(id: Player["id"], name: string, email: string) {
+export async function updatePlayer(id: string, name: string, email: string) {
     return await prisma.player.update({
         where: {
             id,
@@ -85,8 +86,9 @@ export async function updatePlayer(id: Player["id"], name: string, email: string
     });
 }
 
-export async function deletePlayer(id: Player["id"]) {
+export async function deletePlayer(id: string) {
     return await Promise.all([
+        deleteFeedbackForPlayer(id),
         deleteMailsForPlayer(id),
         deleteTokenForPlayer(id),
         deleteSessionForPlayer(id),
