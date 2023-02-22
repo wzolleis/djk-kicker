@@ -1,35 +1,12 @@
-import {GameMail} from "~/helpers/mail/mailApiClient";
 import {prisma} from "~/db.server";
-import {GameMailStatusResponse} from "~/helpers/mail/mailServiceHelper";
+import {MailServiceRequest} from "@prisma/client";
 
-export type MailServiceJob =
-    {
-        "id": string
-        "job_id": number,
-        "project_id": string
-        "request_id": string,
-        "mail_address": string,
-        "status": string
-    }
-
-export type MailServiceRequest = {
-    mailData: GameMail,
-    gameId: string,
-    status: number
-    requestType: string
-
-    requestId: string
+export const createMailServiceRequest = async ({requestId, gameId, requestType, requestPayload}: { requestId: string, gameId: string, requestType: string, requestPayload: string }): Promise<MailServiceRequest> => {
+    return prisma.mailServiceRequest.create({data: {requestId, gameId, requestType, requestPayload}})
 }
 
-export type MailServiceStatusResponse = {
-    jobs: MailServiceJob[]
+export const deleteMailServiceRequests = async (gameId: string) => {
+    return prisma.mailServiceRequest.deleteMany({where: {gameId}})
 }
 
-export type MailServiceStatusParam = {
-    response: GameMailStatusResponse,
-    requestId: string
-}
-
-export const createMailServiceRequest = async (requestId: string) => {
-    await prisma.mailServiceRequest.create({data: {requestId}})
-}
+export const findMailRequestByGameId = async ({gameId}: { gameId: string }): Promise<MailServiceRequest[]> => prisma.mailServiceRequest.findMany({where: {gameId}})

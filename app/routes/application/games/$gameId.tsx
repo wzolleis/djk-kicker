@@ -22,8 +22,7 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({params, request}) => {
     invariant(params.gameId, "expected gameId in url parameters");
     const gameId = params.gameId;
-    const players: PlayerWithFeedback[] =
-        await getPlayersWithUniqueFeedbackForGame(gameId);
+    const players: PlayerWithFeedback[] = await getPlayersWithUniqueFeedbackForGame(gameId);
     const {isAuthenticated, cookieHeader, player, isFirstAuthentication} = await authenticatePlayer(request);
 
     if (player && isFirstAuthentication) {

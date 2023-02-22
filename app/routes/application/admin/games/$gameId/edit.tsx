@@ -53,9 +53,6 @@ export const action: ActionFunction = async ({params, request}) => {
         };
         await updateGame(toUpdate)
         return redirect(routeLinks.admin.games);
-    } else if (gameFromForm.intent === "invite") {
-        return redirect(routeLinks.admin.game.invitation(params.gameId!))
-
     } else if (gameFromForm.intent === "delete") {
         await deleteGame(gameId);
         return redirect(routeLinks.admin.games);

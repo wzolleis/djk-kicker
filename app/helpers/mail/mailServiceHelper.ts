@@ -6,7 +6,7 @@ import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 import {Game} from "@prisma/client";
 import {MailTemplateType} from "~/config/mailTypes";
 import {PlayerMailData} from "~/models/player.server";
-import axios, {AxiosResponse} from "axios";
+import {DriftmailClient, DriftMailStatusResponse, Mail, Recipient} from "driftmail";
 
 type CreateMailParams = {
     game: Game,
@@ -17,14 +17,7 @@ type CreateMailParams = {
     host: string
 }
 
-const axiosInstance = axios.create({
-    baseURL: process.env.MAILSERVICE_ENDPOINT,
-    timeout: 60000,
-    headers: {
-        'X-API-KEY': process.env.MAILSERVICE_API_KEY,
-        'Content-Type': 'application/json'
-    }
-});
+const client = new DriftmailClient()
 
 export const createMailData = async ({game, mailTemplate, playerMailData, host}: CreateMailParams): Promise<GameMail> => {
     const gameId = game.id
@@ -64,36 +57,36 @@ export type SendMailResponse = {
     request_id: string
 }
 
-export const sendGameMail = async ({mail}: SendMailParam) => {
-    const response: AxiosResponse<SendMailResponse> = await axiosInstance.post('/send', mail)
-    console.log('mail sending response', response.data)
-    return response.data
+export const sendGameMail = async ({mail: gameMail}: SendMailParam) => {
+    const mail = new Mail(gameMail.mail.template)
+    mail.addVariable(gameMail.variables)
+    gameMail.recipients.forEach((recipient) => {
+        mail.addRecipient(new Recipient(recipient.mailAddress, recipient.variables))
+    })
+
+    return await client.send(mail)
 }
 
 export type GameMailJob = {
-    id: string
-    job_id: number,
-    project_id: string,
-    request_id: string,
-    mail_address: string,
     status: string
+    requestId: string
+    mailAddress: string
 }
 
-
 export type GameMailStatusResponse = {
-    "jobs": GameMailJob[]
-    status: number
-    statusText?: string | undefined
-    error?: string | undefined
+    jobs: GameMailJob[]
 }
 
 export const getGameMailStatus = async (requestId: string): Promise<GameMailStatusResponse> => {
-    const response: AxiosResponse<GameMailStatusResponse> = await axiosInstance.get(`status/${requestId}`)
-    console.log("send game mail status = ", `${requestId} - ${response.status} - ${response.statusText}` )
-    return {
-        jobs: response.data.jobs,
-        status: response.status,
-        statusText: response.statusText,
-        error: response.data.error
-    }
+    const response: DriftMailStatusResponse = await client.getStatus(requestId)
+    // todo: jetzt kann man hier schon nach failed/success gruppieren
+    const jobs: GameMailJob[] = response.getAll().map(job => {
+        return {
+            mailAddress: job.mail_address,
+            status: job.status,
+            requestId: job.request_id
+        }
+    })
+
+    return {jobs}
 }

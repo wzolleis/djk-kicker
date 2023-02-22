@@ -1,4 +1,5 @@
 import {useTransition} from "@remix-run/react";
+import {PropsWithChildren} from "react";
 
 export type SubmitButtonProps = {
     className?: string
@@ -15,7 +16,7 @@ export type SubmitButtonProps = {
     showTransitionSpinner?: boolean
 }
 
-const SubmitButton = (props: SubmitButtonProps) => {
+const SubmitButton = (props: PropsWithChildren<SubmitButtonProps>) => {
     const transition = useTransition()
     let activeTransition = transition.state !== "idle"
     let label = ''
@@ -32,6 +33,8 @@ const SubmitButton = (props: SubmitButtonProps) => {
             break
     }
 
+    const showTransitionSpinner = !!props.showTransitionSpinner && activeTransition
+
     return (
         <button
             type={props.type ?? "submit"}
@@ -41,8 +44,10 @@ const SubmitButton = (props: SubmitButtonProps) => {
             className={props.className}
         >
             {
-                !!props.showTransitionSpinner && activeTransition &&
-                <p className={"fa fa-spinner animate-spin mr-1"}/>
+                showTransitionSpinner && <p className={"fa fa-spinner animate-spin mr-1"}/>
+            }
+            {
+                !showTransitionSpinner && props.children
             }
             {label}
         </button>

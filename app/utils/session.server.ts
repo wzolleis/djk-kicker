@@ -23,7 +23,7 @@ const {getSession, commitSession, destroySession} =
             secure: process.env.ENVIRONMENT === "production",
             secrets: [sessionSecret],
             path: "/",
-            maxAge: 60 * 60 * 24 * 7,
+            maxAge: 60 * 60 * 24 * 360,
             httpOnly: true,
         },
     });
@@ -110,11 +110,3 @@ async function setSession(
 function sessionHasPlayer(session: Session) {
     return !!session.get("player");
 }
-
-// function findGameTokenFromSession(
-//     session: Session,
-//     gameId: string
-// ): PlayerToken | null {
-//     const token = session.get("token");
-//     return token[gameId];
-// }
