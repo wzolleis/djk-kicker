@@ -46,16 +46,16 @@ export async function authenticatePlayer(request: Request) {
     const token = getQueryParameter(request, "token", false);
     const decryptedToken = decryptPlayerToken(token);
     const session = await getUserSession(request);
-    const playerId = decryptedToken?.playerId;
+    const playerId = decryptedToken?.playerId || session.get("player")?.id;
     if (
-        session.has("player") &&
+        session.get("player") &&
         (await playerHasValidToken(session.get("player").id))
     ) {
         return { isAuthenticated: true, session, playerId };
     }
     if (playerId && decryptedToken) {
         const isAuthenticated = await checkToken(decryptedToken);
-        session.set("player", getPlayerById(playerId));
+        session.set("player", await getPlayerById(playerId));
         return { isAuthenticated: isAuthenticated, session, playerId };
     }
     return { isAuthenticated: false, session, playerId };

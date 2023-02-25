@@ -7,7 +7,6 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import GameSummary from "~/components/game/GameSummary";
 import Players from "~/components/game/Players";
-import routeLinks from "~/config/routeLinks";
 import type { PlayerWithFeedback } from "~/models/player.server";
 import { getPlayersWithUniqueFeedbackForGame } from "~/models/player.server";
 import { useNextGame } from "~/utils/gameUtils";

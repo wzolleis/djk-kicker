@@ -254,7 +254,7 @@ export default function App() {
             <body className="h-full">
                 <div className="flex flex-col">
                     <main className="flex">
-                        <div className="flex-1 p-4 px-4 lg:px-10">
+                        <div className="flex-1 ">
                             <Toaster />
                             <div className={"mb-20 md:mb-5"}>
                                 <TopNavBar
@@ -271,7 +271,9 @@ export default function App() {
                                     nextGame={nextGame}
                                     player={player}
                                 />
-                                <Outlet />
+                                <div className={"mt-5 px-4 md:px-10"}>
+                                    <Outlet />
+                                </div>
                                 <Form
                                     method={"post"}
                                     action={routeLinks.application}>
