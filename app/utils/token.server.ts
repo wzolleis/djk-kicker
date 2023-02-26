@@ -1,14 +1,13 @@
-import { prisma } from "~/db.server";
-import type { JWTDecryptResult } from "jose";
+import {Token} from "@prisma/client";
+import type {KeyObject} from "crypto";
+import {createSecretKey} from "crypto";
+import type {JWTDecryptResult} from "jose";
 import * as jose from "jose";
-import type { KeyObject } from "crypto";
-import { createSecretKey } from "crypto";
-import type { AdminTokenOptions } from "~/models/classes/AdminTokenOption";
-import { DateTime, Interval } from "luxon";
-import { PlayerToken } from "~/models/classes/PlayerToken";
-import { getPlayerById } from "~/models/player.server";
-import { Player, Token } from "@prisma/client";
-import { getPlayerToken } from "~/models/token.server";
+import {DateTime} from "luxon";
+import type {AdminTokenOptions} from "~/models/classes/AdminTokenOption";
+import {PlayerToken} from "~/models/classes/PlayerToken";
+import {getPlayerById} from "~/models/player.server";
+import {getPlayerToken} from "~/models/token.server";
 
 function createEncryptionArguments() {
     const algorithm: string = "aes-256-ctr";
@@ -53,24 +52,15 @@ function decryptData(data: string) {
     return decipher.update(data, "base64url", "utf8") + decipher.final("utf8");
 }
 
-async function getTokenForGame(gameId: string): Promise<string> {
-    const game = await prisma.game.findUnique({
-        where: {
-            id: gameId,
-        },
-    });
-    return game!.token;
-}
-
 export async function createEncryptedPlayerToken(
     playerId: string,
-    gameId: string
 ) {
-    const playerToken = await getPlayerToken(playerId, gameId);
+    const playerToken = await getPlayerToken(playerId);
     return encryptData(playerToken);
 }
 
-export function decryptPlayerToken(encryptedToken: string): Token {
+export function decryptPlayerToken(encryptedToken?: string): Token | undefined {
+    if (!encryptedToken) return undefined;
     const decryptedToken = decryptData(encryptedToken);
     return JSON.parse(decryptedToken.toString());
 }
@@ -90,6 +80,17 @@ export async function verifyToken(playerToken: PlayerToken) {
     return { isAuthenticated, player, playerToken };
 }
 
+export async function checkToken(providedToken: Token) {
+    try {
+        const token = await getPlayerToken(providedToken.playerId);
+        if (token && !token.revoked && !hasTokenExpired(token.expirationDate))
+            return true;
+    } catch (e) {
+        return false;
+    }
+    return false;
+}
+
 function hasTokenExpired(tokenExpiresAt: Token["expirationDate"]) {
     const expirationDate = DateTime.fromJSDate(new Date(tokenExpiresAt));
     return expirationDate < DateTime.now();
@@ -97,7 +98,7 @@ function hasTokenExpired(tokenExpiresAt: Token["expirationDate"]) {
 
 export async function playerHasValidToken(playerId: string): Promise<boolean> {
     try {
-        const token = await getPlayerToken(playerId, undefined, true);
+        const token = await getPlayerToken(playerId, true);
         return !token.revoked && !hasTokenExpired(token.expirationDate);
     } catch (e) {
         return false;
@@ -107,13 +108,6 @@ export async function playerHasValidToken(playerId: string): Promise<boolean> {
 export async function createEncryptedAdminToken(
     adminTokenOptions: AdminTokenOptions
 ): Promise<string> {
-    const diff = Interval.fromDateTimes(
-        DateTime.now(),
-        adminTokenOptions.expires_at
-    );
-    const days = Math.floor(diff.length("days"));
-    const expirationTime = `${days}d`;
-
     const secretKey: KeyObject = createSecretKey(
         getArrayBufferFromSecret(process.env.JWT_SECRET!)
     );

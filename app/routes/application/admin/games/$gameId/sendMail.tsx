@@ -7,16 +7,14 @@ import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {ActionFunction, json} from "@remix-run/node";
 import {FormWrapper} from "~/utils/formWrapper.server";
 import invariant from "tiny-invariant";
-import {getPlayerDataForMail} from "~/models/player.server";
-import {findGameById} from "~/models/games.server";
 import messages from "~/components/i18n/messages";
 import MainPageContent from "~/components/common/MainPageContent";
 import classNames from "classnames";
 import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
-import {createMailData, GameMailStatusResponse, getGameMailStatus, sendGameMail} from "~/helpers/mail/mailServiceHelper";
-import {createMailServiceRequest} from "~/models/mailservice.server";
 import TransitionContainer from "~/components/common/container/transitionContainer";
+import {MailService} from "~/helpers/mail/mailService";
+import {DriftMailStatusResponse} from "driftmail";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -30,30 +28,20 @@ export type SendMailFormFields = typeof SendMailFormFieldValues[number]
 export const action: ActionFunction = async ({request, params: {gameId}}) => {
     invariant(typeof gameId === 'string')
     const formData = await request.formData();
+    const host = request.headers.get("host")!;
 
     const wrapper = new FormWrapper<SendMailFormFields>(formData)
     const includedPlayerIdsString = wrapper.get('includedPlayers')
-
-    const game = await findGameById(gameId)
-    invariant(!!game, "game not found")
     const mailTemplate = wrapper.get("mailTemplate")
     invariant(isMailTemplate(mailTemplate), "invalid template name " + mailTemplate)
     invariant(typeof includedPlayerIdsString === 'string', 'included is not a string')
     const includedPlayerIds = includedPlayerIdsString.split(',')
-    const playerMailData = await getPlayerDataForMail(includedPlayerIds)
-    const host = request.headers.get("host")!;
 
-    const mail = await createMailData({
-        game,
-        mailTemplate,
-        playerMailData,
-        host
-    })
-
-    const requestId = await sendGameMail({mail})
-    await createMailServiceRequest({requestId, gameId, requestType: mail.mail.template, requestPayload: JSON.stringify(mail)})
-    const statusResponse = await getGameMailStatus(requestId)
-    return json<GameMailStatusResponse>(statusResponse)
+    const mailService = new MailService(gameId, mailTemplate, includedPlayerIds, host)
+    await mailService.sendGameMail()
+    const statusResponse = mailService.statusResponse
+    invariant(!!statusResponse, "Die Status-Response ist null")
+    return json<DriftMailStatusResponse >(statusResponse)
 }
 
 type MailTemplateViewProps = {

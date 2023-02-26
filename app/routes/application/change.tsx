@@ -1,13 +1,21 @@
-import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
-import {getCommonSearchParameters} from "~/utils/parameters.server";
-import {decryptPlayerToken} from "~/utils/token.server";
-import {changePlayer, getPlayerFromDatabaseSession,} from "~/utils/session.server";
-import {getPlayerById} from "~/models/player.server";
-import {Player} from "@prisma/client";
-import {useLoaderData} from "@remix-run/react";
-import {useEffect, useState} from "react";
+import { Player } from "@prisma/client";
+import {
+    ActionFunction,
+    json,
+    LoaderFunction,
+    redirect,
+} from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import Modal from "~/components/common/modal/Modal";
 import ConfirmPlayerChange from "~/components/game/players/ConfirmPlayerChange";
+import { getPlayerById } from "~/models/player.server";
+import { getCommonSearchParameters } from "~/utils/parameters.server";
+import {
+    changePlayer,
+    getPlayerFromDatabaseSession,
+} from "~/utils/session.server";
+import { decryptPlayerToken } from "~/utils/token.server";
 
 type LoaderData = {
     player: Player;
@@ -21,7 +29,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
     const decryptedToken = decryptPlayerToken(token);
     const player = await getPlayerFromDatabaseSession(request);
-    const newPlayer = await getPlayerById(decryptedToken.playerId);
+    const newPlayer = decryptedToken?.playerId
+        ? await getPlayerById(decryptedToken.playerId)
+        : null;
 
     if (!player || !newPlayer) {
         throw redirect("/");
@@ -32,7 +42,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
 };
 
-export const action: ActionFunction = async ({ request}) => {
+export const action: ActionFunction = async ({ request }) => {
     const body = await request.formData();
     const intent = await body.get("intent");
     const { token } = getCommonSearchParameters(request);
@@ -40,11 +50,9 @@ export const action: ActionFunction = async ({ request}) => {
         throw redirect("/");
     }
     const decryptedToken = decryptPlayerToken(token);
-
-    if (intent === "confirm") {
+    if (intent === "confirm" && decryptedToken) {
         return await changePlayer(request, decryptedToken);
     }
-
     if (intent === "decline") {
         return redirect("/application/dashboard");
     }

@@ -1,15 +1,18 @@
-import type {ActionFunction, LoaderFunction} from "@remix-run/node";
-import {json, redirect} from "@remix-run/node";
+import type { Prisma } from "@prisma/client";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
-import {useLoaderData} from "@remix-run/react";
-import type {Prisma} from "@prisma/client";
-import {getPlayerFeedbackForGame, updateFeedback,} from "~/models/feedback.server";
+import { errors } from "~/components/i18n/errors";
 import EditPlayerStatusForm from "~/components/player/EditPlayerStatusForm";
-import {authenticatePlayer} from "~/utils/session.server";
-import {NoTokenWarning} from "~/components/warnings/NoTokenWarning";
-import {getFeedbackValues} from "~/utils/form.session";
-import {errors} from "~/components/i18n/errors";
+import { NoTokenWarning } from "~/components/warnings/NoTokenWarning";
 import routeLinks from "~/config/routeLinks";
+import {
+    getPlayerFeedbackForGame,
+    updateFeedback,
+} from "~/models/feedback.server";
+import { getFeedbackValues } from "~/utils/form.session";
+import { authenticatePlayer } from "~/utils/session.server";
 
 export type PlayerFeedbackForGame = Prisma.PlayerGetPayload<{
     include: {
@@ -25,29 +28,29 @@ type LoaderData = {
     isAuthenticated: boolean;
 };
 
-export const loader: LoaderFunction = async ({params, request}) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
     const gameId = params.gameId;
-    const playerId = params.playerId;
+    const playerIdParam = params.playerId;
     invariant(gameId, "Help");
-    invariant(playerId, "Help");
+    invariant(playerIdParam, "Help");
 
     const playerWithFeedback: PlayerFeedbackForGame | null =
-        await getPlayerFeedbackForGame(playerId, gameId);
-    const {player} = await authenticatePlayer(request);
-    const isAuthenticated = player?.id === playerId;
-    return json({player: playerWithFeedback, isAuthenticated});
+        await getPlayerFeedbackForGame(playerIdParam, gameId);
+    const { playerId } = await authenticatePlayer(request);
+    const isAuthenticated = playerIdParam === playerId;
+    return json({ player: playerWithFeedback, isAuthenticated });
 };
 
-export const action: ActionFunction = async ({params, request}) => {
-    const playerId = params.playerId;
+export const action: ActionFunction = async ({ params, request }) => {
+    const playerIdParam = params.playerId;
     const gameId = params.gameId!;
-    const {player} = await authenticatePlayer(request);
-    const isAuthenticated = player!.id === playerId;
+    const { playerId } = await authenticatePlayer(request);
+    const isAuthenticated = playerId === playerIdParam;
     if (!isAuthenticated) {
         throw json("no permission", 403);
     }
     const formData = await request.formData();
-    const {status, note, playerCount} = getFeedbackValues(formData);
+    const { status, note, playerCount } = getFeedbackValues(formData);
 
     if (!gameId) {
         throw new Error(errors.game.updateFeedback.noGameId);
@@ -61,18 +64,18 @@ export const action: ActionFunction = async ({params, request}) => {
     );
 
     if (formData.get("origin") === "dashboard") {
-        return json({newFeedback});
+        return json({ newFeedback });
     }
     return redirect(routeLinks.game(gameId));
 };
 
 const EditPlayerFeedback = () => {
-    const {player, isAuthenticated} = useLoaderData() as LoaderData;
+    const { player, isAuthenticated } = useLoaderData() as LoaderData;
 
     // @ts-ignore
     return (
         <>
-            <NoTokenWarning hidden={isAuthenticated}/>
+            <NoTokenWarning hidden={isAuthenticated} />
             <EditPlayerStatusForm
                 player={player}
                 isAuthenticated={isAuthenticated}

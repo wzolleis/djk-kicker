@@ -8,18 +8,11 @@ import {deleteSessionForPlayer} from "~/models/session.server";
 
 export type {Player} from "@prisma/client";
 
-export type PlayerMailData = {
-    name: string,
-    id: string,
-    email: string
-}
-
 export async function getPlayers() {
     return prisma.player.findMany();
 }
 
-export const
-    getPlayerDataForMail = async (playerIds: string[]): Promise<PlayerMailData[]> => {
+export const getPlayerByIds = async (playerIds: string[]): Promise<Player[]> => {
     return await prisma.player.findMany({
             select: {
                 name: true,

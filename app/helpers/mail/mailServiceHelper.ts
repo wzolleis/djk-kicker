@@ -1,25 +1,24 @@
-import {GameMail, MailBuilder} from "~/helpers/mail/mailApiClient";
+import {MailBuilder} from "~/helpers/mail/mailApiClient";
 import {useDateTime} from "~/utils";
 import messages from "~/components/i18n/messages";
 import {createEncryptedPlayerToken} from "~/utils/token.server";
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
-import {Game} from "@prisma/client";
+import {Game, Player} from "@prisma/client";
 import {MailTemplateType} from "~/config/mailTypes";
-import {PlayerMailData} from "~/models/player.server";
-import {DriftmailClient, DriftMailStatusResponse, Mail, Recipient} from "driftmail";
+import {Mail, Recipient} from "driftmail";
 
 type CreateMailParams = {
     game: Game,
     mailTemplate: MailTemplateType
 
-    playerMailData: PlayerMailData[]
+    allPlayer: Player[]
 
     host: string
 }
 
-const client = new DriftmailClient()
 
-export const createMailData = async ({game, mailTemplate, playerMailData, host}: CreateMailParams): Promise<GameMail> => {
+
+export const createDriftMailData = async ({game, mailTemplate, allPlayer, host}: CreateMailParams): Promise<Mail> => {
     const gameId = game.id
 
 
@@ -32,61 +31,25 @@ export const createMailData = async ({game, mailTemplate, playerMailData, host}:
         templateName: mailTemplate
     })
 
-    for (let i = 0; i < playerMailData.length; i++) {
-        const data = playerMailData[i]
-        const token = await createEncryptedPlayerToken(data.id, gameId);
+    for (let i = 0; i < allPlayer.length; i++) {
+        const player = allPlayer[i]
+        const token = await createEncryptedPlayerToken(player.id);
         const invitationLink = mailLinkBuilder.gameInvitationLink({host, gameId, token})
 
         mailApiClient.addRecipient({
-            mailAddress: data.email,
+            mailAddress: player.email,
             variables: {
                 invitationLink,
-                name: data.name,
+                name: player.name,
             }
         })
     }
 
-    return mailApiClient.buildMail()
-}
-
-export type SendMailParam = {
-    mail: GameMail
-}
-
-export type SendMailResponse = {
-    request_id: string
-}
-
-export const sendGameMail = async ({mail: gameMail}: SendMailParam) => {
+    const gameMail = mailApiClient.buildMail()
     const mail = new Mail(gameMail.mail.template)
     mail.addVariable(gameMail.variables)
     gameMail.recipients.forEach((recipient) => {
         mail.addRecipient(new Recipient(recipient.mailAddress, recipient.variables))
     })
-
-    return await client.send(mail)
-}
-
-export type GameMailJob = {
-    status: string
-    requestId: string
-    mailAddress: string
-}
-
-export type GameMailStatusResponse = {
-    jobs: GameMailJob[]
-}
-
-export const getGameMailStatus = async (requestId: string): Promise<GameMailStatusResponse> => {
-    const response: DriftMailStatusResponse = await client.getStatus(requestId)
-    // todo: jetzt kann man hier schon nach failed/success gruppieren
-    const jobs: GameMailJob[] = response.getAll().map(job => {
-        return {
-            mailAddress: job.mail_address,
-            status: job.status,
-            requestId: job.request_id
-        }
-    })
-
-    return {jobs}
+    return mail
 }
