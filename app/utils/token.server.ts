@@ -1,13 +1,13 @@
-import { prisma } from "~/db.server";
-import type { JWTDecryptResult } from "jose";
-import * as jose from "jose";
+import { Player, Token } from "@prisma/client";
 import type { KeyObject } from "crypto";
 import { createSecretKey } from "crypto";
-import type { AdminTokenOptions } from "~/models/classes/AdminTokenOption";
+import type { JWTDecryptResult } from "jose";
+import * as jose from "jose";
 import { DateTime, Interval } from "luxon";
+import { prisma } from "~/db.server";
+import type { AdminTokenOptions } from "~/models/classes/AdminTokenOption";
 import { PlayerToken } from "~/models/classes/PlayerToken";
 import { getPlayerById } from "~/models/player.server";
-import { Player, Token } from "@prisma/client";
 import { getPlayerToken } from "~/models/token.server";
 
 function createEncryptionArguments() {
@@ -53,15 +53,6 @@ function decryptData(data: string) {
     return decipher.update(data, "base64url", "utf8") + decipher.final("utf8");
 }
 
-async function getTokenForGame(gameId: string): Promise<string> {
-    const game = await prisma.game.findUnique({
-        where: {
-            id: gameId,
-        },
-    });
-    return game!.token;
-}
-
 export async function createEncryptedPlayerToken(
     playerId: string,
     gameId: string
@@ -70,7 +61,8 @@ export async function createEncryptedPlayerToken(
     return encryptData(playerToken);
 }
 
-export function decryptPlayerToken(encryptedToken: string): Token {
+export function decryptPlayerToken(encryptedToken?: string): Token | undefined {
+    if (!encryptedToken) return undefined;
     const decryptedToken = decryptData(encryptedToken);
     return JSON.parse(decryptedToken.toString());
 }
@@ -88,6 +80,17 @@ export async function verifyToken(playerToken: PlayerToken) {
         ? await getPlayerById(playerToken?.playerId)
         : null;
     return { isAuthenticated, player, playerToken };
+}
+
+export async function checkToken(providedToken: Token) {
+    try {
+        const token = await getPlayerToken(providedToken.playerId);
+        if (token && !token.revoked && !hasTokenExpired(token.expirationDate))
+            return true;
+    } catch (e) {
+        return false;
+    }
+    return false;
 }
 
 function hasTokenExpired(tokenExpiresAt: Token["expirationDate"]) {

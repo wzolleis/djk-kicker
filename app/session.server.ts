@@ -1,11 +1,21 @@
-import {createCookieSessionStorage, createSessionStorage, redirect, SessionData} from "@remix-run/node";
+import {
+    createCookieSessionStorage,
+    createSessionStorage,
+    redirect,
+    SessionData,
+} from "@remix-run/node";
 import invariant from "tiny-invariant";
 
-import type {User} from "~/models/user.server";
-import {getUserById} from "~/models/user.server";
-import {prisma} from "~/db.server";
-import {DateTime} from "luxon";
-import {createSession, deleteSessionByID, findSessionByID, upsertSession} from "~/models/session.server";
+import { DateTime } from "luxon";
+import { prisma } from "~/db.server";
+import {
+    createSession,
+    deleteSessionByID,
+    findSessionByID,
+    upsertSession,
+} from "~/models/session.server";
+import type { User } from "~/models/user.server";
+import { getUserById } from "~/models/user.server";
 
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 
@@ -27,7 +37,9 @@ export async function getSession(request: Request) {
     return sessionStorage.getSession(cookie);
 }
 
-export async function getUserId(request: Request): Promise<User["id"] | undefined> {
+export async function getUserId(
+    request: Request
+): Promise<User["id"] | undefined> {
     const session = await getSession(request);
     return session.get(USER_SESSION_KEY);
 }
@@ -42,7 +54,10 @@ export async function getUser(request: Request) {
     throw await logout(request);
 }
 
-export async function requireUserId(request: Request, redirectTo: string = new URL(request.url).pathname) {
+export async function requireUserId(
+    request: Request,
+    redirectTo: string = new URL(request.url).pathname
+) {
     const userId = await getUserId(request);
     if (!userId) {
         const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
@@ -66,40 +81,17 @@ export async function requireUser(request: Request) {
     throw await logout(request);
 }
 
-// @ts-ignore
-export function createDatabaseSessionStorage({cookie}) {
-    return createSessionStorage({
-        cookie,
-        async createData(sessionData: SessionData, expires) {
-            const session = await createSession(JSON.stringify(sessionData))
-            return session.id;
-        },
-        async readData(id: string) {
-            const session = await findSessionByID(id)
-            if (session) {
-                return JSON.parse(session.data);
-            } else return null;
-        },
-        async updateData(id, sessionData, expires) {
-            const sessionString = JSON.stringify(sessionData);
-            if (expires && DateTime.fromJSDate(expires) < DateTime.now()) {
-                await deleteSessionByID(id)
-            } else {
-                await upsertSession({sessionId: id, sessionData: sessionString})
-            }
-        },
-        async deleteData(id) {
-            await prisma.session.delete({where: {id,},});
-        },
-    });
-}
-
 export async function createUserSession({
-                                            request,
-                                            userId,
-                                            remember,
-                                            redirectTo
-                                        }: { request: Request; userId: string; remember: boolean; redirectTo: string }) {
+    request,
+    userId,
+    remember,
+    redirectTo,
+}: {
+    request: Request;
+    userId: string;
+    remember: boolean;
+    redirectTo: string;
+}) {
     const session = await getSession(request);
     session.set(USER_SESSION_KEY, userId);
     return redirect(redirectTo, {
