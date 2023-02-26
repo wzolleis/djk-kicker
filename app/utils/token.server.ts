@@ -1,14 +1,13 @@
-import { Player, Token } from "@prisma/client";
-import type { KeyObject } from "crypto";
-import { createSecretKey } from "crypto";
-import type { JWTDecryptResult } from "jose";
+import {Token} from "@prisma/client";
+import type {KeyObject} from "crypto";
+import {createSecretKey} from "crypto";
+import type {JWTDecryptResult} from "jose";
 import * as jose from "jose";
-import { DateTime, Interval } from "luxon";
-import { prisma } from "~/db.server";
-import type { AdminTokenOptions } from "~/models/classes/AdminTokenOption";
-import { PlayerToken } from "~/models/classes/PlayerToken";
-import { getPlayerById } from "~/models/player.server";
-import { getPlayerToken } from "~/models/token.server";
+import {DateTime} from "luxon";
+import type {AdminTokenOptions} from "~/models/classes/AdminTokenOption";
+import {PlayerToken} from "~/models/classes/PlayerToken";
+import {getPlayerById} from "~/models/player.server";
+import {getPlayerToken} from "~/models/token.server";
 
 function createEncryptionArguments() {
     const algorithm: string = "aes-256-ctr";
@@ -55,9 +54,8 @@ function decryptData(data: string) {
 
 export async function createEncryptedPlayerToken(
     playerId: string,
-    gameId: string
 ) {
-    const playerToken = await getPlayerToken(playerId, gameId);
+    const playerToken = await getPlayerToken(playerId);
     return encryptData(playerToken);
 }
 
@@ -100,7 +98,7 @@ function hasTokenExpired(tokenExpiresAt: Token["expirationDate"]) {
 
 export async function playerHasValidToken(playerId: string): Promise<boolean> {
     try {
-        const token = await getPlayerToken(playerId, undefined, true);
+        const token = await getPlayerToken(playerId, true);
         return !token.revoked && !hasTokenExpired(token.expirationDate);
     } catch (e) {
         return false;
@@ -110,13 +108,6 @@ export async function playerHasValidToken(playerId: string): Promise<boolean> {
 export async function createEncryptedAdminToken(
     adminTokenOptions: AdminTokenOptions
 ): Promise<string> {
-    const diff = Interval.fromDateTimes(
-        DateTime.now(),
-        adminTokenOptions.expires_at
-    );
-    const days = Math.floor(diff.length("days"));
-    const expirationTime = `${days}d`;
-
     const secretKey: KeyObject = createSecretKey(
         getArrayBufferFromSecret(process.env.JWT_SECRET!)
     );
