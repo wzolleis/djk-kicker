@@ -1,12 +1,15 @@
 import {MailTemplateType} from "~/config/mailTypes";
 import {findGameById} from "~/models/games.server";
 import {Game, Player} from "@prisma/client";
-import {getPlayerByIds} from "~/models/player.server";
-import {createDriftMailData} from "~/helpers/mail/mailServiceHelper";
+import {findManyPlayerById} from "~/models/player.server";
 import invariant from "tiny-invariant";
 import {createMailServiceRequest} from "~/models/mailservice.server";
-import {DriftmailClient, DriftMailStatusResponse, Mail} from "driftmail";
+import {DriftmailClient, DriftMailStatusResponse, Mail, Recipient} from "driftmail";
 import {JobResponse} from "driftmail/build/GetStatusRequestResponse";
+import {useDateTime} from "~/utils";
+import messages from "~/components/i18n/messages";
+import {createEncryptedPlayerToken} from "~/utils/token.server";
+import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 
 const driftMailClient = new DriftmailClient()
 
@@ -24,7 +27,8 @@ export class MailService {
 
 
     // ===================================================
-    // ---------- wird nachgeladen oder berechnet --------
+    // die nachfolgenden Werte werden nachgeladen oder
+    // berechnet
     // ===================================================
     game: Game | null = null
 
@@ -41,13 +45,18 @@ export class MailService {
         this.playerIds = playerIds
         this.host = host
     }
-    async sendGameMail() {
+
+    async sendGameMail(): Promise<{requestId: string, status: DriftMailStatusResponse}> {
         await this.loadGameData()
         await this.loadPlayerData()
         await this.createDriftMailData()
         await this.sendDriftMail()
         await this.saveMailRequest()
         await this.fetchDriftMailStatus()
+
+        invariant(this.requestId, "Die ReqquestId ist null")
+        invariant(this.statusResponse, "Die StatusResponse ist null")
+        return {requestId: this.requestId, status: this.statusResponse}
     }
 
     private async loadGameData() {
@@ -56,17 +65,35 @@ export class MailService {
     }
 
     private async loadPlayerData() {
-        this.player = await getPlayerByIds(this.playerIds)
+        this.player = await findManyPlayerById(this.playerIds)
     }
 
     private async createDriftMailData() {
-        this.driftMail = await createDriftMailData({
-            game: this.game!,
-            mailTemplate: this.templateName,
-            allPlayer: this.player,
-            host: this.host
+        invariant(!!this.game, "Game is null")
+        invariant(!!this.host, "Host is null")
+
+        const {id: gameId, gameTime, name: gameName, spielort} = this.game
+        const mail = new Mail(this.templateName)
+        mail.addVariable({
+            event: {
+                date: useDateTime(gameTime),
+                name: gameName,
+                location: messages.commonForm.spielort(spielort)
+            }
         })
 
+        for (let i = 0; i < this.player.length; i++) {
+            const player = this.player[i]
+            const token = await createEncryptedPlayerToken(player.id);
+            const invitationLink = mailLinkBuilder.gameInvitationLink({host: this.host, gameId, token})
+            const playerVariables = {
+                invitationLink,
+                name: player.name,
+            }
+            mail.addRecipient(new Recipient(player.email, playerVariables))
+        }
+
+        this.driftMail = mail
         invariant(!!this.driftMail, "Die Mail konnte nicht erzeugt werden")
     }
 
@@ -92,8 +119,8 @@ export class MailService {
 }
 
 /**
- * Eine Abfrage des Status fuer einen Request
- * @param requestId die RequestId
+ * Eine Abfrage des Status fuer einen Request, das ist eine eigene Methode, damit man den Status auch nur mit der Request-Id abfragen kann
+ * @param requestId die die Drift-Mail-Request ID
  */
 export const fetchDriftMailStatus = async (requestId: string): Promise<DriftMailStatusResponse> => {
     return await driftMailClient.getStatus(requestId)

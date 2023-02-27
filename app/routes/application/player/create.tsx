@@ -37,7 +37,7 @@ const sendGameInvitation = async ({
                                       playerId
                                   }: { request: Request, gameId: string, playerId: string }) => {
     const host = request.headers.get("host")!;
-    await createEncryptedPlayerToken(playerId, gameId);
+    await createEncryptedPlayerToken(playerId);
     await mailhelper.sendGameInvitation({host, gameId, playerIds: [playerId]});
 }
 
