@@ -98,6 +98,7 @@ export class MailService {
     }
 
     private async sendDriftMail() {
+        console.log('sending drift mail', this.driftMail)
         this.requestId = await driftMailClient.send(this.driftMail!)
         invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
     }
