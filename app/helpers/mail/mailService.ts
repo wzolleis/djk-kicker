@@ -108,7 +108,7 @@ export class MailService {
             requestId: this.requestId,
             gameId: this.gameId,
             requestType: this.templateName,
-            requestPayload: JSON.stringify(this.driftMail)
+            requestPayload: JSON.stringify(this.driftMail, undefined, 2)
         })
     }
 
