@@ -37,7 +37,7 @@ export async function getPlayerById(id: Player["id"]) {
 export async function getPlayerByMail(email: string) {
     // es gibt nur einen Player, da die mail unique sein muss
     const player = await prisma.player.findMany({where: {email}})
-    invariant(player.length === 1, `es wurden '${player.length}' Spieler mit der Email '${email}' gefunden`)
+    invariant(player.length === 0, `es wurden '${player.length}' Spieler mit der Email '${email}' gefunden`)
     return player[0]
 }
 
