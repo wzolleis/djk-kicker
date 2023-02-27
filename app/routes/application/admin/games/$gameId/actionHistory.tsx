@@ -10,6 +10,7 @@ import {DateTime} from "luxon";
 import {groupBy} from "lodash";
 import {DriftMailStatusResponse} from "driftmail";
 import {DriftMailJob, FailedDriftMailJob, fetchDriftMailStatus} from "~/helpers/mail/mailService";
+import classNames from "classnames";
 
 type DriftMailJobData = {
     sucessfull: DriftMailJob[]
@@ -52,24 +53,32 @@ const mapJobsToMailddress = (jobs: DriftMailJob[]) => {
     return jobs.map((job) => `${job.mail_address}`).join()
 }
 
-const ActionCard = ({request, jobs}: { request: MailServiceRequest, jobs: DriftMailJob[] }) => {
+type ActionStatus = 'Success' | 'Failed' | 'Waiting'
+
+const ActionCard = ({request, jobs, status}: { request: MailServiceRequest, jobs: DriftMailJob[], status: ActionStatus }) => {
     /* @ts-ignore */
     const requestTypeLabel = messages.commonForm.requestType[request.requestType ?? 'unknownRequest'] as string
-    const groupdByStatus = groupBy(jobs, (job) => job.status)
+    const groupedByStatus = groupBy(jobs, (job) => job.status)
+    const background = classNames({
+        'bg-red-200': status === 'Failed',
+        'bg-green-200': status === 'Success',
+        'bg-gray-200': status === 'Waiting'
+    })
+
 
     return (
-        <div className={`flex items-center p-3 rounded-xl ring ring-1`}>
-            <div className="">
+        <div className={classNames(background, `flex items-center p-3 rounded-xl ring ring-1`)}>
+            <div>
                 <div className={"flex gap-2 items-center"}>
                     <p className="text-sm text-gray-500 truncate">
-                        {`${dateUtils.format(new Date(request.updatedAt))} - ${requestTypeLabel ?? request.requestType}`}
+                        {`${request.id} - ${dateUtils.format(new Date(request.updatedAt))} - ${requestTypeLabel ?? request.requestType}`}
                     </p>
                     <p className="text-title-medium text-black font-default-bold">
                         {jobs.length === 0 && <span>Keine Mail Jobs</span>}
 
                         {
-                            Object.keys(groupdByStatus).map((key) => {
-                                const jobsForStatus = groupdByStatus[key]
+                            Object.keys(groupedByStatus).map((key) => {
+                                const jobsForStatus = groupedByStatus[key]
                                 return (
                                     <span key={key}>{`${key}: ${mapJobsToMailddress(jobsForStatus)}`}</span>
                                 )
@@ -95,34 +104,18 @@ const ActionList = ({requests, jobData}: { requests: MailServiceRequest[], jobDa
         <ContentContainer>
             <h1 className={"font-default-bold text-title-large"}>{messages.adminGameActionsForm.title}</h1>
             <div className={"flex flex-col gap-4"}>
-                <span>Successfull</span>
                 {
                     requests.map((request) => {
-                            const jobsForRequest: DriftMailJob[] = jobData.sucessfull.filter(job => job.request_id === request.requestId)
+                            const successfulJobs: DriftMailJob[] = jobData.sucessfull.filter(job => job.request_id === request.requestId)
+                            const waitingJobs: DriftMailJob[] = jobData.waiting.filter(job => job.request_id === request.requestId)
+                            const failedJobs: DriftMailJob[] = jobData.failed.filter(job => job.request_id === request.requestId)
                             return (
-                                <ActionCard key={request.id} request={request} jobs={jobsForRequest}/>
-                            )
-                        }
-                    )}
-            </div>
-            <div className={"flex flex-col gap-4"}>
-                <span>Waiting</span>
-                {
-                    requests.map((request) => {
-                            const jobsForRequest: DriftMailJob[] = jobData.waiting.filter(job => job.request_id === request.requestId)
-                            return (
-                                <ActionCard key={request.id} request={request} jobs={jobsForRequest}/>
-                            )
-                        }
-                    )}
-            </div>
-            <div className={"flex flex-col gap-4"}>
-                <span>Failed</span>
-                {
-                    requests.map((request) => {
-                            const jobsForRequest: DriftMailJob[] = jobData.failed.filter(job => job.request_id === request.requestId)
-                            return (
-                                <ActionCard key={request.id} request={request} jobs={jobsForRequest}/>
+                                <>
+                                    {successfulJobs.length > 0 &&
+                                        <ActionCard key={request.id} request={request} jobs={successfulJobs} status={'Success'}/>}
+                                    {waitingJobs.length > 0 && <ActionCard key={request.id} request={request} jobs={waitingJobs} status={'Waiting'}/>}
+                                    {failedJobs.length > 0 && <ActionCard key={request.id} request={request} jobs={failedJobs} status={'Failed'}/>}
+                                </>
                             )
                         }
                     )}

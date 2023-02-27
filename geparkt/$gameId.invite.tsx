@@ -53,7 +53,7 @@ export const loader: LoaderFunction = async ({
                 playerId,
             },
         });
-        const playerToken = await createEncryptedPlayerToken(playerId, gameId);
+        const playerToken = await createEncryptedPlayerToken(playerId);
         return json<RequestPlayerLink>({feedback, playerToken});
     }
 

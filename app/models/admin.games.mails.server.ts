@@ -35,7 +35,7 @@ const sendGameInvitation = async ({
         const invitationLink = mailLinkBuilder.gameInvitationLink({
             host,
             gameId,
-            token: await createEncryptedPlayerToken(playerIds[i], gameId),
+            token: await createEncryptedPlayerToken(playerIds[i]),
         });
         invariant(player !== null);
         const gameTime = dateUtils.dateTimeToFormat({
