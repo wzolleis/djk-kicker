@@ -98,18 +98,30 @@ export class MailService {
     }
 
     private async sendDriftMail() {
-        this.requestId = await driftMailClient.send(this.driftMail!)
-        invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
+        try {
+            console.group("sendDriftMail")
+            console.info('mail', this.driftMail)
+            this.requestId = await driftMailClient.send(this.driftMail!)
+
+            invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
+        } finally {
+            console.groupEnd()
+        }
     }
 
     private async saveMailRequest() {
-        invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
-        await createMailServiceRequest({
-            requestId: this.requestId,
-            gameId: this.gameId,
-            requestType: this.templateName,
-            requestPayload: JSON.stringify(this.driftMail, undefined, 2)
-        })
+        console.group("saveMailRequest")
+        try {
+            invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
+            await createMailServiceRequest({
+                requestId: this.requestId,
+                gameId: this.gameId,
+                requestType: this.templateName,
+                requestPayload: JSON.stringify(this.driftMail, undefined, 2)
+            })
+        } finally {
+            console.groupEnd()
+        }
     }
 
     private async fetchDriftMailStatus() {

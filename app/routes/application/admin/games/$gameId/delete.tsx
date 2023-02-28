@@ -33,8 +33,6 @@ export const action: ActionFunction = async ({params, request}: { params: Params
     invariant(!!gameId, "Kein Spiel")
     invariant(!!intent, "Kein Intent gesetzt")
 
-    console.log('intent', intent)
-
     if (intent === 'abort') {
         return redirect(routeLinks.admin.users.home)
     } else if (intent === 'delete') {

@@ -7,22 +7,24 @@ import {Settings} from "luxon";
 Settings.defaultZone = "Europe/Berlin"
 Settings.defaultLocale = "de-de"
 
-console.log(Settings.defaultZone); // Reading the configured time zone.
-console.log(Settings.defaultLocale); // Reading the configured time zone.
+console.group("entry.client")
+console.info('zone = ', Settings.defaultZone); // Reading the configured time zone.
+console.info('locale = ', Settings.defaultLocale); // Reading the configured time zone.
+console.groupEnd()
 
 function hydrate() {
-  startTransition(() => {
-    hydrateRoot(
-      document,
-        <RemixBrowser />
-    );
-  });
+    startTransition(() => {
+        hydrateRoot(
+            document,
+            <RemixBrowser/>
+        );
+    });
 }
 
 if (window.requestIdleCallback) {
-  window.requestIdleCallback(hydrate);
+    window.requestIdleCallback(hydrate);
 } else {
-  // Safari doesn't support requestIdleCallback
-  // https://caniuse.com/requestidlecallback
-  window.setTimeout(hydrate, 1);
+    // Safari doesn't support requestIdleCallback
+    // https://caniuse.com/requestidlecallback
+    window.setTimeout(hydrate, 1);
 }
