@@ -27,7 +27,7 @@ export const findManyPlayerById = async (playerIds: string[]): Promise<Player[]>
     )
 }
 
-export async function getPlayerById(id: Player["id"]) {
+export async function getPlayerById(id: string | undefined) {
     if (!id) {
         throw new Error("No player Id provided");
     }

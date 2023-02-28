@@ -3,7 +3,6 @@ import type {KeyObject} from "crypto";
 import {createSecretKey} from "crypto";
 import type {JWTDecryptResult} from "jose";
 import * as jose from "jose";
-import {DateTime} from "luxon";
 import type {AdminTokenOptions} from "~/models/classes/AdminTokenOption";
 import {PlayerToken} from "~/models/classes/PlayerToken";
 import {getPlayerById} from "~/models/player.server";
@@ -19,7 +18,7 @@ function createEncryptionArguments() {
     const keyBuffer = Buffer.from(key);
     const ivBuffer = Buffer.from(iv);
 
-    return { algorithm, keyBuffer, ivBuffer };
+    return {algorithm, keyBuffer, ivBuffer};
 }
 
 function encryptData(data: string | object): string {
@@ -69,39 +68,37 @@ export async function verifyToken(playerToken: PlayerToken) {
     let isAuthenticated = false;
     try {
         const token = await getPlayerToken(playerToken.playerId);
-        if (token && !token.revoked && !hasTokenExpired(token.expirationDate)) {
+        if (token && !token.revoked) {
             isAuthenticated = true;
         }
-    } catch (e) {}
+    } catch (e) {
+    }
 
     const player = playerToken?.playerId
         ? await getPlayerById(playerToken?.playerId)
         : null;
-    return { isAuthenticated, player, playerToken };
+    return {isAuthenticated, player, playerToken};
 }
 
 export async function checkToken(providedToken: Token) {
     try {
         const token = await getPlayerToken(providedToken.playerId);
-        if (token && !token.revoked && !hasTokenExpired(token.expirationDate))
-            return true;
+        return token && !token.revoked
     } catch (e) {
         return false;
     }
-    return false;
-}
-
-function hasTokenExpired(tokenExpiresAt: Token["expirationDate"]) {
-    const expirationDate = DateTime.fromJSDate(new Date(tokenExpiresAt));
-    return expirationDate < DateTime.now();
 }
 
 export async function playerHasValidToken(playerId: string): Promise<boolean> {
     try {
+        console.group("playerHasValidToken")
         const token = await getPlayerToken(playerId, true);
-        return !token.revoked && !hasTokenExpired(token.expirationDate);
-    } catch (e) {
+        return !token.revoked;
+    } catch (e: unknown) {
+        console.error(`invalid token, playerId = ${playerId}`, e)
         return false;
+    } finally {
+        console.groupEnd()
     }
 }
 
@@ -111,7 +108,7 @@ export async function createEncryptedAdminToken(
     const secretKey: KeyObject = createSecretKey(
         getArrayBufferFromSecret(process.env.JWT_SECRET!)
     );
-    return await new jose.EncryptJWT({ ...adminTokenOptions })
+    return await new jose.EncryptJWT({...adminTokenOptions})
         .setProtectedHeader({
             alg: "dir",
             enc: "A256GCM",

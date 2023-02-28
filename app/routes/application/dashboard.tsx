@@ -1,29 +1,18 @@
-import { DefaultFeedback, Feedback, Player } from "@prisma/client";
-import {
-    ActionFunction,
-    json,
-    LoaderFunction,
-    redirect,
-} from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import {DefaultFeedback, Feedback, Player} from "@prisma/client";
+import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
+import {Form, useActionData, useLoaderData} from "@remix-run/react";
 import _ from "lodash";
 import invariant from "tiny-invariant";
 import TransitionContainer from "~/components/common/container/transitionContainer";
-import {
-    DashboardFormValues,
-    getDashboardFormValues,
-} from "~/components/dashboard/dashboardHelper";
+import {DashboardFormValues, getDashboardFormValues,} from "~/components/dashboard/dashboardHelper";
 import GameFeedback from "~/components/dashboard/gameFeedback";
-import { GameWithFeedback } from "~/config/applicationTypes";
+import {GameWithFeedback} from "~/config/applicationTypes";
 import routeLinks from "~/config/routeLinks";
-import {
-    findFeedbackWithPlayerIdAndGameId,
-    updateFeedback,
-} from "~/models/feedback.server";
-import { getGameById, getMostRecentGame } from "~/models/games.server";
-import { getPlayerById } from "~/models/player.server";
-import { useDefaultFeedback } from "~/utils/playerUtils";
-import { authenticatePlayer } from "~/utils/session.server";
+import {findFeedbackWithPlayerIdAndGameId, updateFeedback,} from "~/models/feedback.server";
+import {getGameById, getMostRecentGame} from "~/models/games.server";
+import {getPlayerById} from "~/models/player.server";
+import {useDefaultFeedback} from "~/utils/playerUtils";
+import {authenticatePlayer} from "~/utils/session.server";
 
 export type LoaderData = {
     isAuthenticated: boolean;
@@ -39,75 +28,93 @@ type ActionData = {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-    const { isAuthenticated, playerId } = await authenticatePlayer(request);
+    console.group('dashboard action')
 
-    const formData = await request.formData();
-    const gameId = formData.get("gameId");
-    const feedbackId = formData.get("feedbackId");
+    try {
+        const {isAuthenticated, playerId} = await authenticatePlayer(request);
+        const formData = await request.formData();
+        const gameId = formData.get("gameId");
+        const feedbackId = formData.get("feedbackId");
 
-    if (!isAuthenticated) {
-        return redirect(routeLinks.playerNotAuthenticated);
-    }
-    if (!gameId) {
-        throw new Error("No GameId provided");
-    }
-    if (!feedbackId) {
-        throw new Error("No Feedback provided");
-    }
+        if (!isAuthenticated) {
+            return redirect(routeLinks.playerNotAuthenticated);
+        }
+        if (!gameId) {
+            throw new Error("No GameId provided");
+        }
+        if (!feedbackId) {
+            throw new Error("No Feedback provided");
+        }
 
-    invariant(typeof gameId === "string", "invalid gameId");
-    invariant(typeof feedbackId === "string", "invalid feedback id type");
-    const formValues: DashboardFormValues = getDashboardFormValues(
-        formData,
-        playerId,
-        gameId
-    );
-    const { intent, feedback } = formValues;
+        invariant(typeof gameId === "string", "invalid gameId");
+        invariant(typeof feedbackId === "string", "invalid feedback id type");
+        invariant(!!playerId, "Keine PlayerId")
 
-    if (intent === "playerFeedback") {
-        invariant(!!feedback, "Feedback is undefined");
-        await updateFeedback(
+        const formValues: DashboardFormValues = getDashboardFormValues(
+            formData,
             playerId,
-            gameId,
-            feedback.status,
-            feedback.playerCount,
-            feedback.note
+            gameId
         );
-        return json<ActionData>({
-            gameFeedback: {
-                id: feedbackId,
-                playerId: playerId,
-                gameId: gameId,
-                ...feedback,
-            },
-        });
+        const {intent, feedback} = formValues;
+
+        console.info('intent =', intent)
+
+
+        if (intent === "playerFeedback") {
+            console.info('update feedback with playerId = ', playerId)
+            invariant(!!feedback, "Feedback is undefined");
+            await updateFeedback(
+                playerId,
+                gameId,
+                feedback.status,
+                feedback.playerCount,
+                feedback.note
+            );
+            return json<ActionData>({
+                gameFeedback: {
+                    id: feedbackId,
+                    playerId: playerId,
+                    gameId: gameId,
+                    ...feedback,
+                },
+            });
+        }
+    } finally {
+        console.groupEnd()
     }
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
     const { isAuthenticated, playerId } = await authenticatePlayer(request);
-    if (!playerId) {
-        return redirect(routeLinks.playerNotAuthenticated);
-    }
-    const player = await getPlayerById(playerId);
-    if (!player) {
-        return redirect(routeLinks.playerNotAuthenticated);
-    }
-    const nextGame = await getMostRecentGame();
+    console.group('dashboard loader')
+    console.info("dashboard: authenticated = ", isAuthenticated)
 
-    const nextGameWithFeedBack = !!nextGame
-        ? await getGameById(nextGame.id)
-        : null;
-    const nextGameFeedback = !!nextGame
-        ? await findFeedbackWithPlayerIdAndGameId(playerId, nextGame.id)
-        : null;
+    try {
+        if (!playerId) {
+            return redirect(routeLinks.playerNotAuthenticated);
+        }
+        const player = await getPlayerById(playerId);
+        if (!player) {
+            return redirect(routeLinks.playerNotAuthenticated);
+        }
+        const nextGame = await getMostRecentGame();
 
-    return json<LoaderData>({
-        isAuthenticated,
-        player,
-        nextGame: nextGameWithFeedBack,
-        nextGameFeedback,
-    });
+        const nextGameWithFeedBack = !!nextGame
+            ? await getGameById(nextGame.id)
+            : null;
+        const nextGameFeedback = !!nextGame
+            ? await findFeedbackWithPlayerIdAndGameId(playerId, nextGame.id)
+            : null;
+
+        return json<LoaderData>({
+            isAuthenticated,
+            player,
+            nextGame: nextGameWithFeedBack,
+            nextGameFeedback,
+        });
+    } finally {
+        console.groupEnd()
+    }
 };
 const Dashboard = () => {
     const { player, nextGame, nextGameFeedback } =

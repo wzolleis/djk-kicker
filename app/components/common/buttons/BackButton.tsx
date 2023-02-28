@@ -5,7 +5,6 @@ const BackButton = ({className}: { className?: string }) => {
     const navigate = useNavigate()
 
     const handleNavigate = () => {
-        console.log('back')
         navigate(-1)
     }
 

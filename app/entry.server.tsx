@@ -7,8 +7,10 @@ import {Settings} from "luxon";
 Settings.defaultZone = "Europe/Berlin"
 Settings.defaultLocale = "de-de"
 
-console.log(Settings.defaultZone); // Reading the configured time zone.
-console.log(Settings.defaultLocale); // Reading the configured time zone.
+console.group('entry.server')
+console.info(Settings.defaultZone); // Reading the configured time zone.
+console.info(Settings.defaultLocale); // Reading the configured time zone.
+console.groupEnd()
 
 export default function handleRequest(
   request: Request,
