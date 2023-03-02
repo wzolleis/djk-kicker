@@ -13,7 +13,8 @@ interface AppNavBarProps {
 
 const TopNavBar = ({appMenu}: AppNavBarProps) => {
     const [isOpen, setIsOpen] = useState(false);
-    const isLoggedIn: boolean = !!useOptionalUser();
+    const user: User | undefined = useOptionalUser()
+    const isLoggedIn: boolean = !!user
     const menuItemClassName = isOpen ? "block" : "hidden";
     const hamburgerOrCloseIcon = isOpen ? hamburgerIcon : closeIcon;
 
@@ -45,6 +46,12 @@ const TopNavBar = ({appMenu}: AppNavBarProps) => {
                             {menu.appLink.label}
                         </Link>
                     ))}
+                <Form action="/ChangePassword" method="get" hidden={!isLoggedIn}>
+                    <button type="submit"
+                            className="block rounded px-2 py-1 font-semibold hover:bg-gray-800 hover:text-yellow-300">
+                        {messages.appmenu.changePassword}
+                    </button>
+                </Form>
                 <Form action="/logout" method="post" hidden={!isLoggedIn}>
                     <button type="submit"
                             className="block rounded px-2 py-1 font-semibold hover:bg-gray-800 hover:text-yellow-300">

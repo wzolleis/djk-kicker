@@ -47,7 +47,8 @@ const messages = {
     createPlayer: "Neuer Spieler",
     dashboard: "Dashboard",
     login: "Als Administrator anmelden",
-    logout: "Abmelden"
+    logout: "Abmelden",
+    changePassword: 'Passwort ändern'
   },
   commonForm: {
     cancel: "Abbruch",
@@ -101,6 +102,13 @@ const messages = {
     login: "Anmelden",
     rememberMe: "Anmeldedaten speichern",
     createAccount: "Neuen Account anlegen"
+  },
+  changePasswordForm: {
+    actualPassword: "Aktuelles Passwort",
+    passwordNew: "Neues Passwort",
+    passwordRepeat: "Neues Passwort (Wiederholung)",
+    changePassword: 'Passwort ändern',
+    passwordChanged: 'Passwort wurde geändert'
   },
   errors: {
     noGame: "Kein Spiel vorhanden"
