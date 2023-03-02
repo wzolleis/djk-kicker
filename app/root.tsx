@@ -1,43 +1,25 @@
-import type {
-    LinksFunction,
-    LoaderArgs,
-    LoaderFunction,
-    MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
-import {
-    Form,
-    Links,
-    LiveReload,
-    Meta,
-    NavLink,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-    useLoaderData,
-    useLocation,
-} from "@remix-run/react";
+import type {LinksFunction, LoaderArgs, LoaderFunction, MetaFunction,} from "@remix-run/node";
+import {json} from "@remix-run/node";
+import {Form, Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation,} from "@remix-run/react";
 
-import { DefaultFeedback, Player, User } from "@prisma/client";
+import {DefaultFeedback, Player, User} from "@prisma/client";
 import React from "react";
-import { Toaster } from "react-hot-toast";
-import { GameBanner } from "~/components/common/header/pageBanner";
+import {Toaster} from "react-hot-toast";
+import {GameBanner} from "~/components/common/header/pageBanner";
 import Subheading from "~/components/common/header/Subheading";
-import { appMenu } from "~/components/nav/appMenu";
+import {appMenu} from "~/components/nav/appMenu";
 import BottomNavigationBar from "~/components/nav/BottomNavigationBar";
 import TopNavBar from "~/components/nav/TopNavBar";
-import {
-    GameWithFeedback,
-    UserAuthentication,
-} from "~/config/applicationTypes";
+import {GameWithFeedback,} from "~/config/applicationTypes";
 import routeLinks from "~/config/routeLinks";
-import { getDefaultFeedback } from "~/models/feedback.server";
-import { getGameById, getMostRecentGame } from "~/models/games.server";
-import { getPlayerById, getPlayers } from "~/models/player.server";
-import { getPlayerGreeting } from "~/utils";
-import { authenticatePlayer } from "~/utils/session.server";
-import { getUser } from "./session.server";
+import {getDefaultFeedback} from "~/models/feedback.server";
+import {getGameById, getMostRecentGame} from "~/models/games.server";
+import {getPlayerById, getPlayers} from "~/models/player.server";
+import {getPlayerGreeting} from "~/utils";
+import {authenticatePlayer} from "~/utils/session.server";
+import {getUser} from "./session.server";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import messages from "~/components/i18n/messages";
 
 export const links: LinksFunction = () => {
     return [
@@ -247,7 +229,7 @@ export default function App() {
     return (
         <html lang="en" className="bg-neutral-100">
             <head>
-                <title>DJK Kicker</title>
+                <title>{messages.app.title}</title>
                 <Meta />
                 <Links />
             </head>

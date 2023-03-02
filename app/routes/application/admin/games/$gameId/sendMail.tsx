@@ -133,6 +133,7 @@ const SendGameMail = () => {
 
     if (!!status && !!requestId) {
         toast.success(`Request ${requestId} erfolgreich abgeschickt`, {id: requestId})
+        toast.remove(requestId)
     }
 
     const removePlayerFromIncludedList = (player: Player) => {
