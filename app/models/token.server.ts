@@ -29,5 +29,6 @@ export async function getPlayerToken(
 }
 
 export const deleteTokenForPlayer = async (playerId: string) => {
+
     return prisma.token.delete({ where: { playerId } });
 };

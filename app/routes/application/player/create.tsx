@@ -1,6 +1,5 @@
-import {useLoaderData} from "@remix-run/react";
+import {Form, useActionData, useLoaderData} from "@remix-run/react";
 import {ActionFunction, json, redirect} from "@remix-run/node";
-import CreatePlayerForm from "~/components/player/CreatePlayerForm";
 import {getQueryParams} from "~/utils";
 import PageHeader from "~/components/common/PageHeader";
 import messages from "~/components/i18n/messages";
@@ -12,11 +11,20 @@ import {getGameById} from "~/models/games.server";
 import {GameWithFeedback} from "~/config/applicationTypes";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import ContentContainer from "~/components/common/container/ContentContainer";
-import mailhelper from "~/models/admin.games.mails.server";
-import {createEncryptedPlayerToken} from "~/utils/token.server";
+import * as React from "react";
+import {useState} from "react";
+import {statusInConfig} from "~/config/status";
+import InputWithLabel from "~/components/common/form/InputWithLabel";
+import SetStatusButton from "~/components/common/buttons/SetStatusButton";
+import {configuration} from "~/config";
+import RedButton from "~/components/common/buttons/RedButton";
+import DefaultButton from "~/components/common/buttons/DefaultButton";
+import {MailService} from "~/helpers/mail/mailService";
+import toast from "react-hot-toast";
+import {getPlayerToken} from "~/models/token.server";
 
 type LoaderData = {
-    gameid: string;
+    gameId: string;
     game?: GameWithFeedback
 };
 
@@ -28,7 +36,7 @@ export const loader = async ({request}: { params: any; request: any }) => {
         return json({gameid, game: gameWithFeedback});
     }
 
-    return json({gameid});
+    return json({gameId: gameid});
 };
 
 const sendGameInvitation = async ({
@@ -37,8 +45,22 @@ const sendGameInvitation = async ({
                                       playerId
                                   }: { request: Request, gameId: string, playerId: string }) => {
     const host = request.headers.get("host")!;
-    await createEncryptedPlayerToken(playerId);
-    await mailhelper.sendGameInvitation({host, gameId, playerIds: [playerId]});
+    // await mailhelper.sendGameInvitation({host, gameId, playerIds: [playerId]});
+    const mailservice = new MailService(gameId, 'gameInvitation', [playerId], host)
+    await mailservice.sendGameMail()
+}
+
+type ActionData = {
+    error: {
+        playerMail: string | null
+        playerStatus: string | null
+        playerNote: string | null
+    } | undefined,
+    info: {
+        created: {
+            playerId: string
+        }
+    } | undefined
 }
 
 export const action: ActionFunction = async ({
@@ -60,32 +82,149 @@ export const action: ActionFunction = async ({
 
     let redirectTarget = routeLinks.dashboard
 
-    if (intent === "cancel") {
-        redirectTarget = gameid ? routeLinks.game(gameid) : routeLinks.dashboard
-    } else {
-        const playerByMail = await getPlayerByMail(playerMail)
-        invariant(playerByMail == null, '"Es gibt schon einen Spieler mit der Mailadresse')
-        const player = await createPlayer(playerName.trim(), playerMail.trim());
-        if (!!gameid) {
-            invariant(typeof playerStatus === "string", "playerStatus");
-            invariant(typeof note === "string", "note");
-            await createFeedback({playerId: player.id, gameId: gameid, status: parseInt(playerStatus), note});
-            await sendGameInvitation({request, gameId: gameid, playerId: player.id})
-            redirectTarget = routeLinks.game(gameid);
+    console.group('create player')
+
+    try {
+        if (intent === "cancel") {
+            console.info('cancel')
+            redirectTarget = gameid ? routeLinks.game(gameid) : routeLinks.dashboard
+        } else {
+            console.info('validate  mail')
+            const emptyError = {
+                playerStatus: null,
+                playerMail: null,
+                playerNote: null
+            }
+
+            const playerByMail = await getPlayerByMail(playerMail)
+            if (playerByMail !== null) {
+                console.info('Die Mail ' + playerByMail.email + ' existiert bereits')
+                return json({
+                    error: {
+                        ...emptyError,
+                        playerMail: 'Es gibt schon einen Spieler mit der Mailadresse',
+                    }
+                })
+            }
+            console.info('create player')
+            const player = await createPlayer(playerName.trim(), playerMail.trim());
+            await getPlayerToken(player.id, false)
+
+            if (!!gameid) {
+                console.info('validate input')
+                if (typeof playerStatus !== "string") {
+                    return json({
+                        error: {
+                            ...emptyError,
+                            playerStatus: 'Status ist ungültig'
+                        }
+                    })
+                }
+
+                if (typeof note !== 'string') {
+                    return json({
+                        error: {
+                            emptyError,
+                            playerNote: 'Note ist ungültig'
+                        }
+                    })
+                }
+
+                console.info('create feedback')
+                await createFeedback({playerId: player.id, gameId: gameid, status: parseInt(playerStatus), note});
+                console.info('sending invitation...')
+                await sendGameInvitation({request, gameId: gameid, playerId: player.id})
+                console.info('...invitation sent')
+                console.info('create token....')
+                console.info('...token created')
+                console.info('Neuer Spieler wurde angelegt')
+                redirectTarget = routeLinks.game(gameid);
+            }
         }
+        toast('Spieler wurde angelegt')
+        return redirect(redirectTarget)
+    } finally {
+        console.info('create player - end')
+        console.groupEnd()
     }
-    return redirect(redirectTarget)
 };
 
 const CreatePlayer = () => {
-    const {gameid, game} = useLoaderData<LoaderData>();
+    const {gameId} = useLoaderData<LoaderData>() as unknown as LoaderData;
+    const actionData = useActionData<ActionData>() as unknown as ActionData;
+    const [status, setStatus] = useState<statusInConfig>(statusInConfig.unknown);
 
     return (
         <TransitionContainer>
             <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
                 <PageHeader title={messages.player.add}></PageHeader>
-                { /* @ts-ignore */}
-                <CreatePlayerForm gameId={gameid} game={game}/>
+                <Form method={"post"}>
+                    <main className={"flex flex-col gap-4"}>
+                        <InputWithLabel id={'name'} type={'text'} name={'name'} label={messages.createPlayerForm.name} required={true}/>
+                        <InputWithLabel id={'mail'} type={'email'} name={'mail'} label={messages.createPlayerForm.email} required={true}
+                                        error={actionData?.error?.playerMail}/>
+                        {!!gameId &&
+                            <>
+                                <div className={"flex flex-col font-default-medium text-slate-600"}>
+                                    <label htmlFor="name">{messages.createPlayerForm.status}</label>
+                                    <div>
+                                        <input
+                                            name={"status"}
+                                            id={"status"}
+                                            type={"hidden"}
+                                            defaultValue={status}
+                                        />
+                                        <div className={"mt-5 flex w-full items-center justify-start gap-5"}>
+                                            <SetStatusButton
+                                                image={"/img/thumbs-up.png"}
+                                                onClick={() => setStatus(configuration.status.confirmed)}
+                                                isActive={status === configuration.status.confirmed}
+                                                activeColor={"green-500"}
+                                            />
+                                            <SetStatusButton
+                                                image={"/img/thumbs-down.png"}
+                                                onClick={() => setStatus(configuration.status.declined)}
+                                                isActive={status === configuration.status.declined}
+                                                activeColor={"red-500"}
+                                            />
+                                            <SetStatusButton
+                                                image={"/img/thinking.png"}
+                                                onClick={() => setStatus(configuration.status.undecided)}
+                                                isActive={status === configuration.status.undecided}
+                                                activeColor={"yellow-500"}
+                                            />
+                                        </div>
+                                        {actionData?.error?.playerStatus && (
+                                            <div className="pt-1 text-red-700 bg-yellow-500">
+                                                {actionData.error.playerStatus}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className={"flex flex-col font-inter-medium text-slate-600"}>
+                                    <label htmlFor={"feedbackNote"}>Notiz</label>
+                                    <textarea
+                                        name={"note"}
+                                        id={"note"}
+                                        className={"rounded-xl border border-gray-300 bg-white py-3 shadow-lg shadow-indigo-500/20 outline-none"}/>
+                                    {actionData?.error?.playerNote && (
+                                        <div className="pt-1 text-red-700 bg-yellow-500">
+                                            {actionData.error.playerNote}
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        }
+                        <div className={"flex justify-start gap-2 pt-2"}>
+                            <RedButton>
+                                <button name='intent' value={'cancel'} type={'submit'}>{messages.buttons.cancel}</button>
+                            </RedButton>
+                            <DefaultButton className={'ml-auto'}>
+                                <button name={'intent'} value={'save'}>{messages.buttons.save}</button>
+                            </DefaultButton>
+                        </div>
+                    </main>
+                </Form>
             </ContentContainer>
         </TransitionContainer>
     );

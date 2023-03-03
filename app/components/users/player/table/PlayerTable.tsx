@@ -2,12 +2,12 @@ import messages from "~/components/i18n/messages";
 import {Player} from "@prisma/client";
 import PlayerTableRow from "~/components/users/player/table/PlayerTableRow";
 
-export type AdminTableProps = {
+export type PlayerTableProps = {
     players: Player[];
 }
 
 
-const AdminTable = ({players}: AdminTableProps) => {
+const PlayerTable = ({players}: PlayerTableProps) => {
 
 
     return (
@@ -18,6 +18,7 @@ const AdminTable = ({players}: AdminTableProps) => {
                     <tr className={"border-b text-left"}>
                         <th className={"py-3"}>{messages.adminOverviewTable.name}</th>
                         <th>{messages.adminOverviewTable.email}</th>
+                        <th>{messages.adminOverviewTable.playerId}</th>
                     </tr>
                     </thead>
                     <tbody className={"mt-5"}>
@@ -34,4 +35,4 @@ const AdminTable = ({players}: AdminTableProps) => {
 
 }
 
-export default AdminTable;
+export default PlayerTable;

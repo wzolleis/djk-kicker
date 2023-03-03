@@ -192,7 +192,8 @@ const messages = {
   adminOverviewTable: {
     name: "Name",
     email: "E-Mail",
-    role: "Rolle"
+    role: "Rolle",
+    playerId: 'ID'
   },
   adminCreateUserForm: {
     title: "Neuen Administrator anlegen",

@@ -5,7 +5,6 @@ import {deleteFeedbackForPlayer, getUniqueFeedbackForGameAndPlayer} from "~/mode
 import {deleteMailsForPlayer} from "~/models/admin.mails.server";
 import {deleteTokenForPlayer} from "~/models/token.server";
 import {deleteSessionForPlayer} from "~/models/session.server";
-import invariant from "tiny-invariant";
 
 export type {Player} from "@prisma/client";
 
@@ -34,11 +33,9 @@ export async function getPlayerById(id: string | undefined) {
     return await prisma.player.findUnique({where: {id}});
 }
 
-export async function getPlayerByMail(email: string) {
+export async function getPlayerByMail(email: string): Promise<Player | null> {
     // es gibt nur einen Player, da die mail unique sein muss
-    const player = await prisma.player.findMany({where: {email}})
-    invariant(player.length === 0, `es wurden '${player.length}' Spieler mit der Email '${email}' gefunden`)
-    return player[0]
+    return await prisma.player.findUnique({where: {email}})
 }
 
 export interface PlayerWithFeedback extends Player {
