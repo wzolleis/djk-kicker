@@ -4,7 +4,6 @@ import {Form, Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestorati
 
 import {DefaultFeedback, Player, User} from "@prisma/client";
 import React from "react";
-import {Toaster} from "react-hot-toast";
 import {GameBanner} from "~/components/common/header/pageBanner";
 import Subheading from "~/components/common/header/Subheading";
 import {appMenu} from "~/components/nav/appMenu";
@@ -237,7 +236,6 @@ export default function App() {
                 <div className="flex flex-col">
                     <main className="flex">
                         <div className="flex-1 ">
-                            <Toaster />
                             <div className={"mb-20 md:mb-5"}>
                                 <TopNavBar
                                     appMenu={appMenu.app}

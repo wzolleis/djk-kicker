@@ -2,7 +2,7 @@ import {usePlayers} from "~/utils";
 import React, {useState} from "react";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {Player} from "@prisma/client";
-import {Form, useActionData} from "@remix-run/react";
+import {Form} from "@remix-run/react";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {ActionFunction, json} from "@remix-run/node";
 import {FormWrapper} from "~/utils/formWrapper.server";
@@ -15,7 +15,6 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import {MailService} from "~/helpers/mail/mailService";
 import {DriftMailStatusResponse} from "driftmail";
-import toast from "react-hot-toast";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -126,15 +125,6 @@ const SendGameMail = () => {
     const [excludedPlayers, setExcludedPlayers] = useState(Array<Player>);
     const [mailTemplate, setMailTemplate] = useState<MailTemplateType>("gameInvitation")
 
-    // TS ActionData mit 'as unknown as ActionData' - > siehe https://github.com/remix-run/remix/issues/3931
-    const actionData = useActionData<ActionData>() as unknown as ActionData
-    const status = actionData?.status
-    const requestId = actionData?.requestId
-
-    if (!!status && !!requestId) {
-        toast.success(`Request ${requestId} erfolgreich abgeschickt`, {id: requestId})
-        toast.remove(requestId)
-    }
 
     const removePlayerFromIncludedList = (player: Player) => {
         setIncludedPlayers(removePlayerFromArrayByPlayerId(includedPlayers, player.id))

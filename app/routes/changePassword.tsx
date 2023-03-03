@@ -11,7 +11,6 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import Subheading from "~/components/common/header/Subheading";
 import {User} from "@prisma/client";
 import BodyText from "~/components/common/header/BodyText";
-import toast from "react-hot-toast";
 
 type LoaderData = {
     user: User
@@ -92,6 +91,7 @@ export default function ChangePassword() {
     const actionData = useActionData<typeof action>();
     const passwordRef = React.useRef<HTMLInputElement>(null);
 
+    // TS LoaderData/ActionData mit 'as unknown as ActionData' - > siehe https://github.com/remix-run/remix/issues/3931
     const loaderData = useLoaderData<LoaderData>() as unknown as LoaderData | undefined
     const userName = loaderData?.user?.name ?? ''
 
@@ -100,12 +100,6 @@ export default function ChangePassword() {
             passwordRef.current?.focus();
         }
     }, [actionData]);
-
-    React.useEffect(() => {
-        if (!!actionData?.errors && !actionData?.errors?.passwordNew) {
-            toast(messages.changePasswordForm.passwordChanged )
-        }
-    }, [actionData])
 
     return (
         <ContentContainer className={'bg-blue-200'}>

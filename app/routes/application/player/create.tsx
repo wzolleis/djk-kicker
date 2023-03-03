@@ -20,7 +20,6 @@ import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {MailService} from "~/helpers/mail/mailService";
-import toast from "react-hot-toast";
 import {getPlayerToken} from "~/models/token.server";
 
 type LoaderData = {
@@ -33,7 +32,7 @@ export const loader = async ({request}: { params: any; request: any }) => {
     if (!!gameid) {
         const game: GameWithFeedback | null = await getGameById(gameid)
         const gameWithFeedback = game ?? undefined
-        return json({gameid, game: gameWithFeedback});
+        return json({gameId: gameid, game: gameWithFeedback});
     }
 
     return json({gameId: gameid});
@@ -70,6 +69,7 @@ export const action: ActionFunction = async ({
 }) => {
     const formData = await request.formData();
     const {gameid} = getQueryParams(request, "gameid");
+
     const playerName = formData.get("name");
     const playerMail = formData.get("mail");
     const playerStatus = formData.get("status");
@@ -141,7 +141,6 @@ export const action: ActionFunction = async ({
                 redirectTarget = routeLinks.game(gameid);
             }
         }
-        toast('Spieler wurde angelegt')
         return redirect(redirectTarget)
     } finally {
         console.info('create player - end')
@@ -153,7 +152,6 @@ const CreatePlayer = () => {
     const {gameId} = useLoaderData<LoaderData>() as unknown as LoaderData;
     const actionData = useActionData<ActionData>() as unknown as ActionData;
     const [status, setStatus] = useState<statusInConfig>(statusInConfig.unknown);
-
     return (
         <TransitionContainer>
             <ContentContainer className={"mt-2.5 shadow-lg shadow-blue-400/50"}>
