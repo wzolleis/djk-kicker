@@ -1,5 +1,4 @@
-import { Outlet } from "@remix-run/react";
-import messages from "~/components/i18n/messages";
+import {Outlet} from "@remix-run/react";
 
 const Admin = () => {
   return (

@@ -1,7 +1,6 @@
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
-import toast from "react-hot-toast";
 import {deleteGame, findGameById, updateGame} from "~/models/admin.games.server";
 import {Game} from "@prisma/client";
 import {Form, useLoaderData, useNavigate} from "@remix-run/react";
@@ -27,7 +26,6 @@ export const loader: LoaderFunction = async ({params}) => {
 
     const gameId = params.gameId
     if (!gameId) {
-        toast.error(`Game with id ${gameId} does not exist!`)
         return redirect("/application/admin/games")
     }
     const game = await findGameById(gameId);

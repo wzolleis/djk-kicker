@@ -13,9 +13,12 @@ if (!sessionSecret) {
     throw new Error("SESSION_SECRET must be set");
 }
 
+const PLAYER_SESSION_VALUE = 'player'
+const PLAYER_SESSION_COOKIE_NAME = "PlayerSession"
+
 export const {getSession, commitSession, destroySession} = createCookieSessionStorage({
         cookie: {
-            name: "PlayerSession",
+            name: PLAYER_SESSION_COOKIE_NAME,
             sameSite: "lax",
             secure: process.env.ENVIRONMENT === "production",
             secrets: [sessionSecret],
@@ -89,15 +92,15 @@ export const getPlayerFromRequest = async (request: Request): Promise<Player | n
 export async function getPlayerFromSession(session: Session): Promise<Player | null> {
     console.group("getPlayerFromSession")
     try { //  first try
-        if (session.has("player")) {
+        if (session.has(PLAYER_SESSION_VALUE)) {
             console.info('"player" in session')
-            return session.get("player")
+            return session.get(PLAYER_SESSION_VALUE)
         }
 
         // second try
-        if (session.has("playerSession")) {
+        if (session.has(PLAYER_SESSION_COOKIE_NAME)) {
             console.info('"playerSession" in session')
-            return session.get("playerSession")
+            return session.get(PLAYER_SESSION_COOKIE_NAME)
         }
 
         // kein player in der Session
@@ -110,7 +113,7 @@ export async function getPlayerFromSession(session: Session): Promise<Player | n
 
 async function setSession(session: Session, playerToken: PlayerToken, player: Player) {
     if (player) {
-        session.set("player", player);
+        session.set(PLAYER_SESSION_VALUE, player);
     }
     return await commitSession(session);
 }

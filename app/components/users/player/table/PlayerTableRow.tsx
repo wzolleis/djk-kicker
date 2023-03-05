@@ -16,6 +16,7 @@ const AdminTableRow = ({player}: AdminTableRowProps) => {
             <td className={"text-indigo-500 underline"}>
                 <a href={`mailto:${player.email}`}>{player.email}</a>
             </td>
+            <td className={"py-5 "}>{player.id}</td>
             <td className={"text-right"}>
                 <ButtonContainer className={"flex justify-end"}>
                     <RedButton>

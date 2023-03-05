@@ -16,7 +16,10 @@ export const loader: LoaderFunction = async ({params}) => {
     const playerId = params.playerId;
     invariant(!!playerId, "Keine Spieler ID in der URL")
     const player = await getPlayerById(playerId)
-    invariant(!!player, "Spieler nicht gefunden")
+    if (!player) {
+        console.info(`Der Spieler mit der ID ${playerId} existiert nicht (mehr)`)
+        return redirect(routeLinks.admin.users.home)
+    }
     return json({player})
 }
 
@@ -32,8 +35,6 @@ export const action: ActionFunction = async ({params, request}: { params: Params
     } else if (intent === 'delete') {
         const player = await getPlayerById(playerId)
         invariant(!!player, "Spieler nicht gefunden")
-
-
         await deleteFeedbackForPlayer(playerId)
         await deletePlayer(playerId)
     }

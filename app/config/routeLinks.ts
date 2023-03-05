@@ -6,9 +6,9 @@ const routeLinks = {
         game: {
             details: (gameId: string) => `/application/admin/games/${gameId}`,
             actions: (gameId: string) => `/application/admin/games/${gameId}/actions`,
-            edit:  (gameId: string) => `/application/admin/games/${gameId}/edit`,
-            delete:  (gameId: string) => `/application/admin/games/${gameId}/delete`,
-            sendMail:  (gameId: string) => `/application/admin/games/${gameId}/sendMail`,
+            edit: (gameId: string) => `/application/admin/games/${gameId}/edit`,
+            delete: (gameId: string) => `/application/admin/games/${gameId}/delete`,
+            sendMail: (gameId: string) => `/application/admin/games/${gameId}/sendMail`,
         },
         users: {
             useradministration: '/application/admin/users/users',
