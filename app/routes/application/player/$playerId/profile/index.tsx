@@ -1,11 +1,6 @@
-import { DefaultFeedback, Game, Player } from "@prisma/client";
-import {
-    ActionFunction,
-    json,
-    LoaderFunction,
-    redirect,
-} from "@remix-run/node";
-import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import {DefaultFeedback, Game, Player} from "@prisma/client";
+import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
+import {Form, useLoaderData, useTransition} from "@remix-run/react";
 import invariant from "tiny-invariant";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import RedButton from "~/components/common/buttons/RedButton";
@@ -15,19 +10,14 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import Subheading from "~/components/common/header/Subheading";
 import messages from "~/components/i18n/messages";
-import PlayerProfileForm, {
-    PlayerProfileDescription,
-} from "~/components/player/profile/playerProfileForm";
+import PlayerProfileForm, {PlayerProfileDescription,} from "~/components/player/profile/playerProfileForm";
 import routeLinks from "~/config/routeLinks";
-import { istStatusInConfig, statusInConfig } from "~/config/status";
-import {
-    getDefaultFeedback,
-    updateDefaultFeedback,
-} from "~/models/feedback.server";
-import { getGameById, getMostRecentGame } from "~/models/games.server";
-import { getPlayerById, updatePlayer } from "~/models/player.server";
-import { FormWrapper } from "~/utils/formWrapper.server";
-import { authenticatePlayer } from "~/utils/session.server";
+import {istStatusInConfig, statusInConfig} from "~/config/status";
+import {getDefaultFeedback, updateDefaultFeedback,} from "~/models/feedback.server";
+import {getGameById, getMostRecentGame} from "~/models/games.server";
+import {getPlayerById} from "~/models/player.server";
+import {FormWrapper} from "~/utils/formWrapper.server";
+import {authenticatePlayer} from "~/utils/session.server";
 
 type LoaderData = {
     player: Player;
@@ -52,8 +42,6 @@ const ProfileFormInputNameValues = [
     "dashboard.defaultFeedback.status",
     "dashboard.defaultFeedback.playerCount",
     "dashboard.defaultFeedback.note",
-    "dashboard.profile.player.name",
-    "dashboard.profile.player.email",
 ] as const;
 export type ProfileFormInputName = (typeof ProfileFormInputNameValues)[number];
 
@@ -79,8 +67,6 @@ export const action: ActionFunction = async ({ request }) => {
 
     if (intent === "saveProfile") {
         const profileForm = new FormWrapper<ProfileFormInputName>(formData);
-        const playerName = profileForm.get("dashboard.profile.player.name");
-        const playerMail = profileForm.get("dashboard.profile.player.email");
         const defaultFeedbackStatus =
             profileForm.get("dashboard.defaultFeedback.status") ??
             `${statusInConfig.unknown}`;
@@ -108,25 +94,12 @@ export const action: ActionFunction = async ({ request }) => {
             typeof defaultFeedbackNote === "string",
             "invalid default_note type: " + defaultFeedbackNote
         );
-        invariant(
-            typeof playerName === "string",
-            "invalid player name type: " + playerName
-        );
-        invariant(
-            typeof playerMail === "string",
-            "invalid player mail type: " + playerMail
-        );
         const defaultFeedbackStatusNumber = Number.parseInt(
             defaultFeedbackStatus
         );
         invariant(
             istStatusInConfig(defaultFeedbackStatusNumber),
             "invalid feedback_status value: " + defaultFeedbackStatusNumber
-        );
-        const playerUpdate = await updatePlayer(
-            playerId,
-            playerName.trim(),
-            playerMail.trim()
         );
         const defaultFeedbackUpdate = await updateDefaultFeedback({
             playerId,
@@ -136,7 +109,7 @@ export const action: ActionFunction = async ({ request }) => {
         });
 
         return json({
-            player: playerUpdate,
+            player,
             defaultFeedback: defaultFeedbackUpdate,
         });
     } else if (intent === "resetProfile") {
