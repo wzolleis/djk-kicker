@@ -65,18 +65,6 @@ export async function createPlayer(name: string, email: string): Promise<Player>
     });
 }
 
-export async function updatePlayer(id: string, name: string, email: string) {
-    return await prisma.player.update({
-        where: {
-            id,
-        },
-        data: {
-            name,
-            email,
-        },
-    });
-}
-
 export async function deletePlayer(id: string) {
     return await Promise.all([
         deleteFeedbackForPlayer(id),

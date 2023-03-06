@@ -82,8 +82,10 @@ const messages = {
     playerStatusForGame: (gameDate: string) => `Deine Antwort für den  ${gameDate}`,
     playerDefaultStatus: "Dein Standard-Status",
     playerProfile: "Dein Profil",
-    playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten und Deinen optionalen Standard-Status.",
-    playerProfileDescription_2: "Dieser Status wird verwendet, wenn Du keine Rückmeldung für das nächste Spiel setzt und gilt solange, bis Du ihn wieder löscht.",
+    playerProfileDescription_1: "Dein Profil enthält Deine Kontaktdaten, falls Du diese ändern möchtest, dann wende Dich bitte an einen Administrator.",
+    playerProfileDescription_3: "Der Standard-Status wird verwendet, wenn Du keine Rückmeldung für das nächste Spiel setzt und gilt solange, bis Du ihn wieder löscht (zurücksetzt). ",
+    playerProfileWarning_1: "Eine Änderung des Standard-Status gilt nicht für das aktuelle Spiel, sondern wirkt sich erst auf zukünftige Spiele aus.",
+    playerProfileWarning_2: "Wenn Du z.B. den Wert auf 'Nein' setzt, dann bist du automatisch solange für die nächsten Spiele abgemeldet, bis Du das wieder änderst.",
     saveProfile: "Profil speichern",
     deleteDefaultFeedback: "Standard-Status zurücksetzen"
   },
