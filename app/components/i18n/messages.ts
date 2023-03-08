@@ -93,6 +93,7 @@ const messages = {
     game: "Spiel",
     feedback: "Antwort",
     profile: "Profil",
+    rescue: 'Erste Hilfe',
     administration: "Verwaltung",
     registerPlayer: "Neuer Spieler",
   },
@@ -119,6 +120,13 @@ const messages = {
     invitation: (gameDate: string) => `Einladung für das Spiel am ${gameDate}`,
     zusage: (gameDate: string) => `Das Spiel am ${gameDate} findet statt`,
     absage: (gameDate: string) => `Das Spiel am ${gameDate} wurde abgesagt`
+  },
+  playerRescueForm: {
+    title: 'Erste Hilfe',
+    rescueDescription: 'Nur im Notfall verwenden',
+    emailDescription: 'Bitte gib zuerst deine E-Mail-Adresse ein',
+    deleteCookieDescription: 'Session Cookie',
+    email: 'E-Mail (Pflichtfeld)',
   },
   adminGamesTable: {
     id: '#',

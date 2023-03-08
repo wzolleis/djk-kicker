@@ -1,3 +1,4 @@
+
 const routeLinks = {
     admin: {
         adminLandingPage: "/application/admin/",
@@ -31,6 +32,7 @@ const routeLinks = {
     dashboard: '/application/dashboard',
     player: {
         create: `/application/player/create`,
+        rescue: `/application/player/rescue`,
         createForGame: (gameId: string) => `/application/player/create?gameid=${gameId}`,
         delete: (playerId: string) => `/application/player/${playerId}/delete`,
         profile: (playerId: string) => `/application/player/${playerId}/profile`,

@@ -14,19 +14,41 @@ if (!sessionSecret) {
 }
 
 const PLAYER_SESSION_VALUE = 'player'
-const PLAYER_SESSION_COOKIE_NAME = "PlayerSession"
+export const PLAYER_SESSION_COOKIE_NAME = "PlayerSession"
 
-export const {getSession, commitSession, destroySession} = createCookieSessionStorage({
-        cookie: {
-            name: PLAYER_SESSION_COOKIE_NAME,
-            sameSite: "lax",
-            secure: process.env.ENVIRONMENT === "production",
-            secrets: [sessionSecret],
-            path: "/",
-            maxAge: 60 * 60 * 24 * 360,
-            httpOnly: true,
-        },
-    });
+const sessionStorage = createCookieSessionStorage({
+    cookie: {
+        name: PLAYER_SESSION_COOKIE_NAME,
+        sameSite: "lax",
+        secure: process.env.ENVIRONMENT === "production",
+        secrets: [sessionSecret],
+        path: "/",
+        maxAge: 60 * 60 * 24,
+        httpOnly: true,
+    },
+});
+
+export const {getSession, commitSession, destroySession, } = sessionStorage
+export const destroyPlayerSession = async (request: Request): Promise<string> => {
+    try {
+        console.group('destroy player session')
+        const cookie = request.headers.get("Cookie");
+        console.info('cookie = ', JSON.stringify(cookie, undefined, 2))
+        const session = await getSession(cookie)
+        console.info('session = ', JSON.stringify(session, undefined, 2))
+        const result = destroySession(session)
+        console.log('result =', JSON.stringify(result, undefined, 2))
+        return result
+    } finally {
+        console.groupEnd()
+    }
+
+
+    const session = await getSession(request.headers.get('Cookie'));
+    request.headers.delete('Cookie')
+    session.set('cookie', null);
+    return await commitSession(session)
+}
 
 
 export async function getPlayerFromDatabaseSession(request: Request): Promise<Player | null> {
@@ -44,7 +66,7 @@ export async function changePlayer(request: Request, playerToken: PlayerToken) {
     return redirect(routeLinks.dashboard);
 }
 
-export const authenticatePlayer = async (request: Request): Promise<{isAuthenticated: boolean, session: Session, playerId: string | undefined}> => {
+export const authenticatePlayer = async (request: Request): Promise<{ isAuthenticated: boolean, session: Session, playerId: string | undefined }> => {
     try {
         console.group("authenticatePlayer")
         const token = getQueryParameter(request, "token", false);
@@ -80,6 +102,10 @@ export const authenticatePlayer = async (request: Request): Promise<{isAuthentic
 
 export async function getUserSession(request: Request) {
     return await getSession(request.headers.get("Cookie"));
+}
+
+export async function destroyUserSession(request: Request) {
+    return await destroySession(await getSession(request.headers.get('Cookie')))
 }
 
 export const getPlayerFromRequest = async (request: Request): Promise<Player | null> => {
