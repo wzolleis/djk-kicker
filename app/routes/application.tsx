@@ -1,25 +1,17 @@
-import {
-    ActionFunction,
-    json,
-    LoaderFunction,
-    redirect,
-} from "@remix-run/node";
-import { Outlet, useCatch, useNavigate } from "@remix-run/react";
+import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
+import {Outlet, useCatch, useNavigate} from "@remix-run/react";
 import React from "react";
 import invariant from "tiny-invariant";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import ErrorComponent from "~/components/common/error/ErrorComponent";
 import PageHeader from "~/components/common/PageHeader";
 import messages from "~/components/i18n/messages";
-import {
-    getNavigationFormValues,
-    isNavigationIntent,
-} from "~/config/bottomNavigation";
+import {getNavigationFormValues, isNavigationIntent,} from "~/config/bottomNavigation";
 import routeLinks from "~/config/routeLinks";
-import { getDefaultFeedback } from "~/models/feedback.server";
-import { authenticatePlayer } from "~/utils/session.server";
+import {getDefaultFeedback} from "~/models/feedback.server";
+import {authenticatePlayer} from "~/utils/session.server";
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
     const formValues = getNavigationFormValues(formData);
     const intent = formValues.get("intent");
@@ -38,6 +30,8 @@ export const action: ActionFunction = async ({ request }) => {
             break;
         case "home":
             return redirect(routeLinks.dashboard);
+        case 'rescue':
+            return redirect(routeLinks.player.rescue)
         case "game":
             if (!!gameId) {
                 return redirect(routeLinks.game(gameId));
@@ -60,8 +54,8 @@ export type ApplicationLoaderData = {
     defaultFeedback?: Awaited<ReturnType<typeof getDefaultFeedback>>;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
-    const { playerId } = await authenticatePlayer(request);
+export const loader: LoaderFunction = async ({request}) => {
+    const {playerId} = await authenticatePlayer(request);
     const defaultFeedback = playerId
         ? await getDefaultFeedback(playerId)
         : undefined;
@@ -72,7 +66,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 const Application = () => {
-    return <Outlet />;
+    return <Outlet/>;
 };
 
 export const CatchBoundary = () => {
@@ -94,9 +88,9 @@ export const CatchBoundary = () => {
     );
 };
 
-export const ErrorBoundary = ({ error }: { error: Error }) => {
+export const ErrorBoundary = ({error}: { error: Error }) => {
     console.error(error);
-    return <ErrorComponent />;
+    return <ErrorComponent/>;
 };
 
 export default Application;

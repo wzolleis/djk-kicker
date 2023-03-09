@@ -123,15 +123,6 @@ export const getNextGameDay = (startDate: DateTime = DateTime.now().startOf("day
   return startDate.set({ weekday: wednesday, weekNumber: startDate.weekNumber + 1 });
 };
 
-export function getRedactedString(): string {
-  const redacted = "●";
-  let result = redacted;
-  for (let i = 0; i < 10; i++) {
-    result += redacted;
-  }
-  return result;
-}
-
 export function getPlayerGreeting(playerName: string) {
   const hour = DateTime.now().hour;
   let playerGreeting;

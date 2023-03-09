@@ -14,7 +14,6 @@ import routeLinks from "~/config/routeLinks";
 import {getDefaultFeedback} from "~/models/feedback.server";
 import {getGameById, getMostRecentGame} from "~/models/games.server";
 import {getPlayerById, getPlayers} from "~/models/player.server";
-import {getPlayerGreeting} from "~/utils";
 import {authenticatePlayer} from "~/utils/session.server";
 import {getUser} from "./session.server";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
@@ -22,7 +21,7 @@ import messages from "~/components/i18n/messages";
 
 export const links: LinksFunction = () => {
     return [
-        { rel: "stylesheet", href: tailwindStylesheetUrl },
+        {rel: "stylesheet", href: tailwindStylesheetUrl},
         {
             rel: "stylesheet",
             href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css",
@@ -47,9 +46,9 @@ type LoaderData = {
     defaultFeedback: DefaultFeedback | null;
 };
 
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+export const loader: LoaderFunction = async ({request}: LoaderArgs) => {
     try {
-        const [user, mostRecentGame, { playerId }] = await Promise.all([
+        const [user, mostRecentGame, {playerId}] = await Promise.all([
             getUser(request),
             getMostRecentGame(),
             authenticatePlayer(request),
@@ -90,7 +89,7 @@ type RootScreenProps = {
     player: Player | null | undefined;
 };
 
-const SummaryButton = ({ nextGame }: { nextGame: GameWithFeedback }) => {
+const SummaryButton = ({nextGame}: { nextGame: GameWithFeedback }) => {
     return (
         <NavLink
             to={routeLinks.game(nextGame.id)}
@@ -109,8 +108,8 @@ const SummaryButton = ({ nextGame }: { nextGame: GameWithFeedback }) => {
 };
 
 const CreatePlayerButton = ({
-    nextGame,
-}: {
+                                nextGame,
+                            }: {
     nextGame: GameWithFeedback | null | undefined;
 }) => {
     const link = nextGame
@@ -133,7 +132,7 @@ const CreatePlayerButton = ({
     );
 };
 
-const ProfileButton = ({ player }: { player: Player }) => {
+const ProfileButton = ({player}: { player: Player }) => {
     return (
         <NavLink
             to={routeLinks.player.profile(player.id)}
@@ -171,7 +170,7 @@ const DashboardButton = () => {
     );
 };
 
-const RootScreen = ({ show, nextGame, player }: RootScreenProps) => {
+const RootScreen = ({show, nextGame, player}: RootScreenProps) => {
     if (!show) return null;
 
     return (
@@ -184,29 +183,16 @@ const RootScreen = ({ show, nextGame, player }: RootScreenProps) => {
                 />
             </div>
             <div className="mt-5 items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                {player && <DashboardButton />}
-                {nextGame && <SummaryButton nextGame={nextGame} />}
-                {player && <ProfileButton player={player} />}
-                <CreatePlayerButton nextGame={nextGame} />
+                {player && <DashboardButton/>}
+                {nextGame && <SummaryButton nextGame={nextGame}/>}
+                {player && <ProfileButton player={player}/>}
+                <CreatePlayerButton nextGame={nextGame}/>
             </div>
         </div>
     );
 };
 
-const Greeting = ({
-    showGreeting,
-    player,
-}: {
-    showGreeting: boolean;
-    player?: Player | null | undefined;
-}) => {
-    if (!showGreeting) return null;
-
-    const greeting = `${(!!player && getPlayerGreeting(player.name)) || ""}`;
-    return <Subheading title={greeting} />;
-};
-
-export function ErrorBoundary({ error }: { error: any }) {
+export function ErrorBoundary({error}: { error: any }) {
     return (
         <div>
             <h1>Error</h1>
@@ -218,69 +204,65 @@ export function ErrorBoundary({ error }: { error: any }) {
 }
 
 export default function App() {
-    const { nextGame, user, player } =
+    const {nextGame, user, player} =
         useLoaderData<LoaderData>() as LoaderData;
 
     const location = useLocation();
     const rootScreen = location.pathname === "/";
 
-    const showGreeting = !user;
     return (
         <html lang="en" className="bg-neutral-100">
-            <head>
-                <title>{messages.app.title}</title>
-                <Meta />
-                <Links />
-            </head>
-            <body className="h-full">
-                <div className="flex flex-col">
-                    <main className="flex">
-                        <div className="flex-1 ">
-                            <div className={"mb-20 md:mb-5"}>
-                                <TopNavBar
-                                    appMenu={appMenu.app}
-                                    user={user ?? undefined}
-                                />
-                                <GameBanner game={nextGame} />
-                                <Greeting
-                                    player={player}
-                                    showGreeting={showGreeting}
-                                />
-                                <RootScreen
-                                    show={rootScreen}
-                                    nextGame={nextGame}
-                                    player={player}
-                                />
-                                <div className={"mt-5 px-4 md:px-10"}>
-                                    <Outlet />
-                                </div>
-                                <Form
-                                    method={"post"}
-                                    action={routeLinks.application}>
-                                    <input
-                                        type={"hidden"}
-                                        name="nextGameId"
-                                        value={nextGame?.id}
-                                    />
-                                    <input
-                                        type={"hidden"}
-                                        name="playerId"
-                                        value={player?.id}
-                                    />
-                                    <BottomNavigationBar
-                                        admin={user ?? undefined}
-                                        game={nextGame}
-                                        player={player}
-                                    />
-                                </Form>
-                            </div>
+        <head>
+            <title>{messages.app.title}</title>
+            <Meta/>
+            <Links/>
+        </head>
+        <body className="h-full">
+        <div className="flex flex-col">
+            <main className="flex">
+                <div className="flex-1 ">
+                    <div className={"mb-20 md:mb-5"}>
+                        <TopNavBar
+                            appMenu={appMenu.app}
+                            user={user}
+                            player={player}
+                        />
+                        <GameBanner game={nextGame}/>
+                        <RootScreen
+                            show={rootScreen}
+                            nextGame={nextGame}
+                            player={player}
+                        />
+                        <div className={"mt-5 px-4 md:px-10"}>
+                            <Outlet/>
                         </div>
-                    </main>
+                        <Form
+                            method={"post"}
+                            action={routeLinks.application}>
+                            <input
+                                type={"hidden"}
+                                name="nextGameId"
+                                value={nextGame?.id}
+                            />
+                            <input
+                                type={"hidden"}
+                                name="playerId"
+                                value={player?.id}
+                            />
+                            <BottomNavigationBar
+                                admin={user ?? undefined}
+                                game={nextGame}
+                                player={player}
+                            />
+                        </Form>
+                    </div>
                 </div>
-                <ScrollRestoration />
-                <Scripts />
-                <LiveReload />
-            </body>
+            </main>
+        </div>
+        <ScrollRestoration/>
+        <Scripts/>
+        <LiveReload/>
+        </body>
         </html>
     );
 }

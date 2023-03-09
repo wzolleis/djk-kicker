@@ -1,21 +1,7 @@
-import {
-    createCookieSessionStorage,
-    createSessionStorage,
-    redirect,
-    SessionData,
-} from "@remix-run/node";
+import {createCookieSessionStorage, redirect,} from "@remix-run/node";
 import invariant from "tiny-invariant";
-
-import { DateTime } from "luxon";
-import { prisma } from "~/db.server";
-import {
-    createSession,
-    deleteSessionByID,
-    findSessionByID,
-    upsertSession,
-} from "~/models/session.server";
-import type { User } from "~/models/user.server";
-import { getUserById } from "~/models/user.server";
+import type {User} from "~/models/user.server";
+import {getUserById} from "~/models/user.server";
 
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 
