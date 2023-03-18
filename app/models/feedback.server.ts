@@ -1,8 +1,9 @@
-import type { Feedback, Game, Player } from "@prisma/client";
-import { DefaultFeedback } from "@prisma/client";
-import { DateTime } from "luxon";
-import { configuration } from "~/config";
-import { prisma } from "~/db.server";
+import type {Feedback, Game, Player} from "@prisma/client";
+import {DefaultFeedback} from "@prisma/client";
+import {DateTime} from "luxon";
+import {configuration} from "~/config";
+import {prisma} from "~/db.server";
+import {getPlayers} from "~/models/player.server";
 
 export async function getFeedbackForGame(gameId: Feedback["gameId"]) {
     return await prisma.feedback.findMany({ where: { gameId } });
@@ -32,7 +33,7 @@ export async function initializePlayers(gameId: string) {
             id: gameId,
         },
     });
-    const players = await prisma.player.findMany();
+    const players = await getPlayers();
     const expirationDate = DateTime.fromJSDate(new Date(game!.gameTime))
         .plus({ years: 1 })
         .toJSDate();

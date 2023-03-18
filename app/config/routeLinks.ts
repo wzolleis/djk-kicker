@@ -33,6 +33,7 @@ const routeLinks = {
     player: {
         create: `/application/player/create`,
         rescue: `/application/player/rescue`,
+        rating: `/application/player/rating`,
         createForGame: (gameId: string) => `/application/player/create?gameid=${gameId}`,
         delete: (playerId: string) => `/application/player/${playerId}/delete`,
         profile: (playerId: string) => `/application/player/${playerId}/profile`,

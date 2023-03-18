@@ -48,7 +48,8 @@ const messages = {
     dashboard: "Dashboard",
     login: "Als Administrator anmelden",
     logout: "Abmelden",
-    changePassword: 'Passwort ändern'
+    changePassword: 'Passwort ändern',
+    rescue: 'Erste Hilfe'
   },
   commonForm: {
     cancel: "Abbruch",
@@ -96,6 +97,7 @@ const messages = {
     rescue: 'Erste Hilfe',
     administration: "Verwaltung",
     registerPlayer: "Neuer Spieler",
+    rating: 'Stars'
   },
   loginform: {
     welcome: "DJK Kicker - Anmeldung",

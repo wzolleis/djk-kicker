@@ -32,6 +32,8 @@ export const action: ActionFunction = async ({request}) => {
             return redirect(routeLinks.dashboard);
         case 'rescue':
             return redirect(routeLinks.player.rescue)
+        case 'rating':
+            return redirect(routeLinks.player.rating)
         case "game":
             if (!!gameId) {
                 return redirect(routeLinks.game(gameId));

@@ -1,7 +1,7 @@
 import {FormWrapper} from "~/utils/formWrapper.server";
 
 
-const NavigationIntentValues = ["home", "game", "profile",  "administration", "registration", "rescue"] as const
+const NavigationIntentValues = ["home", "game", "profile",  "administration", "registration", "rescue", "rating"] as const
 export type NavigationIntent = typeof NavigationIntentValues[number]
 
 const NavigationFormValues = ["intent", "nextGameId", "playerId"] as const

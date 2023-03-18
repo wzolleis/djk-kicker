@@ -34,37 +34,7 @@ model Game {
   spielort String       @default("0")
   feedback Feedback[]
   token    String       @unique @default(cuid())
-  action   GameAction[]
-  mail     Mail[]
   status   String? // findet statt oder abgesagt
-}
-
-model GameAction {
-  id         String   @id @default(cuid())
-  game       Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  gameId     String
-  actionType String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  mail       Mail[] // die Mails, die fuer dieses Spiel veschickt wurden
-  status     Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
-  statusTxt  String? // Fehlermeldung
-}
-
-model Mail {
-  id        String     @id @default(cuid())
-  action    GameAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
-  actionId  String
-  player    Player     @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId  String
-  playerName String?
-  game      Game?      @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  gameId    String?
-  status    Int? // Mail erfolgreich geschickt (200) bzw. kann nicht verschickt werden (400) oder Error (500)
-  statusTxt String? // Fehlermeldung
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  mailType  String? // Einladungslink, Zusage, Absage,...
 }
 
 // Feedback der Spieler für ein Spiel
@@ -86,9 +56,9 @@ model Player {
   name            String
   email           String             @unique
   feedback        Feedback[]
-  mails           Mail[]
   DefaultFeedback DefaultFeedback[]
   Token           Token[]
+  isActive        Boolean? @default(true)
 }
 
 model DefaultFeedback {
@@ -141,3 +111,12 @@ model MailServiceRequest {
     updatedAt       DateTime   @updatedAt
 }
 
+model PlayerRating {
+    id              String   @id @default(cuid())
+    playerId String @unique
+    technik         Int          @default(0)
+    speed           Int          @default(0)
+    condition       Int          @default(0)
+    createdAt       DateTime   @default(now())
+    updatedAt       DateTime   @updatedAt
+}

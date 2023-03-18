@@ -118,13 +118,35 @@ const MailTemplateSelect = ({selected, onSelect}: SelectMailTemplateProps) => {
     )
 }
 
+type ActivePlayerButtonProps = {
+    player: Player
+    onPlayerClick: (player: Player) => void
+
+    selected: boolean
+}
+const ActivePlayerButton = ({player, onPlayerClick, selected}: ActivePlayerButtonProps) => {
+    return (
+        <div onClick={() => onPlayerClick(player)}>
+            <div className={classNames({
+                "bg-green-200": selected,
+                "bg-red-400": !selected,
+                "text-white": !selected,
+                "text-gray-600": selected,
+            }, "flex items-center justify-between border-b")}>
+                <div className="p-3 text-lg font-bold">
+                    {player.name}
+                </div>
+            </div>
+        </div>
+    )
+}
+
 const SendGameMail = () => {
     const allPlayers = usePlayers()
     const sorted = [...allPlayers].sort()
     const [includedPlayers, setIncludedPlayers] = useState(sorted)
     const [excludedPlayers, setExcludedPlayers] = useState(Array<Player>);
     const [mailTemplate, setMailTemplate] = useState<MailTemplateType>("gameInvitation")
-
 
     const removePlayerFromIncludedList = (player: Player) => {
         setIncludedPlayers(removePlayerFromArrayByPlayerId(includedPlayers, player.id))
@@ -191,18 +213,7 @@ const SendGameMail = () => {
                                     allPlayers.map((player: Player) => {
                                             const selected = isPlayerInIncludedList(player)
                                             return (
-                                                <div key={player.id} onClick={() => handlePlayerSelection(player)}>
-                                                    <div className={classNames({
-                                                        "bg-green-200": selected,
-                                                        "bg-red-400": !selected,
-                                                        "text-white": !selected,
-                                                        "text-gray-600": selected,
-                                                    }, "flex items-center justify-between border-b")}>
-                                                        <div className="p-3 text-lg font-bold">
-                                                            {player.name}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <ActivePlayerButton key={player.id} player={player} onPlayerClick={handlePlayerSelection} selected={selected}/>
                                             )
                                         }
                                     )
