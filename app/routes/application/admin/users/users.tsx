@@ -8,12 +8,13 @@ import messages from "~/components/i18n/messages";
 import PageHeader from "~/components/common/PageHeader";
 import MainPageContent from "~/components/common/MainPageContent";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import {getPlayers} from "~/models/player.server";
+import {getActiveAndInactivePlayers} from "~/models/player.server";
 import PlayerTable from "~/components/users/player/table/PlayerTable";
 import routeLinks from "~/config/routeLinks";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import {getAdminInvitations} from "~/models/admin.user.invitation.server";
 import AdminInvitationTable from "~/components/users/admin/AdminInvitationTable";
+import TransitionContainer from "~/components/common/container/transitionContainer";
 
 type LoaderData = {
     users: User[];
@@ -28,7 +29,7 @@ export const loader: LoaderFunction = async ({
     request: Request;
 }) => {
     await requireUserId(request);
-    const [users, players, invitations] = await Promise.all([getUsers(), getPlayers(), getAdminInvitations()]);
+    const [users, players, invitations] = await Promise.all([getUsers(), getActiveAndInactivePlayers(), getAdminInvitations()]);
 
     return json<LoaderData>({users, players, invitations});
 };
@@ -37,7 +38,7 @@ const Users = () => {
     const {users, players, invitations} = useLoaderData() as unknown as LoaderData;
 
     return (
-        <>
+        <TransitionContainer>
             <div className={"flex gap-5"}>
                 <PageHeader title={messages.adminLandingPage.users}/>
                 <ButtonContainer className={'flex-grow'}>
@@ -72,7 +73,7 @@ const Users = () => {
                     </section>
                 </div>
             </MainPageContent>
-        </>
+        </TransitionContainer>
     );
 };
 

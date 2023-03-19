@@ -24,8 +24,10 @@ const routeLinks = {
                              token
                          }: { inviteId: string, token: string }) => `/application/admin/users/invites/${inviteId}/accept?token=${token}`
             },
-
         },
+        players: {
+            status: (playerId: string) => `/application/admin/players/${playerId}/status`,
+        }
     },
     games: '/application/games',
     game: (gameId: string) => `/application/games/${gameId}`,

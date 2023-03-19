@@ -32,7 +32,9 @@ const messages = {
     actionHistory: 'Historie',
     absage: 'Absagen',
     zusage: 'Zusagen',
-    details: "Details"
+    details: "Details",
+    activate: 'aktivieren',
+    deactivate: 'deaktivieren'
   },
   actionType: {
     GAME_INVITATION: "Einladung",
@@ -205,7 +207,10 @@ const messages = {
     name: "Name",
     email: "E-Mail",
     role: "Rolle",
-    playerId: 'ID'
+    playerId: 'ID',
+    status: 'Status',
+    activeStatus: (active: boolean) => `${active ? 'aktiv' : 'deaktiviert'}`,
+    actions: 'Aktionen'
   },
   adminCreateUserForm: {
     title: "Neuen Administrator anlegen",
@@ -331,6 +336,10 @@ const messages = {
   adminInvitationDeleteForm: {
     confirmationQuestion: (adminName: string) => `Die Einladung für "${adminName}" löschen?`
   },
+  playerStatusForm: {
+    deactivateConfirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" deaktivieren ?`,
+    activateConfirmationQuestion: (playerName: string) => `Den Spieler "${playerName}" aktivieren ?`
+  },
   playerGreeting: {
     morning: "Guten Morgen",
     noon: "Mahlzeit",
@@ -380,6 +389,9 @@ const messages = {
   },
   adminDeleteExpiredForm: {
     confirmationQuestion: (gameCount: number) => `Lösche ${gameCount} ${gameCount > 1 ? "abgelaufene Spiele" : "abgelaufenes Spiel"}? `
+  },
+  adminEditPlayerForm: {
+    title: 'Spieler bearbeiten',
   }
 };
 

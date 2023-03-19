@@ -15,6 +15,10 @@ export async function getPlayers() {
     });
 }
 
+export async function getActiveAndInactivePlayers() {
+    return prisma.player.findMany();
+}
+
 export const findManyPlayerById = async (playerIds: string[]): Promise<Player[]> => {
     return await prisma.player.findMany({
             where: {
@@ -70,4 +74,15 @@ export async function deletePlayer(id: string) {
         deleteSessionForPlayer(id),
         prisma.player.delete({where: {id}})
     ]);
+}
+
+export async function updatePlayer(id: string, toUpdate: {isActive: boolean}) {
+    return await prisma.player.update({
+        where: {
+            id: id
+        },
+        data: {
+            isActive: toUpdate.isActive
+        }
+    })
 }
