@@ -14,7 +14,6 @@ import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import {MailService} from "~/helpers/mail/mailService";
-import {DriftMailStatusResponse} from "driftmail";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -25,10 +24,10 @@ const removePlayerFromArrayByPlayerId = (playerArray: Array<Player>, playerId: s
 const SendMailFormFieldValues = ["includedPlayers", "mailTemplate"] as const
 export type SendMailFormFields = typeof SendMailFormFieldValues[number]
 
-type ActionData = {
-    status: DriftMailStatusResponse
-    requestId: string
-}
+// type ActionData = {
+//     status: DriftMailStatusResponse
+//     requestId: string
+// }
 
 export const action: ActionFunction = async ({request, params: {gameId}}) => {
     invariant(typeof gameId === 'string')
@@ -43,8 +42,9 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     const includedPlayerIds = includedPlayerIdsString.split(',')
 
     const mailService = new MailService(gameId, mailTemplate, includedPlayerIds, host)
-    const mailStatus = await mailService.sendGameMail()
-    return json<ActionData>(mailStatus)
+    await mailService.sendGameMail()
+
+    return json<{  }>({})
 }
 
 type MailTemplateViewProps = {

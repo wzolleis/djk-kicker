@@ -1,5 +1,5 @@
-import {useTransition} from "@remix-run/react";
 import {PropsWithChildren} from "react";
+import {useNavigation} from "@remix-run/react";
 
 export type SubmitButtonProps = {
     className?: string
@@ -17,7 +17,7 @@ export type SubmitButtonProps = {
 }
 
 const SubmitButton = (props: PropsWithChildren<SubmitButtonProps>) => {
-    const transition = useTransition()
+    const transition = useNavigation()
     let activeTransition = transition.state !== "idle"
     let label = ''
     switch (transition.state) {

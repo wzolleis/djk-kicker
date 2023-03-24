@@ -1,4 +1,4 @@
-import {useTransition} from "@remix-run/react";
+import {useNavigation} from "@remix-run/react";
 import {AnimatePresence, motion} from "framer-motion";
 import {PropsWithChildren} from "react";
 import messages from "~/components/i18n/messages";
@@ -24,8 +24,9 @@ const Placeholder = ({show}: { show: boolean }) => {
 }
 
 const TransitionContainer = ({children}: PropsWithChildren<TransitionContainerProps>) => {
-    const transition = useTransition()
-    let activeTransition = transition.state !== "idle"
+    const navigation = useNavigation()
+
+    let activeTransition = navigation.state !== "idle"
     return (
         <AnimatePresence>
             <Placeholder show={activeTransition}/>
