@@ -15,10 +15,12 @@ const PlayerTable = ({players}: PlayerTableProps) => {
             <div className={"bg-white rounded-xl shadow shadow-lg shadow-indigo-200 px-5"}>
                 <table className="table-auto w-full ">
                     <thead className={"mb-4"}>
-                    <tr className={"border-b text-left"}>
-                        <th className={"py-3"}>{messages.adminOverviewTable.name}</th>
+                    <tr className={"border-b text-left py-5"}>
+                        <th>{messages.adminOverviewTable.name}</th>
                         <th>{messages.adminOverviewTable.email}</th>
-                        <th>{messages.adminOverviewTable.playerId}</th>
+                        <th>{messages.adminOverviewTable.status}</th>
+                        <th className={'hidden md:block py-5'}>{messages.adminOverviewTable.playerId}</th>
+                        <th className={'py-5'}>{messages.adminOverviewTable.actions}</th>
                     </tr>
                     </thead>
                     <tbody className={"mt-5"}>

@@ -8,7 +8,7 @@ import {useDate} from "~/utils";
 import PlayerFeedback from "~/components/player/feedback/PlayerFeedback";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
-import {useTransition} from "@remix-run/react";
+import {useNavigation} from "@remix-run/react";
 import classNames from "classnames";
 import SubmitButton from "~/components/common/buttons/submitButton";
 
@@ -24,7 +24,7 @@ const GameFeedback = ({
                           nextGameFeedback,
                           defaultFeedback,
                       }: GameFeedbackProps) => {
-    const transition = useTransition()
+    const navigation = useNavigation()
 
     if (!nextGame) return (
         <Subheading title={messages.errors.noGame}/>
@@ -35,8 +35,8 @@ const GameFeedback = ({
     const handleFeedBackChange = (changedFeedback: Feedback) => {
         setFeedBack(changedFeedback)
     }
-    const submitting = transition.state === "submitting"
-    const loading = transition.state === "loading"
+    const submitting = navigation.state === "submitting"
+    const loading = navigation.state === "loading"
 
     let title = messages.dashboard.playerStatusForGame(useDate(new Date(nextGame.gameTime)))
 

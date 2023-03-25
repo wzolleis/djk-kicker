@@ -82,15 +82,28 @@ const ProfileButton = ({playerId}: { playerId: string | undefined }) => {
     )
 }
 
-const PlayerRescueButton = () => {
+// const PlayerRescueButton = () => {
+//     const location = useLocation()
+//     const active = location.pathname === routeLinks.player.rescue
+//
+//     return (
+//         <NavButton label={messages.bottomNavBar.rescue}
+//                    className={"fa-solid fa-suitcase-medical"}
+//                    active={active}
+//                    value={"rescue"}
+//         />
+//     )
+// }
+
+const RatingButton = () => {
     const location = useLocation()
-    const active = location.pathname === routeLinks.player.rescue
+    const active = location.pathname === routeLinks.player.rating
 
     return (
-        <NavButton label={messages.bottomNavBar.rescue}
-                   className={"fa-solid fa-suitcase-medical"}
+        <NavButton label={messages.bottomNavBar.rating}
+                   className={"fa-solid fa-star"}
                    active={active}
-                   value={"rescue"}
+                   value={"rating"}
         />
     )
 }
@@ -128,7 +141,7 @@ const BottomNavigationBar = ({admin, player, game}: BottomNavigationBarProps) =>
                     <HomeButton playerId={playerId}/>
                     <SummaryButton gameId={gameId}/>
                     <ProfileButton playerId={playerId}/>
-                    <PlayerRescueButton/>
+                    <RatingButton/>
                     <AdminNavButton label={messages.bottomNavBar.administration}
                                     className={"fa-solid fa-gears"}
                                     optionalUser={admin}

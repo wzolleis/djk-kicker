@@ -1,6 +1,6 @@
 import {DefaultFeedback, Game, Player} from "@prisma/client";
 import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
-import {Form, useLoaderData, useTransition} from "@remix-run/react";
+import {Form, useLoaderData, useNavigation} from "@remix-run/react";
 import invariant from "tiny-invariant";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import RedButton from "~/components/common/buttons/RedButton";
@@ -18,6 +18,7 @@ import {getGameById, getMostRecentGame} from "~/models/games.server";
 import {getPlayerById} from "~/models/player.server";
 import {FormWrapper} from "~/utils/formWrapper.server";
 import {authenticatePlayer} from "~/utils/session.server";
+import PlayerRatingForm from "~/components/player/profile/PlayerRatingForm";
 
 type LoaderData = {
     player: Player;
@@ -141,7 +142,7 @@ const PlayerProfile = () => {
         defaultFeedback,
         game: nextGame,
     } = useLoaderData<LoaderData>();
-    const transition = useTransition();
+    const transition = useNavigation();
     let activeTransition = transition.state !== "idle";
     if (!player) {
         return (
@@ -175,6 +176,7 @@ const PlayerProfile = () => {
                                 player={player}
                                 defaultFeedback={defaultFeedback}
                             />
+                            <PlayerRatingForm player={player}/>
                             <ProcessingPlaceholder hidden={!activeTransition} />
                             {!activeTransition && (
                                 <ButtonContainer

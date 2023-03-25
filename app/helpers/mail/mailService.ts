@@ -46,7 +46,7 @@ export class MailService {
         this.host = host
     }
 
-    async sendGameMail(): Promise<{requestId: string, status: DriftMailStatusResponse}> {
+    async sendGameMail(): Promise<{ requestId: string, status: DriftMailStatusResponse } | undefined> {
         await this.loadGameData()
         await this.loadPlayerData()
         await this.createDriftMailData()
@@ -54,9 +54,13 @@ export class MailService {
         await this.saveMailRequest()
         await this.fetchDriftMailStatus()
 
-        invariant(this.requestId, "Die ReqquestId ist null")
-        invariant(this.statusResponse, "Die StatusResponse ist null")
-        return {requestId: this.requestId, status: this.statusResponse}
+        // invariant(this.requestId, "Die ReqquestId ist null")
+        // invariant(this.statusResponse, "Die StatusResponse ist null")
+        if (!!this.requestId && !!this.statusResponse) {
+            return {requestId: this.requestId, status: this.statusResponse}
+        } else {
+            return undefined
+        }
     }
 
     private async loadGameData() {
@@ -100,10 +104,11 @@ export class MailService {
     private async sendDriftMail() {
         try {
             console.group("sendDriftMail")
-            console.info('mail', this.driftMail)
+            console.info('mail', JSON.stringify(this.driftMail, undefined, 2))
             this.requestId = await driftMailClient.send(this.driftMail!)
-
-            invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
+            // invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
+        } catch (error) {
+            console.error('Fehler beim Senden der drift mail', error)
         } finally {
             console.groupEnd()
         }
@@ -112,13 +117,17 @@ export class MailService {
     private async saveMailRequest() {
         console.group("saveMailRequest")
         try {
-            invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
-            await createMailServiceRequest({
-                requestId: this.requestId,
-                gameId: this.gameId,
-                requestType: this.templateName,
-                requestPayload: JSON.stringify(this.driftMail, undefined, 2)
-            })
+            // invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
+            if (!this.requestId) {
+                console.warn('Keine Request Id')
+            } else {
+                await createMailServiceRequest({
+                    requestId: this.requestId,
+                    gameId: this.gameId,
+                    requestType: this.templateName,
+                    requestPayload: JSON.stringify(this.driftMail, undefined, 2)
+                })
+            }
         } finally {
             console.groupEnd()
         }

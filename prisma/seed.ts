@@ -1,6 +1,6 @@
-import { Player, PrismaClient } from "@prisma/client";
+import {Player, PrismaClient} from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { faker } from "@faker-js/faker";
+import {faker} from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
@@ -12,26 +12,9 @@ function generateEmail() {
   return faker.internet.exampleEmail(undefined, undefined, { allowSpecialCharacters: false });
 }
 
-async function generateGames() {
-  let i = 1;
-  const games = [];
-  while (i < 11) {
-    const game = await prisma.game.create({
-      data: {
-        name: `Fußball ${i}.10.22`,
-        link: `game${generateName()}`,
-        gameTime: new Date(`2022-09-${i}`),
-      },
-    });
-    games.push(game);
-    i++;
-  }
-  return games;
-}
-
 async function generatePlayers() {
   const players: Player[] = [];
-  for (let index = 0; index < 10; index++) {
+  for (let index = 0; index < 1; index++) {
     const player = await prisma.player.create({
       data: {
         name: generateName(),
@@ -68,7 +51,6 @@ async function seed() {
     },
   });
   console.log("created user with id: ", user.id);
-  const games = await generateGames();
   console.log("created games");
   const players = await generatePlayers();
   console.log("created players");
@@ -76,6 +58,10 @@ async function seed() {
   players.map((player) => {
     generateFeedback(player);
   });
+
+  players.map((player) => {
+    generateRating(player)
+  })
 
   console.log("created feedback");
   console.log(`Database has been seeded. 🌱`);
@@ -92,6 +78,14 @@ seed()
 
 async function generateFeedback(player: Player) {
   await prisma.defaultFeedback.create({
+    data: {
+      playerId: player.id,
+    },
+  });
+}
+
+async function generateRating(player: Player) {
+  await prisma.playerRating.create({
     data: {
       playerId: player.id,
     },

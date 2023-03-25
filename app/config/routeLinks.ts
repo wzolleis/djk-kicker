@@ -24,8 +24,10 @@ const routeLinks = {
                              token
                          }: { inviteId: string, token: string }) => `/application/admin/users/invites/${inviteId}/accept?token=${token}`
             },
-
         },
+        players: {
+            status: (playerId: string) => `/application/admin/players/${playerId}/status`,
+        }
     },
     games: '/application/games',
     game: (gameId: string) => `/application/games/${gameId}`,
@@ -33,6 +35,7 @@ const routeLinks = {
     player: {
         create: `/application/player/create`,
         rescue: `/application/player/rescue`,
+        rating: `/application/player/rating`,
         createForGame: (gameId: string) => `/application/player/create?gameid=${gameId}`,
         delete: (playerId: string) => `/application/player/${playerId}/delete`,
         profile: (playerId: string) => `/application/player/${playerId}/profile`,

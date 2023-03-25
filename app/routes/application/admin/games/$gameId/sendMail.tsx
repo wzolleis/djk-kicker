@@ -14,7 +14,6 @@ import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import {MailService} from "~/helpers/mail/mailService";
-import {DriftMailStatusResponse} from "driftmail";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -25,10 +24,10 @@ const removePlayerFromArrayByPlayerId = (playerArray: Array<Player>, playerId: s
 const SendMailFormFieldValues = ["includedPlayers", "mailTemplate"] as const
 export type SendMailFormFields = typeof SendMailFormFieldValues[number]
 
-type ActionData = {
-    status: DriftMailStatusResponse
-    requestId: string
-}
+// type ActionData = {
+//     status: DriftMailStatusResponse
+//     requestId: string
+// }
 
 export const action: ActionFunction = async ({request, params: {gameId}}) => {
     invariant(typeof gameId === 'string')
@@ -43,8 +42,9 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     const includedPlayerIds = includedPlayerIdsString.split(',')
 
     const mailService = new MailService(gameId, mailTemplate, includedPlayerIds, host)
-    const mailStatus = await mailService.sendGameMail()
-    return json<ActionData>(mailStatus)
+    await mailService.sendGameMail()
+
+    return json<{  }>({})
 }
 
 type MailTemplateViewProps = {
@@ -118,13 +118,35 @@ const MailTemplateSelect = ({selected, onSelect}: SelectMailTemplateProps) => {
     )
 }
 
+type ActivePlayerButtonProps = {
+    player: Player
+    onPlayerClick: (player: Player) => void
+
+    selected: boolean
+}
+const ActivePlayerButton = ({player, onPlayerClick, selected}: ActivePlayerButtonProps) => {
+    return (
+        <div onClick={() => onPlayerClick(player)}>
+            <div className={classNames({
+                "bg-green-200": selected,
+                "bg-red-400": !selected,
+                "text-white": !selected,
+                "text-gray-600": selected,
+            }, "flex items-center justify-between border-b")}>
+                <div className="p-3 text-lg font-bold">
+                    {player.name}
+                </div>
+            </div>
+        </div>
+    )
+}
+
 const SendGameMail = () => {
     const allPlayers = usePlayers()
     const sorted = [...allPlayers].sort()
     const [includedPlayers, setIncludedPlayers] = useState(sorted)
     const [excludedPlayers, setExcludedPlayers] = useState(Array<Player>);
     const [mailTemplate, setMailTemplate] = useState<MailTemplateType>("gameInvitation")
-
 
     const removePlayerFromIncludedList = (player: Player) => {
         setIncludedPlayers(removePlayerFromArrayByPlayerId(includedPlayers, player.id))
@@ -191,18 +213,7 @@ const SendGameMail = () => {
                                     allPlayers.map((player: Player) => {
                                             const selected = isPlayerInIncludedList(player)
                                             return (
-                                                <div key={player.id} onClick={() => handlePlayerSelection(player)}>
-                                                    <div className={classNames({
-                                                        "bg-green-200": selected,
-                                                        "bg-red-400": !selected,
-                                                        "text-white": !selected,
-                                                        "text-gray-600": selected,
-                                                    }, "flex items-center justify-between border-b")}>
-                                                        <div className="p-3 text-lg font-bold">
-                                                            {player.name}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <ActivePlayerButton key={player.id} player={player} onPlayerClick={handlePlayerSelection} selected={selected}/>
                                             )
                                         }
                                     )

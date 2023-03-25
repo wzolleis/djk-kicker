@@ -3,7 +3,6 @@ import type {Game} from "@prisma/client";
 import {DateTime} from "luxon";
 import {deleteFeedbackForGame, initializePlayers} from "~/models/feedback.server";
 import {GameStatus} from "~/config/admin.game.constants";
-import {deleteGameActionsByIds, deleteMailsForGame, findActionsForGame} from "~/models/admin.mails.server";
 
 export const findAllGames = async (): Promise<Game[]> => {
     return await prisma.game.findMany({
@@ -50,12 +49,8 @@ export const updateGameStatus = async (gameId: string, status: GameStatus) => {
 }
 
 export const deleteGame = async (gameId: string) => {
-    const gameActions = await findActionsForGame(gameId)
-    const gameActionIds = gameActions.map(action => action.id)
     await Promise.all(
         [
-            deleteMailsForGame(gameActionIds),
-            deleteGameActionsByIds(gameActionIds),
             deleteFeedbackForGame(gameId),
             // Die Mail-Requests bleiben noch für Analyse-Zwecke
             // deleteMailServiceRequests(gameId),

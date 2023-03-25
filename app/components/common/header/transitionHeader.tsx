@@ -1,10 +1,10 @@
-import {useTransition} from "@remix-run/react";
+import {useNavigation} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
 import Subheading from "~/components/common/header/Subheading";
 import classNames from "classnames";
 
 const TransitionHeader = ({idleLabel, hidden}: { idleLabel: string, hidden?: boolean }) => {
-    const transition = useTransition()
+    const transition = useNavigation()
     const idle = transition.state === 'idle'
 
     if (hidden) return null
