@@ -17,7 +17,7 @@ const AdminTableRow = ({player}: AdminTableRowProps) => {
             <td className={"text-indigo-500 underline"}>
                 <a href={`mailto:${player.email}`}>{player.email}</a>
             </td>
-            <td>{messages.adminOverviewTable.activeStatus(player.isActive)} </td>
+            <td>{messages.adminOverviewTable.activeStatus(player.isActive ?? false)} </td>
             <td className={"hidden md:flex"}>{player.id}</td>
             <td className={"text-center"}>
                 <ButtonContainer className={'flex justify-between'}>

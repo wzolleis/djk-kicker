@@ -112,11 +112,12 @@ model MailServiceRequest {
 }
 
 model PlayerRating {
-    id              String   @id @default(cuid())
-    playerId String @unique
-    technik         Int          @default(0)
-    speed           Int          @default(0)
-    condition       Int          @default(0)
-    createdAt       DateTime   @default(now())
-    updatedAt       DateTime   @updatedAt
+    id              String      @id             @default(cuid())
+    playerId        String      @unique
+    overall         Int                         @default(0)
+    technik         Int                         @default(0)
+    speed           Int                         @default(0)
+    condition       Int                         @default(0)
+    createdAt       DateTime                    @default(now())
+    updatedAt       DateTime                    @updatedAt
 }

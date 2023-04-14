@@ -15,6 +15,7 @@ const routeLinks = {
             useradministration: '/application/admin/users/users',
             home: '/application/admin/users',
             create: '/application/admin/users/new',
+            ratings: '/application/admin/users/playerRating',
             delete: (userId: string) => `/application/admin/users/${userId}/delete`,
             invite: {
                 create: '/application/admin/users/invites/new',
@@ -27,7 +28,8 @@ const routeLinks = {
         },
         players: {
             status: (playerId: string) => `/application/admin/players/${playerId}/status`,
-        }
+        },
+        serverLandingPage: 'application/admin/server'
     },
     games: '/application/games',
     game: (gameId: string) => `/application/games/${gameId}`,

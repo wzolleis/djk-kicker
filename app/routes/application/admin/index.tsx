@@ -1,5 +1,6 @@
-import { Link, useNavigate } from "@remix-run/react";
+import {Link, useNavigate} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
+import * as React from "react";
 
 const GamesSvg = () => {
   return (
@@ -24,6 +25,12 @@ const UsersSvg = () => {
     </svg>
   );
 };
+
+const ServerSvg = () => {
+  return (
+      <i className="fa-solid fa-server h-10 w-10 justify-center"></i>
+  )
+}
 
 const AdminIndex = () => {
   // Beispiel aus https://tailwindcomponents.com/component/cards-9
@@ -53,6 +60,18 @@ const AdminIndex = () => {
             <Link to="users">{messages.adminLandingPage.users}</Link>
           </p>
           <p className="mt-2 text-sm text-slate-500">{messages.adminLandingPage.usersDescription}</p>
+        </div>
+        <div
+          className="p-10 flex flex-col items-center text-center group md:lg:xl:border-r md:lg:xl:border-b hover:bg-slate-50 cursor-pointer"
+          onClick={() => navigate("server")}
+        >
+          <span className="p-5 rounded-full bg-orange-500 text-white shadow-lg shadow-orange-200">
+            <ServerSvg />
+          </span>
+          <p className="text-xl font-medium text-slate-700 mt-3">
+            <Link to="server">{messages.adminLandingPage.server}</Link>
+          </p>
+          <p className="mt-2 text-sm text-slate-500">{messages.adminLandingPage.serverDescription}</p>
         </div>
       </div>
     </div>
