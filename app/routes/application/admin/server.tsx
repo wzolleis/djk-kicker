@@ -1,9 +1,10 @@
+import React from "react";
 import {Outlet} from "@remix-run/react";
 
-const InviteId = () => {
+const ServerAdmin = () => {
     return (
         <Outlet/>
     )
 }
 
-export default InviteId
+export default ServerAdmin

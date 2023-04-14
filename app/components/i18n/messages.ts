@@ -34,7 +34,8 @@ const messages = {
     zusage: 'Zusagen',
     details: "Details",
     activate: 'aktivieren',
-    deactivate: 'deaktivieren'
+    deactivate: 'deaktivieren',
+    ratings: 'Rating'
   },
   actionType: {
     GAME_INVITATION: "Einladung",
@@ -201,7 +202,9 @@ const messages = {
     games: "Spiele",
     gamesDescription: "Spiele anlegen, Spiele absagen, usw...",
     users: "Benutzerverwaltung",
-    usersDescription: "Berechtigungen und so ein Quatsch"
+    usersDescription: "Berechtigungen und so ein Quatsch",
+    server: 'Server',
+    serverDescription: 'Servereinstellungen'
   },
   adminOverviewTable: {
     name: "Name",

@@ -1,7 +1,7 @@
 import {json, LoaderFunction} from "@remix-run/node";
 import {requireUserId} from "~/session.server";
 import {getUsers} from "~/models/user.server";
-import {AdminInvitation, Player, User} from "@prisma/client";
+import {Player, User} from "@prisma/client";
 import {Link, useLoaderData} from "@remix-run/react";
 import AdminTable from "~/components/users/admin/AdminTable";
 import messages from "~/components/i18n/messages";
@@ -12,15 +12,11 @@ import {getActiveAndInactivePlayers} from "~/models/player.server";
 import PlayerTable from "~/components/users/player/table/PlayerTable";
 import routeLinks from "~/config/routeLinks";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
-import {getAdminInvitations} from "~/models/admin.user.invitation.server";
-import AdminInvitationTable from "~/components/users/admin/AdminInvitationTable";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 
 type LoaderData = {
     users: User[];
     players: Player[];
-
-    invitations: AdminInvitation[]
 };
 
 export const loader: LoaderFunction = async ({
@@ -29,13 +25,13 @@ export const loader: LoaderFunction = async ({
     request: Request;
 }) => {
     await requireUserId(request);
-    const [users, players, invitations] = await Promise.all([getUsers(), getActiveAndInactivePlayers(), getAdminInvitations()]);
+    const [users, players] = await Promise.all([getUsers(), getActiveAndInactivePlayers()]);
 
-    return json<LoaderData>({users, players, invitations});
+    return json<LoaderData>({users, players});
 };
 
 const Users = () => {
-    const {users, players, invitations} = useLoaderData() as unknown as LoaderData;
+    const {users, players} = useLoaderData() as unknown as LoaderData;
 
     return (
         <TransitionContainer>
@@ -46,7 +42,7 @@ const Users = () => {
                         <Link to={routeLinks.admin.users.create}>{messages.buttons.add}</Link>
                     </DefaultButton>
                     <DefaultButton>
-                        <Link to={routeLinks.admin.users.invite.create}>{messages.buttons.invite}</Link>
+                        <Link to={routeLinks.admin.users.ratings}>{messages.buttons.ratings}</Link>
                     </DefaultButton>
                 </ButtonContainer>
             </div>
@@ -58,13 +54,6 @@ const Users = () => {
                         </p>
                         <AdminTable users={users}/>
                     </section>
-                    <section className={"space-y-2"}>
-                        <p className={"font-default-medium text-headline-small"}>
-                            {messages.adminUsersForm.invitations}
-                        </p>
-                        <AdminInvitationTable invitations={invitations}/>
-                    </section>
-
                     <section className={"space-y-2"}>
                         <p className={"font-default-medium text-headline-small"}>
                             {messages.user.roles.player}
