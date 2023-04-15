@@ -11,7 +11,6 @@ import messages from "~/components/i18n/messages";
 import {createEncryptedPlayerToken} from "~/utils/token.server";
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 
-const driftMailClient = new DriftmailClient()
 
 export type DriftMailJob = Omit<JobResponse, "failure_cause">;
 
@@ -38,6 +37,8 @@ export class MailService {
 
     player: Player[] = []
     statusResponse: DriftMailStatusResponse | null = null
+
+    driftMailClient = new DriftmailClient()
 
     constructor(gameId: string, templateName: MailTemplateType, playerIds: string[], host: string) {
         this.gameId = gameId;
@@ -103,7 +104,7 @@ export class MailService {
         try {
             console.group("sendDriftMail")
             console.info('mail', JSON.stringify(this.driftMail, undefined, 2))
-            this.requestId = await driftMailClient.send(this.driftMail!)
+            this.requestId = await this.driftMailClient.send(this.driftMail!)
             console.info('request Id = ' + this.requestId)
         } catch (error) {
             console.error('Fehler beim Senden der drift mail', error)
@@ -115,7 +116,6 @@ export class MailService {
     private async saveMailRequest() {
         console.group("saveMailRequest")
         try {
-            // invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
             if (!this.requestId) {
                 console.warn('Keine Request Id')
             } else {
@@ -143,6 +143,7 @@ export class MailService {
  * @param requestId die die Drift-Mail-Request ID
  */
 export const fetchDriftMailStatus = async (requestId: string): Promise<DriftMailStatusResponse> => {
+    const driftMailClient = new DriftmailClient()
     return await driftMailClient.getStatus(requestId)
 }
 
