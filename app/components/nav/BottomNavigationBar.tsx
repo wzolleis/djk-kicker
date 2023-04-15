@@ -141,7 +141,7 @@ const BottomNavigationBar = ({admin, player, game}: BottomNavigationBarProps) =>
                     <HomeButton playerId={playerId}/>
                     <SummaryButton gameId={gameId}/>
                     <ProfileButton playerId={playerId}/>
-                    <RatingButton/>
+                    {/*<RatingButton/>*/}
                     <AdminNavButton label={messages.bottomNavBar.administration}
                                     className={"fa-solid fa-gears"}
                                     optionalUser={admin}

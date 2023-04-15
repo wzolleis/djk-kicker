@@ -54,8 +54,6 @@ export class MailService {
         await this.saveMailRequest()
         await this.fetchDriftMailStatus()
 
-        // invariant(this.requestId, "Die ReqquestId ist null")
-        // invariant(this.statusResponse, "Die StatusResponse ist null")
         if (!!this.requestId && !!this.statusResponse) {
             return {requestId: this.requestId, status: this.statusResponse}
         } else {
@@ -106,7 +104,7 @@ export class MailService {
             console.group("sendDriftMail")
             console.info('mail', JSON.stringify(this.driftMail, undefined, 2))
             this.requestId = await driftMailClient.send(this.driftMail!)
-            // invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
+            console.info('request Id = ' + this.requestId)
         } catch (error) {
             console.error('Fehler beim Senden der drift mail', error)
         } finally {
@@ -134,8 +132,9 @@ export class MailService {
     }
 
     private async fetchDriftMailStatus() {
-        invariant(!!this.requestId, "die RequestId ist nicht gesetzt")
-        this.statusResponse = await fetchDriftMailStatus(this.requestId)
+        if (!!this.requestId) {
+            this.statusResponse = await fetchDriftMailStatus(this.requestId)
+        }
     }
 }
 
