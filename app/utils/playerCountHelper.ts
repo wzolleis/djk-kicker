@@ -19,7 +19,7 @@ export const calculateNumberOfGuests = (game: GameWithFeedback) => {
     let confirmedPlayerCount = 0;
     game.feedback.forEach((feedback) => {
         if (feedback.status === configuration.status.confirmed) {
-            confirmedPlayerCount = feedback.playerCount + 1
+            confirmedPlayerCount = confirmedPlayerCount + feedback.playerCount
         }
     });
     return confirmedPlayerCount
