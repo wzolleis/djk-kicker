@@ -12,14 +12,30 @@ const subtract = (playerCount: number): number => {
 }
 
 export const calculateCompleteNumberOfPlayers = (game: GameWithFeedback) => {
+    return calculateNumberOfGuests(game) + calculateConfirmedPlayer(game)
+}
+
+export const calculateNumberOfGuests = (game: GameWithFeedback) => {
     let confirmedPlayerCount = 0;
     game.feedback.forEach((feedback) => {
         if (feedback.status === configuration.status.confirmed) {
-            confirmedPlayerCount = confirmedPlayerCount + (feedback.playerCount + 1)
+            confirmedPlayerCount = feedback.playerCount + 1
         }
     });
     return confirmedPlayerCount
 }
+
+export const calculateConfirmedPlayer = (game: GameWithFeedback) => {
+    let confirmedPlayerCount = 0;
+    game.feedback.forEach((feedback) => {
+        if (feedback.status === configuration.status.confirmed) {
+            confirmedPlayerCount = confirmedPlayerCount + 1
+        }
+    });
+    return confirmedPlayerCount
+}
+
+
 export const calculateNumberOfPlayerWithStatus = (game: GameWithFeedback, status: statusInConfig) => {
     let playerCount = 0;
     game.feedback.forEach((feedback) => {
