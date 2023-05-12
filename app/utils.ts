@@ -101,6 +101,15 @@ export function useDateTime(date: Date) {
   return DateTime.fromJSDate(new Date(date)).toFormat("dd.MM.yyyy HH:mm");
 }
 
+export function useTimeOnly(date: Date) {
+  return DateTime.fromJSDate(new Date(date)).toFormat("HH:mm");
+}
+
+
+export function useDateOnly(date: Date): string {
+  return DateTime.fromJSDate(new Date(date)).toFormat("dd.MM.yyyy");
+}
+
 export type QueryParamName = keyof QueryParamTypes;
 
 export function getQueryParams(request: Request, inputParam: Array<QueryParamName> | QueryParamName): Partial<QueryParamTypes> {

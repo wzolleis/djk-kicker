@@ -21,7 +21,8 @@ export class MailService {
     gameId: string
     templateName: MailTemplateType
     playerIds: string[]
-
+    freeText: string
+    mailSubject: string
     host: string
 
 
@@ -40,11 +41,13 @@ export class MailService {
 
     driftMailClient = new DriftmailClient()
 
-    constructor(gameId: string, templateName: MailTemplateType, playerIds: string[], host: string) {
+    constructor(gameId: string, templateName: MailTemplateType, playerIds: string[], freeText: string, mailSubject: string, host: string) {
         this.gameId = gameId;
         this.templateName = templateName;
         this.playerIds = playerIds
         this.host = host
+        this.freeText = freeText
+        this.mailSubject = mailSubject
     }
 
     async sendGameMail(): Promise<{ requestId: string, status: DriftMailStatusResponse } | undefined> {
@@ -82,7 +85,11 @@ export class MailService {
                 date: useDateTime(gameTime),
                 name: gameName,
                 location: messages.commonForm.spielort(spielort)
-            }
+            },
+        })
+        mail.addVariable({
+            freeText: this.freeText,
+            freeTextSubject: this.mailSubject
         })
 
         for (let i = 0; i < this.player.length; i++) {
