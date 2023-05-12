@@ -14,6 +14,8 @@ import {isMailTemplate, MailTemplateType} from "~/config/mailTypes";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import {MailService} from "~/helpers/mail/mailService";
+import TextAreaWithLabel from "~/components/common/form/TextareaWithLabel";
+import InputWithLabel from "~/components/common/form/InputWithLabel";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -21,13 +23,8 @@ const removePlayerFromArrayByPlayerId = (playerArray: Array<Player>, playerId: s
     return playerArray.filter(p => p.id !== playerId).sort(sortByName)
 }
 
-const SendMailFormFieldValues = ["includedPlayers", "mailTemplate"] as const
+const SendMailFormFieldValues = ["includedPlayers", "mailTemplate", 'mailSubject', "freeText"] as const
 export type SendMailFormFields = typeof SendMailFormFieldValues[number]
-
-// type ActionData = {
-//     status: DriftMailStatusResponse
-//     requestId: string
-// }
 
 export const action: ActionFunction = async ({request, params: {gameId}}) => {
     invariant(typeof gameId === 'string')
@@ -40,11 +37,15 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     invariant(isMailTemplate(mailTemplate), "invalid template name " + mailTemplate)
     invariant(typeof includedPlayerIdsString === 'string', 'included is not a string')
     const includedPlayerIds = includedPlayerIdsString.split(',')
+    const freeText = wrapper.get('freeText')
+    invariant(typeof freeText === 'string', 'freeText is not a string')
+    const mailSubject = wrapper.get('mailSubject')
+    invariant(typeof mailSubject === 'string', 'mailSubject is not a string')
 
-    const mailService = new MailService(gameId, mailTemplate, includedPlayerIds, host)
+    const mailService = new MailService(gameId, mailTemplate, includedPlayerIds, freeText, mailSubject, host)
     await mailService.sendGameMail()
 
-    return json<{  }>({})
+    return json<{}>({})
 }
 
 type MailTemplateViewProps = {
@@ -105,16 +106,41 @@ const MailTemplateSelect = ({selected, onSelect}: SelectMailTemplateProps) => {
                                       mailTemplate={"gameAbsage"}
                                       label={messages.adminSendMailForm.cancellation}/>
 
-                    <div className={"hidden md:block md:mt-12"}>
-                        <MailTemplateView onSelect={() => onSelect("testMail")}
-                                          selected={isSelected("testMail")}
-                                          mailTemplate={"testMail"}
-                                          label={"TestMail"}/>
-                    </div>
+                    <MailTemplateView
+                        onSelect={() => onSelect("freeText")}
+                        selected={isSelected("freeText")}
+                        mailTemplate={"freeText"}
+                        label={"Freier Text"}/>
+
+                    <MailTemplateView onSelect={() => onSelect("testMail")}
+                                      selected={isSelected("testMail")}
+                                      mailTemplate={"testMail"}
+                                      label={"TestMail"}/>
 
                 </div>
             </div>
         </div>
+    )
+}
+
+const FreeTextInput = () => {
+    return (
+        <>
+            <InputWithLabel id={'mailSubject'}
+                            type={'text'}
+                            name={'mailSubject'}
+                            label={messages.adminSendMailForm.mailSubjectLabel}
+                            defaultValue={'Nachricht von den DJK-Kickern'}
+                            disabled={false}
+                            required={false}
+            />
+            <TextAreaWithLabel label={messages.adminSendMailForm.freeText}
+                               required={false}
+                               name={'freeText'}
+                               id={'freeText'}
+                               disabled={false}
+                               defaultValue={'Jeder darf einen Grashalm mitnehmen'}/>
+        </>
     )
 }
 
@@ -179,6 +205,8 @@ const SendGameMail = () => {
         }
     }
 
+    const freeTextDisplay = mailTemplate !== 'freeText' ? 'hidden' : 'block'
+
     return (
         <div className={"min-h-screen"}>
             <TransitionContainer>
@@ -192,6 +220,9 @@ const SendGameMail = () => {
 
                         <ContentContainer>
                             <MailTemplateSelect selected={mailTemplate} onSelect={(mailTemplate: MailTemplateType) => setMailTemplate(mailTemplate)}/>
+                        </ContentContainer>
+                        <ContentContainer className={classNames(freeTextDisplay, 'mt-2 bg-blue-200')}>
+                            <FreeTextInput/>
                         </ContentContainer>
 
                         <ContentContainer className={"mt-3 bg-blue-200"}>
@@ -213,7 +244,8 @@ const SendGameMail = () => {
                                     allPlayers.map((player: Player) => {
                                             const selected = isPlayerInIncludedList(player)
                                             return (
-                                                <ActivePlayerButton key={player.id} player={player} onPlayerClick={handlePlayerSelection} selected={selected}/>
+                                                <ActivePlayerButton key={player.id} player={player} onPlayerClick={handlePlayerSelection}
+                                                                    selected={selected}/>
                                             )
                                         }
                                     )

@@ -156,7 +156,9 @@ const messages = {
     sendMails: "Mails verschicken",
     invitation: "Einladung",
     confirmation: "Zusage",
-    cancellation: "Absage"
+    cancellation: "Absage",
+    freeText: 'Freitext',
+    mailSubjectLabel: "Betreff"
   },
   adminUsersForm: {
     invitations: "Einladungen"
