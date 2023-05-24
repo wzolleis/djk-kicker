@@ -61,6 +61,7 @@ export async function action({request}: ActionArgs) {
 const ResetPassword = () => {
     const actionData = useActionData<typeof action>();
 
+    // @ts-ignore
     return (
         <TransitionContainer>
             <ContentContainer className={'bg-blue-200'}>
@@ -71,16 +72,20 @@ const ResetPassword = () => {
                     <Form method="post" className="space-y-6">
                         <div>
                             <InputWithLabel id={'adminMail'} type={'text'} name={'adminMail'} label={messages.resetPasswordForm.adminMail}/>
+                            {/* @ts-ignore */}
                             {actionData?.errors?.adminMail && (
                                 <div className="pt-1 text-red-700" id="mail-error">
+                                    {/* @ts-ignore */}
                                     {actionData.errors.adminMail}
                                 </div>
                             )}
                         </div>
                         <div>
                             <InputWithLabel id={'securityCode'} type={'text'} name={'securityCode'} label={messages.resetPasswordForm.securityCode}/>
+                            {/* @ts-ignore */}
                             {actionData?.errors?.securityCode && (
                                 <div className="pt-1 text-red-700" id="securityCode-error">
+                                    {/* @ts-ignore */}
                                     {actionData.errors.securityCode}
                                 </div>
                             )}
@@ -91,15 +96,19 @@ const ResetPassword = () => {
                                             type={'password'} name={'passwordNew'}
                                             label={messages.resetPasswordForm.passwordNew}
                             />
+                            {/* @ts-ignore */}
                             {actionData?.errors?.passwordNew && (
                                 <div className="pt-1 text-red-700" id="mail-error">
+                                    {/* @ts-ignore */}
                                     {actionData.errors.passwordNew}
                                 </div>
                             )}
                         </div>
 
                         <div>
+                            {/* @ts-ignore */}
                             {!!actionData?.success?.message && <BodyText title={messages.resetPasswordForm.resetPasswordSuccess} className={'mb-2 text-green-700'}/>}
+                            {/* @ts-ignore */}
                             {!!actionData?.errors && <BodyText title={messages.resetPasswordForm.resetPasswordFailed} className={'mb-2 text-red-700'}/>}
                         </div>
 
