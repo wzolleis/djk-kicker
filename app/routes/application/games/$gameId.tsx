@@ -10,6 +10,7 @@ import type {PlayerWithFeedback} from "~/models/player.server";
 import {getPlayersWithUniqueFeedbackForGame} from "~/models/player.server";
 import {useNextGame} from "~/utils/gameUtils";
 import {authenticatePlayer, commitSession} from "~/utils/session.server";
+import {InfoBanner} from "~/components/common/header/pageBanner";
 
 type LoaderData = {
     players: PlayerWithFeedback[];
@@ -33,6 +34,13 @@ export const loader: LoaderFunction = async ({params, request}) => {
     );
 };
 
+const GameBanner = ( {message} : {message: string | null}) => {
+    if (!message) return null
+    return (
+        <InfoBanner text={message}/>
+    )
+}
+
 const GameIndex = () => {
     const gameWithFeedBack = useNextGame();
     const {players} = useLoaderData<LoaderData>() as unknown as LoaderData;
@@ -41,6 +49,9 @@ const GameIndex = () => {
         <TransitionContainer>
             <ContentContainer
                 className={"mt-2.5 bg-blue-200 shadow-lg shadow-blue-400/50"}>
+                <section className={"mt-5 flex flex-col gap-5"} key={"banner"}>
+                    <GameBanner message={gameWithFeedBack.banner}/>
+                </section>
                 <section className={"mt-5 flex flex-col gap-5"} key={"game"}>
                     <GameSummary game={gameWithFeedBack}/>
                     <Players players={players}/>

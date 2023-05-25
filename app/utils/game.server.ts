@@ -1,10 +1,11 @@
-import { gameLocations } from "~/config/locations";
+import {gameLocations} from "~/config/locations";
 
 export type GameFromForm = {
     name: string;
     gameTime: string;
     userId: FormDataEntryValue;
     location: string;
+    banner: string;
     intent: FormDataEntryValue;
 };
 export function getGameFromFormData(formData: FormData) {
@@ -16,6 +17,7 @@ export function getGameFromFormData(formData: FormData) {
             gameLocations.Halle.toString(),
         userId: formData.get("userId")!,
         intent: formData.get("intent")!,
+        banner: formData.get('banner')?.toString() || ''
     };
 
     return gameFromForm;
