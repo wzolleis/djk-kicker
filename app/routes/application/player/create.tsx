@@ -45,7 +45,7 @@ const sendGameInvitation = async ({
                                       playerId
                                   }: { request: Request, gameId: string, playerId: string }) => {
     const host = request.headers.get("host")!;
-    const mailservice = new MailService(gameId, 'gameInvitation', [playerId], host)
+    const mailservice = new MailService(gameId, 'gameInvitation', [playerId], '', '', host)
     await mailservice.sendGameMail()
 }
 

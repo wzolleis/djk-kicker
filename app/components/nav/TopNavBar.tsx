@@ -76,6 +76,12 @@ const TopNavBar = ({appMenu, player}: AppNavBarProps) => {
                         {messages.appmenu.login}
                     </button>
                 </Form>
+                <Form action="/ResetPassword" method="get" hidden={isLoggedIn}>
+                    <button type="submit"
+                            className="block rounded px-2 py-1 font-semibold hover:bg-gray-800 hover:text-yellow-300">
+                        {messages.appmenu.resetPassword}
+                    </button>
+                </Form>
                 <Form action="/application/player/rescue" method="get">
                     <button type="submit"
                             className="block rounded px-2 py-1 font-semibold hover:bg-gray-800 hover:text-yellow-300">

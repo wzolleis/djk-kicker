@@ -24,6 +24,7 @@ model User {
   password Password?
   admin    Boolean   @default(false)
   testUser Boolean   @default(false)
+  securityCode String?
 }
 
 model Game {

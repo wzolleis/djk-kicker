@@ -52,6 +52,7 @@ const messages = {
     login: "Als Administrator anmelden",
     logout: "Abmelden",
     changePassword: 'Passwort ändern',
+    resetPassword: 'Administrator Passwort zurücksetzen',
     rescue: 'Erste Hilfe'
   },
   commonForm: {
@@ -117,6 +118,16 @@ const messages = {
     passwordRepeat: "Neues Passwort (Wiederholung)",
     changePassword: 'Passwort ändern',
     passwordChanged: 'Passwort wurde geändert'
+  },
+  resetPasswordForm: {
+    title: 'Administrator Passwort zurücksetzen',
+    adminMail: 'Admin-Email',
+    adminName: 'Admin-Name',
+    securityCode: 'Sicherheits-Code',
+    passwordNew: 'Neues Passwort',
+    resetPassword: 'Passwort zurücksetzen',
+    resetPasswordSuccess: 'Passwort wurde zurückgesetzt',
+    resetPasswordFailed: 'Es ist ein Fehler aufgetreten'
   },
   errors: {
     noGame: "Kein Spiel vorhanden"
