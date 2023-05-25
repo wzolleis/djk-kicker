@@ -54,6 +54,14 @@ export async function action({request}: ActionArgs) {
             {status: 400}
         );
     }
+
+    if (!user.securityCode) {
+        return json(
+            {errors: {securityCode: "Operation ist nicht erlaubt"}},
+            {status: 400}
+        );
+    }
+
     await changeUserPassword(user.id, passwordNew)
     return json({success: {message: messages.resetPasswordForm.resetPasswordSuccess}}, {status: 200});
 }
@@ -93,7 +101,7 @@ const ResetPassword = () => {
 
                         <div>
                             <InputWithLabel id={'passwordNew'}
-                                            type={'password'} name={'passwordNew'}
+                                            type={'text'} name={'passwordNew'}
                                             label={messages.resetPasswordForm.passwordNew}
                             />
                             {/* @ts-ignore */}
