@@ -47,7 +47,8 @@ export const action: ActionFunction = async ({params, request}) => {
             ...game,
             name: gameFromForm.name.toString(),
             gameTime,
-            spielort: gameFromForm.location.toString()
+            spielort: gameFromForm.location.toString(),
+            banner: gameFromForm.banner
         };
         await updateGame(toUpdate)
         return redirect(routeLinks.admin.games);
@@ -76,6 +77,7 @@ const EditGame = () => {
                     <option value={configuration.gameLocations.Draussen}>
                         {messages.adminEditGameForm.optionDraussen}</option>
                 </SelectWithLabel>
+                <InputWithLabel id={'banner'} type={'text'} name={'banner'} label={'Banner'} defaultValue={game.banner || ''}/>
                 <div className={"flex items-center gap-2"}>
                     <DefaultButton>
                         <p className={'fa fa-angle-left'}/>

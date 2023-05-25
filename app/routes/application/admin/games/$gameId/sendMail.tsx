@@ -16,6 +16,7 @@ import TransitionContainer from "~/components/common/container/transitionContain
 import {MailService} from "~/helpers/mail/mailService";
 import TextAreaWithLabel from "~/components/common/form/TextareaWithLabel";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
+import {updateGameStatus} from "~/models/admin.games.server";
 
 const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
@@ -44,6 +45,18 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
 
     const mailService = new MailService(gameId, mailTemplate, includedPlayerIds, freeText, mailSubject, host)
     await mailService.sendGameMail()
+
+    if (isMailTemplate(mailTemplate) ) {
+        if (mailTemplate === 'gameZusage') {
+            await updateGameStatus(gameId, 'Zusage')
+        }
+        else if (mailTemplate === 'gameAbsage') {
+            await updateGameStatus(gameId, 'Absage')
+        }
+        else if (mailTemplate === 'gameInvitation') {
+            await updateGameStatus(gameId, 'Einladung')
+        }
+    }
 
     return json<{}>({})
 }

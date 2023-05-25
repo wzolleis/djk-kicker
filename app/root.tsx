@@ -4,7 +4,7 @@ import {Form, Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestorati
 
 import {DefaultFeedback, Player, User} from "@prisma/client";
 import React from "react";
-import {GameBanner} from "~/components/common/header/pageBanner";
+import {GameStatusBanner} from "~/components/common/header/pageBanner";
 import Subheading from "~/components/common/header/Subheading";
 import {appMenu} from "~/components/nav/appMenu";
 import BottomNavigationBar from "~/components/nav/BottomNavigationBar";
@@ -227,7 +227,7 @@ export default function App() {
                             user={user}
                             player={player}
                         />
-                        <GameBanner game={nextGame}/>
+                        <GameStatusBanner game={nextGame}/>
                         <RootScreen
                             show={rootScreen}
                             nextGame={nextGame}

@@ -35,7 +35,8 @@ model Game {
   spielort String       @default("0")
   feedback Feedback[]
   token    String       @unique @default(cuid())
-  status   String? // findet statt oder abgesagt
+  status   String?     // Zusage oder Absage
+  banner   String?     // beliebiger Text
 }
 
 // Feedback der Spieler für ein Spiel

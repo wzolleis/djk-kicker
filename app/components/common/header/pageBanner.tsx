@@ -20,14 +20,14 @@ export const AlertBanner = ({text}: { text: string }) => {
 export const InfoBanner = ({text}: { text: string }) => {
     return (
         <div role="info">
-            <div className="border border-t-0 border-yellow-400 rounded-b bg-yellow-100 px-4 py-3 black">
+            <div className="border border-t-0 border-yellow-400 rounded-b bg-yellow-100 px-4 py-3 black text-center">
                 <p>{text}</p>
             </div>
         </div>
     )
 }
 
-export const GameBanner = ({game}: {game: GameWithFeedback | null} ) => {
+export const GameStatusBanner = ({game}: {game: GameWithFeedback | null} ) => {
     const gameStatus = game?.status
     if (!gameStatus) return null
     if (!isGameStatus(gameStatus)) return null
