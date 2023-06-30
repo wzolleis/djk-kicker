@@ -1,10 +1,22 @@
 import {statusInConfig} from "~/config/status";
-import {gameLocations} from "~/config/locations";
 import {actionTypes} from "~/config/action";
 
-export  const configuration = {
+const GameLocationValues = ['Halle', 'Draussen', 'Spickelwiese', 'Gersthofen'] as const
+export type GameLocation = typeof GameLocationValues[number]
+
+export const isGameLocation = (value: any): value is GameLocation => {
+    return GameLocationValues.some(location => location === value)
+}
+
+
+export const configuration = {
     status: statusInConfig,
-    gameLocations: gameLocations,
+    gameLocations: {
+        Halle: 'Halle (Schule Firnhaberau)',
+        Draussen: 'Draussen (Wiese Vereinsheim)',
+        Spickelwiese: 'Draussen (Spickelwiese)',
+        Gersthofen: 'Halle (Paul-Klee-Gymnasium Gersthofen)'
+    },
     actionTypes: actionTypes,
     url: {
         links: {

@@ -1,10 +1,10 @@
-import type { Game } from "@prisma/client";
-import { getNextGameDay } from "~/utils";
-import type { ReactNode } from "react";
+import type {Game} from "@prisma/client";
+import {getNextGameDay} from "~/utils";
+import type {ReactNode} from "react";
 import SmallTag from "~/components/common/tags/SmallTag";
 import messages from "~/components/i18n/messages";
 import dateUtils from "~/dateUtils";
-import { DateTime } from "luxon";
+import {DateTime} from "luxon";
 
 type GameCardProps = {
   game: Game;
@@ -25,7 +25,7 @@ const GameCard = ({ game, children }: GameCardProps) => {
           </p>
           <div className={"flex flex-col items-start"}>
             <p className={`font-default-light text-label-medium ${isFutureGame ? "text-gray-500" : "text-red-200"}`}>{`${dateUtils.dateTimeToFormat({ value: gameTime })}`}</p>
-            <SmallTag text={messages.commonForm.spielort(game.spielort)} isDisabled={!isFutureGame}></SmallTag>
+            <SmallTag text={game.spielort} isDisabled={!isFutureGame}></SmallTag>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import type {ActionArgs, LoaderArgs, MetaFunction} from "@remix-run/node";
+import type {ActionArgs, LoaderArgs} from "@remix-run/node";
 import {json, redirect} from "@remix-run/node";
 import {Form, useActionData, useBeforeUnload, useSearchParams} from "@remix-run/react";
 import * as React from "react";
@@ -59,12 +59,6 @@ export async function action({request}: ActionArgs) {
         redirectTo,
     });
 }
-
-export const meta: MetaFunction = () => {
-    return {
-        title: "Login",
-    };
-};
 
 export default function LoginPage() {
     const [searchParams] = useSearchParams();

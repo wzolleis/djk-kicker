@@ -1,10 +1,11 @@
-import {HTMLInputTypeAttribute} from "react";
+import {ChangeEventHandler, HTMLInputTypeAttribute} from "react";
 
 type InputProps = {
     id: string;
     type: HTMLInputTypeAttribute | undefined;
     name: string;
-    defaultValue?: string;
+    value?: string | undefined
+    onChange: ChangeEventHandler<HTMLInputElement>
     label: string;
     required?: boolean | undefined;
     disabled?: boolean | undefined;
@@ -12,8 +13,8 @@ type InputProps = {
     className?: string | undefined
 };
 
-const InputWithLabel = (props: InputProps) => {
-    const {id, name, label, type, required, disabled, defaultValue, error} = props;
+const ControlledInputWithLabel = (props: InputProps) => {
+    const {id, name, label, type, required, disabled, value, onChange, error} = props;
     return (
         <div className={"flex w-full flex-col gap-2 my-5"}>
             <label className={"font-default-medium text-gray-600"} htmlFor={name}>
@@ -22,9 +23,10 @@ const InputWithLabel = (props: InputProps) => {
             <input
                 className={"rounded-xl border-none bg-gray-50 p-3 font-default-semibold outline-none ring-1 ring-indigo-100 disabled:opacity-25 "}
                 type={type}
-                defaultValue={defaultValue}
                 id={id}
                 name={name}
+                value={value}
+                onChange={onChange}
                 required={required}
                 disabled={disabled}
             />
@@ -35,4 +37,4 @@ const InputWithLabel = (props: InputProps) => {
     );
 };
 
-export default InputWithLabel;
+export default ControlledInputWithLabel;

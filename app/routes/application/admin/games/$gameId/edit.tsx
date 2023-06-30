@@ -14,8 +14,7 @@ import ContentContainer from "~/components/common/container/ContentContainer";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {DateTime} from "luxon";
-import SelectWithLabel from "~/components/common/form/SelectWithLabel";
-import {configuration} from "~/config";
+import LocationInput from "~/components/common/location/location";
 
 
 type LoaderData = {
@@ -57,6 +56,7 @@ export const action: ActionFunction = async ({params, request}) => {
         return redirect(routeLinks.admin.games);
     }
 }
+
 const EditGame = () => {
     const navigate = useNavigate()
     const {game} = useLoaderData() as unknown as LoaderData
@@ -65,18 +65,13 @@ const EditGame = () => {
         <ContentContainer className={'bg-blue-200 mt-5'}>
             <h1 className={"font-default-bold text-title-large"}>{messages.adminEditGameForm.title}</h1>
             <Form method={"post"} className={"flex flex-col gap-2"}>
-                <InputWithLabel id={"name"} type={"text"} name={"name"} label={messages.adminEditGameForm.name}
+                <InputWithLabel id={"name"}
+                                type={"text"}
+                                name={"name"}
+                                label={messages.adminEditGameForm.name}
                                 defaultValue={game.name}/>
                 <DateTimeInput name="gameTime" defaultValue={DateTime.fromJSDate(new Date(game.gameTime))}/>
-                <SelectWithLabel id={"location"} name={"location"}
-                                 defaultValue={configuration.gameLocations[Number.parseInt(game.spielort)]}
-                                 label={messages.adminEditGameForm.spielort}>
-                    <option value={configuration.gameLocations.Halle}>
-                        {messages.adminEditGameForm.optionHalle}
-                    </option>
-                    <option value={configuration.gameLocations.Draussen}>
-                        {messages.adminEditGameForm.optionDraussen}</option>
-                </SelectWithLabel>
+                <LocationInput name={'location'} defaultValue={game.spielort}/>
                 <InputWithLabel id={'banner'} type={'text'} name={'banner'} label={'Banner'} defaultValue={game.banner || ''}/>
                 <div className={"flex items-center gap-2"}>
                     <DefaultButton>

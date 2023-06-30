@@ -7,7 +7,6 @@ import {createMailServiceRequest} from "~/models/mailservice.server";
 import {DriftmailClient, DriftMailStatusResponse, Mail, Recipient} from "driftmail";
 import {JobResponse} from "driftmail/build/GetStatusRequestResponse";
 import {useDateTime} from "~/utils";
-import messages from "~/components/i18n/messages";
 import {createEncryptedPlayerToken} from "~/utils/token.server";
 import mailLinkBuilder from "~/helpers/mail/mailLinkBuilder";
 
@@ -84,7 +83,7 @@ export class MailService {
             event: {
                 date: useDateTime(gameTime),
                 name: gameName,
-                location: messages.commonForm.spielort(spielort)
+                location: spielort
             },
         })
         mail.addVariable({
