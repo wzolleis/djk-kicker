@@ -7,7 +7,6 @@ import DeclinedPlayersCounter from "~/components/game/feedback/DeclinedPlayersCo
 import UndecidedPlayersCounter from "~/components/game/feedback/UndecidedPlayersCounter";
 import UnknownPlayersCounter from "~/components/game/feedback/UnknownPlayersCounter";
 import {GameWithFeedback} from "~/config/applicationTypes";
-import messages from "~/components/i18n/messages";
 import classNames from "classnames";
 
 
@@ -62,7 +61,7 @@ const GameSummary = ({game}: { game: GameWithFeedback }) => {
                 <div className={"grid grid-cols-2 gap-5 m-2"}>
                     <GameDate date={game.gameTime}/>
                     <p className={"text-title-large font-default-medium"}>
-                        {`${messages.commonForm.spielort(game.spielort)}`}
+                        {game.spielort}
                     </p>
                 </div>
             </ContentContainer>

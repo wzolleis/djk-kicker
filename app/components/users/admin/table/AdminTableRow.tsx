@@ -2,7 +2,6 @@ import {User} from "@prisma/client";
 import AdminRole from "~/components/users/admin/table/AdminRole";
 import {Link} from "@remix-run/react";
 import messages from "~/components/i18n/messages";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import RedButton from "~/components/common/buttons/RedButton";
 import routeLinks from "~/config/routeLinks";
@@ -23,9 +22,6 @@ const AdminTableRow = ({user}: AdminTableRowProps) => {
             </td>
             <td className={"text-right"}>
                 <ButtonContainer className={'justify-end'}>
-                    <DefaultButton>
-                        <Link to={`${user.id}`}>{messages.buttons.edit}</Link>
-                    </DefaultButton>
                     <RedButton>
                         <p className={"fa fa-trash mr-2"}/>
                         <Link to={`${routeLinks.admin.users.delete(user.id)}`}>{messages.buttons.delete}</Link>

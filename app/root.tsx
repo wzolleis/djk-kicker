@@ -1,6 +1,22 @@
-import type {LinksFunction, LoaderArgs, LoaderFunction, MetaFunction,} from "@remix-run/node";
+import type {LinksFunction, LoaderArgs, LoaderFunction,} from "@remix-run/node";
 import {json} from "@remix-run/node";
-import {Form, Links, LiveReload, Meta, NavLink, Outlet, Scripts, ScrollRestoration, useLoaderData, useLocation,} from "@remix-run/react";
+import {metaV1} from "@remix-run/v1-meta";
+
+import {
+    Form,
+    isRouteErrorResponse,
+    Links,
+    LiveReload,
+    Meta,
+    NavLink,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+    useLoaderData,
+    useLocation,
+    useRouteError,
+    V2_MetaFunction,
+} from "@remix-run/react";
 
 import {DefaultFeedback, Player, User} from "@prisma/client";
 import React from "react";
@@ -29,11 +45,15 @@ export const links: LinksFunction = () => {
     ];
 };
 
-export const meta: MetaFunction = () => ({
-    charset: "utf-8",
-    title: "DJK Kicker",
-    viewport: "width=device-width,initial-scale=1",
-});
+export const meta: V2_MetaFunction = (args) => {
+    return metaV1(args,
+        {
+            charset: "utf-8",
+            title: "DJK Kicker",
+            viewport: "width=device-width,initial-scale=1",
+        }
+    )
+}
 
 type LoaderData = {
     user: User | null;
@@ -93,7 +113,7 @@ const SummaryButton = ({nextGame}: { nextGame: GameWithFeedback }) => {
     return (
         <NavLink
             to={routeLinks.game(nextGame.id)}
-            className="inline-block inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
+            className="inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
             <p
                 className={
                     "fa-solid fa-info flex h-10 w-10 items-center justify-center rounded-full p-3 font-default-semibold text-white transition ease-in-out"
@@ -118,7 +138,7 @@ const CreatePlayerButton = ({
     return (
         <NavLink
             to={link}
-            className="inline-block inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
+            className="inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
             <p
                 className={
                     "fa-solid fa-user-plus flex h-10 w-10 items-center justify-center rounded-full p-3 font-default-semibold text-white transition ease-in-out"
@@ -136,7 +156,7 @@ const ProfileButton = ({player}: { player: Player }) => {
     return (
         <NavLink
             to={routeLinks.player.profile(player.id)}
-            className="inline-block inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
+            className="inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
             <p
                 className={
                     "fa-solid fa-user-large flex h-10 w-10 items-center justify-center rounded-full p-3 font-default-semibold text-white transition ease-in-out"
@@ -156,7 +176,7 @@ const DashboardButton = () => {
     return (
         <NavLink
             to={routeLinks.dashboard}
-            className="inline-block inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
+            className="inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2.5 pt-2 pb-1 text-center text-white sm:w-auto">
             <p
                 className={
                     "fa-solid fa-futbol flex h-10 w-10 items-center justify-center rounded-full p-3 font-default-semibold text-white transition ease-in-out"
@@ -192,15 +212,22 @@ const RootScreen = ({show, nextGame, player}: RootScreenProps) => {
     );
 };
 
-export function ErrorBoundary({error}: { error: any }) {
-    return (
-        <div>
-            <h1>Error</h1>
-            <p>{error.message}</p>
-            <p>The stack trace is:</p>
-            <pre>{error.stack}</pre>
-        </div>
-    );
+export const ErrorBoundary = () => {
+    const error = useRouteError()
+    if (isRouteErrorResponse(error)) {
+        return (
+            <div>
+                <h1>Error</h1>
+                <p>{error.statusText}</p>
+                <p>The stack trace is:</p>
+                <pre>{JSON.stringify(error.data, undefined, 2)}</pre>
+            </div>
+        )
+    } else {
+        return (
+            <div>Error</div>
+        )
+    }
 }
 
 export default function App() {

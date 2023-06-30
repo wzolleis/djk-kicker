@@ -45,7 +45,7 @@ export const DateInput = ({
                 >
                     {label}
                 </label>
-                <input className={"rounded-lg border border-2 border-gray-600 focus:border-blue-500"}
+                <input className={"rounded-lg border-2 border-gray-600 focus:border-blue-500"}
                        id={`${name}`}
                        type={'date'}
                        name={name}
@@ -70,7 +70,7 @@ const TimeInput = ({
             >
                 {messages.commonForm.time}
             </label>
-            <input className={"rounded-lg border border-2 border-gray-600"}
+            <input className={"rounded-lg border-2 border-gray-600"}
                    type={'time'}
                    name={`${name}-time`}
                    list={"timevalues"}
@@ -93,7 +93,7 @@ const DateSuggestion = ({
             >
                 {messages.commonForm.dateSuggestion}
             </label>
-            <select className={"rounded-lg border border-2 border-gray-600 text-gray-400"}
+            <select className={"rounded-lg border-2 border-gray-600 text-gray-400"}
                     id={name}
                     name={name}
                     onChange={(event: ChangeEvent<HTMLSelectElement>) => onChange(event.target.value)}
@@ -125,7 +125,7 @@ const TimeSuggestion = ({
             >
                 {messages.commonForm.timeSuggestion}
             </label>
-            <select className={"rounded-lg border border-2 border-gray-600 text-gray-400"}
+            <select className={"rounded-lg border-2 border-gray-600 text-gray-400"}
                     name={name}
                     id={name}
                     onChange={(event) => onChange(event.target.value)}
@@ -162,7 +162,7 @@ const DateTimeInput = ({defaultValue, name}: DateTimeInputProps) => {
 
     const dateSuggestions = calculateDateSuggestions()
     const timeSuggestions = calculateTimeSuggestions({
-        start: DateTime.now().set({hour: 18, minute: 0}),
+        start: DateTime.now().set({hour: 17, minute: 0}),
         end: DateTime.now().set({hour: 20, minute: 15}),
         step: 15
     })

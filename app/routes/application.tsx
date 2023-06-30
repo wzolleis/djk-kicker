@@ -1,11 +1,8 @@
 import {ActionFunction, json, LoaderFunction, redirect,} from "@remix-run/node";
-import {Outlet, useCatch, useNavigate} from "@remix-run/react";
+import {isRouteErrorResponse, Outlet, useRouteError} from "@remix-run/react";
 import React from "react";
 import invariant from "tiny-invariant";
-import DefaultButton from "~/components/common/buttons/DefaultButton";
 import ErrorComponent from "~/components/common/error/ErrorComponent";
-import PageHeader from "~/components/common/PageHeader";
-import messages from "~/components/i18n/messages";
 import {getNavigationFormValues, isNavigationIntent,} from "~/config/bottomNavigation";
 import routeLinks from "~/config/routeLinks";
 import {getDefaultFeedback} from "~/models/feedback.server";
@@ -71,27 +68,12 @@ const Application = () => {
     return <Outlet/>;
 };
 
-export const CatchBoundary = () => {
-    const navigate = useNavigate();
-    const caught = useCatch();
-    console.error(JSON.stringify(caught.data, null, 2));
+export const ErrorBoundary = () => {
+    const error = useRouteError();
+    if (isRouteErrorResponse(error)) {
+        return <ErrorComponent title={'Fehler'} message={error.statusText}/>
+    }
 
-    return (
-        <div>
-            <PageHeader
-                title={`Es ist ein Fehler aufgetreten: ${caught.statusText}`}
-            />
-            <DefaultButton className={"m-5 flex justify-start"}>
-                <button onClick={() => navigate(routeLinks.dashboard)}>
-                    {messages.appmenu.dashboard}
-                </button>
-            </DefaultButton>
-        </div>
-    );
-};
-
-export const ErrorBoundary = ({error}: { error: Error }) => {
-    console.error(error);
     return <ErrorComponent/>;
 };
 

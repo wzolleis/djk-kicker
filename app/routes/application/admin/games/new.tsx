@@ -10,13 +10,11 @@ import routeLinks from "~/config/routeLinks";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {getNextGameDay} from "~/utils";
-import SelectWithLabel from "~/components/common/form/SelectWithLabel";
-import {gameLocations} from "~/config/locations";
-import {configuration} from "~/config";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import SubmitButton from "~/components/common/buttons/submitButton";
 import ContentContainer from "~/components/common/container/ContentContainer";
+import LocationInput from "~/components/common/location/location";
 
 export const action: ActionFunction = async ({request}) => {
     const userId = await requireUserId(request);
@@ -34,20 +32,12 @@ export const action: ActionFunction = async ({request}) => {
 
 const NewGame = () => {
     const navigate = useNavigate()
-
     return (
         <ContentContainer className={"bg-blue-200 mt-5"}>
             <Form method={"post"} className={"flex flex-col gap-3"}>
                 <InputWithLabel type={"text"} id={"name"} name={"name"} label={"Spielname"}/>
                 <DateTimeInput name={"gameTime"} defaultValue={getNextGameDay()}/>
-                <SelectWithLabel id={"location"} name={"location"} defaultValue={gameLocations.Draussen.toString()}
-                                 label={messages.adminEditGameForm.spielort}>
-                    {Object.keys(configuration.gameLocations).map((gameLocation) => (
-                        <option value={configuration.gameLocations[gameLocation as unknown as number]}
-                                hidden={!isNaN(Number(gameLocation))}
-                                key={gameLocation}>{gameLocation}</option>
-                    ))}
-                </SelectWithLabel>
+                <LocationInput name={'location'} defaultValue={'Draussen'}/>
                 <div className={"flex gap-3 items-center w-full justify-end"}>
                     <RedButton className={'mr-auto'}>
                         <img className={"h-6"} src={"/img/icons/close-white.png"} alt={""}/>
