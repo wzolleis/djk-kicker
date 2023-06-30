@@ -12,10 +12,10 @@ export const isGameLocation = (value: any): value is GameLocation => {
 export const configuration = {
     status: statusInConfig,
     gameLocations: {
-        Halle: 'Halle (Schule Firnhaberau)',
-        Draussen: 'Draussen (Wiese Vereinsheim)',
-        Spickelwiese: 'Draussen (Spickelwiese)',
-        Gersthofen: 'Halle (Paul-Klee-Gymnasium Gersthofen)'
+        Halle: 'Halle Firnhaberau',
+        Draussen: 'Wiese Firnhaberau',
+        Spickelwiese: 'Spickelwiese',
+        Gersthofen: 'Halle Gersthofen'
     },
     actionTypes: actionTypes,
     url: {

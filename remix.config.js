@@ -1,5 +1,6 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
+  serverBuildTarget: "netlify",
   server:
     process.env.NETLIFY || process.env.NETLIFY_LOCAL
       ? "./server.js"
@@ -12,9 +13,9 @@ module.exports = {
     v2_meta: true,
     v2_errorBoundary: true,
   },
-  serverConditions: ["deno", "worker"],
-  serverMainFields: ["main", "module"],
-  serverModuleFormat: "cjs",
+  // serverConditions: ["deno", "worker"],
+  // serverMainFields: ["main", "module"],
+  // serverModuleFormat: "cjs",
   serverPlatform: "node",
   serverMinify: false,
   // appDirectory: "app",
