@@ -9,7 +9,12 @@ export type LocationInputProps = {
     name?: string
 }
 
-const LocationSuggestions = ({onChange, name}: { onChange: (value: string) => void, name: string }) => {
+const isSelectable = (value: string) => {
+    return Object.values(configuration.gameLocations).some(location => location === value)
+}
+
+const LocationSuggestions = ({onChange, name, currentValue}: { onChange: (value: string) => void, name: string, currentValue: string }) => {
+    const defaultValue = isSelectable(currentValue) ? currentValue : undefined
     return (
         <div className={"flex w-full flex-col col-span-4 py-1 ml-2 my-5"}>
             <label
@@ -21,12 +26,15 @@ const LocationSuggestions = ({onChange, name}: { onChange: (value: string) => vo
             <select className={"rounded-lg border-2 border-gray-600 text-gray-400"}
                     id={name}
                     name={name}
+                    defaultValue={defaultValue}
                     onChange={(event: ChangeEvent<HTMLSelectElement>) => onChange(event.target.value)}
             >
                 {
                     Object.keys(configuration.gameLocations).map(key => {
                         if (isGameLocation(key)) {
-                            return <option key={key} value={configuration.gameLocations[key]} label={configuration.gameLocations[key]}/>
+                            const value = configuration.gameLocations[key]
+                            const selected = value === currentValue
+                            return <option key={key} value={value}>{configuration.gameLocations[key]}</option>
                         }
                     })
                 }
@@ -52,7 +60,7 @@ const LocationInput = ({defaultValue, name = 'location'}: LocationInputProps) =>
             <div className={"flex flex-col col-span-4"}>
                 <ControlledInputWithLabel id={'location'} type={'text'} name={name} label={'Spielort'} value={gameLocation} onChange={onInputChange}/>
             </div>
-            <LocationSuggestions onChange={onGameLocationSelect} name={`${name}-suggestions`}/>
+            <LocationSuggestions onChange={onGameLocationSelect} name={`${name}-suggestions`} currentValue={gameLocation}/>
         </div>
     )
 }
