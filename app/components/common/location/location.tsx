@@ -33,7 +33,6 @@ const LocationSuggestions = ({onChange, name, currentValue}: { onChange: (value:
                     Object.keys(configuration.gameLocations).map(key => {
                         if (isGameLocation(key)) {
                             const value = configuration.gameLocations[key]
-                            const selected = value === currentValue
                             return <option key={key} value={value}>{configuration.gameLocations[key]}</option>
                         }
                     })
