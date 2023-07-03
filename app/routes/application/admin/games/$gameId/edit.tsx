@@ -54,6 +54,9 @@ export const action: ActionFunction = async ({params, request}) => {
     } else if (gameFromForm.intent === "delete") {
         await deleteGame(gameId);
         return redirect(routeLinks.admin.games);
+    } else if (gameFromForm.intent === 'feedback') {
+        return redirect(routeLinks.admin.games);
+
     }
 }
 

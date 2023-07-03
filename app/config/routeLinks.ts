@@ -10,6 +10,9 @@ const routeLinks = {
             edit: (gameId: string) => `/application/admin/games/${gameId}/edit`,
             delete: (gameId: string) => `/application/admin/games/${gameId}/delete`,
             sendMail: (gameId: string) => `/application/admin/games/${gameId}/sendMail`,
+            feedback: (gameId: string) => `/application/admin/games/${gameId}/gameFeedback`,
+            history: (gameId: string) => `/application/admin/games/${gameId}/actionHistory`
+
         },
         users: {
             useradministration: '/application/admin/users/users',
