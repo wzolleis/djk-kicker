@@ -92,8 +92,8 @@ export async function findFeedbackWithPlayerIdAndGameId(
 }
 
 export async function updateFeedback(
-    playerId: Player["id"],
-    gameId: Game["id"],
+    playerId: string,
+    gameId: string,
     status: number,
     playerCount: number,
     note: string | null

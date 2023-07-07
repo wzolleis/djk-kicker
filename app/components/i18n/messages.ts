@@ -404,6 +404,9 @@ const messages = {
     },
     adminEditPlayerForm: {
         title: 'Spieler bearbeiten',
+    },
+    adminEditFeedbackForm: {
+        title: (gameTime: string) => `Rückmeldungen für das Spiel am ${gameTime} anpassen`
     }
 };
 
