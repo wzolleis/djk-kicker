@@ -33,7 +33,8 @@ const messages = {
         details: "Details",
         activate: 'aktivieren',
         deactivate: 'deaktivieren',
-        ratings: 'Rating'
+        ratings: 'Rating',
+        feedback: 'Rückmeldungen'
     },
     actionType: {
         GAME_INVITATION: "Einladung",
@@ -153,7 +154,7 @@ const messages = {
     },
     adminGamesForm: {
         name: "Name",
-        new: "Neues Spiel",
+        new: "Neues Spiel anlegen",
         deleteExpired: "Spiele löschen"
     },
     adminSendMailForm: {
@@ -403,6 +404,9 @@ const messages = {
     },
     adminEditPlayerForm: {
         title: 'Spieler bearbeiten',
+    },
+    adminEditFeedbackForm: {
+        title: (gameTime: string) => `Rückmeldungen für das Spiel am ${gameTime} anpassen`
     }
 };
 

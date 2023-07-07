@@ -5,7 +5,7 @@ import ControlledInputWithLabel from "~/components/common/form/ControlledInputWi
 
 
 export type LocationInputProps = {
-    defaultValue?: string
+    defaultValue: string
     name?: string
 }
 
@@ -44,7 +44,7 @@ const LocationSuggestions = ({onChange, name, currentValue}: { onChange: (value:
 
 
 const LocationInput = ({defaultValue, name = 'location'}: LocationInputProps) => {
-    const [gameLocation, setGameLocation] = useState<string>(defaultValue || 'Halle')
+    const [gameLocation, setGameLocation] = useState<string>(defaultValue)
 
     const onGameLocationSelect = (value: string) => {
         setGameLocation(value)

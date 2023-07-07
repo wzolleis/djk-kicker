@@ -34,7 +34,7 @@ export const action: ActionFunction = async ({params, request}: { params: Params
     invariant(!!intent, "Kein Intent gesetzt")
 
     if (intent === 'abort') {
-        return redirect(routeLinks.admin.users.home)
+        return redirect(routeLinks.admin.games)
     } else if (intent === 'delete') {
         const game = await getGameById(gameId)
         invariant(!!game, "Spiel nicht gefunden")

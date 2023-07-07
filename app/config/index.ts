@@ -1,7 +1,7 @@
 import {statusInConfig} from "~/config/status";
 import {actionTypes} from "~/config/action";
 
-const GameLocationValues = ['Halle', 'Draussen', 'Spickelwiese', 'Gersthofen'] as const
+const GameLocationValues = ['Halle', 'Draussen', 'Spickelwiese', 'Gersthofen', 'Unbekannt'] as const
 export type GameLocation = typeof GameLocationValues[number]
 
 export const isGameLocation = (value: any): value is GameLocation => {
@@ -12,6 +12,7 @@ export const isGameLocation = (value: any): value is GameLocation => {
 export const configuration = {
     status: statusInConfig,
     gameLocations: {
+        Unbekannt: 'Noch nicht bekannt',
         Halle: 'Halle Firnhaberau',
         Draussen: 'Wiese Firnhaberau',
         Spickelwiese: 'Spickelwiese',
