@@ -129,7 +129,7 @@ export const getNextGameDay = (startDate: DateTime = DateTime.now().startOf("day
   const wednesday: number = 3;
   if (startDate.weekday === wednesday) return startDate;
   if (startDate.weekday < wednesday) return startDate.set({ weekday: wednesday });
-  return startDate.set({ weekday: wednesday, weekNumber: startDate.weekNumber + 1 });
+  return startDate.set({weekday: wednesday, weekNumber: startDate.weekNumber + 1, hour: 17, minute: 45});
 };
 
 export function getPlayerGreeting(playerName: string) {
