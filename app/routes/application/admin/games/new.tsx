@@ -15,6 +15,7 @@ import DefaultButton from "~/components/common/buttons/DefaultButton";
 import SubmitButton from "~/components/common/buttons/submitButton";
 import ContentContainer from "~/components/common/container/ContentContainer";
 import LocationInput from "~/components/common/location/location";
+import {configuration} from "~/config";
 
 export const action: ActionFunction = async ({request}) => {
     const userId = await requireUserId(request);
@@ -37,7 +38,7 @@ const NewGame = () => {
             <Form method={"post"} className={"flex flex-col gap-3"}>
                 <InputWithLabel type={"text"} id={"name"} name={"name"} label={"Spielname"}/>
                 <DateTimeInput name={"gameTime"} defaultValue={getNextGameDay()}/>
-                <LocationInput name={'location'} defaultValue={'Draussen'}/>
+                <LocationInput name={'location'} defaultValue={configuration.gameLocations.Unbekannt}/>
                 <div className={"flex gap-3 items-center w-full justify-end"}>
                     <RedButton className={'mr-auto'}>
                         <img className={"h-6"} src={"/img/icons/close-white.png"} alt={""}/>

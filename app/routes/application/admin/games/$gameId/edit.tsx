@@ -15,6 +15,7 @@ import InputWithLabel from "~/components/common/form/InputWithLabel";
 import DateTimeInput from "~/components/common/datetime/datetime";
 import {DateTime} from "luxon";
 import LocationInput from "~/components/common/location/location";
+import {configuration} from "~/config";
 
 
 type LoaderData = {
@@ -63,6 +64,16 @@ export const action: ActionFunction = async ({params, request}) => {
 const EditGame = () => {
     const navigate = useNavigate()
     const {game} = useLoaderData() as unknown as LoaderData
+
+    const spielort = game.spielort
+    let spielortOption = ''
+    for (const [key, value] of Object.entries(configuration.gameLocations)) {
+        if (value === spielort) {
+            spielortOption = key
+            break
+        }
+    }
+
 
     return (
         <ContentContainer className={'bg-blue-200 mt-5'}>
