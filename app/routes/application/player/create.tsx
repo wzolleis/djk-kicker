@@ -110,7 +110,7 @@ export const action: ActionFunction = async ({
             const player = await createPlayer(playerName.trim(), playerMail.trim());
 
             console.info('create default rating...')
-            await createDefaultRating(player.id)
+            await createDefaultRating(player.id, playerName)
             console.info('...default rating created')
 
             console.info('create token....')

@@ -88,6 +88,11 @@ async function generateRating(player: Player) {
   await prisma.playerRating.create({
     data: {
       playerId: player.id,
+      playerName: player.name,
+      overall: 50,
+      speed: 50,
+      technik: 50,
+      condition: 50,
     },
   });
 }
