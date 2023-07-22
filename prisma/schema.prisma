@@ -115,7 +115,8 @@ model MailServiceRequest {
 
 model PlayerRating {
     id              String      @id             @default(cuid())
-    playerId        String      @unique
+    playerId        String?
+    playerName      String
     overall         Int                         @default(0)
     technik         Int                         @default(0)
     speed           Int                         @default(0)

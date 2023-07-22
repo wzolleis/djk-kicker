@@ -216,7 +216,9 @@ const messages = {
         users: "Benutzerverwaltung",
         usersDescription: "Berechtigungen und so ein Quatsch",
         server: 'Server',
-        serverDescription: 'Servereinstellungen'
+        teamMatcher: 'Teams bilden',
+        serverDescription: 'Servereinstellungen',
+        teamMatcherDescription: 'Teams anhand der Ratings zusammenstellen'
     },
     adminOverviewTable: {
         name: "Name",
