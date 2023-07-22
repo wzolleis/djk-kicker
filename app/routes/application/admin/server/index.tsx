@@ -14,8 +14,6 @@ export const loader: LoaderFunction = async () => {
     const variables: ProcessEnvVariables = {
         DRIFTMAIL_SERVICE_URL: process.env.DRIFTMAIL_SERVICE_URL
     }
-
-    console.log('loader: ', variables)
     return json<LoaderData>({variables});
 };
 
