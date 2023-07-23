@@ -33,6 +33,9 @@ export const Environment = ({variables}: EnviromentProps) => {
                 <tr className={"border-b"} key={'DRIFTMAIL_SERVICE_URL'}>
                     <VariableTableRow name={'DRIFTMAIL_SERVICE_URL'} value={variables.DRIFTMAIL_SERVICE_URL}/>
                 </tr>
+                <tr className={"border-b"} key={'FEATURE_TEAMMATCHER_ACTIVE'}>
+                    <VariableTableRow name={'FEATURE_TEAMMATCHER_ACTIVE'} value={variables.FEATURE_TEAMMATCHER_ACTIVE}/>
+                </tr>
                 </tbody>
             </table>
         </ContentContainer>

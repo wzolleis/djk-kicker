@@ -15,6 +15,7 @@ type AdminButtonProps = {
     label: string
     description: string
 }
+
 const AdminButton = ({intent, label, description, children}: PropsWithChildren<AdminButtonProps>) => {
     return (
         <button
@@ -30,46 +31,6 @@ const AdminButton = ({intent, label, description, children}: PropsWithChildren<A
     )
 }
 
-const GamesButton = () => {
-    return (
-        <AdminButton intent={'games'} label={messages.adminLandingPage.games} description={messages.adminLandingPage.gamesDescription}>
-                <span className="p-5 rounded-full bg-green-500 text-white shadow-lg shadow-green-200">
-                    <GamesImage/>
-                </span>
-        </AdminButton>
-    )
-};
-
-const UsersButton = () => {
-    return (
-        <AdminButton intent={'users'} label={messages.adminLandingPage.users} description={messages.adminLandingPage.usersDescription}>
-            <span className="p-5 rounded-full bg-orange-500 text-white shadow-lg shadow-orange-200">
-                <UsersImage/>
-            </span>
-        </AdminButton>
-    );
-};
-
-const ServerButton = () => {
-    return (
-        <AdminButton intent={'server'} label={messages.adminLandingPage.server} description={messages.adminLandingPage.serverDescription}>
-            <span className="p-5 rounded-full bg-gray-500 text-white shadow-lg shadow-gray-200">
-                <ServerImage/>
-            </span>
-        </AdminButton>
-    )
-}
-
-const RatingsButton = () => {
-    return (
-        <AdminButton intent={'ratings'} label={messages.adminLandingPage.teamMatcher} description={messages.adminLandingPage.teamMatcherDescription}>
-            <span className="p-5 rounded-full bg-blue-500 text-white shadow-lg shadow-blue-200">
-                <RatingsImage/>
-            </span>
-        </AdminButton>
-    )
-}
-
 type AdminForm = 'intent'
 
 export const action: ActionFunction = async ({params, request}: { params: Params, request: Request }) => {
@@ -78,29 +39,47 @@ export const action: ActionFunction = async ({params, request}: { params: Params
     const intent = wrapper.get('intent')
     invariant(!!intent, "Kein Intent")
     invariant(isAdminActionButtonIntent(intent), `Ungültiger Intent: ${intent}`)
-
     if (isAdminActionButtonIntent(intent)) {
-        if (intent === 'games') {
-            return redirect('games')
-        } else if (intent === 'users') {
-            return redirect('users')
-        } else if (intent === 'server') {
-            return redirect('server')
-        } else if (intent === 'ratings') {
-            return redirect('teammatcher')
+        switch (intent) {
+            case "users":
+                return redirect('users')
+            case "games":
+                return redirect('games')
+            case "ratings":
+                return redirect('teammatcher')
+            case "server":
+                return redirect('server')
+            default:
+                return redirect(routeLinks.admin.adminLandingPage)
         }
     }
-    return redirect(routeLinks.admin.adminLandingPage)
 }
 
 const AdminIndex = () => {
     return (
         <Form method={'post'}>
             <div className="grid grid-cols-1 md:grid-cols-2 bg-white shadow-xl shadow-neutral-100 border px-3 ">
-                <GamesButton/>
-                <UsersButton/>
-                <RatingsButton/>
-                <ServerButton/>
+                <AdminButton intent={'games'} label={messages.adminLandingPage.games} description={messages.adminLandingPage.gamesDescription}>
+                <span className="p-5 rounded-full bg-green-500 text-white shadow-lg shadow-green-200">
+                    <GamesImage/>
+                </span>
+                </AdminButton>
+                <AdminButton intent={'users'} label={messages.adminLandingPage.users} description={messages.adminLandingPage.usersDescription}>
+                    <span className="p-5 rounded-full bg-orange-500 text-white shadow-lg shadow-orange-200">
+                        <UsersImage/>
+                    </span>
+                </AdminButton>
+                <AdminButton intent={'ratings'} label={messages.adminLandingPage.teamMatcher}
+                             description={messages.adminLandingPage.teamMatcherDescription}>
+                    <span className="p-5 rounded-full bg-blue-500 text-white shadow-lg shadow-blue-200">
+                        <RatingsImage/>
+                    </span>
+                </AdminButton>
+                <AdminButton intent={'server'} label={messages.adminLandingPage.server} description={messages.adminLandingPage.serverDescription}>
+                    <span className="p-5 rounded-full bg-gray-500 text-white shadow-lg shadow-gray-200">
+                        <ServerImage/>
+                    </span>
+                </AdminButton>
             </div>
         </Form>
     );

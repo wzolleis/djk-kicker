@@ -12,7 +12,7 @@ export type Features = {
 const features: Features = {
     teamMatcherEnabled: {
         name: 'teamMatcherEnabled',
-        value: process.env.FEATURE_TEAMMATCHER_ACTIVE || 'false'
+        value: process?.env?.FEATURE_TEAMMATCHER_ACTIVE || 'false'
     }
 }
 

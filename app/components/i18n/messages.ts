@@ -409,6 +409,10 @@ const messages = {
     },
     adminEditFeedbackForm: {
         title: (gameTime: string) => `Rückmeldungen für das Spiel am ${gameTime} anpassen`
+    },
+    adminPlayerRatingTable: {
+        name: 'Name',
+        overall: 'Gesamt'
     }
 };
 
