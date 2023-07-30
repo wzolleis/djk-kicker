@@ -1,7 +1,7 @@
 import {useNavigate} from "@remix-run/react";
 import classNames from "classnames";
 
-const BackButton = ({className}: { className?: string }) => {
+const BackButton = ({className, label}: { label?: string, className?: string }) => {
     const navigate = useNavigate()
 
     const handleNavigate = () => {
@@ -16,7 +16,7 @@ const BackButton = ({className}: { className?: string }) => {
             onClick={handleNavigate}
         >
             <p className={'fa fa-arrow-circle-left'}/>
-            <button type={"button"}/>
+            <button type={"button"}>{label ?? ''}</button>
         </div>
     )
 }

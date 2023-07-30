@@ -5,10 +5,13 @@ type PlayerRatingRowProps = {
 }
 
 const PlayerRatingRow = ({playerRating}: PlayerRatingRowProps) => {
+    const {overall, technik, speed, condition, playerName} = playerRating
+    const values = `${overall} (${technik}/${speed}/${condition})`
+
     return (
         <>
-            <td className={"py-5"}>{playerRating.playerName}</td>
-            <td className={"py-5"}>{playerRating.overall}</td>
+            <td className={"py-5"}>{playerName}</td>
+            <td className={"py-5 text-start"}>{values}</td>
         </>
     )
 }

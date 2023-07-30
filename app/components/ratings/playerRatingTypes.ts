@@ -6,14 +6,17 @@ export type PlayerRatingData = {
 
 export type RatingType = 'Speed' | 'Condition' | 'Technik'
 
-export type PlayerStarRating = {
-    rating: PlayerRatingData
-    label: string,
-    readonly: boolean
-}
 
 export type RatingSelection = {
     ratingType: RatingType
     ratingValue: number
     total: number
 }
+
+export type PlayerRatingValues = {
+    [key in RatingType]: {
+        ratingValue: number;
+        ratingType: RatingType,
+        total: number
+    };
+};

@@ -415,6 +415,7 @@ const messages = {
         overall: 'Gesamt',
         newRating: 'Neu',
         addRatingTitle: 'Neues Rating',
+        rating: 'Bewertung (T,G,L)',
         ratingTechnik: 'Technik',
         ratingSpeed: 'Geschwindigkeit',
         ratingCondition: 'Laufen',
