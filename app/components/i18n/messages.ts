@@ -414,7 +414,11 @@ const messages = {
         name: 'Name',
         overall: 'Gesamt',
         newRating: 'Neu',
-        addRatingTitle: 'Neues Rating'
+        addRatingTitle: 'Neues Rating',
+        ratingTechnik: 'Technik',
+        ratingSpeed: 'Geschwindigkeit',
+        ratingCondition: 'Laufen',
+        ratingTotal: 'Gesamt'
     },
 };
 
