@@ -412,8 +412,10 @@ const messages = {
     },
     adminPlayerRatingTable: {
         name: 'Name',
-        overall: 'Gesamt'
-    }
+        overall: 'Gesamt',
+        newRating: 'Neu',
+        addRatingTitle: 'Neues Rating'
+    },
 };
 
 export default messages;
