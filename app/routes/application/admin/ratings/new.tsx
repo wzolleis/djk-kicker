@@ -16,7 +16,7 @@ import {requireUserId} from "~/session.server";
 import {FormWrapper} from "~/utils/formWrapper.server";
 import routeLinks from "~/config/routeLinks";
 import invariant from "tiny-invariant";
-import {createRating} from "~/models/playerRating.server";
+import {calculateRating, createRating} from "~/models/playerRating.server";
 
 type RatingFormvalues = 'name' | 'Technik' | 'Speed' | 'Condition'
 
@@ -86,11 +86,17 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
     invariant(typeof technik === 'string')
     invariant(typeof condition === 'string')
 
-    await createRating(name, {
-        Speed: {total: 5, ratingValue: parseInt(speed), ratingType: 'Speed'},
-        Technik: {total: 5, ratingValue: parseInt(technik), ratingType: 'Technik'},
-        Condition: {total: 5, ratingValue: parseInt(condition), ratingType: 'Condition'},
-    })
+    const speedInt = parseInt(speed)
+    const technikInt = parseInt(technik)
+    const conditionInt = parseInt(condition)
+
+    invariant(Number.isSafeInteger(speedInt))
+    invariant(Number.isSafeInteger(technikInt))
+    invariant(Number.isSafeInteger(conditionInt))
+
+    const rating = calculateRating({speed: speedInt, technik: technikInt, condition: conditionInt, total: 15})
+
+    await createRating(name, rating)
     return redirect(routeLinks.admin.teamMatcher)
 }
 

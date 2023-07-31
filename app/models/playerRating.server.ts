@@ -1,15 +1,36 @@
 import {prisma} from "~/db.server";
 import {PlayerRating} from "@prisma/client";
-import {PlayerRatingValues} from "~/components/ratings/playerRatingTypes";
 
-export const createDefaultRating = async (playerId: string, playerName: string) => {
+export const calculateRating = (rating: {
+    speed: number,
+    technik: number,
+    condition: number,
+    total: number
+}) => {
+    const {total, speed, technik, condition} = rating
+    const sumOfSkills = speed + technik + condition
+    const overall = Math.ceil((sumOfSkills / total) * 100)
+    return {
+        ...rating,
+        overall
+    }
+}
+
+export const createRatingForPlayer = async (playerId: string, playerName: string, rating: {
+    overall: number,
+    speed: number,
+    technik: number,
+    condition: number
+}) => {
+    const {overall, speed, technik, condition} = rating
+
     return await prisma.playerRating.create({
         data: {
             playerId,
-            overall: 50,
-            condition: 50,
-            speed: 50,
-            technik: 50,
+            overall,
+            condition,
+            speed,
+            technik,
             playerName,
         },
     })
@@ -30,16 +51,15 @@ export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRati
     })
 }
 
-export const createRating = async (playerName: string, rating: PlayerRatingValues) => {
-    const ratingValueSum = Object.values(rating).map(v => v.ratingValue).reduce((prev, cur) => prev + cur)
-    const overall = Math.ceil(ratingValueSum / Object.values(rating).length)
+export const createRating = async (playerName: string, rating: {
+    overall: number,
+    speed: number,
+    technik: number,
+    condition: number
+}) => {
+    const {overall, speed, technik, condition} = rating
+
     return await prisma.playerRating.create({
-        data: {
-            overall,
-            condition: rating.Condition.ratingValue,
-            speed: rating.Speed.ratingValue,
-            technik: rating.Technik.ratingValue,
-            playerName,
-        },
+        data: {overall, condition, speed, technik, playerName,},
     })
 }

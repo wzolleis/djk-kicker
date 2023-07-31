@@ -1,13 +1,15 @@
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {Form, useLoaderData} from "@remix-run/react";
-import {getAllRatings} from "~/models/playerRating.server";
-import {PlayerRating} from "@prisma/client";
+import {calculateRating, createRatingForPlayer, getAllRatings} from "~/models/playerRating.server";
+import {Player, PlayerRating} from "@prisma/client";
 import PlayerRatingTable from "~/components/ratings/PlayerRatingTable";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
 import {FormWrapper} from "~/utils/formWrapper.server";
 import routeLinks from "~/config/routeLinks";
+import invariant from "tiny-invariant";
+import {getPlayers} from "~/models/player.server";
 
 type LoaderData = {
     ratings: PlayerRating[]
@@ -23,25 +25,52 @@ export const loader: LoaderFunction = async () => {
 
 type AddRatingFormFields = 'intent'
 
+const defaultRating = {
+    speed: 3,
+    technik: 3,
+    condition: 3
+}
+
 export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
     const wrapper = new FormWrapper<AddRatingFormFields>(formData)
     const intent = wrapper.get('intent')
-    return redirect(routeLinks.admin.ratings.new)
+    invariant(typeof intent === 'string')
+    if (intent === 'add') {
+        return redirect(routeLinks.admin.ratings.new)
+    } else if (intent === 'playerRatings') {
+        const allPlayers: Player[] = await getPlayers()
+        const allRatings = await getAllRatings()
+        const playerWithoutRating = allPlayers
+            .filter(p => !allRatings.some(r => r.playerId === p.id))
+        for (let i = 0; i < playerWithoutRating.length; i++) {
+            const player = playerWithoutRating[i]
+            const rating = calculateRating({...defaultRating, total: 15})
+            await createRatingForPlayer(player.id, player.name, rating)
+        }
+    }
+    return redirect(routeLinks.admin.adminLandingPage)
 }
 
 const AddRatingButton = () => {
     return (
-        <>
-            <DefaultButton className={'mb-2 ml-auto'}>
-                <button type={'submit'} name={'intent'} value={'add'}>
-                    <i className={"fa fa-plus"}/>
-                    <span className={"inline px-1"}>{messages.adminPlayerRatingTable.newRating}</span>
-                </button>
-            </DefaultButton>
+        <DefaultButton className={'mb-2 ml-auto'}>
+            <button type={'submit'} name={'intent'} value={'add'}>
+                <i className={"fa fa-plus"}/>
+                <span className={"inline px-1"}>{messages.adminPlayerRatingTable.newRating}</span>
+            </button>
+        </DefaultButton>
+    )
+}
 
-        </>
-
+const AddPlayerRatingsButton = () => {
+    return (
+        <DefaultButton className={'mb-2'}>
+            <button type={'submit'} name={'intent'} value={'playerRatings'}>
+                <i className={"fa fa-soccer-ball"}/>
+                <span className={"inline px-1"}>{messages.adminPlayerRatingTable.createPlayerRating}</span>
+            </button>
+        </DefaultButton>
     )
 }
 
@@ -52,6 +81,7 @@ const Teammatcher = () => {
         <div>
             <Form method={'post'}>
                 <ButtonContainer>
+                    <AddPlayerRatingsButton/>
                     <AddRatingButton/>
                 </ButtonContainer>
                 <PlayerRatingTable ratings={data.ratings}/>

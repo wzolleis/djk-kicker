@@ -34,7 +34,8 @@ const routeLinks = {
         serverLandingPage: 'application/admin/server',
         teamMatcher: '/application/admin/teammatcher',
         ratings: {
-            new: '/application/admin/ratings/new'
+            new: '/application/admin/ratings/new',
+            createPlayerRatings: '/application/admin/ratings/createPlayerRatings',
         }
     },
     games: '/application/games',

@@ -21,7 +21,6 @@ import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import {MailService} from "~/helpers/mail/mailService";
 import {getPlayerToken} from "~/models/token.server";
-import {createDefaultRating} from "~/models/playerRating.server";
 
 type LoaderData = {
     gameId: string;
@@ -108,10 +107,6 @@ export const action: ActionFunction = async ({
             }
             console.info('create player')
             const player = await createPlayer(playerName.trim(), playerMail.trim());
-
-            console.info('create default rating...')
-            await createDefaultRating(player.id, playerName)
-            console.info('...default rating created')
 
             console.info('create token....')
             await getPlayerToken(player.id, false)
