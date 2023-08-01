@@ -1,17 +1,13 @@
-export type PlayerRatingData = {
-    ratingType: string
-    total: number
-    rating: number
-}
+import {Rating} from "~/models/classes/Rating";
 
 export type RatingType = 'Speed' | 'Condition' | 'Technik'
-
 
 export type RatingSelection = {
     ratingType: RatingType
     ratingValue: number
     total: number
 }
+
 
 export type PlayerRatingValues = {
     [key in RatingType]: {
@@ -20,3 +16,5 @@ export type PlayerRatingValues = {
         total: number
     };
 };
+
+export const defaultRating: Rating = new Rating({speed: 3, technik: 3, condition: 3})

@@ -35,6 +35,8 @@ const routeLinks = {
         teamMatcher: '/application/admin/teammatcher',
         ratings: {
             new: '/application/admin/ratings/new',
+            delete: (ratingId: string) => `/application/admin/ratings/${ratingId}/delete`,
+            edit: (ratingId: string) => `/application/admin/ratings/${ratingId}/edit`,
             createPlayerRatings: '/application/admin/ratings/createPlayerRatings',
         }
     },

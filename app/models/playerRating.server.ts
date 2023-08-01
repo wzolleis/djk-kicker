@@ -1,29 +1,10 @@
 import {prisma} from "~/db.server";
 import {PlayerRating} from "@prisma/client";
+import {Rating} from "~/models/classes/Rating";
 
-export const calculateRating = (rating: {
-    speed: number,
-    technik: number,
-    condition: number,
-    total: number
-}) => {
-    const {total, speed, technik, condition} = rating
-    const sumOfSkills = speed + technik + condition
-    const overall = Math.ceil((sumOfSkills / total) * 100)
-    return {
-        ...rating,
-        overall
-    }
-}
-
-export const createRatingForPlayer = async (playerId: string, playerName: string, rating: {
-    overall: number,
-    speed: number,
-    technik: number,
-    condition: number
-}) => {
-    const {overall, speed, technik, condition} = rating
-
+export const createRatingForPlayer = async (playerId: string, playerName: string, rating: Rating) => {
+    const {speed, technik, condition} = rating
+    const overall = rating.overall()
     return await prisma.playerRating.create({
         data: {
             playerId,
@@ -51,14 +32,9 @@ export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRati
     })
 }
 
-export const createRating = async (playerName: string, rating: {
-    overall: number,
-    speed: number,
-    technik: number,
-    condition: number
-}) => {
-    const {overall, speed, technik, condition} = rating
-
+export const createRating = async (playerName: string, rating: Rating) => {
+    const {speed, technik, condition} = rating
+    const overall = rating.overall()
     return await prisma.playerRating.create({
         data: {overall, condition, speed, technik, playerName,},
     })

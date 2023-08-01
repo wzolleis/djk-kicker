@@ -6,6 +6,7 @@ export type PlayerRatingTableProps = {
     ratings: PlayerRating[]
 }
 
+
 const PlayerRatingTable = ({ratings}: PlayerRatingTableProps) => {
     return (
         <>

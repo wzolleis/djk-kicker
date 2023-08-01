@@ -41,9 +41,6 @@ const Users = () => {
                     <DefaultButton className={'ml-auto'}>
                         <Link to={routeLinks.admin.users.create}>{messages.buttons.add}</Link>
                     </DefaultButton>
-                    <DefaultButton>
-                        <Link to={routeLinks.admin.users.ratings}>{messages.buttons.ratings}</Link>
-                    </DefaultButton>
                 </ButtonContainer>
             </div>
             <MainPageContent>

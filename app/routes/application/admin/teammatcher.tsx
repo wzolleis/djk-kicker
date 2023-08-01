@@ -1,6 +1,6 @@
 import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {Form, useLoaderData} from "@remix-run/react";
-import {calculateRating, createRatingForPlayer, getAllRatings} from "~/models/playerRating.server";
+import {createRatingForPlayer, getAllRatings} from "~/models/playerRating.server";
 import {Player, PlayerRating} from "@prisma/client";
 import PlayerRatingTable from "~/components/ratings/PlayerRatingTable";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
@@ -10,6 +10,7 @@ import {FormWrapper} from "~/utils/formWrapper.server";
 import routeLinks from "~/config/routeLinks";
 import invariant from "tiny-invariant";
 import {getPlayers} from "~/models/player.server";
+import {defaultRating} from "~/components/ratings/playerRatingTypes";
 
 type LoaderData = {
     ratings: PlayerRating[]
@@ -25,12 +26,6 @@ export const loader: LoaderFunction = async () => {
 
 type AddRatingFormFields = 'intent'
 
-const defaultRating = {
-    speed: 3,
-    technik: 3,
-    condition: 3
-}
-
 export const action: ActionFunction = async ({request}) => {
     const formData = await request.formData();
     const wrapper = new FormWrapper<AddRatingFormFields>(formData)
@@ -45,8 +40,7 @@ export const action: ActionFunction = async ({request}) => {
             .filter(p => !allRatings.some(r => r.playerId === p.id))
         for (let i = 0; i < playerWithoutRating.length; i++) {
             const player = playerWithoutRating[i]
-            const rating = calculateRating({...defaultRating, total: 15})
-            await createRatingForPlayer(player.id, player.name, rating)
+            await createRatingForPlayer(player.id, player.name, defaultRating)
         }
     }
     return redirect(routeLinks.admin.adminLandingPage)
