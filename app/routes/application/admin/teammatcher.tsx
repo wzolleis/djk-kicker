@@ -2,7 +2,6 @@ import {ActionFunction, json, LoaderFunction, redirect} from "@remix-run/node";
 import {Form, useLoaderData} from "@remix-run/react";
 import {createRatingForPlayer, getAllRatings} from "~/models/playerRating.server";
 import {Player, PlayerRating} from "@prisma/client";
-import PlayerRatingTable from "~/components/ratings/PlayerRatingTable";
 import ButtonContainer from "~/components/common/container/ButtonContainer";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
 import messages from "~/components/i18n/messages";
@@ -11,6 +10,7 @@ import routeLinks from "~/config/routeLinks";
 import invariant from "tiny-invariant";
 import {getPlayers} from "~/models/player.server";
 import {defaultRating} from "~/components/ratings/playerRatingTypes";
+import PlayerRatingList from "~/components/ratings/PlayerRatingList";
 
 type LoaderData = {
     ratings: PlayerRating[]
@@ -78,7 +78,7 @@ const Teammatcher = () => {
                     <AddPlayerRatingsButton/>
                     <AddRatingButton/>
                 </ButtonContainer>
-                <PlayerRatingTable ratings={data.ratings}/>
+                <PlayerRatingList ratings={data.ratings}/>
             </Form>
         </div>
     )

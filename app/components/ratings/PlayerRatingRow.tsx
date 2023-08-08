@@ -5,17 +5,20 @@ import routeLinks from "~/config/routeLinks";
 import messages from "~/components/i18n/messages";
 import RedButton from "~/components/common/buttons/RedButton";
 import DefaultButton from "~/components/common/buttons/DefaultButton";
+import {Rating} from "~/models/classes/Rating";
 
 type PlayerRatingRowProps = {
     playerRating: PlayerRating
 }
 
 const PlayerRatingRow = ({playerRating}: PlayerRatingRowProps) => {
-    const {overall, playerName} = playerRating
+    const {playerName, speed, technik, condition,} = playerRating
+    const rating = new Rating({speed, technik, condition})
+
     return (
         <>
             <td className={"py-5"}>{playerName}</td>
-            <td className={"py-5 text-start"}>{overall}</td>
+            <td className={"py-5 text-start"}>{rating.overall()}</td>
 
             <td className={"text-center"}>
                 <ButtonContainer className={'flex'}>
@@ -26,7 +29,7 @@ const PlayerRatingRow = ({playerRating}: PlayerRatingRowProps) => {
                         </Link>
                     </DefaultButton>
                     <RedButton>
-                        <p className={"fa fa-trash "}/>
+                        <p className={"fa fa-trash"}/>
                         <Link to={routeLinks.admin.ratings.delete(playerRating.id)}>
                             <span className={'hidden md:block'}>{messages.buttons.delete}</span>
                         </Link>

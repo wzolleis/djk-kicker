@@ -5,11 +5,11 @@ import {faker} from "@faker-js/faker";
 const prisma = new PrismaClient();
 
 function generateName() {
-  return faker.name.firstName();
+  return faker.person.firstName();
 }
 
 function generateEmail() {
-  return faker.internet.exampleEmail(undefined, undefined, { allowSpecialCharacters: false });
+  return faker.internet.email( { allowSpecialCharacters: false });
 }
 
 async function generatePlayers() {
@@ -89,7 +89,6 @@ async function generateRating(player: Player) {
     data: {
       playerId: player.id,
       playerName: player.name,
-      overall: 50,
       speed: 50,
       technik: 50,
       condition: 50,

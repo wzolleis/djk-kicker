@@ -4,11 +4,9 @@ import {Rating} from "~/models/classes/Rating";
 
 export const createRatingForPlayer = async (playerId: string, playerName: string, rating: Rating) => {
     const {speed, technik, condition} = rating
-    const overall = rating.overall()
     return await prisma.playerRating.create({
         data: {
             playerId,
-            overall,
             condition,
             speed,
             technik,
@@ -21,7 +19,14 @@ export const getAllRatings = async (): Promise<PlayerRating[]> => {
     return await prisma.playerRating.findMany()
 }
 
-export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRating, 'speed' | 'condition' | 'technik' | 'playerName' | 'playerId' | 'overall'>) => {
+export const getPlayerRatingById = async (id: string | undefined) => {
+    if (!id) {
+        throw new Error("No rating Id provided");
+    }
+    return await prisma.playerRating.findUnique({where: {id}})
+}
+
+export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRating, 'speed' | 'condition' | 'technik' | 'playerName' | 'playerId'>) => {
     return await prisma.playerRating.update({
         where: {
             id: ratingId
@@ -34,8 +39,7 @@ export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRati
 
 export const createRating = async (playerName: string, rating: Rating) => {
     const {speed, technik, condition} = rating
-    const overall = rating.overall()
     return await prisma.playerRating.create({
-        data: {overall, condition, speed, technik, playerName,},
+        data: {condition, speed, technik, playerName,},
     })
 }

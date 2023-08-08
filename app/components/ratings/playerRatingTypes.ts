@@ -17,4 +17,4 @@ export type PlayerRatingValues = {
     };
 };
 
-export const defaultRating: Rating = new Rating({speed: 3, technik: 3, condition: 3})
+export const defaultRating: Rating = new Rating({speed: 3, technik: 3, condition: 3, playerName: '', id: ''})

@@ -2,7 +2,7 @@ import classNames from "classnames";
 import {RatingSelection, RatingType} from "~/components/ratings/playerRatingTypes";
 
 export type RatingInputProps = {
-    label: string
+    label?: string
     selectionChanged?: (selection: RatingSelection) => void
     rating: {
         total: number,
@@ -30,9 +30,11 @@ const RatingInput = ({label, rating: {total, ratingType, ratingValue}, selection
 
     return (
         <div className={"flex w-full flex-row gap-2"}>
-            <label className={"font-default-medium text-gray-600 w-1/2 md:w-1/4"}>
-                {label}
-            </label>
+            {!!label &&
+                <label className={"font-default-medium text-gray-600 w-1/2 md:w-1/4"}>
+                    {label}
+                </label>
+            }
             {
                 stars.map((star) => {
                     return (

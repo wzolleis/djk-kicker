@@ -19,7 +19,7 @@ import invariant from "tiny-invariant";
 import {createRating} from "~/models/playerRating.server";
 import {Rating} from "~/models/classes/Rating";
 
-type RatingFormvalues = 'name' | 'Technik' | 'Speed' | 'Condition'
+type AddRatingFormvalues = 'name' | 'Technik' | 'Speed' | 'Condition'
 
 const AddPlayerRatingForm = () => {
     const playerRatings: PlayerRatingValues = {
@@ -73,10 +73,12 @@ const AddPlayerRatingForm = () => {
     )
 }
 
-export const action: ActionFunction = async ({request}: { request: Request }) => {
+export const action: ActionFunction = async ({request}: {
+    request: Request
+}) => {
     await requireUserId(request)
     const formData = await request.formData();
-    const wrapper = new FormWrapper<RatingFormvalues>(formData)
+    const wrapper = new FormWrapper<AddRatingFormvalues>(formData)
     const speed = wrapper.get('Speed')
     const name = wrapper.get('name')
     const technik = wrapper.get('Technik')
@@ -104,7 +106,7 @@ export const action: ActionFunction = async ({request}: { request: Request }) =>
 const AddPlayerRating = () => {
     return (
         <TransitionContainer>
-            <Form method={"post"} className={"flex flex-col gap-3"}>
+            <Form method={"post"} className={"flex flex-col gap-3 bg-blue-200 p-5"}>
                 <Subheading title={messages.adminPlayerRatingTable.addRatingTitle}/>
                 <AddPlayerRatingForm/>
                 <ButtonContainer>
