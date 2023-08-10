@@ -70,7 +70,6 @@ const AddPlayerRatingsButton = () => {
 
 const Teammatcher = () => {
     const data = useLoaderData() as unknown as LoaderData
-
     return (
         <div>
             <Form method={'post'}>
@@ -78,8 +77,8 @@ const Teammatcher = () => {
                     <AddPlayerRatingsButton/>
                     <AddRatingButton/>
                 </ButtonContainer>
-                <PlayerRatingList ratings={data.ratings}/>
             </Form>
+            <PlayerRatingList ratings={data.ratings}/>
         </div>
     )
 }
