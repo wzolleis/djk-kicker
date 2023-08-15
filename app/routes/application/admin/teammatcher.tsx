@@ -11,6 +11,10 @@ import invariant from "tiny-invariant";
 import {getPlayers} from "~/models/player.server";
 import {defaultRating} from "~/components/ratings/playerRatingTypes";
 import PlayerRatingList from "~/components/ratings/PlayerRatingList";
+import {TabPanel, useTabs} from "react-headless-tabs";
+import {TabSelector} from "~/components/common/tabs/TabSelector";
+import RatingSelection from "~/components/ratings/RatingSelection";
+import {Rating} from "~/models/classes/Rating";
 
 type LoaderData = {
     ratings: PlayerRating[]
@@ -70,6 +74,16 @@ const AddPlayerRatingsButton = () => {
 
 const Teammatcher = () => {
     const data = useLoaderData() as unknown as LoaderData
+    const [selectedTab, setSelectedTab] = useTabs([
+        "Rating",
+        "Auswahl",
+        "Teams",
+    ]);
+
+    const ratings = data.ratings.map((one) => {
+        return Rating.fromPlayerRating(one)
+    })
+
     return (
         <div>
             <Form method={'post'}>
@@ -78,9 +92,40 @@ const Teammatcher = () => {
                     <AddRatingButton/>
                 </ButtonContainer>
             </Form>
-            <PlayerRatingList ratings={data.ratings}/>
+            <>
+                <nav className="flex border-b border-gray-300">
+                    <TabSelector
+                        isActive={selectedTab === "Rating"}
+                        onClick={() => setSelectedTab("Rating")}
+                    >
+                        Rating
+                    </TabSelector>
+                    <TabSelector
+                        isActive={selectedTab === "Auswahl"}
+                        onClick={() => setSelectedTab("Auswahl")}
+                    >
+                        Auswahl
+                    </TabSelector>
+                    <TabSelector
+                        isActive={selectedTab === "Teams"}
+                        onClick={() => setSelectedTab("Teams")}
+                    >
+                        Teams
+                    </TabSelector>
+                </nav>
+                <div className="p-4">
+                    <TabPanel hidden={selectedTab !== "Rating"}>
+                        <PlayerRatingList ratings={data.ratings}/>
+                    </TabPanel>
+                    <TabPanel hidden={selectedTab !== "Auswahl"}>
+                        <RatingSelection ratings={ratings}/>
+                    </TabPanel>
+                    <TabPanel hidden={selectedTab !== "Teams"}>Teams</TabPanel>
+                </div>
+            </>
         </div>
     )
 }
 
 export default Teammatcher
+

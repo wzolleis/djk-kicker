@@ -243,6 +243,11 @@ const messages = {
         scope: "Scope",
         validUntil: "Gültig bis"
     },
+    adminRatingSelectionForm: {
+        included: 'Anwesend',
+        allRatings: 'Alle',
+        removeAll: 'Alle entfernen'
+    },
     game: {
         headings: {
             nextGame: "Nächstes Spiel",
