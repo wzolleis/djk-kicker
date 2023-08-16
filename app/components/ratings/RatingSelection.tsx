@@ -1,5 +1,4 @@
-import {Rating} from "~/models/classes/Rating";
-import {useItemSelectionList} from "~/components/selection";
+import {ItemSelection} from "~/components/selection";
 import TransitionContainer from "~/components/common/container/transitionContainer";
 import {Form} from "@remix-run/react";
 import MainPageContent from "~/components/common/MainPageContent";
@@ -33,13 +32,7 @@ const ActiveRatingButton = ({rating, onRatingClick, selected}: ActiveRatingButto
     )
 }
 
-const RatingSelection = ({ratings}: { ratings: Rating[] }) => {
-    const ratingsWithId: RatingWithId[] = ratings.map((r) => {
-        return new RatingWithId({id: r.id!, rating: r})
-    })
-
-    const selection = useItemSelectionList({items: ratingsWithId})
-
+const RatingSelection = ({ratings, selection}: { ratings: RatingWithId[], selection: ItemSelection<RatingWithId> }) => {
     return (
         <div className={"min-h-screen"}>
             <TransitionContainer>
@@ -68,7 +61,7 @@ const RatingSelection = ({ratings}: { ratings: Rating[] }) => {
 
                             <main className={"mt-5 flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"}>
                                 {
-                                    ratingsWithId.map((rating) => {
+                                    ratings.map((rating) => {
                                             const selected = selection.isItemIncluded(rating)
                                             return (
                                                 <ActiveRatingButton key={rating.id}

@@ -9,7 +9,16 @@ export type UseSelectionListProps<T extends DataWithId> = {
     sortFn?: (t1: T, t2: T) => number
 }
 
-export const useItemSelectionList = <T extends DataWithId>(props: UseSelectionListProps<T>) => {
+export type ItemSelection<T> = {
+    includedItems: T[]
+    excludedItems: T[]
+    handleItemSelection: (item: T) => void
+    addAllItemsToIncluded: () => void
+    removeAllItemsFromIncluded: () => void
+    isItemIncluded: (item: T) => boolean
+}
+
+export const useItemSelectionList = <T extends DataWithId>(props: UseSelectionListProps<T>): ItemSelection<T> => {
     const {items, sortFn} = props
     const sorted = [...items].sort(sortFn)
 

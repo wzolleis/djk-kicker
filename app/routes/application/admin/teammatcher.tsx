@@ -15,6 +15,9 @@ import {TabPanel, useTabs} from "react-headless-tabs";
 import {TabSelector} from "~/components/common/tabs/TabSelector";
 import RatingSelection from "~/components/ratings/RatingSelection";
 import {Rating} from "~/models/classes/Rating";
+import {ItemSelection, useItemSelectionList} from "~/components/selection";
+import {RatingWithId} from "~/models/classes/RatingWithId";
+import MatchList from "~/components/ratings/MatchList";
 
 type LoaderData = {
     ratings: PlayerRating[]
@@ -83,6 +86,11 @@ const Teammatcher = () => {
     const ratings = data.ratings.map((one) => {
         return Rating.fromPlayerRating(one)
     })
+    const ratingsWithId: RatingWithId[] = ratings.map((r) => {
+        return new RatingWithId({id: r.id!, rating: r})
+    })
+
+    const selection: ItemSelection<RatingWithId> = useItemSelectionList({items: ratingsWithId})
 
     return (
         <div>
@@ -118,9 +126,11 @@ const Teammatcher = () => {
                         <PlayerRatingList ratings={data.ratings}/>
                     </TabPanel>
                     <TabPanel hidden={selectedTab !== "Auswahl"}>
-                        <RatingSelection ratings={ratings}/>
+                        <RatingSelection ratings={ratingsWithId} selection={selection}/>
                     </TabPanel>
-                    <TabPanel hidden={selectedTab !== "Teams"}>Teams</TabPanel>
+                    <TabPanel hidden={selectedTab !== "Teams"}>
+                        <MatchList selection={selection}/>
+                    </TabPanel>
                 </div>
             </>
         </div>
