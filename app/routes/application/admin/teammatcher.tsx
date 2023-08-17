@@ -80,7 +80,7 @@ const Teammatcher = () => {
     const [selectedTab, setSelectedTab] = useTabs([
         "Rating",
         "Auswahl",
-        "Teams",
+        "Matches",
     ]);
 
     const ratings = data.ratings.map((one) => {
@@ -115,10 +115,10 @@ const Teammatcher = () => {
                         Auswahl
                     </TabSelector>
                     <TabSelector
-                        isActive={selectedTab === "Teams"}
-                        onClick={() => setSelectedTab("Teams")}
+                        isActive={selectedTab === "Matches"}
+                        onClick={() => setSelectedTab("Matches")}
                     >
-                        Teams
+                        Matches
                     </TabSelector>
                 </nav>
                 <div className="p-4">
@@ -128,7 +128,7 @@ const Teammatcher = () => {
                     <TabPanel hidden={selectedTab !== "Auswahl"}>
                         <RatingSelection ratings={ratingsWithId} selection={selection}/>
                     </TabPanel>
-                    <TabPanel hidden={selectedTab !== "Teams"}>
+                    <TabPanel hidden={selectedTab !== "Matches"}>
                         <MatchList selection={selection}/>
                     </TabPanel>
                 </div>

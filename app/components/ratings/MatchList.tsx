@@ -3,6 +3,8 @@ import {RatingWithId} from "~/models/classes/RatingWithId";
 import {calculateMatches} from "~/matches/teamCalculation";
 import {mapToPlayerModel} from "~/matches/player";
 import {MatchModel} from "~/matches/teamTypes";
+import ContentContainer from "~/components/common/container/ContentContainer";
+import MatchView from "~/components/ratings/MatchView";
 
 export type MatchListProps = {
     selection: ItemSelection<RatingWithId>
@@ -16,10 +18,22 @@ const MatchList = ({selection}: MatchListProps) => {
         return m1.diff - m2.diff
     }
 
-    console.log('matches', matches.sort(sortBySkill))
+    const sortedMatches = matches.sort(sortBySkill)
 
     return (
-        <div>Matches</div>
+        <ContentContainer>
+            <ul className={'my-2 bg-white'}>
+                {
+                    sortedMatches.map(match => {
+                        return (
+                            <li key={match.id} className={'my-5 px-5'}>
+                                <MatchView match={match}/>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
+        </ContentContainer>
     )
 }
 
