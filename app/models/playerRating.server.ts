@@ -26,7 +26,8 @@ export const getPlayerRatingById = async (id: string | undefined) => {
     return await prisma.playerRating.findUnique({where: {id}})
 }
 
-export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRating, 'speed' | 'condition' | 'technik' | 'playerName' | 'playerId'>) => {
+export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRating,
+    'speed' | 'condition' | 'technik' | 'position' | 'playerName' | 'playerId'>) => {
     return await prisma.playerRating.update({
         where: {
             id: ratingId

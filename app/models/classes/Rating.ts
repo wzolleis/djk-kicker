@@ -9,19 +9,22 @@ export class Rating {
     condition: number
     playerName: string | undefined
     id: string | undefined
+    position: string
 
-    constructor({speed, technik, condition, playerName, id}: {
+    constructor({speed, technik, condition, position, playerName, id}: {
         id?: string,
         speed: number,
         technik: number,
         condition: number,
         playerName?: string
+        position: string
     }) {
         this.speed = speed;
         this.technik = technik;
         this.condition = condition;
         this.playerName = playerName
         this.id = id
+        this.position = position
     }
 
     copyWith(ratingType: RatingType, value: number) {
@@ -30,7 +33,8 @@ export class Rating {
             condition: this.condition,
             technik: this.technik,
             id: this.id,
-            playerName: this.playerName
+            playerName: this.playerName,
+            position: this.position
         }
 
         switch (ratingType) {
@@ -48,8 +52,15 @@ export class Rating {
         return new Rating(values)
     }
 
-    static fromPlayerRating({id, speed, technik, condition, playerName}: PlayerRating) {
-        return new Rating({id, speed, technik, condition, playerName})
+    copyWithPosition({position}: { position: string }) {
+        return new Rating({
+            ...this,
+            position
+        })
+    }
+
+    static fromPlayerRating({id, speed, technik, condition, position, playerName}: PlayerRating) {
+        return new Rating({id, speed, technik, condition, position, playerName})
     }
 
     total() {

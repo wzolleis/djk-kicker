@@ -117,6 +117,7 @@ model PlayerRating {
     id              String      @id             @default(cuid())
     playerId        String?
     playerName      String
+    position        String                      @default("defender")
     technik         Int                         @default(0)
     speed           Int                         @default(0)
     condition       Int                         @default(0)

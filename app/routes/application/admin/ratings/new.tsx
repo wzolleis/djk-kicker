@@ -19,7 +19,7 @@ import invariant from "tiny-invariant";
 import {createRating} from "~/models/playerRating.server";
 import {Rating} from "~/models/classes/Rating";
 
-type AddRatingFormvalues = 'name' | 'Technik' | 'Speed' | 'Condition'
+type AddRatingFormvalues = 'name' | 'Technik' | 'Speed' | 'Condition' | 'position'
 
 const AddPlayerRatingForm = () => {
     const playerRatings: PlayerRatingValues = {
@@ -57,6 +57,7 @@ const AddPlayerRatingForm = () => {
             <input hidden={true} name={'Technik'} value={playerRatingValues['Technik'].ratingValue} type={'number'}/>
 
             <InputWithLabel type={"text"} id={"name"} name={"name"} label={"Name"} required={true}/>
+            <InputWithLabel type={"text"} id={"position"} name={"position"} label={"Position"} required={true}/>
             <RatingInput label={messages.adminPlayerRatingTable.ratingTechnik}
                          rating={playerRatingValues['Technik']}
                          selectionChanged={selectionChanged}
@@ -83,11 +84,13 @@ export const action: ActionFunction = async ({request}: {
     const name = wrapper.get('name')
     const technik = wrapper.get('Technik')
     const condition = wrapper.get('Condition')
+    const position = wrapper.get('position')
 
     invariant(typeof speed === 'string')
     invariant(typeof name === 'string')
     invariant(typeof technik === 'string')
     invariant(typeof condition === 'string')
+    invariant(typeof position === 'string')
 
     const speedInt = parseInt(speed)
     const technikInt = parseInt(technik)
@@ -97,7 +100,12 @@ export const action: ActionFunction = async ({request}: {
     invariant(Number.isSafeInteger(technikInt))
     invariant(Number.isSafeInteger(conditionInt))
 
-    const rating = new Rating({speed: speedInt, technik: technikInt, condition: conditionInt})
+    const rating = new Rating({
+        speed: speedInt,
+        technik: technikInt,
+        condition: conditionInt,
+        position: position
+    })
 
     await createRating(name, rating)
     return redirect(routeLinks.admin.teamMatcher)

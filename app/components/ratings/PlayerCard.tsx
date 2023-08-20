@@ -1,11 +1,49 @@
 import {Rating} from "~/models/classes/Rating";
-import {useMemo, useState} from "react";
+import {ChangeEvent, useMemo, useState} from "react";
 import {playerImageByRating} from "~/components/ratings/playerRatingImage";
 import {useFetcher} from "@remix-run/react";
 import PlayerRatingInput from "~/components/ratings/PlayerRatingInput";
+import _ from "lodash";
+import messages from "~/components/i18n/messages";
+import {configuration} from "~/config";
+import {isPlayerPosition} from "~/components/ratings/playerRatingTypes";
 
 export type PlayerCardProps = {
     rating: Rating
+}
+
+const isSelectable = (value: string) => {
+    return Object.values(configuration.playerPositions).some(position => position === value)
+}
+
+
+const PositionSuggestions = ({onChange, name, currentValue}: { onChange: (value: string) => void, name: string, currentValue: string }) => {
+    const defaultValue = isSelectable(currentValue) ? currentValue : undefined
+    return (
+        <div className={"grid grid-cols-3 py-1 px-3"}>
+            <label
+                htmlFor={`${name}`}
+                className="mb-2 block md:font-medium text-gray-400"
+            >
+                {messages.editRatingForm.position}
+            </label>
+            <select className={"text-gray-400 rounded-lg border-2 border-gray-600 col-span-2 mr-2"}
+                    id={name}
+                    name={name}
+                    defaultValue={defaultValue}
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) => onChange(event.target.value)}
+            >
+                {
+                    Object.keys(configuration.playerPositions).map(key => {
+                        if (isPlayerPosition(key)) {
+                            const value = configuration.playerPositions[key]
+                            return <option key={key} value={value}>{configuration.playerPositions[key]}</option>
+                        }
+                    })
+                }
+            </select>
+        </div>
+    )
 }
 
 const PlayerCard = ({rating}: PlayerCardProps) => {
@@ -13,11 +51,21 @@ const PlayerCard = ({rating}: PlayerCardProps) => {
     const image = useMemo(() => playerImageByRating({rating: rating.overall()}), [rating])
     const fetcher = useFetcher();
     const [ratingValue, setRatingValue] = useState(rating)
+    const [position, setPosition] = useState(rating.position)
 
     const onRatingChanged = (changed: Rating) => {
         setRatingValue(changed)
         fetcher.submit({rating: JSON.stringify(changed)}, {method: 'POST', action: `/application/admin/ratings/${rating.id}/edit`});
     }
+
+    const onPositionChanged = (position: string) => {
+        setPosition(position)
+        const changed = rating.copyWithPosition({position})
+        onRatingChanged(changed)
+        debouncedRatingChanged(changed)
+    }
+
+    const debouncedRatingChanged = _.debounce(onRatingChanged, 1000)
 
     return (
         <fetcher.Form>
@@ -35,6 +83,9 @@ const PlayerCard = ({rating}: PlayerCardProps) => {
                     <h5 className="px-3 text-xl font-medium text-neutral-800">
                         {rating.playerName}
                     </h5>
+                    <div>
+                        <PositionSuggestions onChange={onPositionChanged} name={`position-suggestions`} currentValue={position}/>
+                    </div>
                     <div className="flex flex-col justify-start p-6 mb-4 text-base text-neutral-600">
                         <PlayerRatingInput rating={ratingValue} onChange={onRatingChanged}/>
                     </div>

@@ -13,12 +13,14 @@ export const action: ActionFunction = async ({request}: {
     const rating = JSON.parse(ratingFormValue) as Rating
     invariant(!!rating.id, 'rating id ist nicht gesetzt')
     invariant(!!rating.playerName, 'playerName ist nicht gesetzt')
+
     await updatePlayerRating(rating.id, {
         speed: rating.speed,
         technik: rating.technik,
         playerId: null,
         playerName: rating.playerName,
-        condition: rating.condition
+        condition: rating.condition,
+        position: rating.position
     })
     return null
 }

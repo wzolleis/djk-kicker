@@ -64,17 +64,6 @@ const AddRatingButton = () => {
     )
 }
 
-const AddPlayerRatingsButton = () => {
-    return (
-        <DefaultButton className={'mb-2'}>
-            <button type={'submit'} name={'intent'} value={'playerRatings'}>
-                <i className={"fa fa-soccer-ball"}/>
-                <span className={"inline px-1"}>{messages.adminPlayerRatingTable.createPlayerRating}</span>
-            </button>
-        </DefaultButton>
-    )
-}
-
 const Teammatcher = () => {
     const data = useLoaderData() as unknown as LoaderData
     const [selectedTab, setSelectedTab] = useTabs([
@@ -96,7 +85,6 @@ const Teammatcher = () => {
         <div>
             <Form method={'post'}>
                 <ButtonContainer>
-                    <AddPlayerRatingsButton/>
                     <AddRatingButton/>
                 </ButtonContainer>
             </Form>

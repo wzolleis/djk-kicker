@@ -18,6 +18,11 @@ export const configuration = {
         Spickelwiese: 'Spickelwiese',
         Gersthofen: 'Halle Gersthofen'
     },
+    playerPositions: {
+        Defender: 'Verteidiger',
+        Attacker: 'Angreifer',
+        Goalkeeper: 'Torwart'
+    },
     actionTypes: actionTypes,
     url: {
         links: {

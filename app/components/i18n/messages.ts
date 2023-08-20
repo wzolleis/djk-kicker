@@ -419,7 +419,7 @@ const messages = {
         name: 'Name',
         overall: 'Gesamt',
         newRating: 'Neu',
-        createPlayerRating: 'Spieler Rating erzeugen',
+        createPlayerRating: 'Rating initialisieren',
         addRatingTitle: 'Neues Rating',
         rating: 'Bewertung',
         ratingTechnik: 'Technik',
@@ -427,6 +427,9 @@ const messages = {
         ratingCondition: 'Laufen',
         ratingTotal: 'Gesamt'
     },
+    editRatingForm: {
+        position: 'Position'
+    }
 };
 
 export default messages;
