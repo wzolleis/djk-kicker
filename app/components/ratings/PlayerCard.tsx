@@ -13,7 +13,7 @@ export type PlayerCardProps = {
 }
 
 const isSelectable = (value: string) => {
-    return Object.values(configuration.playerPositions).some(position => position === value)
+    return Object.keys(configuration.playerPositions).some(position => position === value)
 }
 
 
@@ -36,8 +36,7 @@ const PositionSuggestions = ({onChange, name, currentValue}: { onChange: (value:
                 {
                     Object.keys(configuration.playerPositions).map(key => {
                         if (isPlayerPosition(key)) {
-                            const value = configuration.playerPositions[key]
-                            return <option key={key} value={value}>{configuration.playerPositions[key]}</option>
+                            return <option key={key} value={key}>{configuration.playerPositions[key]}</option>
                         }
                     })
                 }

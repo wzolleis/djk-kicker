@@ -11,7 +11,8 @@ const mapRatingToPlayerModel = (ratingWithId: RatingWithId): PlayerModel => {
         id: rating.id ?? uuidv4(),
         condition: rating.condition,
         speed: rating.speed,
-        technicalSkill: rating.technik
+        technicalSkill: rating.technik,
+        position: rating.position
     }
 }
 

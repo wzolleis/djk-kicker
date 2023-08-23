@@ -9,6 +9,7 @@ export interface PlayerModel {
   technicalSkill: number
   condition: number,
   anwesend: boolean
+  position: string
 }
 
 export interface MatchModel {

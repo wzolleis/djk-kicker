@@ -8,7 +8,6 @@ export const isGameLocation = (value: any): value is GameLocation => {
     return GameLocationValues.some(location => location === value)
 }
 
-
 export const configuration = {
     status: statusInConfig,
     gameLocations: {

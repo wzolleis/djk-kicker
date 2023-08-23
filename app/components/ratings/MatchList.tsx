@@ -22,12 +22,12 @@ const MatchList = ({selection}: MatchListProps) => {
 
     return (
         <ContentContainer>
-            <ul className={'my-2 bg-white'}>
+            <ul>
                 {
-                    sortedMatches.map(match => {
+                    sortedMatches.map((match, index) => {
                         return (
-                            <li key={match.id} className={'my-5 px-5'}>
-                                <MatchView match={match}/>
+                            <li key={match.id} className={'my-2 shadow-gray-200'}>
+                                <MatchView match={match} matchIndex={index}/>
                             </li>
                         )
                     })
