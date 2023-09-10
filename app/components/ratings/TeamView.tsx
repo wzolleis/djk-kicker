@@ -11,7 +11,7 @@ const TeamView = ({team}: TeamViewProps) => {
                 <ul>
                     {team.players.map(player => {
                         return (
-                            <li key={player.id} className={'text-base md:text-xl'}>{player.name}</li>
+                            <li key={player.id} className={'text-base md:text-xl'}>{player.playerNumber}: {player.name}</li>
                         )
                     })}
                 </ul>

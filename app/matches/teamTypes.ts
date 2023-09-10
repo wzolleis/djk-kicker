@@ -1,10 +1,7 @@
-export enum SkillLevel {
-  PROFI = 200, HIGH = 100, MEDIUM = 50, LOW = 20
-}
-
 export interface PlayerModel {
   id: string,
   name: string
+  playerNumber: number
   speed: number
   technicalSkill: number
   condition: number,

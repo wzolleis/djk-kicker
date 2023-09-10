@@ -2,10 +2,9 @@
 import React from 'react';
 import SoccerLineUp from 'react-soccer-lineup'
 import {Squad} from 'react-soccer-lineup/dist/components/team/Team';
-import {TeamModel} from "~/matches/teamTypes";
+import {PlayerModel, TeamModel} from "~/matches/teamTypes";
 import {Player as SoccerPlayer} from 'react-soccer-lineup/dist/components/team/player/Player';
 import {isPlayerPosition} from "~/components/ratings/playerRatingTypes";
-
 
 type SoccerFieldProps = {
     home: TeamModel
@@ -13,6 +12,10 @@ type SoccerFieldProps = {
 }
 
 const hasCapacity = (players: SoccerPlayer[]) => players.length < 2
+
+const playerToSoccerPlayer = (player: PlayerModel): SoccerPlayer => {
+    return {number: player.playerNumber}
+}
 
 const teamToSquad = (teamModel: TeamModel): Squad => {
 
@@ -27,35 +30,26 @@ const teamToSquad = (teamModel: TeamModel): Squad => {
         if (isPlayerPosition(player.position)) {
             switch (player.position) {
                 case "Goalkeeper":
+                case 'Defender':
                     if (gk === undefined) {
-                        gk = {name: player.name}
+                        gk = playerToSoccerPlayer(player)
                     } else {
-                        df.push({name: player.name})
+                        df.push(playerToSoccerPlayer(player))
                     }
                     break
                 case "Attacker":
                     if (hasCapacity(fw)) {
-                        fw.push({name: player.name})
+                        fw.push(playerToSoccerPlayer(player))
                     } else if (hasCapacity(cam)) {
-                        cam.push({name: player.name})
+                        cam.push(playerToSoccerPlayer(player))
                     } else if (hasCapacity(cm)) {
-                        cm.push({name: player.name})
+                        cm.push(playerToSoccerPlayer(player))
                     } else {
-                        cdm.push({name: player.name})
+                        cdm.push(playerToSoccerPlayer(player))
                     }
                     break
                 default:
-                case "Defender":
-                    df.push({name: player.name})
-                    break
             }
-        }
-    })
-
-
-    df = df.map(_ => {
-        return {
-            name: ''
         }
     })
 
