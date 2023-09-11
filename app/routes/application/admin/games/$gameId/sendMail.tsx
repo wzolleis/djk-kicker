@@ -17,12 +17,9 @@ import {MailService} from "~/helpers/mail/mailService";
 import TextAreaWithLabel from "~/components/common/form/TextareaWithLabel";
 import InputWithLabel from "~/components/common/form/InputWithLabel";
 import {updateGameStatus} from "~/models/admin.games.server";
+import {useItemSelectionList} from "~/components/selection";
 
-const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
-
-const removePlayerFromArrayByPlayerId = (playerArray: Array<Player>, playerId: string): Array<Player> => {
-    return playerArray.filter(p => p.id !== playerId).sort(sortByName)
-}
+// const sortByName = (p1: Player, p2: Player) => p1.name.localeCompare(p2.name)
 
 const SendMailFormFieldValues = ["includedPlayers", "mailTemplate", 'mailSubject', "freeText"] as const
 export type SendMailFormFields = typeof SendMailFormFieldValues[number]
@@ -46,14 +43,12 @@ export const action: ActionFunction = async ({request, params: {gameId}}) => {
     const mailService = new MailService(gameId, mailTemplate, includedPlayerIds, freeText, mailSubject, host)
     await mailService.sendGameMail()
 
-    if (isMailTemplate(mailTemplate) ) {
+    if (isMailTemplate(mailTemplate)) {
         if (mailTemplate === 'gameZusage') {
             await updateGameStatus(gameId, 'Zusage')
-        }
-        else if (mailTemplate === 'gameAbsage') {
+        } else if (mailTemplate === 'gameAbsage') {
             await updateGameStatus(gameId, 'Absage')
-        }
-        else if (mailTemplate === 'gameInvitation') {
+        } else if (mailTemplate === 'gameInvitation') {
             await updateGameStatus(gameId, 'Einladung')
         }
     }
@@ -182,49 +177,15 @@ const ActivePlayerButton = ({player, onPlayerClick, selected}: ActivePlayerButto
 
 const SendGameMail = () => {
     const allPlayers = usePlayers()
-    const sorted = [...allPlayers].sort()
-    const [includedPlayers, setIncludedPlayers] = useState(sorted)
-    const [excludedPlayers, setExcludedPlayers] = useState(Array<Player>);
+    const selection = useItemSelectionList({items: allPlayers})
     const [mailTemplate, setMailTemplate] = useState<MailTemplateType>("gameInvitation")
-
-    const removePlayerFromIncludedList = (player: Player) => {
-        setIncludedPlayers(removePlayerFromArrayByPlayerId(includedPlayers, player.id))
-        setExcludedPlayers([...excludedPlayers, player].sort(sortByName))
-    }
-    const addPlayerToIncludedList = (player: Player) => {
-        setExcludedPlayers(removePlayerFromArrayByPlayerId(excludedPlayers, player.id))
-        setIncludedPlayers([...includedPlayers, player].sort(sortByName))
-    }
-
-    const addAllToIncluded = () => {
-        setIncludedPlayers([...allPlayers].sort(sortByName))
-        setExcludedPlayers([])
-    }
-
-    const removeAllFromIncluded = () => {
-        setIncludedPlayers([])
-        setExcludedPlayers([...allPlayers].sort(sortByName))
-    }
-
-    const isPlayerInIncludedList = (player: Player) => {
-        return includedPlayers.some((value) => value.id === player.id)
-    }
-
-    const handlePlayerSelection = (player: Player) => {
-        if (isPlayerInIncludedList(player)) {
-            removePlayerFromIncludedList(player)
-        } else {
-            addPlayerToIncludedList(player)
-        }
-    }
-
     const freeTextDisplay = mailTemplate !== 'freeText' ? 'hidden' : 'block'
 
     return (
         <div className={"min-h-screen"}>
             <TransitionContainer>
                 <Form method={"post"}>
-                    <input type={"hidden"} value={includedPlayers.map(p => p.id)} name={"includedPlayers"}/>
+                    <input type={"hidden"} value={selection.includedItems.map(p => p.id)} name={"includedPlayers"}/>
                     <input type={"hidden"} value={mailTemplate} name="mailTemplate"/>
                     <MainPageContent>
                         <header className={"flex items-center justify-between"}>
@@ -245,19 +206,21 @@ const SendGameMail = () => {
 
                             <ButtonContainer>
                                 <DefaultButton className={"bg-green-400"}>
-                                    <button type='button' onClick={addAllToIncluded}>{messages.adminSendMailForm.addAllRecipients}</button>
+                                    <button type='button'
+                                            onClick={selection.addAllItemsToIncluded}>{messages.adminSendMailForm.addAllRecipients}</button>
                                 </DefaultButton>
                                 <DefaultButton className={"bg-red-400"}>
-                                    <button type='button' onClick={removeAllFromIncluded}>{messages.adminSendMailForm.removeAllRecipients}</button>
+                                    <button type='button'
+                                            onClick={selection.removeAllItemsFromIncluded}>{messages.adminSendMailForm.removeAllRecipients}</button>
                                 </DefaultButton>
                             </ButtonContainer>
 
                             <main className={"mt-5 flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"}>
                                 {
                                     allPlayers.map((player: Player) => {
-                                            const selected = isPlayerInIncludedList(player)
+                                        const selected = selection.isItemIncluded(player)
                                             return (
-                                                <ActivePlayerButton key={player.id} player={player} onPlayerClick={handlePlayerSelection}
+                                                <ActivePlayerButton key={player.id} player={player} onPlayerClick={selection.handleItemSelection}
                                                                     selected={selected}/>
                                             )
                                         }

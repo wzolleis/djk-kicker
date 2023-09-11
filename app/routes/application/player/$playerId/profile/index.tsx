@@ -18,7 +18,6 @@ import {getGameById, getMostRecentGame} from "~/models/games.server";
 import {getPlayerById} from "~/models/player.server";
 import {FormWrapper} from "~/utils/formWrapper.server";
 import {authenticatePlayer} from "~/utils/session.server";
-import PlayerRatingForm from "~/components/player/profile/PlayerRatingForm";
 
 type LoaderData = {
     player: Player;
@@ -148,7 +147,7 @@ const PlayerProfile = () => {
         return (
             <div
                 className={
-                    "rounded-xl bg-red-100 p-3 ring ring-1 ring-red-200"
+                    "rounded-xl bg-red-100 p-3 ring-1 ring-red-200"
                 }>
                 <p
                     className={
@@ -176,7 +175,6 @@ const PlayerProfile = () => {
                                 player={player}
                                 defaultFeedback={defaultFeedback}
                             />
-                            <PlayerRatingForm player={player}/>
                             <ProcessingPlaceholder hidden={!activeTransition} />
                             {!activeTransition && (
                                 <ButtonContainer

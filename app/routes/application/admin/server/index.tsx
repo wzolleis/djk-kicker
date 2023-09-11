@@ -4,6 +4,7 @@ import {useLoaderData} from "@remix-run/react";
 
 export type ProcessEnvVariables = {
     DRIFTMAIL_SERVICE_URL: string | undefined
+    FEATURE_TEAMMATCHER_ACTIVE: string | undefined
 }
 
 type LoaderData = {
@@ -12,10 +13,9 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async () => {
     const variables: ProcessEnvVariables = {
-        DRIFTMAIL_SERVICE_URL: process.env.DRIFTMAIL_SERVICE_URL
+        DRIFTMAIL_SERVICE_URL: process.env.DRIFTMAIL_SERVICE_URL,
+        FEATURE_TEAMMATCHER_ACTIVE: process.env.FEATURE_TEAMMATCHER_ACTIVE
     }
-
-    console.log('loader: ', variables)
     return json<LoaderData>({variables});
 };
 

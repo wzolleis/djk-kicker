@@ -1,14 +1,12 @@
-export enum SkillLevel {
-  PROFI = 200, HIGH = 100, MEDIUM = 50, LOW = 20
-}
-
 export interface PlayerModel {
   id: string,
   name: string
+  playerNumber: number
   speed: number
   technicalSkill: number
   condition: number,
   anwesend: boolean
+  position: string
 }
 
 export interface MatchModel {
@@ -23,9 +21,4 @@ export interface MatchModel {
 export interface TeamModel {
   overallSkill: number,
   players: PlayerModel[],
-}
-
-export interface TeamState {
-  players: PlayerModel[], // alle Spieler,
-  matches: MatchModel[]
 }

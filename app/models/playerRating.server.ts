@@ -1,14 +1,16 @@
 import {prisma} from "~/db.server";
 import {PlayerRating} from "@prisma/client";
+import {Rating} from "~/models/classes/Rating";
 
-export const createDefaultRating = async (playerId: string) => {
+export const createRatingForPlayer = async (playerId: string, playerName: string, rating: Rating) => {
+    const {speed, technik, condition} = rating
     return await prisma.playerRating.create({
         data: {
             playerId,
-            overall: 50,
-            condition: 50,
-            speed: 50,
-            technik: 50
+            condition,
+            speed,
+            technik,
+            playerName,
         },
     })
 }
@@ -17,13 +19,28 @@ export const getAllRatings = async (): Promise<PlayerRating[]> => {
     return await prisma.playerRating.findMany()
 }
 
-export const updatePlayerRating = async (playerId: string, data: Pick<PlayerRating, 'speed' | 'condition' | 'technik'>) => {
+export const getPlayerRatingById = async (id: string | undefined) => {
+    if (!id) {
+        throw new Error("No rating Id provided");
+    }
+    return await prisma.playerRating.findUnique({where: {id}})
+}
+
+export const updatePlayerRating = async (ratingId: string, data: Pick<PlayerRating,
+    'speed' | 'condition' | 'technik' | 'position' | 'playerName' | 'playerId'>) => {
     return await prisma.playerRating.update({
         where: {
-            playerId
+            id: ratingId
         },
         data: {
             ...data
         }
+    })
+}
+
+export const createRating = async (playerName: string, rating: Rating) => {
+    const {speed, technik, condition} = rating
+    return await prisma.playerRating.create({
+        data: {condition, speed, technik, playerName,},
     })
 }

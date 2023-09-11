@@ -8,7 +8,6 @@ export const isGameLocation = (value: any): value is GameLocation => {
     return GameLocationValues.some(location => location === value)
 }
 
-
 export const configuration = {
     status: statusInConfig,
     gameLocations: {
@@ -17,6 +16,11 @@ export const configuration = {
         Draussen: 'Wiese Firnhaberau',
         Spickelwiese: 'Spickelwiese',
         Gersthofen: 'Halle Gersthofen'
+    },
+    playerPositions: {
+        Defender: 'Verteidiger',
+        Attacker: 'Angreifer',
+        Goalkeeper: 'Torwart'
     },
     actionTypes: actionTypes,
     url: {

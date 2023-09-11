@@ -216,7 +216,9 @@ const messages = {
         users: "Benutzerverwaltung",
         usersDescription: "Berechtigungen und so ein Quatsch",
         server: 'Server',
-        serverDescription: 'Servereinstellungen'
+        teamMatcher: 'Teams bilden',
+        serverDescription: 'Servereinstellungen',
+        teamMatcherDescription: 'Teams anhand der Ratings zusammenstellen'
     },
     adminOverviewTable: {
         name: "Name",
@@ -240,6 +242,11 @@ const messages = {
         name: "Name",
         scope: "Scope",
         validUntil: "Gültig bis"
+    },
+    adminRatingSelectionForm: {
+        included: 'Anwesend',
+        allRatings: 'Alle',
+        removeAll: 'Alle entfernen'
     },
     game: {
         headings: {
@@ -407,6 +414,21 @@ const messages = {
     },
     adminEditFeedbackForm: {
         title: (gameTime: string) => `Rückmeldungen für das Spiel am ${gameTime} anpassen`
+    },
+    adminPlayerRatingTable: {
+        name: 'Name',
+        overall: 'Gesamt',
+        newRating: 'Neu',
+        createPlayerRating: 'Rating initialisieren',
+        addRatingTitle: 'Neues Rating',
+        rating: 'Bewertung',
+        ratingTechnik: 'Technik',
+        ratingSpeed: 'Geschwindigkeit',
+        ratingCondition: 'Laufen',
+        ratingTotal: 'Gesamt'
+    },
+    editRatingForm: {
+        position: 'Position'
     }
 };
 
