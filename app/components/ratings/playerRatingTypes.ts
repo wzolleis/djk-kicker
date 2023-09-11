@@ -22,7 +22,7 @@ export const defaultRating: Rating = new Rating({
     technik: 3,
     condition: 3,
     playerName: '',
-    position: 'defender',
+    position: 'Defender',
     id: ''
 })
 
